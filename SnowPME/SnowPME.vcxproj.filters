@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Mono">
+      <UniqueIdentifier>{1ad504b0-aece-4668-92bd-bc6f404cd0d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mono">
+      <UniqueIdentifier>{2439195f-530a-4b5d-87fc-13952f1d8ccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM">
+      <UniqueIdentifier>{914f32dc-b063-4bbc-b8e5-aad3b905301a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce">
+      <UniqueIdentifier>{cf0e3028-4aec-423d-a04c-2821ffc7018a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation">
+      <UniqueIdentifier>{7d06ac9e-cf63-4eaa-beec-24404752e699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core">
+      <UniqueIdentifier>{2473d426-c168-4d0b-ac26-6d9f1e137b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Services">
+      <UniqueIdentifier>{208018df-46cd-4738-8457-88d8b37796db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Input">
+      <UniqueIdentifier>{980fbb25-af43-42e8-9971-9006a2db5db9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Imaging">
+      <UniqueIdentifier>{09b65243-a170-49a4-aebb-da41c8577fc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Graphics">
+      <UniqueIdentifier>{b871068c-0832-43b7-aa92-cd3548a207d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Device">
+      <UniqueIdentifier>{2e8a84a7-cb13-4718-941b-5717ede7d369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Audio">
+      <UniqueIdentifier>{bb2b46cb-dd82-4340-8044-5cd832596b9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LibPSM\Sce\PlayStation\Core\Environment">
+      <UniqueIdentifier>{413718a7-de17-4711-9332-667865285d95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM">
+      <UniqueIdentifier>{400dc02f-cd11-4461-adc2-9193d051c718}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce">
+      <UniqueIdentifier>{1b97fd47-b0f1-41d2-a0cf-ebbc62b199c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation">
+      <UniqueIdentifier>{672a9f11-20da-44ac-a6e9-d9872425e457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core">
+      <UniqueIdentifier>{6fa61602-4e38-4526-bb7f-b1eddb3a1935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Services">
+      <UniqueIdentifier>{e6653bb2-f1bd-4408-9625-6d37602516c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Input">
+      <UniqueIdentifier>{f590b8a1-cc0f-4fdf-8367-36b3d314cdbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Imaging">
+      <UniqueIdentifier>{4bc518a2-bc92-4788-b52b-b7b174a4f816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Graphics">
+      <UniqueIdentifier>{e45a0355-3932-4bbe-b466-3690fecea4a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Environment">
+      <UniqueIdentifier>{5d229ff4-2d67-4d9a-be4e-704420902760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Device">
+      <UniqueIdentifier>{22b1bc9f-94ee-423c-890c-35485b509e60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LibPSM\Sce\PlayStation\Core\Audio">
+      <UniqueIdentifier>{f3df6910-d9b7-47ff-8d60-495e72e8136c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Include">
+      <UniqueIdentifier>{e6e9f662-1309-4a1a-862a-d29b142bbb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Include\SnowPME">
+      <UniqueIdentifier>{7a8a494f-d74c-4d51-b9f2-ca224094db7b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SnowPME.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mono\Init.cpp">
+      <Filter>Source Files\Mono</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mono\Security.cpp">
+      <Filter>Source Files\Mono</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Error.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\AccountInformation.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\Network.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\NetworkRequest.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Input\GamePad.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Input\Motion.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Input\Touch.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Imaging\Font.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Imaging\Image.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmFrameBuffer.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmGraphicsContext.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmPixelBuffer.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmShaderProgram.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmTexture.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmVertexBuffer.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\Clipboard.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\Log.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\NetworkInformation.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\PersistentMemory.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\Shell.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\SystemEvents.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\SystemMemory.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\SystemParameters.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Environment\TextInputDialog.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Device\Camera.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Device\CameraImportDialog.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Device\Location.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Device\PhotoImportDialog.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\Bgm.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\BgmPlayer.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\Sound.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\SoundPlayer.cpp">
+      <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Mono\Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Mono\Init.hpp">
+      <Filter>Header Files\Mono</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mono\Security.hpp">
+      <Filter>Header Files\Mono</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Matrix4.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector2.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector3.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector4.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\AccountInformation.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\InAppPurchaseCommand.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\InAppPurchaseDialog.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\InAppPurchaseProductData.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\Network.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Services\NetworkRequest.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\GamePad.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\GamePadButtons.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\GamePadData.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\Motion.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\MotionData.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\Touch.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\TouchData.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Input\TouchStatus.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\CharMetrics.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\Font.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\FontAlias.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\FontMetrics.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\FontStyle.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\Image.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\ImageColor.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\ImageMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\ImagePosition.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\ImageRect.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Imaging\ImageSize.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Imaging</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\TextureFilter.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\TextureWrap.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\BlendFunc.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\BlendFuncFactor.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\BlendFuncMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\ClearMask.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\ColorMask.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\CullFace.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\CullFaceDirection.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\DepthFunc.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\DepthFuncMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\DrawMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\EnableMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\GraphicsCapsState.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\GraphicsExtension.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\GraphicsState.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\GraphicsUpdate.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\InternalOption.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\MultiSampleMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PixelBufferOption.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PixelBufferType.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PixelFormat.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PolygonOffset.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\Primitive.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmFrameBuffer.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmGraphicsContext.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmPixelBuffer.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmShaderProgram.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmTexture.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\PsmVertexBuffer.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\ShaderAttributeType.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\ShaderUniformType.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\StencilFunc.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\StencilFuncMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\StencilOpMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\TextureCubeFace.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\TextureFilterMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\TextureWrapMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\VertexFormat.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Graphics\StencilOp.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\LocationData.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\LocationDeviceType.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\Camera.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraFacing.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraImageFormat.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraImportDialog.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraInfo.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraSize.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\CameraState.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\Location.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\PhotoImportDialog.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Device\PictureState.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\BgmStatus.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\Bgm.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\BgmPlayer.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\Sound.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\SoundPlayer.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\SoundStatus.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\CommonDialogState.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\Clipboard.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\CommonDialogResult.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\CommonDialogType.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\Log.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\NetworkInformation.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\PersistentMemory.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\Shell.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\SystemEvents.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\SystemMemory.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\SystemParameters.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\TextInputDialog.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\Sce\PlayStation\Core\Environment\TextInputMode.hpp">
+      <Filter>Header Files\LibPSM\Sce\PlayStation\Core\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="LibPSM\LibPSM.hpp">
+      <Filter>Header Files\LibPSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Mono\Resources.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\SnowPME\Mono.h">
+      <Filter>Header Files\Include\SnowPME</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
