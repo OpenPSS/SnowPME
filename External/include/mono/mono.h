@@ -1,5 +1,5 @@
-#ifndef SNOW_PME_MONO_H
-#define SNOW_PME_MONO_H 1
+#ifndef MONO_H
+#define MONO_H 1
 
 #ifdef __cplusplus
 extern "C" {

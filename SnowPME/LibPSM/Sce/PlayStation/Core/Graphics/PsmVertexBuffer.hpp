@@ -7,7 +7,7 @@
 #include "VertexFormat.hpp"
 #include "../Vector4.hpp"
 using namespace Sce::PlayStation::Core;
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Graphics {
 	class PsmVertexBuffer {

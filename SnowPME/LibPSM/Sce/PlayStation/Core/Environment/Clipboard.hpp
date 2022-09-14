@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 	class Clipboard {
 	public:
-		static int SetTextNative(string text);
-		static int GetTextNative(string *text);
+		static int SetTextNative(std::string text);
+		static int GetTextNative(std::string *text);
 	};
 }
 #endif

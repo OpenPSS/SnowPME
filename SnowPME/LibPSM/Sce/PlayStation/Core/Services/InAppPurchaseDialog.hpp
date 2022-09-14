@@ -9,7 +9,7 @@
 #include "../Environment/CommonDialogState.hpp"
 #include "../Environment/CommonDialogResult.hpp"
 using namespace Sce::PlayStation::Core::Environment;
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Services {
 	class InAppPurchaseDialog {

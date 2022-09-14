@@ -2,35 +2,35 @@
 
 namespace Sce::PlayStation::Core::Services {
 	int Network::CheckStateNative(uint32_t* state){
-		cout << "Sce::PlayStation::Core::Services::CheckStateNative(uint32_t *) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Services::CheckStateNative(uint32_t *) Unimplemented." << std::endl;
 		return 0;
 	}
-	int Network::GetOnlineIdNative(string* id){
-		cout << "Sce::PlayStation::Core::Services::GetOnlineIdNative(string *) Unimplemented." << endl;
+	int Network::GetOnlineIdNative(std::string* id) {
+		std::cout << "Sce::PlayStation::Core::Services::GetOnlineIdNative(string *) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Network::GetAccountIdNative(unsigned long* id){
-		cout << "Sce::PlayStation::Core::Services::GetAccountIdNative(unsigned long *) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Services::GetAccountIdNative(unsigned long *) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Network::SetWebRequestDelegate(uintptr_t handle){
-		cout << "Sce::PlayStation::Core::Services::SetWebRequestDelegate(intptr) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Services::SetWebRequestDelegate(intptr) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Network::SetAuthServer(bool useAuth){
-		cout << "Sce::PlayStation::Core::Services::SetAuthServer(bool) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Services::SetAuthServer(bool) Unimplemented." << std::endl;
 		return 0;
 	}
-	int Network::GetAuthTicketDataNative(string* data){
-		cout << "Sce::PlayStation::Core::Services::GetAuthTicketDataNative(string *) Unimplemented." << endl;
+	int Network::GetAuthTicketDataNative(std::string* data) {
+		std::cout << "Sce::PlayStation::Core::Services::GetAuthTicketDataNative(string *) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Network::ResetAuthTicketNative(){
-		cout << "Sce::PlayStation::Core::Services::ResetAuthTicketNative() Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Services::ResetAuthTicketNative() Unimplemented." << std::endl;
 		return 0;
 	}
-	int Network::SetAppIdNative(string appId){
-		cout << "Sce::PlayStation::Core::Services::SetAppIdNative(string)) Unimplemented." << endl;
+	int Network::SetAppIdNative(std::string appId){
+		std::cout << "Sce::PlayStation::Core::Services::SetAppIdNative(string)) Unimplemented." << std::endl;
 		return 0;
 	}
 }

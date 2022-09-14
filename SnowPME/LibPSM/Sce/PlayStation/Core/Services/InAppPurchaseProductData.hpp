@@ -1,13 +1,13 @@
 #ifndef LIB_PSM_INAPPPURCHASEPRODUCTDATA_H
 #define LIB_PSM_INAPPPURCHASEPRODUCTDATA_H
 #include <string>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Services {
 	typedef struct InAppPurchaseProductData {
-		string Label;
-		string Name;
-		string Price;
+		std::string Label;
+		std::string Name;
+		std::string Price;
 		int pad;
 		unsigned int TicketType;
 		bool TicketIsOK;

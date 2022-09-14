@@ -91,14 +91,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(ProjectDir)Include\SnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)mono\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Io\Path.cpp" />
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\Bgm.cpp" />
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\BgmPlayer.cpp" />
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\Sound.cpp" />
@@ -192,14 +193,15 @@
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
-    <ClCompile Include="Config.cpp" />
-    <ClCompile Include="Mono\Init.cpp" />
-    <ClCompile Include="Mono\Resources.cpp" />
-    <ClCompile Include="Mono\Security.cpp" />
+    <ClCompile Include="Util\Config.cpp" />
+    <ClCompile Include="Runtime\Init.cpp" />
+    <ClCompile Include="Runtime\Resources.cpp" />
+    <ClCompile Include="Runtime\Security.cpp" />
     <ClCompile Include="SnowPME.cpp" />
+    <ClCompile Include="Util\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\SnowPME\Mono.h" />
+    <ClInclude Include="Io\Path.hpp" />
     <ClInclude Include="LibPSM\LibPSM.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\Bgm.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Audio\BgmPlayer.hpp" />
@@ -302,10 +304,11 @@
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector2.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Vector4.hpp" />
-    <ClInclude Include="Config.hpp" />
-    <ClInclude Include="Mono\Init.hpp" />
-    <ClInclude Include="Mono\Resources.hpp" />
-    <ClInclude Include="Mono\Security.hpp" />
+    <ClInclude Include="Util\Config.hpp" />
+    <ClInclude Include="Runtime\Init.hpp" />
+    <ClInclude Include="Runtime\Resources.hpp" />
+    <ClInclude Include="Runtime\Security.hpp" />
+    <ClInclude Include="Util\StringUtils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

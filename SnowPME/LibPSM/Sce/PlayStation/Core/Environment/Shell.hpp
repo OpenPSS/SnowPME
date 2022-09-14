@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 
@@ -17,10 +17,10 @@ namespace Sce::PlayStation::Core::Environment {
 	typedef struct Action
 	{
 		ActionType type;
-		string parameter0;
-		string parameter1;
-		string parameter2;
-		string parameter3;
+		std::string parameter0;
+		std::string parameter1;
+		std::string parameter2;
+		std::string parameter3;
 	} Action;
 
 	class Shell {

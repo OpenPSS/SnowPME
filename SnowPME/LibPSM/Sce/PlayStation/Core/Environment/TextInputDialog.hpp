@@ -1,25 +1,24 @@
 #ifndef LIB_PSM_TEXTINPUTDIALOG_H
 #define LIB_PSM_TEXTINPUTDIALOG_H 1
-#include <stdint.h>
-#include <stdlib.h>
+
 #include <string>
 #include <iostream>
 #include "CommonDialogType.hpp"
 #include "CommonDialogResult.hpp"
 #include "CommonDialogState.hpp"
 #include "TextInputMode.hpp"
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 	typedef struct Arguments
 	{
 		TextInputMode mode;
-		string text;
+		std::string text;
 	} Arguments;
 
 	typedef struct Results
 	{
-		string text;
+		std::string text;
 	} Results;
 
 	class TextInputDialog {

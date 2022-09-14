@@ -1,18 +1,18 @@
-#include "Resources.hpp"
-#include <SnowPME/Mono.h>
+#include <Runtime/Resources.hpp>
+#include <mono/mono.h>
 
-namespace SnowPME::Mono {
+namespace SnowPME::Runtime {
 	void Resources::ResourceLimitReachedCallback(int resourceType, uintptr_t value, int isSoft) {
 		if (resourceType < MONO_RESOURCE_JIT_CODE || resourceType <= MONO_RESOURCE_GC_HEAP || resourceType != MONO_RESOURCE_GC_HEAP) {
 			if (resourceType <= MONO_RESOURCE_METADATA)
-				cout << "ERROR : resource exhausted (type: " << to_string(resourceType) << "value: " << to_string(value) << "soft: " << to_string(isSoft) << endl;
+				std::cout << "ERROR : resource exhausted (type: " << std::to_string(resourceType) << "value: " << std::to_string(value) << "soft: " << std::to_string(isSoft) << std::endl;
 
 			// TODO: Make this exit the currently running program
-			cout << "ABORT: Resources limit exceeded!" << endl;
+			std::cout << "ABORT: Resources limit exceeded!" << std::endl;
 		}
 	}
 	void Resources::ThreadsExhaustedCallback() {
-		cout << "ERROR: threads exhausted!" << endl;
+		std::cout << "ERROR: threads exhausted!" << std::endl;
 		mono_gc_out_of_memory(0);
 	}
 }

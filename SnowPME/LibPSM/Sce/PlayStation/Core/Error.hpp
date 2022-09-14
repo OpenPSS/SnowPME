@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 enum PsmError : unsigned int {
 	SCE_PSM_ERROR_BASE = 0x80580000,
@@ -33,7 +33,7 @@ enum PsmError : unsigned int {
 namespace Sce::PlayStation::Core {
 	class Error {
 	public:
-		static int GetExceptionInfoNative(string *message, string *param);
+		static int GetExceptionInfoNative(std::string *message, std::string *param);
 	};
 }
 #endif

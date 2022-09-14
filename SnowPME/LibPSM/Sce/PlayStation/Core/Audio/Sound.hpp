@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Audio {
 	class Sound {
 	public:
-		static int NewFromFilename(string filename, int *handle);
-		static int NewFromFileImage(byte* fileImage, int *handle);
+		static int NewFromFilename(std::string filename, int *handle);
+		static int NewFromFileImage(std::byte* fileImage, int *handle);
 		static int ReleaseNative(int handle);
 		static int CreatePlayerNative(int handle, int *playerHandle);
 	};

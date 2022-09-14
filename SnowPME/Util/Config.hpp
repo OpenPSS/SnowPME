@@ -12,15 +12,15 @@
 #define RUNTIME_CONFIG_PATH "Runtime/etc"
 #endif
 
-using namespace std;
-namespace SnowPME
+
+namespace SnowPME::Util
 {
 	class Config {
 	public:
 		static bool SecurityCritical; // If mono is allowed full access to native functions.
-		static string PsmCorelibsPath; // Path to Sce.PlayStation.Core.dll
-		static string RuntimeLibPath; // Path to mono/lib folder.
-		static string RuntimeConfigPath; // Path to mono/config folder.
+		static std::string PsmCorelibsPath; // Path to Sce.PlayStation.Core.dll
+		static std::string RuntimeLibPath; // Path to mono/lib folder.
+		static std::string RuntimeConfigPath; // Path to mono/config folder.
 		static int ReadConfig(std::string configFile);
 	};
 }

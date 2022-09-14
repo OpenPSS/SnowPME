@@ -1,20 +1,20 @@
 #include "Bgm.hpp"
 
 namespace Sce::PlayStation::Core::Audio {
-	int Bgm::NewFromFilename(string filename, int * handle){
-		cout << "Sce::PlayStation::Core::Audio::NewFromFilename(string, int *) Unimplemented." << endl;
+	int Bgm::NewFromFilename(std::string filename, int * handle){
+		std::cout << "Sce::PlayStation::Core::Audio::NewFromFilename(string, int *) Unimplemented." << std::endl;
 		return 0;
 	}
-	int Bgm::NewFromFileImage(byte* fileImage, int * handle){
-		cout << "Sce::PlayStation::Core::Audio::NewFromFileImage(byte*, int *) Unimplemented." << endl;
+	int Bgm::NewFromFileImage(std::byte* fileImage, int * handle){
+		std::cout << "Sce::PlayStation::Core::Audio::NewFromFileImage(byte*, int *) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Bgm::ReleaseNative(int handle){
-		cout << "Sce::PlayStation::Core::Audio::ReleaseNative(int) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Audio::ReleaseNative(int) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Bgm::CreatePlayerNative(int handle, int * playerHandle){
-		cout << "Sce::PlayStation::Core::Audio::CreatePlayerNative(int, int *) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Audio::CreatePlayerNative(int, int *) Unimplemented." << std::endl;
 		return 0;
 	}
 }

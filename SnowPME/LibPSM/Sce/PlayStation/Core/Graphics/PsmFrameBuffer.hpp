@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "TextureCubeFace.hpp"
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Graphics {
 	class PsmFrameBuffer {

@@ -1,14 +1,16 @@
+#include <Util/Config.hpp>
+#include <Runtime/Init.hpp>
+#include <Io/Path.hpp>
 
-#include <iostream>
-#include "Config.hpp"
-#include "Mono/Init.hpp"
-using namespace SnowPME::Mono;
+using namespace SnowPME::Runtime;
+using namespace SnowPME::Io;
+using namespace SnowPME::Util;
 
 namespace SnowPME {
 	class Program {
 	public:
 		Program() {
-			//Config::ReadConfig("psm.config");
+			Config::ReadConfig("psm.config");
 			Init::InitMono("Application\\app.exe");
 		}
 	};

@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 	class PersistentMemory {
 	public:
-		static int WriteNative(byte* fileImage);
-		static int ReadNative(byte* fileImage);
+		static int WriteNative(std::byte* fileImage);
+		static int ReadNative(std::byte* fileImage);
 	};
 }
 #endif

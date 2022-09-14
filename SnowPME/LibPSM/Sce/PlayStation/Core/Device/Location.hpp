@@ -6,7 +6,7 @@
 #include <iostream>
 #include "LocationData.hpp"
 
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Device {
 	class Location {

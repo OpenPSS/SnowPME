@@ -4,8 +4,8 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
-namespace SnowPME::Mono
+
+namespace SnowPME::Runtime
 {
 	class Security {
 	public:

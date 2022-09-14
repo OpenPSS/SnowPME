@@ -2,19 +2,19 @@
 
 namespace Sce::PlayStation::Core::Device {
 	int Location::StartNative(){
-		cout << "Sce::PlayStation::Core::Device::StartNative() Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Device::StartNative() Unimplemented." << std::endl;
 		return 0;
 	}
 	int Location::StopNative(){
-		cout << "Sce::PlayStation::Core::Device::StopNative() Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Device::StopNative() Unimplemented." << std::endl;
 		return 0;
 	}
 	int Location::GetDataNative(LocationData * locationData){
-		cout << "Sce::PlayStation::Core::Device::GetDataNative(Sce::PlayStation::Core::Device::LocationData *) Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Device::GetDataNative(Sce::PlayStation::Core::Device::LocationData *) Unimplemented." << std::endl;
 		return 0;
 	}
 	int Location::GetEnableDevicesNative(){
-		cout << "Sce::PlayStation::Core::Device::GetEnableDevicesNative() Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Device::GetEnableDevicesNative() Unimplemented." << std::endl;
 		return 0;
 	}
 }

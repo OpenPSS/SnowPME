@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "MotionData.hpp"
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Input {
 	class Motion {

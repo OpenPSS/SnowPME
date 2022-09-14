@@ -7,7 +7,7 @@
 #include "../Environment/CommonDialogState.hpp"
 #include "../Environment/CommonDialogResult.hpp"
 
-using namespace std;
+
 using namespace Sce::PlayStation::Core::Environment;
 
 namespace Sce::PlayStation::Core::Device {

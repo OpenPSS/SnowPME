@@ -2,7 +2,7 @@
 
 namespace Sce::PlayStation::Core::Environment {
 	int NetworkInformation::GetNetworkInterfaceTypeNative(){
-		cout << "Sce::PlayStation::Core::Environment::GetNetworkInterfaceTypeNative() Unimplemented." << endl;
+		std::cout << "Sce::PlayStation::Core::Environment::GetNetworkInterfaceTypeNative() Unimplemented." << std::endl;
 		return 0;
 	}
 }

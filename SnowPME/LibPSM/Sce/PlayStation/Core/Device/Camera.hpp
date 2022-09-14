@@ -12,7 +12,7 @@
 #include "CameraInfo.hpp"
 #include "PictureState.hpp"
 
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Device {
 	class Camera {
@@ -33,9 +33,9 @@ namespace Sce::PlayStation::Core::Device {
 		static int GetPreviewImageFormatNative(int handle, CameraImageFormat *format);
 		static int StartNative(int handle);
 		static int StopNative(int handle);
-		static int ReadNative(int handle, byte* frameBuffer, int bufferSize, long *frameCount);
+		static int ReadNative(int handle, std::byte* frameBuffer, int bufferSize, long *frameCount);
 		static int TakePictureNative(int handle, CameraSize size);
-		static int GetPictureFilenameNative(int handle, string *filename);
+		static int GetPictureFilenameNative(int handle, std::string *filename);
 	};
 }
 #endif

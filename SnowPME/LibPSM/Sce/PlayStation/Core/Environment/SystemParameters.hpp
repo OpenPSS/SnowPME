@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 	enum ParameterKey : unsigned int
@@ -20,7 +20,7 @@ namespace Sce::PlayStation::Core::Environment {
 	public:
 		static int GetInt(ParameterKey key, int *value);
 		static int GetFloat(ParameterKey key, float *value);
-		static int GetString(ParameterKey key, string *value);
+		static int GetString(ParameterKey key, std::string *value);
 	};
 }
 #endif

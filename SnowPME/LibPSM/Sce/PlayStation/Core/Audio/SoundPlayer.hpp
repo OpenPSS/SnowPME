@@ -6,7 +6,7 @@
 #include <iostream>
 #include "SoundStatus.hpp"
 
-using namespace std;
+
 namespace Sce::PlayStation::Core::Audio {
 	class SoundPlayer {
 	public:

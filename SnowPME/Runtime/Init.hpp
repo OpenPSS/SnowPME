@@ -1,18 +1,18 @@
 #ifndef SNOW_PME_MONO_INIT_H
 #define SNOW_PME_MONO_INIT_H 1
-#include <SnowPME/Mono.h>
+#include <mono/mono.h>
 #include <string>
 
-using namespace std;
-namespace SnowPME::Mono
+
+namespace SnowPME::Runtime
 {
 	class Init {
 	private:
-		static string executableFile;
+		static std::string executableFile;
 		static void addFunctions();
 		static void launchProgram(MonoAssembly* assembly, char* path);
 	public:
-		static int InitMono(string executablePath);
+		static int InitMono(std::string executablePath);
 	};
 }
 

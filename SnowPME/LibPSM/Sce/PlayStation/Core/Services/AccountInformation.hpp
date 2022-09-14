@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Services {
 	class AccountInformation {
 	public:
-		static int GetUniqueID(byte* id);
+		static int GetUniqueID(std::byte* id);
 	};
 }
 #endif

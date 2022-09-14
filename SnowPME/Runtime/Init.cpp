@@ -1,17 +1,21 @@
-#include "Init.hpp"
-#include "Resources.hpp"
-#include "Security.hpp"
-#include "../LibPSM/LibPSM.hpp"
-#include "../Config.hpp"
-namespace SnowPME::Mono
+#include <Runtime/Init.hpp>
+#include <Runtime/Resources.hpp>
+#include <Runtime/Security.hpp>
+
+#include <LibPSM/LibPSM.hpp>
+#include <Util/Config.hpp>
+
+using namespace SnowPME::Util;
+
+namespace SnowPME::Runtime
 {
-	string Init::executableFile = "";
+	std::string Init::executableFile = "";
 
 	/*
 	*	This function initalizes mono with a given executable path
 	*/
-	int Init::InitMono(string executablePath) {
-		cout << "C# Assembly Loading [ " << executablePath << " ]" << endl;
+	int Init::InitMono(std::string executablePath) {
+		std::cout << "C# Assembly Loading [ " << executablePath << " ]" << std::endl;
 
 		executableFile = executablePath;
 

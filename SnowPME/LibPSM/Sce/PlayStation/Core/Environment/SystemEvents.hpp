@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string>
 #include <iostream>
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Environment {
 	typedef struct InternalData

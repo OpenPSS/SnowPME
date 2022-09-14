@@ -96,13 +96,13 @@
     <ClCompile Include="SnowPME.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mono\Init.cpp">
+    <ClCompile Include="Runtime\Init.cpp">
       <Filter>Source Files\Mono</Filter>
     </ClCompile>
-    <ClCompile Include="Config.cpp">
+    <ClCompile Include="Util\Config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mono\Security.cpp">
+    <ClCompile Include="Runtime\Security.cpp">
       <Filter>Source Files\Mono</Filter>
     </ClCompile>
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Error.cpp">
@@ -204,18 +204,24 @@
     <ClCompile Include="LibPSM\Sce\PlayStation\Core\Audio\SoundPlayer.cpp">
       <Filter>Source Files\LibPSM\Sce\PlayStation\Core\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Mono\Resources.cpp">
+    <ClCompile Include="Runtime\Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Io\Path.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\StringUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mono\Init.hpp">
+    <ClInclude Include="Runtime\Init.hpp">
       <Filter>Header Files\Mono</Filter>
     </ClInclude>
-    <ClInclude Include="Config.hpp">
+    <ClInclude Include="Util\Config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mono\Security.hpp">
+    <ClInclude Include="Runtime\Security.hpp">
       <Filter>Header Files\Mono</Filter>
     </ClInclude>
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp">
@@ -524,11 +530,14 @@
     <ClInclude Include="LibPSM\LibPSM.hpp">
       <Filter>Header Files\LibPSM</Filter>
     </ClInclude>
-    <ClInclude Include="Mono\Resources.hpp">
+    <ClInclude Include="Runtime\Resources.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\SnowPME\Mono.h">
-      <Filter>Header Files\Include\SnowPME</Filter>
+    <ClInclude Include="Io\Path.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\StringUtils.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

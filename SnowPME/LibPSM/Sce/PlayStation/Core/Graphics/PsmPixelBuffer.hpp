@@ -9,7 +9,7 @@
 #include "PixelBufferOption.hpp"
 #include "InternalOption.hpp"
 
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Graphics {
 	class PsmPixelBuffer {

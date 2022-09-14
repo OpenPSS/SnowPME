@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "GamePadData.hpp"
-using namespace std;
+
 
 namespace Sce::PlayStation::Core::Input {
 	class GamePad {

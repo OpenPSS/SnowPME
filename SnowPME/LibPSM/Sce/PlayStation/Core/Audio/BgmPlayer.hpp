@@ -6,7 +6,7 @@
 #include <iostream>
 #include "BgmStatus.hpp"
 
-using namespace std;
+
 namespace Sce::PlayStation::Core::Audio {
 	class BgmPlayer {
 	public:
