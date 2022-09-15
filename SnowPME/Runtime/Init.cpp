@@ -2,7 +2,7 @@
 #include <Runtime/Resources.hpp>
 #include <Runtime/Security.hpp>
 
-#include <LibPSM/LibPSM.hpp>
+#include <LibPSM.hpp>
 #include <Util/Config.hpp>
 
 using namespace SnowPME::Util;
@@ -35,7 +35,7 @@ namespace SnowPME::Runtime
 		MonoDomain* mDomain = mono_jit_init_version(executablePath.c_str(), "mobile");
 
 		// PSM Icalls
-		/* pss_io_icall_install_functions(
+/*		pss_io_icall_install_functions(
 			handle_close,
 			directory_create,
 			directory_remove,
@@ -55,7 +55,7 @@ namespace SnowPME::Runtime
 			file_copy,
 			file_setattr,
 			file_settime,
-			file_getpathinfo);*/
+			file_getpathinfo); */
 
 		// Add all PSM Exclusive functions.
 		Init::addFunctions();

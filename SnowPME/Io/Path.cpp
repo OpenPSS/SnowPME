@@ -5,21 +5,22 @@
 using namespace SnowPME::Util;
 namespace SnowPME::Io
 {
-	bool Path::IsSandboxDirectory(std::string path) {
+	bool Path::CheckIsSandboxDirectory(std::string path) {
 		// Convert to absolute path
 		std::string pathToCheck = Path::GetAbsolutePath(path);
 
 		// Valid sandbox folders
-		std::string sandboxFolders[4] = {
-			"/Application",
+		std::string sandboxFolders[5] = {
 			"/Documents",
-			"/System",
 			"/Temp",
+			"/Application",
+			"/fonts",
+			"/"
 		};
 
 		// Iterate over all possible sandbox folders
 		for(std::string sandboxFolder : sandboxFolders) {
-			if (StringUtils::ToLower(path).starts_with(StringUtils::ToLower(sandboxFolder))) // If path starts with sandbox folder name
+			if (StringUtils::ToLower(path) == StringUtils::ToLower(sandboxFolder)) // If path starts with sandbox folder name
 			{
 				return true;
 			}

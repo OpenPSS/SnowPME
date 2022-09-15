@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sce\PlayStation\Core\Audio\Bgm.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Audio\BgmPlayer.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Audio\Sound.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Audio\SoundPlayer.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Device\Camera.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Device\CameraImportDialog.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Device\Location.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\Clipboard.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\Log.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\NetworkInformation.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\PersistentMemory.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\Shell.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\SystemEvents.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\SystemMemory.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\SystemParameters.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Environment\TextInputDialog.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Error.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmFrameBuffer.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmGraphicsContext.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmPixelBuffer.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmShaderProgram.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmTexture.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmVertexBuffer.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Imaging\Font.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Imaging\Image.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Input\GamePad.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Input\Motion.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Input\Touch.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Services\AccountInformation.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LibPSM.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\Bgm.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\BgmPlayer.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\BgmStatus.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\Sound.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\SoundPlayer.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Audio\SoundStatus.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\Camera.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraFacing.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraImageFormat.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraImportDialog.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraInfo.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraSize.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\CameraState.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\Location.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\LocationData.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\LocationDeviceType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\PhotoImportDialog.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\Clipboard.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogResult.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogState.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\Log.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\NetworkInformation.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\PersistentMemory.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\Shell.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\SystemEvents.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\SystemMemory.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\SystemParameters.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\TextInputDialog.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\TextInputMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Error.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\BlendFunc.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\BlendFuncFactor.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\BlendFuncMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ClearMask.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ColorMask.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\CullFace.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\CullFaceDirection.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\DepthFunc.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\DepthFuncMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\DrawMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\EnableMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsCapsState.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsExtension.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsState.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsUpdate.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\InternalOption.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\MultiSampleMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PixelBufferOption.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PixelBufferType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PixelFormat.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PolygonOffset.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\Primitive.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmFrameBuffer.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmGraphicsContext.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmPixelBuffer.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmShaderProgram.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmTexture.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\PsmVertexBuffer.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ShaderAttributeType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ShaderUniformType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\StencilFunc.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\StencilFuncMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\StencilOp.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\StencilOpMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\TextureCubeFace.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\TextureFilter.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\TextureFilterMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\TextureWrap.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\TextureWrapMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\VertexFormat.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\CharMetrics.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\Font.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\FontAlias.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\FontMetrics.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\FontStyle.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\Image.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\ImageColor.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\ImageMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\ImagePosition.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\ImageRect.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Imaging\ImageSize.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\GamePad.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\GamePadButtons.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\GamePadData.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\Motion.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\MotionData.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\Touch.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\TouchData.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Input\TouchStatus.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Matrix4.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\AccountInformation.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\InAppPurchaseCommand.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\InAppPurchaseDialog.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\InAppPurchaseProductData.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\Network.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Services\NetworkRequest.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Vector2.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{557a07d6-202e-476c-bdb8-6506289c76ff}</ProjectGuid>
+    <RootNamespace>LibPSM</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\External\lib\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\Temp</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,20 @@
+#ifndef LIB_PSM_LOCATION_H
+#define LIB_PSM_LOCATION_H 1
+#include <cstdint>
+
+#include <string>
+#include <iostream>
+#include "LocationData.hpp"
+
+
+
+namespace Sce::PlayStation::Core::Device {
+	class Location {
+	public:
+		static int StartNative();
+		static int StopNative();
+		static int GetDataNative(LocationData *locationData);
+		static int GetEnableDevicesNative();
+	};
+}
+#endif

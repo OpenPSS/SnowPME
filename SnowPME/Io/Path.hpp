@@ -14,7 +14,7 @@ namespace SnowPME::Io
 	public:
 		static std::string GetAbsolutePath(std::string path);
 		static std::string ChangeSlashesToPsmStyle(std::string path);
-		static bool IsSandboxDirectory(std::string path);
+		static bool CheckIsSandboxDirectory(std::string path);
 	};
 }
 

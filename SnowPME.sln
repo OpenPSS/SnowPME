@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32120.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SnowPME", "SnowPME\SnowPME.vcxproj", "{2EECE25C-859D-4D90-B43B-2D3B6B6FBFA2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibPSM", "LibPSM\LibPSM.vcxproj", "{557A07D6-202E-476C-BDB8-6506289C76FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{2EECE25C-859D-4D90-B43B-2D3B6B6FBFA2}.Debug|x86.Build.0 = Debug|Win32
 		{2EECE25C-859D-4D90-B43B-2D3B6B6FBFA2}.Release|x86.ActiveCfg = Release|Win32
 		{2EECE25C-859D-4D90-B43B-2D3B6B6FBFA2}.Release|x86.Build.0 = Release|Win32
+		{557A07D6-202E-476C-BDB8-6506289C76FF}.Debug|x86.ActiveCfg = Debug|Win32
+		{557A07D6-202E-476C-BDB8-6506289C76FF}.Debug|x86.Build.0 = Debug|Win32
+		{557A07D6-202E-476C-BDB8-6506289C76FF}.Release|x86.ActiveCfg = Release|Win32
+		{557A07D6-202E-476C-BDB8-6506289C76FF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
