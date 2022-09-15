@@ -1,9 +1,9 @@
-#include <Io/Path.hpp>
+#include <IO/Path.hpp>
 #include <Util/StringUtils.hpp>
 #include <vector>
 
 using namespace SnowPME::Util;
-namespace SnowPME::Io
+namespace SnowPME::IO
 {
 	bool Path::CheckIsSandboxDirectory(std::string path) {
 		// Convert to absolute path

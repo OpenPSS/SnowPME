@@ -8,7 +8,7 @@
 #define PSM_PATH_SEPERATOR "/"
 #define WINDOWS_PATH_SEPERATOR "\\"
 
-namespace SnowPME::Io
+namespace SnowPME::IO
 {
 	class Path {
 	public:
