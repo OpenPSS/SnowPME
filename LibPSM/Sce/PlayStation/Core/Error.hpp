@@ -7,6 +7,7 @@
 
 
 enum PsmError : unsigned int {
+	PSM_OK = 0x00,
 	/* IO */
 	PSM_ERROR_IO_ESRCH = 0x80010003,
 	PSM_ERROR_IO_EISDIR = 0x80010015,

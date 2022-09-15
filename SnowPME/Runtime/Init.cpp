@@ -1,11 +1,13 @@
 #include <Runtime/Init.hpp>
 #include <Runtime/Resources.hpp>
 #include <Runtime/Security.hpp>
+#include <IO/Filesystem.hpp>
 
 #include <LibPSM.hpp>
 #include <Util/Config.hpp>
 
 using namespace SnowPME::Util;
+using namespace SnowPME::IO;
 
 namespace SnowPME::Runtime
 {
@@ -35,27 +37,29 @@ namespace SnowPME::Runtime
 		MonoDomain* mDomain = mono_jit_init_version(executablePath.c_str(), "mobile");
 
 		// PSM Icalls
-/*		pss_io_icall_install_functions(
-			handle_close,
-			directory_create,
-			directory_remove,
-			directory_open,
-			diretory_read,
-			directory_getcwd,
-			directory_setcwd,
-			file_open,
-			file_delete,
-			file_getinfo,
-			file_read,
-			file_write,
-			file_seek,
-			file_flush,
-			file_getsize,
-			file_truncate,
-			file_copy,
-			file_setattr,
-			file_settime,
-			file_getpathinfo); */
+		pss_io_icall_install_functions(
+			Filesystem::PsmClose,
+			Filesystem::PsmDirectoryCreate,
+			Filesystem::PsmDirectoryRemove,
+			Filesystem::PsmDirectoryOpen,
+			Filesystem::PsmDirectoryRead,
+			Filesystem::PsmDirectoryGetWorking,
+			Filesystem::PsmDirectorySetWorking,
+			
+			Filesystem::PsmFileOpen,
+			Filesystem::PsmFileDelete,
+			Filesystem::PsmFileGetInformation,
+			Filesystem::PsmFileRead,
+			Filesystem::PsmFileWrite,
+			Filesystem::PsmFileSeek,
+			Filesystem::PsmFileFlush,
+			Filesystem::PsmFileGetSize,
+			Filesystem::PsmFileTruncate,
+			Filesystem::PsmFileCopy,
+			Filesystem::PsmFileSetAttributes,
+			Filesystem::PsmFileSetTimes,
+
+			Filesystem::PsmFileGetPathInformation); 
 
 		// Add all PSM Exclusive functions.
 		Init::addFunctions();

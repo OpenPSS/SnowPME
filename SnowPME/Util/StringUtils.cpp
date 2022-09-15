@@ -23,6 +23,7 @@ namespace SnowPME::Util {
 			strcopy[i] = std::toupper(strcopy[i]); // change character to uppercase
 		}
 
+		return strcopy;
 	}
 
 	std::string StringUtils::Join(std::vector<std::string> parts, std::string delimiter) {

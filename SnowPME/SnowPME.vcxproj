@@ -160,7 +160,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Io\Path.cpp" />
+    <ClCompile Include="IO\Filesystem.cpp" />
+    <ClCompile Include="IO\Path.cpp" />
     <ClCompile Include="Util\Config.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
     <ClCompile Include="Runtime\Resources.cpp" />
@@ -169,7 +170,8 @@
     <ClCompile Include="Util\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Io\Path.hpp" />
+    <ClInclude Include="IO\Filesystem.hpp" />
+    <ClInclude Include="IO\Path.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
     <ClInclude Include="Util\Config.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />

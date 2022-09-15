@@ -108,10 +108,13 @@
     <ClCompile Include="Runtime\Resources.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Io\Path.cpp">
+    <ClCompile Include="IO\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Util\StringUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO\Filesystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,10 +134,13 @@
     <ClInclude Include="Runtime\Resources.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Io\Path.hpp">
+    <ClInclude Include="IO\Path.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\StringUtils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO\Filesystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
