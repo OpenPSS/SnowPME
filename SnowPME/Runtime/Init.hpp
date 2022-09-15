@@ -3,16 +3,18 @@
 #include <mono/mono.h>
 #include <string>
 
+#define PSM_MAIN_EXECUTABLE "app.exe"
 
 namespace SnowPME::Runtime
 {
 	class Init {
 	private:
-		static std::string executableFile;
 		static void addFunctions();
-		static void launchProgram(MonoAssembly* assembly, char* path);
+		static void launchExe(std::string runExe);
+		static int initMono(std::string executablePath);
 	public:
-		static int InitMono(std::string executablePath);
+		static void LoadApplication(std::string gameFolder);
+		static void StartApplication();
 	};
 }
 

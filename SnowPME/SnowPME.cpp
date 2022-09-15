@@ -3,7 +3,7 @@
 #include <Io/Path.hpp>
 
 using namespace SnowPME::Runtime;
-using namespace SnowPME::Io;
+using namespace SnowPME::IO;
 using namespace SnowPME::Util;
 
 namespace SnowPME {
@@ -11,7 +11,9 @@ namespace SnowPME {
 	public:
 		Program() {
 			Config::ReadConfig("psm.config");
-			Init::InitMono("Application\\app.exe");
+
+			Init::LoadApplication("Test");
+			Init::StartApplication();
 		}
 	};
 }

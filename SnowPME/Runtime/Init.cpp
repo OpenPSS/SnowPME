@@ -1,25 +1,46 @@
 #include <Runtime/Init.hpp>
 #include <Runtime/Resources.hpp>
 #include <Runtime/Security.hpp>
+
+#include <IO/ICall.hpp>
 #include <IO/Filesystem.hpp>
+#include <IO/Path.hpp>
+
+#include <Util/Config.hpp>
 
 #include <LibPSM.hpp>
-#include <Util/Config.hpp>
+#include <filesystem>
+#include <string>
 
 using namespace SnowPME::Util;
 using namespace SnowPME::IO;
 
-namespace SnowPME::Runtime
-{
-	std::string Init::executableFile = "";
+namespace SnowPME::Runtime {
 
-	/*
-	*	This function initalizes mono with a given executable path
-	*/
-	int Init::InitMono(std::string executablePath) {
-		std::cout << "C# Assembly Loading [ " << executablePath << " ]" << std::endl;
+	static std::string appExe = "";
+	static MonoDomain* psmDomain;
+	static MonoAssembly*psmAssembly;
 
-		executableFile = executablePath;
+	void Init::LoadApplication(std::string gameFolder) {
+
+		std::filesystem::path gamePath = std::filesystem::path(gameFolder);
+		std::filesystem::path applicationPath = gamePath.append("Application");
+		std::filesystem::path documentsPath = gamePath.append("Documents");
+		std::filesystem::path tempPath = gamePath.append("Temp");
+		std::filesystem::path systemPath = gamePath.append("System");
+
+		Init::initMono(std::filesystem::absolute(applicationPath.append(PSM_MAIN_EXECUTABLE)).string());
+	}
+
+	void Init::StartApplication() {
+		Init::launchExe(appExe);
+	}
+
+	int Init::initMono(std::string executablePath) {
+		appExe = executablePath;
+
+		std::cout << "Initalzing Mono " << executablePath << std::endl;
+
 
 		// Lockdown mono if security is enabled
 		if (!Config::SecurityCritical) {
@@ -34,38 +55,38 @@ namespace SnowPME::Runtime
 		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
 
 		// Create a domain in which this application will run under.
-		MonoDomain* mDomain = mono_jit_init_version(executablePath.c_str(), "mobile");
+		psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
 
 		// PSM Icalls
 		pss_io_icall_install_functions(
-			Filesystem::PsmClose,
-			Filesystem::PsmDirectoryCreate,
-			Filesystem::PsmDirectoryRemove,
-			Filesystem::PsmDirectoryOpen,
-			Filesystem::PsmDirectoryRead,
-			Filesystem::PsmDirectoryGetWorking,
-			Filesystem::PsmDirectorySetWorking,
+			ICall::PsmClose,
+			ICall::PsmDirectoryCreate,
+			ICall::PsmDirectoryRemove,
+			ICall::PsmDirectoryOpen,
+			ICall::PsmDirectoryRead,
+			ICall::PsmDirectoryGetWorking,
+			ICall::PsmDirectorySetWorking,
 			
-			Filesystem::PsmFileOpen,
-			Filesystem::PsmFileDelete,
-			Filesystem::PsmFileGetInformation,
-			Filesystem::PsmFileRead,
-			Filesystem::PsmFileWrite,
-			Filesystem::PsmFileSeek,
-			Filesystem::PsmFileFlush,
-			Filesystem::PsmFileGetSize,
-			Filesystem::PsmFileTruncate,
-			Filesystem::PsmFileCopy,
-			Filesystem::PsmFileSetAttributes,
-			Filesystem::PsmFileSetTimes,
+			ICall::PsmFileOpen,
+			ICall::PsmFileDelete,
+			ICall::PsmFileGetInformation,
+			ICall::PsmFileRead,
+			ICall::PsmFileWrite,
+			ICall::PsmFileSeek,
+			ICall::PsmFileFlush,
+			ICall::PsmFileGetSize,
+			ICall::PsmFileTruncate,
+			ICall::PsmFileCopy,
+			ICall::PsmFileSetAttributes,
+			ICall::PsmFileSetTimes,
 
-			Filesystem::PsmFileGetPathInformation); 
+			ICall::PsmFileGetPathInformation); 
 
 		// Add all PSM Exclusive functions.
 		Init::addFunctions();
 
 		// Load Sce.PlayStation.Core.dll
-		MonoAssembly* psmAssembly = mono_domain_assembly_open(mDomain, Config::PsmCorelibsPath.c_str());
+		psmAssembly = mono_domain_assembly_open(psmDomain, Config::PsmCorelibsPath.c_str());
 
 		// Calls SetToConsole. 
 		MonoImage* psmImage = mono_assembly_get_image(psmAssembly);
@@ -87,24 +108,32 @@ namespace SnowPME::Runtime
 		mono_threadpool_set_max_threads(8,8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		// Load main executable (app.exe)
-		MonoAssembly* appAssembly = mono_domain_assembly_open(mDomain, executablePath.c_str());
-		
-		Init::launchProgram(appAssembly, &executableFile[0]);
-		return 0;
+		return PSM_OK;
 	}
 
-	void Init::launchProgram(MonoAssembly* assembly, char* path) {
-		MonoObject* exec = 0;
+	void Init::launchExe(std::string runExe) {
+		// Load the executable
+		MonoAssembly* runAssembly = mono_domain_assembly_open(psmDomain, runExe.c_str());
 
-		MonoImage* image = mono_assembly_get_image(assembly);
-		uint32_t entryPoint = mono_image_get_entry_point(image);
-		MonoMethod* method = mono_get_method(image, entryPoint, NULL);
-		char** argv = &path;
-		mono_runtime_run_main(method, 1, argv, NULL);
+		// Create argv
+		char* args[2] = { (char*)runExe.c_str(), NULL };
+
+		MonoObject* executionContext = NULL;
+
+		// Get executable image
+		MonoImage* runImage = mono_assembly_get_image(runAssembly);
 		
-		if (exec)
-			mono_unhandled_exception(exec);
+		// Get address of entry point
+		uint32_t entryPointAddr = mono_image_get_entry_point(runImage);
+		
+		// Get entry point method
+		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, NULL);
+		
+		// Run entry point function
+		mono_runtime_run_main(entryPointMethod, 1, args, &executionContext);
+		
+		if (!executionContext)
+			mono_unhandled_exception(executionContext);
 
 	}
 

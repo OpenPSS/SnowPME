@@ -28,8 +28,10 @@ namespace SnowPME::Util {
 
 	std::string StringUtils::Join(std::vector<std::string> parts, std::string delimiter) {
 		std::string str = "";
-		for (std::string part : parts) {
-			str += delimiter + part;
+		for (int i = 0; i < parts.size(); i++) {
+			str += parts.at(i);
+			if (i + 1 <= parts.size())
+				str += delimiter;
 		}
 		return str;
 	}
