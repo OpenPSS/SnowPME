@@ -143,7 +143,8 @@ namespace SnowPME::IO {
 
 		// Get the real path to this folder on disk
 		std::filesystem::path fsRealPath = std::filesystem::path(filesystem->PathOnDisk());
-		// Get the name inside the PSM Sandbox.
+		
+		// Get the folder name inside the PSM Sandbox.
 		std::string fsName = filesystem->SandboxPath();
 
 		// Subtract sandbox name from the full path, should result in a relative path from inside the specific sandboxed folder ..

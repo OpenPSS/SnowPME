@@ -102,6 +102,7 @@ namespace SnowPME::IO {
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_IO_EPERM;
 
+
 		ScePssFileInformation_t fileinfo = psmSandbox->StatFile(relativePath);
 		memcpy(pFileInfo, &fileinfo, sizeof(ScePssFileInformation_t));
 
