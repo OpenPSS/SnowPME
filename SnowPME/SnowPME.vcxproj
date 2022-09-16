@@ -88,7 +88,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)\External\include;$(SolutionDir)\LibPSM;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -163,6 +163,8 @@
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
+    <ClCompile Include="IO\Sandbox.cpp" />
+    <ClCompile Include="Runtime\AppGlobals.cpp" />
     <ClCompile Include="Util\Config.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
     <ClCompile Include="Runtime\Resources.cpp" />
@@ -174,7 +176,9 @@
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
     <ClInclude Include="IO\Path.hpp" />
+    <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
+    <ClInclude Include="Runtime\AppGlobals.hpp" />
     <ClInclude Include="Util\Config.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
     <ClInclude Include="Runtime\Resources.hpp" />

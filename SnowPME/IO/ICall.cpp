@@ -1,8 +1,10 @@
 #include <IO/ICall.hpp>
 #include <IO/Path.hpp>
+#include <Runtime/AppGlobals.hpp>
 
 #include <LibPSM.hpp>
 
+using namespace SnowPME::Runtime;
 
 namespace SnowPME::IO {
 	int ICall::PsmClose(uint64_t handle) {
@@ -82,23 +84,27 @@ namespace SnowPME::IO {
 		return PSM_OK;
 	}
 	int ICall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {
-		return PSM_OK;
-		
-		/*if (pFileInfo == NULL)
+		if (pFileInfo == NULL)
 			return PSM_ERROR_IO_ESRCH;
 		memset(pFileInfo, 0, sizeof(ScePssFileInformation_t));
 
 		if (!pFileInfo)
 			return PSM_ERROR_IO_ESRCH;
 
-		std::string relativePath = std::string(pszFileName);
-		std::string absolutePath = Path::GetAbsolutePath(relativePath);
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
 
-		if (Path::CheckIsSandboxDirectory(absolutePath))
+		std::string relativePath = std::string(pszFileName);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		if (psmSandbox->IsDirectory(absolutePath))
 			return PSM_ERROR_IO_EISDIR;
 
-		// TODO: Check if is dir
-		*/
+		if (!psmSandbox->PathExist(absolutePath))
+			return PSM_ERROR_IO_EPERM;
 
+		ScePssFileInformation_t fileinfo = psmSandbox->StatFile(relativePath);
+		memcpy(pFileInfo, &fileinfo, sizeof(ScePssFileInformation_t));
+
+		return PSM_OK;
 	}
 }

@@ -1,5 +1,5 @@
-#ifndef SNOW_PME_MONO_RESOURCES_H
-#define SNOW_PME_MONO_RESOURCES_H 1
+#ifndef SNOW_PME_RUNTIME_RESOURCES_H
+#define SNOW_PME_RUNTIME_RESOURCES_H 1
 
 #include <string>
 #include <iostream>

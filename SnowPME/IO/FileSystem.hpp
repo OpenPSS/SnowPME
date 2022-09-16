@@ -2,25 +2,23 @@
 #define SNOW_PME_FILESYSTEM_H 1
 
 #include <string>
-
-#define PSM_PATH_SEPERATOR "/"
-#define WINDOWS_PATH_SEPERATOR "\\"
-#define PSM_PATH_MAX (0xAC)
+#include <filesystem>
 
 namespace SnowPME::IO{
 	class FileSystem {
 	private:
-		static std::string currentWorkingDirectory;
-
-		bool rewritable;
 		std::byte gamekey[0x20];
-		std::string filesystemPath;
+		bool hasEdata;
+		bool rw;
+		std::string pathOnDisk;
+		std::string sandboxPath;
 	public:
-		FileSystem(std::string path, std::string sandboxPathName, bool rewritable, bool encrypted);
+		FileSystem(std::string filesystemPath, std::string sandboxPathName, bool rewritable);
 		~FileSystem();
 
-		std::string AbsolutePath(std::string path);
-		bool IsDirectory(std::string path);
+		std::string SandboxPath();
+		std::string PathOnDisk();
+		bool IsEncrypted();
 		bool IsRewitable();
 	};
 }

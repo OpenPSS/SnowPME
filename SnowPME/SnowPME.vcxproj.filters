@@ -120,6 +120,12 @@
     <ClCompile Include="IO\FileSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IO\Sandbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime\AppGlobals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Runtime\Init.hpp">
@@ -147,6 +153,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IO\FileSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO\Sandbox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtime\AppGlobals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

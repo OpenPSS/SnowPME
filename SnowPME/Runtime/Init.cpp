@@ -1,10 +1,12 @@
 #include <Runtime/Init.hpp>
 #include <Runtime/Resources.hpp>
 #include <Runtime/Security.hpp>
+#include <Runtime/AppGlobals.hpp>
 
 #include <IO/ICall.hpp>
 #include <IO/Filesystem.hpp>
 #include <IO/Path.hpp>
+#include <IO/Sandbox.hpp>
 
 #include <Util/Config.hpp>
 
@@ -19,17 +21,11 @@ namespace SnowPME::Runtime {
 
 	static std::string appExe = "";
 	static MonoDomain* psmDomain;
-	static MonoAssembly*psmAssembly;
+	static MonoAssembly* psmAssembly;
 
 	void Init::LoadApplication(std::string gameFolder) {
-
-		std::filesystem::path gamePath = std::filesystem::path(gameFolder);
-		std::filesystem::path applicationPath = gamePath.append("Application");
-		std::filesystem::path documentsPath = gamePath.append("Documents");
-		std::filesystem::path tempPath = gamePath.append("Temp");
-		std::filesystem::path systemPath = gamePath.append("System");
-
-		Init::initMono(std::filesystem::absolute(applicationPath.append(PSM_MAIN_EXECUTABLE)).string());
+		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
+		Init::initMono(AppGlobals::PsmSandbox()->LocateRealPath("/Application/app.exe"));
 	}
 
 	void Init::StartApplication() {

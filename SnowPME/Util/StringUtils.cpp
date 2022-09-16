@@ -4,7 +4,7 @@ namespace SnowPME::Util {
 
 	std::string StringUtils::ToLower(std::string str) {
 		// dont modify the original string
-		std::string strcopy; 
+		std::string strcopy = str;
 		
 		//iterate over the entire string
 		for (size_t i = 0; i < strcopy.length(); i++) {
@@ -16,7 +16,7 @@ namespace SnowPME::Util {
 
 	std::string StringUtils::ToUpper(std::string str) {
 		// dont modify the original string
-		std::string strcopy;
+		std::string strcopy = str;
 
 		//iterate over the entire string
 		for (size_t i = 0; i < strcopy.length(); i++) {
@@ -28,9 +28,9 @@ namespace SnowPME::Util {
 
 	std::string StringUtils::Join(std::vector<std::string> parts, std::string delimiter) {
 		std::string str = "";
-		for (int i = 0; i < parts.size(); i++) {
+		for (size_t i = 0; i < parts.size(); i++) {
 			str += parts.at(i);
-			if (i + 1 <= parts.size())
+			if (i + 1 < parts.size())
 				str += delimiter;
 		}
 		return str;

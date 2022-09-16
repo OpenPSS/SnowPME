@@ -1,5 +1,5 @@
-#ifndef SNOW_PME_MONO_SECURITY_H
-#define SNOW_PME_MONO_SECURITY_H 1
+#ifndef SNOW_PME_RUNTIME_SECURITY_H
+#define SNOW_PME_RUNTIME_SECURITY_H 1
 
 #include <string>
 #include <iostream>

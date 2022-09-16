@@ -3,6 +3,10 @@
 
 #include <string>
 
+#define PSM_PATH_SEPERATOR "/"
+#define WINDOWS_PATH_SEPERATOR "\\"
+#define PSM_PATH_MAX (0xA0)
+
 namespace SnowPME::IO
 {
 	class Path {
