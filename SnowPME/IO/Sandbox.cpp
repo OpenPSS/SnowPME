@@ -3,6 +3,8 @@
 #include <Util/StringUtils.hpp>
 #include <filesystem>
 #include <sys/stat.h>
+#include <mono/mono.h>
+#include <LibPSM.hpp>
 
 using namespace SnowPME::Util;
 
@@ -63,9 +65,14 @@ namespace SnowPME::IO {
 		psmPathInformation.tLastAccessTime = stats.st_atime;
 
 		if ((stats.st_mode & S_IFDIR) != 0)
-			psmPathInformation.uFlags |= PSM_IO_DIR;
-		if ( ( (stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
-			psmPathInformation.uFlags |= PSM_IO_RO;
+			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_DIRECTORY;
+
+		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
+			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
+
+		if (filesystem->IsEncrypted())
+			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
+
 
 		return psmPathInformation;
 	}
@@ -93,7 +100,7 @@ namespace SnowPME::IO {
 
 		if (std::filesystem::exists(LocateRealPath(absPath)))
 			return true;
-		
+
 		return false;
 	}
 
@@ -117,7 +124,7 @@ namespace SnowPME::IO {
 
 		if (!this->PathExist(absPath))
 			return false;
-		
+
 		std::string realPath = this->LocateRealPath(absPath);
 
 		if (std::filesystem::is_directory(realPath))
@@ -131,19 +138,110 @@ namespace SnowPME::IO {
 
 	void Sandbox::CloseDirectory(PsmHandle* handle) {
 		if (handle != NULL) {
+			if (handle->opened && handle->fileFd != NULL) {
+				delete handle->directoryFd;
+			}
 			handle->opened = false;
-			delete handle->directoryFd;
 			delete handle;
 		}
 	}
 
 	void Sandbox::CloseFile(PsmHandle* handle) {
 		if (handle != NULL) {
+			if (handle->opened && handle->fileFd != NULL) {
+				handle->fileFd->close();
+				delete handle->fileFd;
+			}
 			handle->opened = false;
-			handle->fileFd->close();
-			delete handle->fileFd;
 			delete handle;
 		}
+	}
+
+	uint64_t Sandbox::GetSize(PsmHandle* handle) {
+		if (!handle->encrypted) {
+			return std::filesystem::file_size(handle->realPath);
+		}
+		return 0;
+	}
+
+	PsmHandle* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+		std::string realPath = this->LocateRealPath(absPath);
+
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		PsmHandle* handle = new PsmHandle();
+		memset(handle, 0, sizeof(PsmHandle));
+
+		bool openRw = (((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0));
+
+		handle->realPath = realPath;
+		handle->sandboxPath = absPath;
+
+		handle->flags = flags;
+		handle->rw = openRw;
+
+		handle->directory = false;
+		handle->directoryFd = NULL;
+
+
+		if (filesystem->IsEncrypted()) {
+			// TODO: check psse.list
+			handle->encrypted = true;
+		}
+
+		if (openRw && !filesystem->IsRewitable()) {
+			handle->opened = false;
+			handle->failReason = PSM_ERROR_ACCESS_DENIED;
+			return handle;
+		}
+
+		if (!openRw && !this->PathExist(absPath)) {
+			handle->opened = false;
+			handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
+			return handle;
+		}
+
+
+		// Calculate mode
+
+		std::fstream::ios_base::openmode openmode = 0;
+		openmode |= std::ios::_Nocreate;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0)
+			openmode |= std::ios::in;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0)
+			openmode |= std::ios::out;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_BINARY) != 0)
+			openmode |= std::ios::binary;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0)
+			openmode |= std::ios::trunc;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0)
+			openmode ^= std::ios::trunc;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0)
+			openmode |= std::ios::ate;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0)
+			openmode |= std::ios::_Noreplace;
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0)
+			openmode ^= std::ios::_Nocreate;
+			
+
+
+		std::fstream* str = new std::fstream();
+		str->open(realPath, openmode);
+
+		handle->failReason = PSM_ERROR_NO_ERROR;
+		handle->opened = true;
+		handle->fileFd = str;
+
+		return handle;
 	}
 
 	PsmHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {
@@ -160,15 +258,15 @@ namespace SnowPME::IO {
 		handle->opened = true;
 		handle->rw = filesystem->IsRewitable();
 		handle->encrypted = filesystem->IsEncrypted();
+		handle->emulated = filesystem->IsEmulated();
 		handle->directory = true;
 
-		// TODO implement emulated "/" directory
-		handle->emulated = false;
-		
+		handle->flags = SCE_PSS_FILE_OPEN_FLAG_READ;
 		handle->sandboxPath = absPath;
 		handle->realPath = realPath;
 		handle->directoryFd = iterator;
 		handle->fileFd = NULL;
+		handle->failReason = PSM_ERROR_NO_ERROR;
 		return handle;
 	}
 	std::string Sandbox::LocateRealPath(std::string sandboxedPath) {

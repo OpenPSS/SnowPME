@@ -10,6 +10,7 @@ namespace SnowPME::IO{
 		std::byte gamekey[0x20];
 		bool hasEdata;
 		bool rw;
+		bool emulated;
 		std::string pathOnDisk;
 		std::string sandboxPath;
 	public:
@@ -20,6 +21,7 @@ namespace SnowPME::IO{
 		std::string PathOnDisk();
 		bool IsEncrypted();
 		bool IsRewitable();
+		bool IsEmulated();
 	};
 }
 

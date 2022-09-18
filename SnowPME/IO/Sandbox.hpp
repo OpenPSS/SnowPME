@@ -1,6 +1,5 @@
 #ifndef SNOW_PME_SANDBOX_H
 #define SNOW_PME_SANDBOX_H 1
-
 #include <IO/FileSystem.hpp>
 #include <vector>
 #include <fstream>
@@ -12,16 +11,14 @@ typedef struct PsmHandle {
 	bool directory;
 	bool encrypted;
 	bool emulated;
+	uint32_t failReason;
+	ScePssFileOpenFlag_t flags;
 	std::string sandboxPath;
 	std::string realPath;
 	std::filesystem::directory_iterator* directoryFd;
-	std::ifstream* fileFd;
+	std::fstream* fileFd;
 } PsmHandle;
 
-typedef enum PsmFileMode : uint32_t {
-	PSM_IO_DIR = 0x2,
-	PSM_IO_RO = 0x1,
-} PsmFileMode;
 
 namespace SnowPME::IO {
 	class Sandbox {	
@@ -40,8 +37,9 @@ namespace SnowPME::IO {
 
 		void CloseDirectory(PsmHandle* handle);
 		void CloseFile(PsmHandle* handle);
-
+		uint64_t GetSize(PsmHandle* handle);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
+		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);
 
 		std::string AbsolutePath(std::string sandboxedPath);
 		std::string LocateRealPath(std::string sandboxedPath);

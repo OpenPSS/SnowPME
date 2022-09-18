@@ -3,6 +3,7 @@
 #include <Runtime/AppGlobals.hpp>
 
 #include <LibPSM.hpp>
+#include <mono/mono.h>
 
 using namespace SnowPME::Runtime;
 
@@ -51,6 +52,14 @@ namespace SnowPME::IO {
 
 		if (psmSandbox->IsDirectory(absolutePath)) {
 			PsmHandle* directoryHandle = psmSandbox->OpenDirectory(absolutePath);
+			
+			if (directoryHandle->failReason != PSM_ERROR_NO_ERROR)
+			{
+				uint32_t failReason = directoryHandle->failReason;
+				psmSandbox->CloseDirectory(directoryHandle);
+				return failReason;
+			}
+			
 			*pDirectory = (uint64_t)directoryHandle;
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -70,8 +79,36 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
-		std::cout << "Filesystem::PsmFileOpen Not Implemented" << std::endl;
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		if (pszFileName == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (phFile == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (strlen(pszFileName) > PSM_PATH_MAX)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+
+		std::string relativePath = std::string(pszFileName);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		if (psmSandbox->IsFile(absolutePath)) {
+			PsmHandle* fileHandle = psmSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags);
+
+			if (fileHandle->failReason != PSM_ERROR_NO_ERROR)
+			{
+				uint32_t failReason = fileHandle->failReason;
+				psmSandbox->CloseFile(fileHandle);
+				return failReason;
+			}
+
+			*phFile = (uint64_t)fileHandle;
+			return PSM_ERROR_NO_ERROR;
+		}
+
+		return PSM_ERROR_PATH_NOT_FOUND;
 	}
 	int ICall::PsmFileDelete(char* pszFileName) {
 		std::cout << "Filesystem::PsmFileDelete Not Implemented" << std::endl;
@@ -98,8 +135,21 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
-		std::cout << "Filesystem::PsmFileGetSize Not Implemented" << std::endl;
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		if (puSize == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (file == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+		
+		PsmHandle* handle = (PsmHandle*)file;
+
+		if (!handle->opened)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		*puSize = psmSandbox->GetSize((PsmHandle*)file);
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int ICall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
 		std::cout << "Filesystem::PsmFileTruncate Not Implemented" << std::endl;
@@ -125,7 +175,6 @@ namespace SnowPME::IO {
 		if (pFileInfo == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		// Implement function
 		memset(pFileInfo, 0, sizeof(ScePssFileInformation_t));
 
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
