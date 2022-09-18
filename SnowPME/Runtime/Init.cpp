@@ -35,7 +35,7 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		std::cout << "Initalzing Mono " << executablePath << std::endl;
+		LOG("Initalzing Mono " << executablePath);
 
 
 		// Lockdown mono if security is enabled
@@ -128,7 +128,7 @@ namespace SnowPME::Runtime {
 		// Run entry point function
 		mono_runtime_run_main(entryPointMethod, 1, args, &executionContext);
 		
-		if (!executionContext)
+		if (executionContext != NULL)
 			mono_unhandled_exception(executionContext);
 
 	}

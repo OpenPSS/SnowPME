@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <mono/mono.h>
 #include <LibPSM.hpp>
+#include <Runtime/AppGlobals.hpp>
 
 using namespace SnowPME::Util;
 
@@ -47,9 +48,8 @@ namespace SnowPME::IO {
 		throw std::exception("FileSystem not found ?? ??");
 	}
 
-	ScePssFileInformation_t Sandbox::StatFile(std::string sandboxedPath) {
+	ScePssFileInformation_t Sandbox::Stat(std::string sandboxedPath, std::string setName) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
-
 		FileSystem* filesystem = this->findFilesystem(sandboxedPath);
 
 		struct stat stats;
@@ -58,7 +58,7 @@ namespace SnowPME::IO {
 		ScePssFileInformation_t psmPathInformation;
 		memset(&psmPathInformation, 0, sizeof(ScePssFileInformation_t));
 
-		strncpy(psmPathInformation.szName, sandboxedPath.c_str(), PSM_PATH_MAX);
+		strncpy(psmPathInformation.szName, setName.c_str(), PSM_PATH_MAX);
 		psmPathInformation.uFileSize = stats.st_size;
 		psmPathInformation.tCreationTime = stats.st_ctime;
 		psmPathInformation.tLastWriteTime = stats.st_mtime;
@@ -138,7 +138,7 @@ namespace SnowPME::IO {
 
 	void Sandbox::CloseDirectory(PsmHandle* handle) {
 		if (handle != NULL) {
-			if (handle->opened && handle->fileFd != NULL) {
+			if (handle->opened && handle->directoryFd != NULL) {
 				delete handle->directoryFd;
 			}
 			handle->opened = false;
@@ -171,7 +171,6 @@ namespace SnowPME::IO {
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
 		PsmHandle* handle = new PsmHandle();
-		memset(handle, 0, sizeof(PsmHandle));
 
 		bool openRw = (((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0));
 
@@ -196,13 +195,6 @@ namespace SnowPME::IO {
 			return handle;
 		}
 
-		if (!openRw && !this->PathExist(absPath)) {
-			handle->opened = false;
-			handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
-			return handle;
-		}
-
-
 		// Calculate mode
 
 		std::fstream::ios_base::openmode openmode = 0;
@@ -220,19 +212,17 @@ namespace SnowPME::IO {
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0)
 			openmode |= std::ios::trunc;
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0)
-			openmode ^= std::ios::trunc;
-
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0)
-			openmode |= std::ios::ate;
+			openmode |= std::ios::app;
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0)
 			openmode |= std::ios::_Noreplace;
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0)
-			openmode ^= std::ios::_Nocreate;
-			
+			openmode &= ~std::ios::_Nocreate;
 
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0)
+			openmode &= ~std::ios::trunc;
 
 		std::fstream* str = new std::fstream();
 		str->open(realPath, openmode);
@@ -253,7 +243,6 @@ namespace SnowPME::IO {
 		std::filesystem::directory_iterator* iterator = new std::filesystem::directory_iterator(realPath);
 
 		PsmHandle* handle = new PsmHandle();
-		memset(handle, 0, sizeof(PsmHandle));
 
 		handle->opened = true;
 		handle->rw = filesystem->IsRewitable();

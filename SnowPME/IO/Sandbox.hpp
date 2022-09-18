@@ -6,17 +6,17 @@
 #include <mono/mono.h>
 
 typedef struct PsmHandle {
-	bool opened;
-	bool rw;
-	bool directory;
-	bool encrypted;
-	bool emulated;
-	uint32_t failReason;
-	ScePssFileOpenFlag_t flags;
+	bool opened = false;
+	bool rw = false;
+	bool directory = false;
+	bool encrypted = false;
+	bool emulated = false;
+	uint32_t failReason = 0;
+	ScePssFileOpenFlag_t flags = (ScePssFileOpenFlag_t)0;
 	std::string sandboxPath;
 	std::string realPath;
-	std::filesystem::directory_iterator* directoryFd;
-	std::fstream* fileFd;
+	std::filesystem::directory_iterator* directoryFd = NULL;
+	std::fstream* fileFd = NULL;
 } PsmHandle;
 
 
@@ -30,7 +30,7 @@ namespace SnowPME::IO {
 	public:
 		Sandbox(std::string gameFolder);
 		~Sandbox();
-		ScePssFileInformation_t StatFile(std::string sandboxedPath);
+		ScePssFileInformation_t Stat(std::string sandboxedPath, std::string setName);
 		bool PathExist(std::string sandboxedPath);
 		bool IsFile(std::string sandboxedPath);
 		bool IsDirectory(std::string sandboxedPath);
@@ -40,7 +40,6 @@ namespace SnowPME::IO {
 		uint64_t GetSize(PsmHandle* handle);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
 		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);
-
 		std::string AbsolutePath(std::string sandboxedPath);
 		std::string LocateRealPath(std::string sandboxedPath);
 	};

@@ -9,6 +9,7 @@ using namespace SnowPME::Runtime;
 
 namespace SnowPME::IO {
 	int ICall::PsmClose(uint64_t handle) {
+		LOG(__func__);
 		if (handle == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
@@ -36,6 +37,7 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
+		LOG(__func__);
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -67,8 +69,41 @@ namespace SnowPME::IO {
 		return PSM_ERROR_PATH_NOT_FOUND;
 	}
 	int ICall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
-		std::cout << "Filesystem::PsmDirectoryRead Not Implemented" << std::endl;
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		LOG(__func__);
+		if (pFileInfo == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (directory == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		PsmHandle* handle = (PsmHandle*)directory;
+
+		if (!handle->opened)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (!handle->directory)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (!handle->directoryFd)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (!handle->directoryFd->_At_end()) {
+			std::filesystem::directory_entry entry = *handle->directoryFd[0];
+			std::string filename = entry.path().filename().string();
+
+			std::string newFile = Path::Combine(handle->sandboxPath, filename);
+			ScePssFileInformation_t fileStat = psmSandbox->Stat(newFile, filename);
+			(*handle->directoryFd)++;
+
+			memcpy(pFileInfo, &fileStat, sizeof(ScePssFileInformation_t));
+		}
+		else {
+			return PSM_ERROR_PATH_NOT_FOUND;
+		}
+
+		return PSM_ERROR_NO_ERROR;
+
 	}
 	int ICall::PsmDirectoryGetWorking(char* pszDirectoryPath, uint32_t uBufferSize) {
 		std::cout << "Filesystem::PsmDirectoryGetWorking Not Implemented" << std::endl;
@@ -79,6 +114,7 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
+		LOG(__func__);
 		if (pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -135,6 +171,7 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
+		LOG(__func__);
 		if (puSize == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -147,7 +184,7 @@ namespace SnowPME::IO {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		*puSize = psmSandbox->GetSize((PsmHandle*)file);
+		*puSize = (uint32_t)psmSandbox->GetSize(handle);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -168,6 +205,8 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {
+		LOG(__func__);
+
 		// Check arguments
 		if (pFileInfo == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -182,14 +221,11 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
-		if (psmSandbox->IsDirectory(absolutePath))
-			return PSM_ERROR_NOT_FOUND;
-
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_NOT_FOUND;
 
 
-		ScePssFileInformation_t fileinfo = psmSandbox->StatFile(relativePath);
+		ScePssFileInformation_t fileinfo = psmSandbox->Stat(absolutePath, relativePath);
 		memcpy(pFileInfo, &fileinfo, sizeof(ScePssFileInformation_t));
 
 		return PSM_ERROR_NO_ERROR;
