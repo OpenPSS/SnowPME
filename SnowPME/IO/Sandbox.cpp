@@ -30,12 +30,6 @@ namespace SnowPME::IO {
 			delete filesystem; // delete the filesystem
 		}
 
-		// Iterate over all files opened by the sandbox
-		for (std::ifstream* file : this->openFiles) {
-			file->close(); // close the file.
-			delete file; // free up memory used by the handle
-		}
-
 		Sandbox::filesystems.clear(); // Clear the filesystems vector
 	}
 
@@ -135,6 +129,48 @@ namespace SnowPME::IO {
 		return false;
 	}
 
+	void Sandbox::CloseDirectory(PsmHandle* handle) {
+		if (handle != NULL) {
+			handle->opened = false;
+			delete handle->directoryFd;
+			delete handle;
+		}
+	}
+
+	void Sandbox::CloseFile(PsmHandle* handle) {
+		if (handle != NULL) {
+			handle->opened = false;
+			handle->fileFd->close();
+			delete handle->fileFd;
+			delete handle;
+		}
+	}
+
+	PsmHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+		std::string realPath = this->LocateRealPath(absPath);
+
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		std::filesystem::directory_iterator* iterator = new std::filesystem::directory_iterator(realPath);
+
+		PsmHandle* handle = new PsmHandle();
+		memset(handle, 0, sizeof(PsmHandle));
+
+		handle->opened = true;
+		handle->rw = filesystem->IsRewitable();
+		handle->encrypted = filesystem->IsEncrypted();
+		handle->directory = true;
+
+		// TODO implement emulated "/" directory
+		handle->emulated = false;
+		
+		handle->sandboxPath = absPath;
+		handle->realPath = realPath;
+		handle->directoryFd = iterator;
+		handle->fileFd = NULL;
+		return handle;
+	}
 	std::string Sandbox::LocateRealPath(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		
@@ -147,11 +183,13 @@ namespace SnowPME::IO {
 		// Get the folder name inside the PSM Sandbox.
 		std::string fsName = filesystem->SandboxPath();
 
-		// Subtract sandbox name from the full path, should result in a relative path from inside the specific sandboxed folder ..
-		std::string pathRelativeToFilesystem = absPath.substr(fsName.length()+1);
+		if (!this->isFileSystemRootDirectory(absPath)) {
+			// Subtract sandbox name from the full path, should result in a relative path from inside the specific sandboxed folder ..
+			std::string pathRelativeToFilesystem = absPath.substr(fsName.length() + 1);
 
-		// Append that file path to real path,
-		fsRealPath.append(pathRelativeToFilesystem);
+			// Append that file path to real path,
+			fsRealPath.append(pathRelativeToFilesystem);
+		}
 
 		return fsRealPath.string();
 	}

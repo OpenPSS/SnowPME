@@ -7,8 +7,6 @@ namespace SnowPME::Runtime {
 			if (resourceType <= MONO_RESOURCE_METADATA)
 				std::cout << "ERROR : resource exhausted (type: " << std::to_string(resourceType) << "value: " << std::to_string(value) << "soft: " << std::to_string(isSoft) << std::endl;
 
-			// TODO: Make this exit the currently running program
-			std::cout << "ABORT: Resources limit exceeded!" << std::endl;
 		}
 	}
 	void Resources::ThreadsExhaustedCallback() {

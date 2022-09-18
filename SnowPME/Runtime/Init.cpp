@@ -104,7 +104,7 @@ namespace SnowPME::Runtime {
 		mono_threadpool_set_max_threads(8,8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		return PSM_OK;
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	void Init::launchExe(std::string runExe) {
