@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Util\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
     <ClInclude Include="IO\Path.hpp" />

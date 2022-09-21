@@ -48,6 +48,17 @@ namespace SnowPME::IO {
 		throw std::exception("FileSystem not found ?? ??");
 	}
 
+	size_t Sandbox::ReadFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
+		if (!handle->encrypted) {
+			handle->fileFd->read(buffer, numbBytes);
+			size_t bytesRead = (size_t)handle->fileFd->gcount();
+			handle->seekPos += bytesRead;
+			return bytesRead;
+		}
+
+		throw std::exception("Encryption not yet implemented. ?? ??");
+	}
+
 	ScePssFileInformation_t Sandbox::Stat(std::string sandboxedPath, std::string setName) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		FileSystem* filesystem = this->findFilesystem(sandboxedPath);
@@ -146,6 +157,14 @@ namespace SnowPME::IO {
 		}
 	}
 
+	int Sandbox::ChangeSize(PsmHandle* handle, size_t newSize) {
+		if (!handle->encrypted) {
+			std::filesystem::resize_file(std::filesystem::path(handle->realPath), newSize);
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_ACCESS_DENIED;
+	}
+
 	void Sandbox::CloseFile(PsmHandle* handle) {
 		if (handle != NULL) {
 			if (handle->opened && handle->fileFd != NULL) {
@@ -157,11 +176,11 @@ namespace SnowPME::IO {
 		}
 	}
 
-	uint64_t Sandbox::GetSize(PsmHandle* handle) {
+	size_t Sandbox::GetSize(PsmHandle* handle) {
 		if (!handle->encrypted) {
-			return std::filesystem::file_size(handle->realPath);
+			return (size_t)std::filesystem::file_size(handle->realPath);
 		}
-		return 0;
+		throw std::exception("Encryption not implemented");
 	}
 
 	PsmHandle* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
@@ -199,6 +218,7 @@ namespace SnowPME::IO {
 
 		std::fstream::ios_base::openmode openmode = 0;
 		openmode |= std::ios::_Nocreate;
+		openmode |= std::ios::trunc;
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0)
 			openmode |= std::ios::in;
@@ -210,7 +230,7 @@ namespace SnowPME::IO {
 			openmode |= std::ios::binary;
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0)
-			openmode |= std::ios::trunc;
+			openmode &= std::ios::binary;
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0)
 			openmode |= std::ios::app;
@@ -224,6 +244,8 @@ namespace SnowPME::IO {
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0)
 			openmode &= ~std::ios::trunc;
 
+		handle->iflags = openmode;
+
 		std::fstream* str = new std::fstream();
 		str->open(realPath, openmode);
 
@@ -232,6 +254,86 @@ namespace SnowPME::IO {
 		handle->fileFd = str;
 
 		return handle;
+	}
+
+	size_t Sandbox::WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
+		if (!handle->encrypted) {
+			std::streampos pos = handle->fileFd->tellp();
+			handle->fileFd->write(buffer, numbBytes);
+			std::streampos npos = handle->fileFd->tellp();
+
+			size_t bytesWritten = (size_t)(npos - pos);
+			handle->seekPos += bytesWritten;
+			return bytesWritten;
+		}
+		throw std::exception("Tried to write to encrypted file?");
+	}
+
+	int Sandbox::SetCurrentDirectory(std::string sandboxedPath) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+		if (!this->IsDirectory(absPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
+
+		if (!this->PathExist(absPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
+
+		this->currentWorkingDirectory = absPath;
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	std::string Sandbox::GetCurrentDirectory() {
+		return this->currentWorkingDirectory;
+	}
+
+	int Sandbox::DeleteFile(std::string sandboxedPath) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+
+		if (!this->PathExist(absPath) || !this->IsFile(absPath))
+			return PSM_ERROR_FILE_NOT_FOUND;
+		
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		if (!filesystem->IsRewitable() || filesystem->IsEmulated())
+			return PSM_ERROR_ACCESS_DENIED;
+
+		std::string realPath = this->LocateRealPath(absPath);
+		std::filesystem::remove(std::filesystem::path(realPath));
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	int Sandbox::Seek(PsmHandle* handle, uint32_t offset, ScePssFileSeekType_t seekType) {
+		if (!handle->encrypted) {
+
+			size_t totalFileSz = this->GetSize(handle);
+			switch (seekType) {
+			case SCE_PSS_FILE_SEEK_TYPE_BEGIN:
+				handle->seekPos = offset;
+				handle->fileFd->seekg(offset, std::ios::beg);
+				break;
+			case SCE_PSS_FILE_SEEK_TYPE_CURRENT:
+				handle->seekPos += offset;
+				handle->fileFd->seekg(offset, std::ios::cur);
+				break;
+			case SCE_PSS_FILE_SEEK_TYPE_END:
+				handle->seekPos = totalFileSz - offset;
+				handle->fileFd->seekg(offset, std::ios::end);
+				break;
+			default:
+				return PSM_ERROR_ERROR;
+			}
+
+			if (handle->seekPos > totalFileSz)
+				handle->seekPos = totalFileSz;
+
+			if (handle->seekPos < 0)
+				handle->seekPos = 0;
+
+			return PSM_ERROR_NO_ERROR;
+
+		}
+		throw new std::exception("encryption not implemented!");
 	}
 
 	PsmHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {

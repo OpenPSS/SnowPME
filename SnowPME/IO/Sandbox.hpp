@@ -12,11 +12,14 @@ typedef struct PsmHandle {
 	bool encrypted = false;
 	bool emulated = false;
 	uint32_t failReason = 0;
-	ScePssFileOpenFlag_t flags = (ScePssFileOpenFlag_t)0;
+	ScePssFileOpenFlag_t flags = ScePssFileOpenFlag_t();
+	std::ios_base::openmode iflags = std::ios_base::openmode();
 	std::string sandboxPath;
 	std::string realPath;
 	std::filesystem::directory_iterator* directoryFd = NULL;
 	std::fstream* fileFd = NULL;
+
+	size_t seekPos = 0;
 } PsmHandle;
 
 
@@ -37,9 +40,16 @@ namespace SnowPME::IO {
 
 		void CloseDirectory(PsmHandle* handle);
 		void CloseFile(PsmHandle* handle);
-		uint64_t GetSize(PsmHandle* handle);
+		size_t GetSize(PsmHandle* handle);
+		int ChangeSize(PsmHandle* handle, size_t newSize);
+		int Seek(PsmHandle* handle, uint32_t offset, ScePssFileSeekType_t seekType);
+		int DeleteFile(std::string sandboxedPath);
+		size_t ReadFile(PsmHandle* handle, size_t numbBytes, char* buffer);
+		size_t WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer);
+		std::string GetCurrentDirectory();
+		int SetCurrentDirectory(std::string sandboxedPath);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
-		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);
+		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);		
 		std::string AbsolutePath(std::string sandboxedPath);
 		std::string LocateRealPath(std::string sandboxedPath);
 	};

@@ -9,6 +9,7 @@
 #include <IO/Sandbox.hpp>
 
 #include <Util/Config.hpp>
+#include <Debug/Logger.hpp>
 
 #include <LibPSM.hpp>
 #include <filesystem>
@@ -35,7 +36,7 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		LOG("Initalzing Mono " << executablePath);
+		Debug::Logger::Debug("Initalzing Mono " + executablePath);
 
 
 		// Lockdown mono if security is enabled

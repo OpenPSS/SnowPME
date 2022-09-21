@@ -3,18 +3,21 @@
 #include <Util/StringUtils.hpp>
 
 #include <vector>
+#include <filesystem>
 using namespace SnowPME::Util;
 
 namespace SnowPME::IO {
 	 
-	FileSystem::FileSystem(std::string filesystemPath, std::string sandboxPathName, bool rewritable) {
+	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable) {
 		this->sandboxPath = sandboxPathName;
-		this->pathOnDisk = filesystemPath;
+		this->pathOnDisk = pathOnDisk;
 		this->rw = rewritable;
 
+		std::filesystem::create_directories(std::filesystem::path(pathOnDisk));
+		
 		// TODO: Implement encryption and emulated dirs
 		this->hasEdata = false;
-		this->emulated = true;
+		this->emulated = false;
 	}
 	FileSystem::~FileSystem() {
 
