@@ -1,29 +1,29 @@
 #ifndef SNOW_PME_SANDBOX_H
 #define SNOW_PME_SANDBOX_H 1
+#include <IO/DirectoryIterator.hpp>
 #include <IO/FileSystem.hpp>
 #include <vector>
 #include <fstream>
 #include <mono/mono.h>
 
-typedef struct PsmHandle {
-	bool opened = false;
-	bool rw = false;
-	bool directory = false;
-	bool encrypted = false;
-	bool emulated = false;
-	uint32_t failReason = 0;
-	ScePssFileOpenFlag_t flags = ScePssFileOpenFlag_t();
-	std::ios_base::openmode iflags = std::ios_base::openmode();
-	std::string sandboxPath;
-	std::string realPath;
-	std::filesystem::recursive_directory_iterator* directoryFd = NULL;
-	std::fstream* fileFd = NULL;
-
-	size_t seekPos = 0;
-} PsmHandle;
-
-
 namespace SnowPME::IO {
+	typedef struct PsmHandle {
+		bool opened = false;
+		bool rw = false;
+		bool directory = false;
+		bool encrypted = false;
+		bool emulated = false;
+		uint32_t failReason = 0;
+		ScePssFileOpenFlag_t flags = ScePssFileOpenFlag_t();
+		std::ios_base::openmode iflags = std::ios_base::openmode();
+		std::string sandboxPath;
+		std::string realPath;
+		size_t seekPos = 0;
+
+		std::fstream* fileFd = NULL;
+		DirectoryIterator* directoryFd = NULL;
+	} PsmHandle;
+
 	class Sandbox {	
 	private:
 		std::string currentWorkingDirectory;

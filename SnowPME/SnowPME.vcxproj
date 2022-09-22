@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
+    <ClCompile Include="IO\DirectoryIterator.cpp" />
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
     <ClInclude Include="Runtime\AppGlobals.hpp" />
+    <ClInclude Include="IO\DirectoryIterator.hpp" />
     <ClInclude Include="Util\Config.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
     <ClInclude Include="Runtime\Resources.hpp" />

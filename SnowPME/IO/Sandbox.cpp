@@ -90,47 +90,37 @@ namespace SnowPME::IO {
 
 		memset(fileInfo, 0, sizeof(ScePssFileInformation_t));
 
-
 		if (handle->emulated) { // handle "/" emulated directory, display all sandboxed paths
-			if (handle->seekPos >= this->filesystems.size())
+			if (handle->seekPos >= this->filesystems.size()) {
 				return PSM_ERROR_PATH_NOT_FOUND;
+			}
+			else {
 
-			FileSystem* filesystem = this->filesystems[handle->seekPos];
+				FileSystem* filesystem = this->filesystems[handle->seekPos];
+				handle->seekPos++;
 
-			handle->seekPos++;
+				if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
+					return this->ReadDirectory(handle, fileInfo);
 
-			if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
-				return this->ReadDirectory(handle, fileInfo);
+				std::string filename = Path::GetFilename(filesystem->SandboxPath());
 
-			std::string filename = Path::GetFilename(filesystem->SandboxPath());
+				ScePssFileInformation_t psmPathInformation = this->Stat(filesystem->SandboxPath(), filename);
+				memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
+				
+				return PSM_ERROR_NO_ERROR;
 
-			ScePssFileInformation_t psmPathInformation = this->Stat(filesystem->SandboxPath(), filename);
-			memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
-
-			
-
-			return PSM_ERROR_NO_ERROR;
+			}
 		}
 		else {
 			if (handle->directoryFd == NULL)
 				return PSM_ERROR_INVALID_PARAMETER;
 
-			std::filesystem::recursive_directory_iterator& iterator = *handle->directoryFd;
+			int error =  handle->directoryFd->Next(fileInfo);
+			
+			if (error != PSM_ERROR_NO_ERROR)
+				return error;
 
-			if (*(int*)&iterator == NULL) // why? because you cant directly check if the thing is null THHTS WHY
-				return PSM_ERROR_PATH_NOT_FOUND;
-
-
-			std::string realPath = iterator->path().string();
-			std::string sandboxRelPath = Path::ChangeSlashesToPsmStyle(realPath.substr(handle->realPath.length()+1));
-			std::string sandboxAbsPath = Path::Combine(handle->sandboxPath, sandboxRelPath);
-
-			ScePssFileInformation_t psmPathInformation = this->Stat(sandboxAbsPath, sandboxRelPath);
-			memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
-
-			iterator++;
 			handle->seekPos++;
-
 			return PSM_ERROR_NO_ERROR;
 		}
 	}
@@ -454,8 +444,6 @@ namespace SnowPME::IO {
 
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
-		std::filesystem::recursive_directory_iterator* iterator = new std::filesystem::recursive_directory_iterator(realPath);
-
 		PsmHandle* handle = new PsmHandle();
 
 		handle->opened = true;
@@ -467,7 +455,12 @@ namespace SnowPME::IO {
 		handle->flags = SCE_PSS_FILE_OPEN_FLAG_READ;
 		handle->sandboxPath = absPath;
 		handle->realPath = realPath;
-		handle->directoryFd = iterator;
+
+		if (!handle->emulated)
+			handle->directoryFd = new DirectoryIterator(absPath, false);
+		else
+			handle->directoryFd = NULL;
+		
 		handle->fileFd = NULL;
 		handle->failReason = PSM_ERROR_NO_ERROR;
 		return handle;

@@ -12,8 +12,10 @@ namespace SnowPME::IO
 	class Path {
 	public:
 		static std::string ChangeSlashesToPsmStyle(std::string path);
+		static std::string ChangeSlashesToNativeStyle(std::string path);
 		static std::string Combine(std::string path, std::string newPart);
 		static std::string GetFilename(std::string path);
+		static std::string UpDirectory(std::string path);
 	};
 }
 

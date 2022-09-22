@@ -17,7 +17,7 @@ namespace SnowPME::IO {
 
 		this->emulated = emulated;
 
-		// TODO: Implement encryption and emulated dirs
+		// TODO: Implement encryption
 		this->hasEdata = false;
 	}
 	FileSystem::~FileSystem() {
