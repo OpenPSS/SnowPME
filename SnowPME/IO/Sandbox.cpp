@@ -224,9 +224,9 @@ namespace SnowPME::IO {
 	}
 
 	int Sandbox::ChangeSize(PsmHandle* handle, size_t newSize) {
-		if (!handle->encrypted) {
+		if (!handle->encrypted && handle->rw) {
 			std::filesystem::resize_file(std::filesystem::path(handle->realPath), newSize);
-			this->reopen(handle);
+			this->reopen(handle); // fstream has to be re-opened after doing this so it reflects the proper size.
 			return PSM_ERROR_NO_ERROR;
 		}
 		return PSM_ERROR_ACCESS_DENIED;
@@ -259,6 +259,7 @@ namespace SnowPME::IO {
 
 		PsmHandle* handle = new PsmHandle();
 
+		// Are we trying to open a file for writing?
 		bool openRw = (((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0));
 
 		handle->realPath = realPath;
@@ -325,13 +326,22 @@ namespace SnowPME::IO {
 	}
 
 	size_t Sandbox::WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
-		if (!handle->encrypted) {
+		if (!handle->encrypted && handle->rw) {
+			// Get current position in file
 			std::streampos pos = handle->fileFd->tellp();
+
+			// Write buffer to file
 			handle->fileFd->write(buffer, numbBytes);
+
+			// Get new position in file
 			std::streampos npos = handle->fileFd->tellp();
 
+			// Calculate the amount of bytes written from the two positions
 			size_t bytesWritten = (size_t)(npos - pos);
+
+			// Update the seek position by how many bytes written
 			handle->seekPos += bytesWritten;
+
 			return bytesWritten;
 		}
 		throw std::exception("Tried to write to encrypted file?");
@@ -339,14 +349,16 @@ namespace SnowPME::IO {
 
 	int Sandbox::DeleteDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
+		// Check the path is inside a rewritable filesystem.
 		FileSystem* filesystem = this->findFilesystem(absPath);
-
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 
-		if (this->IsFile(sandboxedPath))
+		// Check the path is an actual directory, and that exists 
+		if (!this->IsDirectory(absPath) || !this->PathExist(absPath))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
+		// Locate the directory on disk and delete it
 		std::string realPath = this->LocateRealPath(absPath);
 		std::filesystem::remove(realPath);
 
@@ -356,14 +368,16 @@ namespace SnowPME::IO {
 
 	int Sandbox::CreateDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
+		// Check the path is inside a rewritable filesystem
 		FileSystem* filesystem = this->findFilesystem(absPath);
-		
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
-		if (this->IsFile(sandboxedPath))
+		// Check the path does not already contain a file.
+		if (this->IsFile(absPath))
 			return PSM_ERROR_ALREADY_EXISTS;
 
+		// Locate path on disk, and create directores
 		std::string realPath = this->LocateRealPath(absPath);
 		std::filesystem::create_directories(realPath);
 
@@ -379,6 +393,7 @@ namespace SnowPME::IO {
 
 		if (this->IsFile(absPath))
 			return PSM_ERROR_PATH_NOT_FOUND;
+
 		this->currentWorkingDirectory = absPath;
 
 		return PSM_ERROR_NO_ERROR;
@@ -391,14 +406,16 @@ namespace SnowPME::IO {
 	int Sandbox::DeleteFile(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
+		// Check that the file actually exists,
 		if (!this->PathExist(absPath) || this->IsDirectory(absPath))
 			return PSM_ERROR_FILE_NOT_FOUND;
 		
+		// Check that the file is not in a read-only folder
 		FileSystem* filesystem = this->findFilesystem(absPath);
-
 		if (!filesystem->IsRewitable() || filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 
+		// Locate the file on disk, and delete it
 		std::string realPath = this->LocateRealPath(absPath);
 		std::filesystem::remove(std::filesystem::path(realPath));
 
@@ -408,6 +425,7 @@ namespace SnowPME::IO {
 	int Sandbox::Seek(PsmHandle* handle, uint32_t offset, ScePssFileSeekType_t seekType) {
 		if (!handle->encrypted) {
 
+			// Translate seek command to native one.
 			size_t totalFileSz = this->GetSize(handle);
 			switch (seekType) {
 			case SCE_PSS_FILE_SEEK_TYPE_BEGIN:
@@ -441,11 +459,18 @@ namespace SnowPME::IO {
 	PsmHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		std::string realPath = this->LocateRealPath(absPath);
-
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
+		// Create a new PsmHandle 
 		PsmHandle* handle = new PsmHandle();
 
+		// Fail if its a file or it doesnt exist.
+		if (this->IsFile(absPath) || !this->PathExist(absPath)) {
+			handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
+			return handle;
+		}
+
+		// Setup handle struct
 		handle->opened = true;
 		handle->rw = filesystem->IsRewitable();
 		handle->encrypted = filesystem->IsEncrypted();
@@ -462,6 +487,8 @@ namespace SnowPME::IO {
 			handle->directoryFd = NULL;
 		
 		handle->fileFd = NULL;
+
+		// Set fail reason to no error, and return
 		handle->failReason = PSM_ERROR_NO_ERROR;
 		return handle;
 	}
