@@ -14,7 +14,7 @@ namespace SnowPME::IO{
 		std::string pathOnDisk;
 		std::string sandboxPath;
 	public:
-		FileSystem(std::string filesystemPath, std::string sandboxPathName, bool rewritable);
+		FileSystem(std::string filesystemPath, std::string sandboxPathName, bool rewritable, bool emulated);
 		~FileSystem();
 
 		std::string SandboxPath();

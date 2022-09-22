@@ -14,4 +14,8 @@ namespace SnowPME::IO
 		return path + PSM_PATH_SEPERATOR + newPart; // Append /newPart
 	}
 
+	std::string Path::GetFilename(std::string fullPath) {
+		return ChangeSlashesToPsmStyle(fullPath).substr(ChangeSlashesToPsmStyle(fullPath).find_last_of(PSM_PATH_SEPERATOR) + 1);
+	}
+
 }

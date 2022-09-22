@@ -1,7 +1,8 @@
 #include <Runtime/Security.hpp>
 #include <Util/Config.hpp>
 #include <Debug/Logger.hpp>
-
+#include <IO/Path.hpp>
+using namespace SnowPME::IO;
 using namespace SnowPME::Debug;
 namespace SnowPME::Runtime
 {
@@ -13,8 +14,8 @@ namespace SnowPME::Runtime
 
 	int Security::IsSecurityCriticalExempt(const char* exeFullPath) {
 
-		std::string path(exeFullPath);
-		std::string filename = path.substr(path.find_last_of("/\\") + 1);
+		std::string exePath = std::string(exeFullPath);
+		std::string filename = Path::GetFilename(exePath);
 		for (std::string exemptFilename : securityWhitelist) {
 			if (filename == exemptFilename) {
 				Logger::Debug("Determined Security Level for : " + filename + " as [SecurityCritical]");

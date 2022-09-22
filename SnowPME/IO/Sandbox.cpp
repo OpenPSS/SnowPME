@@ -6,9 +6,10 @@
 #include <mono/mono.h>
 #include <LibPSM.hpp>
 #include <Runtime/AppGlobals.hpp>
+#include <Debug/Logger.hpp>
 
 using namespace SnowPME::Util;
-
+using namespace SnowPME::Debug;
 namespace SnowPME::IO {
 
 
@@ -18,11 +19,11 @@ namespace SnowPME::IO {
 		std::filesystem::path documentsPath = std::filesystem::path(gameFolder).append("Documents");
 		std::filesystem::path tempPath = std::filesystem::path(gameFolder).append("Temp");
 
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(applicationPath).string(), "/Application", false));
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(documentsPath).string(), "/Documents", true));
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(tempPath).string(), "/Temp", true));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(applicationPath).string(), "/Application", false, false));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(tempPath).string(), "/Temp", true, false));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(documentsPath).string(), "/Documents", true, false));
 
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(gamePath).string(), "/", false));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(gamePath).string(), "/", false, true));
 
 		this->currentWorkingDirectory = "/";
 
@@ -35,7 +36,33 @@ namespace SnowPME::IO {
 
 		Sandbox::filesystems.clear(); // Clear the filesystems vector
 	}
+	
+	// Some functions require handling via filepath,
+	// in these cases, the fstream needs to be created again
+	void Sandbox::reopen(PsmHandle* handle) {
+		if (handle->opened && !handle->directory && handle->fileFd != NULL) {
+			// Store current position
+			std::streampos position = handle->fileFd->tellg();
+		
+			// Close the file
+			if(handle->fileFd->is_open())
+				handle->fileFd->close();
+			delete handle->fileFd;
 
+			// Open the file again
+			std::fstream* str = new std::fstream();
+			str->open(handle->realPath, handle->iflags);
+
+			// Seek to where we were.
+			str->seekg(position, std::ios::beg);
+			
+			// Overwrite the fstream.
+			handle->fileFd = str;
+		}
+	}
+
+	// Determines which "FileSystem" a given file is in,
+	// eg /Application or /Documents, 
 	FileSystem* Sandbox::findFilesystem(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
@@ -59,6 +86,55 @@ namespace SnowPME::IO {
 		throw std::exception("Encryption not yet implemented. ?? ??");
 	}
 
+	int Sandbox::ReadDirectory(PsmHandle* handle, ScePssFileInformation_t* fileInfo) {
+
+		memset(fileInfo, 0, sizeof(ScePssFileInformation_t));
+
+
+		if (handle->emulated) { // handle "/" emulated directory, display all sandboxed paths
+			if (handle->seekPos >= this->filesystems.size())
+				return PSM_ERROR_PATH_NOT_FOUND;
+
+			FileSystem* filesystem = this->filesystems[handle->seekPos];
+
+			handle->seekPos++;
+
+			if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
+				return this->ReadDirectory(handle, fileInfo);
+
+			std::string filename = Path::GetFilename(filesystem->SandboxPath());
+
+			ScePssFileInformation_t psmPathInformation = this->Stat(filesystem->SandboxPath(), filename);
+			memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
+
+			
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			if (handle->directoryFd == NULL)
+				return PSM_ERROR_INVALID_PARAMETER;
+
+			std::filesystem::recursive_directory_iterator& iterator = *handle->directoryFd;
+
+			if (*(int*)&iterator == NULL) // why? because you cant directly check if the thing is null THHTS WHY
+				return PSM_ERROR_PATH_NOT_FOUND;
+
+
+			std::string realPath = iterator->path().string();
+			std::string sandboxRelPath = Path::ChangeSlashesToPsmStyle(realPath.substr(handle->realPath.length()+1));
+			std::string sandboxAbsPath = Path::Combine(handle->sandboxPath, sandboxRelPath);
+
+			ScePssFileInformation_t psmPathInformation = this->Stat(sandboxAbsPath, sandboxRelPath);
+			memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
+
+			iterator++;
+			handle->seekPos++;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+	}
+
 	ScePssFileInformation_t Sandbox::Stat(std::string sandboxedPath, std::string setName) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		FileSystem* filesystem = this->findFilesystem(sandboxedPath);
@@ -75,7 +151,7 @@ namespace SnowPME::IO {
 		psmPathInformation.tLastWriteTime = stats.st_mtime;
 		psmPathInformation.tLastAccessTime = stats.st_atime;
 
-		if ((stats.st_mode & S_IFDIR) != 0)
+		if (this->IsDirectory(sandboxedPath))
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_DIRECTORY;
 
 		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
@@ -160,6 +236,7 @@ namespace SnowPME::IO {
 	int Sandbox::ChangeSize(PsmHandle* handle, size_t newSize) {
 		if (!handle->encrypted) {
 			std::filesystem::resize_file(std::filesystem::path(handle->realPath), newSize);
+			this->reopen(handle);
 			return PSM_ERROR_NO_ERROR;
 		}
 		return PSM_ERROR_ACCESS_DENIED;
@@ -177,8 +254,9 @@ namespace SnowPME::IO {
 	}
 
 	size_t Sandbox::GetSize(PsmHandle* handle) {
-		if (!handle->encrypted) {
-			return (size_t)std::filesystem::file_size(handle->realPath);
+		if (!handle->encrypted && !handle->directory) {
+			size_t fileSize = (size_t)std::filesystem::file_size(handle->realPath);
+			return fileSize;
 		}
 		throw std::exception("Encryption not implemented");
 	}
@@ -269,14 +347,48 @@ namespace SnowPME::IO {
 		throw std::exception("Tried to write to encrypted file?");
 	}
 
+	int Sandbox::DeleteDirectory(std::string sandboxedPath) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		if (!filesystem->IsRewitable())
+			return PSM_ERROR_ACCESS_DENIED;
+
+		if (this->IsFile(sandboxedPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
+
+		std::string realPath = this->LocateRealPath(absPath);
+		std::filesystem::remove(realPath);
+
+		return PSM_ERROR_NO_ERROR;
+
+	}
+
+	int Sandbox::CreateDirectory(std::string sandboxedPath) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+		FileSystem* filesystem = this->findFilesystem(absPath);
+		
+		if (!filesystem->IsRewitable())
+			return PSM_ERROR_ACCESS_DENIED;
+		
+		if (this->IsFile(sandboxedPath))
+			return PSM_ERROR_ALREADY_EXISTS;
+
+		std::string realPath = this->LocateRealPath(absPath);
+		std::filesystem::create_directories(realPath);
+
+		return PSM_ERROR_NO_ERROR;
+
+	}
+
 	int Sandbox::SetCurrentDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
-		if (!this->IsDirectory(absPath))
-			return PSM_ERROR_PATH_NOT_FOUND;
 
 		if (!this->PathExist(absPath))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
+		if (this->IsFile(absPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
 		this->currentWorkingDirectory = absPath;
 
 		return PSM_ERROR_NO_ERROR;
@@ -289,7 +401,7 @@ namespace SnowPME::IO {
 	int Sandbox::DeleteFile(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		if (!this->PathExist(absPath) || !this->IsFile(absPath))
+		if (!this->PathExist(absPath) || this->IsDirectory(absPath))
 			return PSM_ERROR_FILE_NOT_FOUND;
 		
 		FileSystem* filesystem = this->findFilesystem(absPath);
@@ -342,7 +454,7 @@ namespace SnowPME::IO {
 
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
-		std::filesystem::directory_iterator* iterator = new std::filesystem::directory_iterator(realPath);
+		std::filesystem::recursive_directory_iterator* iterator = new std::filesystem::recursive_directory_iterator(realPath);
 
 		PsmHandle* handle = new PsmHandle();
 

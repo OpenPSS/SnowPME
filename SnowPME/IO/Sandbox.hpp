@@ -16,7 +16,7 @@ typedef struct PsmHandle {
 	std::ios_base::openmode iflags = std::ios_base::openmode();
 	std::string sandboxPath;
 	std::string realPath;
-	std::filesystem::directory_iterator* directoryFd = NULL;
+	std::filesystem::recursive_directory_iterator* directoryFd = NULL;
 	std::fstream* fileFd = NULL;
 
 	size_t seekPos = 0;
@@ -30,6 +30,7 @@ namespace SnowPME::IO {
 		std::vector<FileSystem*> filesystems;
 		FileSystem* findFilesystem(std::string sandboxedPath);
 		bool isFileSystemRootDirectory(std::string sandboxedPath);
+		void reopen(PsmHandle* handle);
 	public:
 		Sandbox(std::string gameFolder);
 		~Sandbox();
@@ -48,6 +49,9 @@ namespace SnowPME::IO {
 		size_t WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer);
 		std::string GetCurrentDirectory();
 		int SetCurrentDirectory(std::string sandboxedPath);
+		int CreateDirectory(std::string sandboxedPath);
+		int DeleteDirectory(std::string sandboxedPath);
+		int ReadDirectory(PsmHandle* handle, ScePssFileInformation_t* fileInfo);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
 		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);		
 		std::string AbsolutePath(std::string sandboxedPath);

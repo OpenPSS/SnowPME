@@ -8,16 +8,17 @@ using namespace SnowPME::Util;
 
 namespace SnowPME::IO {
 	 
-	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable) {
+	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated) {
 		this->sandboxPath = sandboxPathName;
 		this->pathOnDisk = pathOnDisk;
 		this->rw = rewritable;
 
 		std::filesystem::create_directories(std::filesystem::path(pathOnDisk));
-		
+
+		this->emulated = emulated;
+
 		// TODO: Implement encryption and emulated dirs
 		this->hasEdata = false;
-		this->emulated = false;
 	}
 	FileSystem::~FileSystem() {
 
@@ -34,7 +35,7 @@ namespace SnowPME::IO {
 	}
 	bool FileSystem::IsRewitable() {
 		
-		if (this->IsEncrypted() || !this->rw)
+		if (this->IsEncrypted() || !this->rw || this->IsEmulated())
 			return false;
 		else
 			return true;

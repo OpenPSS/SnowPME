@@ -30,23 +30,43 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int ICall::PsmDirectoryCreate(char* pszDirectoryPath) {
-		Logger::Error("PsmDirectoryCreate Not Implemented");
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Logger::Debug(__func__);
+		if (pszDirectoryPath == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+
+		std::string relativePath = std::string(pszDirectoryPath);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		return psmSandbox->CreateDirectory(absolutePath);
 	}
 	int ICall::PsmDirectoryRemove(char* pszDirectoryPath) {
-		Logger::Error("PsmDirectoryRemove Not Implemented");
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Logger::Debug(__func__);
+		if (pszDirectoryPath == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+
+		std::string relativePath = std::string(pszDirectoryPath);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		return psmSandbox->DeleteDirectory(absolutePath);
 	}
 	int ICall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL || pDirectory == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
+		if (pszFileExtension != NULL)
+			Logger::Debug("Oh oh- pszFileExtension is not null.");
 
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+		
+		Logger::Debug("OPEN: " + relativePath);
 
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_PATH_NOT_FOUND;
@@ -82,24 +102,8 @@ namespace SnowPME::IO {
 		if (!handle->directory)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		if (!handle->directoryFd)
-			return PSM_ERROR_INVALID_PARAMETER;
 
-		if (!handle->directoryFd->_At_end()) {
-			std::filesystem::directory_entry entry = *handle->directoryFd[0];
-			std::string filename = entry.path().filename().string();
-
-			std::string newFile = Path::Combine(handle->sandboxPath, filename);
-			ScePssFileInformation_t fileStat = psmSandbox->Stat(newFile, filename);
-			(*handle->directoryFd)++;
-
-			memcpy(pFileInfo, &fileStat, sizeof(ScePssFileInformation_t));
-		}
-		else {
-			return PSM_ERROR_PATH_NOT_FOUND;
-		}
-
-		return PSM_ERROR_NO_ERROR;
+		return psmSandbox->ReadDirectory(handle, pFileInfo);
 
 	}
 	int ICall::PsmDirectoryGetWorking(char* pszDirectoryPath, uint32_t uBufferSize) {
@@ -302,9 +306,10 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
+		Logger::Debug("PathInfo: " + relativePath);
+
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_NOT_FOUND;
-
 
 		ScePssFileInformation_t fileinfo = psmSandbox->Stat(absolutePath, relativePath);
 		memcpy(pFileInfo, &fileinfo, sizeof(ScePssFileInformation_t));
