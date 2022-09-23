@@ -38,7 +38,6 @@ namespace SnowPME::IO {
 		bool PathExist(std::string sandboxedPath);
 		bool IsFile(std::string sandboxedPath);
 		bool IsDirectory(std::string sandboxedPath);
-
 		void CloseDirectory(PsmHandle* handle);
 		void CloseFile(PsmHandle* handle);
 		size_t GetSize(PsmHandle* handle);
@@ -47,6 +46,8 @@ namespace SnowPME::IO {
 		int DeleteFile(std::string sandboxedPath);
 		size_t ReadFile(PsmHandle* handle, size_t numbBytes, char* buffer);
 		size_t WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer);
+		int FlushFile(PsmHandle* handle);
+		int CopyFile(std::string sandboxedSrcPath, std::string sandboxDestPath, bool move);
 		std::string GetCurrentDirectory();
 		int SetCurrentDirectory(std::string sandboxedPath);
 		int CreateDirectory(std::string sandboxedPath);

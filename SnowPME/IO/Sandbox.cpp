@@ -41,9 +41,6 @@ namespace SnowPME::IO {
 	// in these cases, the fstream needs to be created again
 	void Sandbox::reopen(PsmHandle* handle) {
 		if (handle->opened && !handle->directory && handle->fileFd != NULL) {
-			// Store current position
-			std::streampos position = handle->fileFd->tellg();
-		
 			// Close the file
 			if(handle->fileFd->is_open())
 				handle->fileFd->close();
@@ -54,7 +51,7 @@ namespace SnowPME::IO {
 			str->open(handle->realPath, handle->iflags);
 
 			// Seek to where we were.
-			str->seekg(position, std::ios::beg);
+			str->seekg(handle->seekPos, std::ios::beg);
 			
 			// Overwrite the fstream.
 			handle->fileFd = str;
@@ -224,9 +221,16 @@ namespace SnowPME::IO {
 	}
 
 	int Sandbox::ChangeSize(PsmHandle* handle, size_t newSize) {
-		if (!handle->encrypted && handle->rw) {
+		if (!handle->encrypted && handle->rw) { // Workaround fstream stupidity.
+			// close becuase you cant resize the file while its open
+			handle->fileFd->close();
+
+			// Resize the file to new size ...
 			std::filesystem::resize_file(std::filesystem::path(handle->realPath), newSize);
-			this->reopen(handle); // fstream has to be re-opened after doing this so it reflects the proper size.
+			
+			// open file again, at same position.
+			this->reopen(handle); 
+
 			return PSM_ERROR_NO_ERROR;
 		}
 		return PSM_ERROR_ACCESS_DENIED;
@@ -324,25 +328,92 @@ namespace SnowPME::IO {
 
 		return handle;
 	}
+	int Sandbox::CopyFile(std::string sandboxedSrcPath, std::string sandboxDstPath, bool move) {
+		// Find src and dest absoulte paths
+		std::string absSrc = this->AbsolutePath(sandboxedSrcPath);
+		std::string absDst = this->AbsolutePath(sandboxDstPath);
+
+		// Find src and dest filesystem
+		FileSystem* srcFilesystem = this->findFilesystem(absSrc);
+		FileSystem* dstFilesystem = this->findFilesystem(absDst);
+
+		// Check if src filesystem is read only- and this is a move
+		if (srcFilesystem->IsEmulated() || srcFilesystem->IsEncrypted() && move)
+			return PSM_ERROR_ACCESS_DENIED;
+
+		// Check if dst filesystem is read only-
+		if (dstFilesystem->IsEmulated() || dstFilesystem->IsEncrypted() || !dstFilesystem->IsRewitable())
+			return PSM_ERROR_ACCESS_DENIED;
+
+		// Check if either dst or src is a directory.
+		if (this->IsDirectory(absSrc) || this->IsDirectory(absDst))
+			return PSM_ERROR_FILE_NOT_FOUND;
+
+		// Crate the directory if it does not exist.
+		std::string parentDirectory = Path::UpDirectory(sandboxDstPath);
+		if (!this->PathExist(parentDirectory))
+			this->CreateDirectory(parentDirectory);
+
+		// Locate real location of src and dst.
+		std::string realSrc = this->LocateRealPath(absSrc);
+		std::string realDst = this->LocateRealPath(absDst);
+
+		if (move) { // Move operation? simply "rename" the file to new location
+			std::filesystem::rename(realSrc, realDst);
+			return PSM_ERROR_NO_ERROR;
+		}
+		else { // This is a copy operation.. 
+			const int totalReadAtOnce = 0x80000;
+			char* buffer = new char[totalReadAtOnce];
+
+			PsmHandle* srcHandle = this->OpenFile(absSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE));
+			PsmHandle* dstHandle = this->OpenFile(absDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE));
+			this->ChangeSize(dstHandle, 0);
+				
+			int totalRead = 0;
+			do {
+				totalRead = this->ReadFile(srcHandle, totalReadAtOnce, buffer);
+				this->WriteFile(dstHandle, totalRead, buffer);
+			} while (totalRead != 0);
+				
+			this->CloseFile(srcHandle);
+			this->CloseFile(dstHandle);
+
+			delete buffer;
+			return PSM_ERROR_NO_ERROR;
+		}
+
+	}
+	int Sandbox::FlushFile(PsmHandle* handle) {
+		if (!handle->opened)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (handle->directory)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		if (!handle->rw || handle->encrypted || handle->emulated)
+			return PSM_ERROR_ACCESS_DENIED;
+
+		if (handle->fileFd == NULL)
+			return PSM_ERROR_INVALID_HANDLE;
+
+		handle->fileFd->flush();
+		return PSM_ERROR_NO_ERROR;
+	}
 
 	size_t Sandbox::WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
 		if (!handle->encrypted && handle->rw) {
-			// Get current position in file
-			std::streampos pos = handle->fileFd->tellp();
 
 			// Write buffer to file
 			handle->fileFd->write(buffer, numbBytes);
 
-			// Get new position in file
-			std::streampos npos = handle->fileFd->tellp();
-
-			// Calculate the amount of bytes written from the two positions
-			size_t bytesWritten = (size_t)(npos - pos);
+			// fstream provides no way of knowing how many bytes were actually written
+			// So just pray and hope;
 
 			// Update the seek position by how many bytes written
-			handle->seekPos += bytesWritten;
+			handle->seekPos += numbBytes;
 
-			return bytesWritten;
+			return numbBytes;
 		}
 		throw std::exception("Tried to write to encrypted file?");
 	}
