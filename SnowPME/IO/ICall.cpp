@@ -30,6 +30,7 @@ namespace SnowPME::IO {
 			
 		return PSM_ERROR_NO_ERROR;
 	}
+
 	int ICall::PsmDirectoryCreate(char* pszDirectoryPath) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL)
@@ -42,6 +43,7 @@ namespace SnowPME::IO {
 
 		return psmSandbox->CreateDirectory(absolutePath);
 	}
+
 	int ICall::PsmDirectoryRemove(char* pszDirectoryPath) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL)
@@ -54,6 +56,7 @@ namespace SnowPME::IO {
 
 		return psmSandbox->DeleteDirectory(absolutePath);
 	}
+
 	int ICall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL || pDirectory == NULL)
@@ -88,6 +91,7 @@ namespace SnowPME::IO {
 
 		return PSM_ERROR_PATH_NOT_FOUND;
 	}
+
 	int ICall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
 		Logger::Debug(__func__);
 		if (pFileInfo == NULL || directory == NULL)
@@ -107,6 +111,7 @@ namespace SnowPME::IO {
 		return psmSandbox->ReadDirectory(handle, pFileInfo);
 
 	}
+
 	int ICall::PsmDirectoryGetWorking(char* pszDirectoryPath, uint32_t uBufferSize) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL || uBufferSize == NULL)
@@ -121,6 +126,7 @@ namespace SnowPME::IO {
 
 		return PSM_ERROR_NO_ERROR;
 	}
+
 	int ICall::PsmDirectorySetWorking(char* pszDirectoryPath) {
 		Logger::Debug(__func__);
 		if (pszDirectoryPath == NULL)
@@ -287,6 +293,7 @@ namespace SnowPME::IO {
 
 		return PSM_ERROR_NO_ERROR;
 	}
+
 	int ICall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
 		Logger::Debug(__func__);
 		if (file == NULL)
