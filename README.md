@@ -17,8 +17,7 @@ like JVM essentially just emulates a processor that doesnt exist-
 
 
 common answer i hear is that there is isolation, like software running in mono/java/etc still have access to the whole system,
-but a GBA emulator does not.
-
+whereas say, a GBA emulator would not,
 
 however, this is also true for PSM- only access to /Documents, /Application, and /Temp folders respectively
 as well as having memory limitations, on how many threads can be used, as well as no access to Marshal or any ability to call native DLLs/code
