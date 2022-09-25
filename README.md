@@ -6,7 +6,8 @@ NOTE: This is VERY EARLY in development, so nothing runs at all yet except some 
 
 
 
--- About usage of the term "Emulator" --
+--- About usage of the term "Emulator" ---
+
 i can already hear all the angry nerds telling me you cant make a PSM emulator because PSM im not emulating any CPU!
 its a Runtime Environment, and is built upon Mono Framework! Thats like calling .NET framework or Java an emulator!11
 
