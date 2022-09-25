@@ -9,7 +9,7 @@ NOTE: This is VERY EARLY in development, so nothing runs at all yet except some 
 ---- About usage of the term "Emulator" 
 
 i can already hear all the angry nerds telling me you cant make a PSM emulator because PSM im not any hardware!
-its a Runtime Environment, and is built upon Mono Framework! Thats like calling .NET framework or Java an emulator!11
+its a Runtime Environment, heck its even built upon Mono Framework!! Thats like calling .NET or Java an emulator!11
 
 
 Okay, i give you this *What exactly is the difference between a Runtime like .NET or the JVM,* and a console emulator (say like mGBA?)
