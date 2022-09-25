@@ -25,5 +25,9 @@ as well as having memory limitations, on how many threads can be used, as well a
 
 
 heck ok, if Ruffle can call themselves an emulator, for essentially being the same thing, so can i-
+
+
 its app that runs software, designed for something else, alright?
+
+
 Sooo Emulator that's what im going with, deal with it.
