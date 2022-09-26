@@ -356,9 +356,6 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
-		if (!psmSandbox->PathExist(absolutePath))
-			return PSM_ERROR_NOT_FOUND;
-
 		time_t creationTime = FILETIME_TO_UNIX(*pCreationTime);
 		time_t lastAccessTime = FILETIME_TO_UNIX(*pLastAccessTime);
 		time_t lastWriteTime = FILETIME_TO_UNIX(*pLastWriteTime);

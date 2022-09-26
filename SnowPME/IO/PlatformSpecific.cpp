@@ -12,8 +12,7 @@ namespace SnowPME::IO {
     void UnixTimeToFileTime(time_t t, LPFILETIME pft)
     {
         LONGLONG ll;
-
-        ll = Int32x32To64(t, FILETIME_TICK) + UNIX_EPOCH;
+        ll = Int32x32To64(t, FILETIME_TICK) + UNIX_TO_FILETIME_MAGIC;
         pft->dwLowDateTime = (DWORD)ll;
         pft->dwHighDateTime = ll >> 32;
     }
@@ -50,8 +49,10 @@ namespace SnowPME::IO {
 
         // Open the file .. 
         HANDLE fd = CreateFileA(RealFilePath.c_str(), FILE_WRITE_ATTRIBUTES, NULL, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_DIRECTORY, NULL);
+        
         // Set the file times
         SetFileTime(fd, &creationTime, &lastAccessTime, &lastWriteTime);
+        
         // Close the file
         CloseHandle(fd);
         return PSM_ERROR_NO_ERROR;

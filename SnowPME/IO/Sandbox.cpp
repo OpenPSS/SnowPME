@@ -133,9 +133,15 @@ namespace SnowPME::IO {
 		ScePssFileInformation_t psmPathInformation;
 		memset(&psmPathInformation, 0, sizeof(ScePssFileInformation_t));
 
+
 		strncpy(psmPathInformation.szName, setName.c_str(), PSM_PATH_MAX);
 		psmPathInformation.uFileSize = stats.st_size;
-		psmPathInformation.tCreationTime = stats.st_ctime;
+		
+		if (stats.st_ctime != -1)
+			psmPathInformation.tCreationTime = stats.st_ctime;
+		else
+			psmPathInformation.tCreationTime = std::time(0);
+
 		psmPathInformation.tLastWriteTime = stats.st_mtime;
 		psmPathInformation.tLastAccessTime = stats.st_atime;
 
@@ -326,6 +332,8 @@ namespace SnowPME::IO {
 		handle->failReason = PSM_ERROR_NO_ERROR;
 		handle->opened = true;
 		handle->fileFd = str;
+
+		Logger::Debug("FileOpen: " + absPath);
 
 		return handle;
 	}
