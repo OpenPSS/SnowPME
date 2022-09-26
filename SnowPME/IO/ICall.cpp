@@ -54,6 +54,8 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
+		Logger::Debug("DeleteDirectory: " + absolutePath);
+
 		return psmSandbox->DeleteDirectory(absolutePath);
 	}
 
@@ -172,13 +174,14 @@ namespace SnowPME::IO {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-
 		std::string relativePath = std::string(pszFileName);
 		
 		if (relativePath.length() > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		Logger::Debug("DeleteFile: " + absolutePath);
 
 		return psmSandbox->DeleteFile(absolutePath);
 
@@ -378,9 +381,6 @@ namespace SnowPME::IO {
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
 		Logger::Debug("GetPathInfo: " + relativePath);
-
-		if (psmSandbox->IsDirectory(absolutePath))
-			return PSM_ERROR_NOT_FOUND;
 
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_NOT_FOUND;

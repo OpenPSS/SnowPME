@@ -503,8 +503,13 @@ namespace SnowPME::IO {
 
 		// Locate the directory on disk and delete it
 		std::string realPath = this->LocateRealPath(absPath);
-		std::filesystem::remove(realPath);
-
+		try{
+			std::filesystem::remove(realPath);
+		}
+		catch (std::filesystem::filesystem_error) {
+			return PSM_ERROR_ERROR;
+		}
+		
 		return PSM_ERROR_NO_ERROR;
 
 	}
