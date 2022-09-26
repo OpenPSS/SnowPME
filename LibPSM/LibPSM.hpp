@@ -1,5 +1,5 @@
-#ifndef _LIB_PSM_H
-#define _LIB_PSM_H 1
+#ifndef LIB_PSM_H
+#define LIB_PSM_H 1
 
 #include "Sce/PlayStation/Core/Error.hpp"
 #include "Sce/PlayStation/Core/Environment/Log.hpp"

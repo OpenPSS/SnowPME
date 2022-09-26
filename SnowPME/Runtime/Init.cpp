@@ -12,11 +12,14 @@
 #include <Debug/Logger.hpp>
 
 #include <LibPSM.hpp>
+#include <LibCXML.hpp>
+
 #include <filesystem>
 #include <string>
 
 using namespace SnowPME::Util;
 using namespace SnowPME::IO;
+using namespace LibCXML;
 
 namespace SnowPME::Runtime {
 
@@ -26,7 +29,9 @@ namespace SnowPME::Runtime {
 
 	void Init::LoadApplication(std::string gameFolder) {
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
-		Init::initMono(AppGlobals::PsmSandbox()->LocateRealPath("/Application/app.exe"));
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		CXMLReader* reader = new CXMLReader(psmSandbox->LocateRealPath("/Application/app.info"));
+		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
 	}
 
 	void Init::StartApplication() {
