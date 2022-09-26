@@ -336,8 +336,27 @@ namespace SnowPME::IO {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 	int ICall::PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime) {
-		Logger::Error("PsmFileSetTimes Not Implemented");
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Logger::Debug(__func__);
+		if (pszFileName == NULL || pCreationTime == NULL || pLastAccessTime == NULL || pLastWriteTime == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+
+		std::string relativePath = std::string(pszFileName);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		if (!psmSandbox->PathExist(absolutePath))
+			return PSM_ERROR_NOT_FOUND;
+
+		if(psmSandbox->IsFileSystemRootDirectory(absolutePath))
+			return PSM_ERROR_NOT_FOUND;
+
+		time_t creationTime = FILETIME_TO_UNIX(*pCreationTime);
+		time_t lastAccessTime = FILETIME_TO_UNIX(* pLastAccessTime);
+		time_t lastWriteTime = FILETIME_TO_UNIX(*pLastWriteTime);
+
+
+		return psmSandbox->SetFileTimes(absolutePath, creationTime, lastAccessTime, lastWriteTime);
 	}
 
 	int ICall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {

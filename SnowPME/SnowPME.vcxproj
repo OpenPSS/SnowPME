@@ -165,6 +165,7 @@
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
+    <ClCompile Include="IO\PlatformSpecific.cpp" />
     <ClCompile Include="IO\Sandbox.cpp" />
     <ClCompile Include="Runtime\AppGlobals.cpp" />
     <ClCompile Include="Util\Config.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
     <ClInclude Include="IO\Path.hpp" />
+    <ClInclude Include="IO\PlatformSpecific.hpp" />
     <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
     <ClInclude Include="Runtime\AppGlobals.hpp" />

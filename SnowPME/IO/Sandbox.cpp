@@ -7,6 +7,7 @@
 #include <LibPSM.hpp>
 #include <Runtime/AppGlobals.hpp>
 #include <Debug/Logger.hpp>
+#include <IO/PlatformSpecific.hpp>
 
 using namespace SnowPME::Util;
 using namespace SnowPME::Debug;
@@ -151,7 +152,7 @@ namespace SnowPME::IO {
 		return psmPathInformation;
 	}
 
-	bool Sandbox::isFileSystemRootDirectory(std::string sandboxedPath) {
+	bool Sandbox::IsFileSystemRootDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : this->filesystems) {
@@ -166,7 +167,7 @@ namespace SnowPME::IO {
 	bool Sandbox::PathExist(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		if (this->isFileSystemRootDirectory(absPath))
+		if (this->IsFileSystemRootDirectory(absPath))
 			return true;
 
 		if (this->findFilesystem(absPath) == NULL)
@@ -193,7 +194,7 @@ namespace SnowPME::IO {
 	bool Sandbox::IsDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		if (this->isFileSystemRootDirectory(absPath))
+		if (this->IsFileSystemRootDirectory(absPath))
 			return true;
 
 		if (!this->PathExist(absPath))
@@ -379,11 +380,40 @@ namespace SnowPME::IO {
 			this->CloseFile(srcHandle);
 			this->CloseFile(dstHandle);
 
-			delete buffer;
+			delete[] buffer;
 			return PSM_ERROR_NO_ERROR;
 		}
 
 	}
+	int Sandbox::SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime) {
+		// Get absoulte path of file
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+
+		// Determine filesystem its located in
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		if (filesystem->IsEmulated())
+			return PSM_ERROR_ACCESS_DENIED;
+		if (!filesystem->IsRewitable())
+			return PSM_ERROR_ACCESS_DENIED;
+
+
+		ScePssFileInformation_t fileInfo = this->Stat(absPath, absPath);
+
+		if (CreationTime == -1)
+			CreationTime = fileInfo.tCreationTime;
+		if (LastAccessTime == -1)
+			LastAccessTime = fileInfo.tLastAccessTime;
+		if (LastWriteTime == -1)
+			LastWriteTime = fileInfo.tLastWriteTime;
+
+		std::string realPath = this->LocateRealPath(absPath);
+
+
+		// Use OS Specific API to change file times
+		return PlatformSpecific::ChangeFileTimes(realPath, CreationTime, LastAccessTime, LastWriteTime);
+	}
+
 	int Sandbox::FlushFile(PsmHandle* handle) {
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -575,7 +605,7 @@ namespace SnowPME::IO {
 		// Get the folder name inside the PSM Sandbox.
 		std::string fsName = filesystem->SandboxPath();
 
-		if (!this->isFileSystemRootDirectory(absPath)) {
+		if (!this->IsFileSystemRootDirectory(absPath)) {
 			// Subtract sandbox name from the full path, should result in a relative path from inside the specific sandboxed folder ..
 			std::string pathRelativeToFilesystem = absPath.substr(fsName.length() + 1);
 

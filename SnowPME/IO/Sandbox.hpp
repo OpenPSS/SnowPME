@@ -6,6 +6,7 @@
 #include <fstream>
 #include <mono/mono.h>
 
+
 namespace SnowPME::IO {
 	typedef struct PsmHandle {
 		bool opened = false;
@@ -29,12 +30,12 @@ namespace SnowPME::IO {
 		std::string currentWorkingDirectory;
 		std::vector<FileSystem*> filesystems;
 		FileSystem* findFilesystem(std::string sandboxedPath);
-		bool isFileSystemRootDirectory(std::string sandboxedPath);
 		void reopen(PsmHandle* handle);
 	public:
 		Sandbox(std::string gameFolder);
 		~Sandbox();
 		ScePssFileInformation_t Stat(std::string sandboxedPath, std::string setName);
+		bool IsFileSystemRootDirectory(std::string sandboxedPath);
 		bool PathExist(std::string sandboxedPath);
 		bool IsFile(std::string sandboxedPath);
 		bool IsDirectory(std::string sandboxedPath);
@@ -53,6 +54,7 @@ namespace SnowPME::IO {
 		int CreateDirectory(std::string sandboxedPath);
 		int DeleteDirectory(std::string sandboxedPath);
 		int ReadDirectory(PsmHandle* handle, ScePssFileInformation_t* fileInfo);
+		int SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
 		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);		
 		std::string AbsolutePath(std::string sandboxedPath);
