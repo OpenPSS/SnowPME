@@ -70,7 +70,7 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 		
-		Logger::Debug("OPEN: " + relativePath);
+		Logger::Debug("DirectoryOpen: " + relativePath);
 
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_PATH_NOT_FOUND;
@@ -377,7 +377,10 @@ namespace SnowPME::IO {
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
-		Logger::Debug("PathInfo: " + relativePath);
+		Logger::Debug("GetPathInfo: " + relativePath);
+
+		if (psmSandbox->IsDirectory(absolutePath))
+			return PSM_ERROR_NOT_FOUND;
 
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_NOT_FOUND;

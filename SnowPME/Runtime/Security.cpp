@@ -22,7 +22,7 @@ namespace SnowPME::Runtime
 				return true;
 			}
 		}
-		Logger::Debug("Determined Security Level for : " + filename + " as [SecuritySafeCritical]");
+		Logger::Debug("Determined Security Level for : " + filename + " as [SecurityTransparent]");
 		return false;
 	}
 

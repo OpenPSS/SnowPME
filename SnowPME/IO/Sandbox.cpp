@@ -511,8 +511,14 @@ namespace SnowPME::IO {
 
 	int Sandbox::CreateDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
+
+		// Return success if directory already exists.
+		if (this->IsDirectory(absPath))
+			return PSM_ERROR_NO_ERROR;
+
 		// Check the path is inside a rewritable filesystem
 		FileSystem* filesystem = this->findFilesystem(absPath);
+
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
