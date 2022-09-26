@@ -11,7 +11,6 @@ namespace SnowPME::Runtime
 	public:
 		static int IsSecurityCriticalExempt(const char* exeFullPath);
 	};
-
 }
 
 #endif

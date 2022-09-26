@@ -329,6 +329,7 @@ namespace SnowPME::IO {
 
 		return handle;
 	}
+
 	int Sandbox::CopyFile(std::string sandboxedSrcPath, std::string sandboxDstPath, bool move) {
 		// Find src and dest absoulte paths
 		std::string absSrc = this->AbsolutePath(sandboxedSrcPath);
@@ -385,6 +386,29 @@ namespace SnowPME::IO {
 		}
 
 	}
+
+	int Sandbox::SetAttributes(std::string sandboxedPath, uint32_t attributes) {
+		std::string absPath = this->AbsolutePath(sandboxedPath);
+
+		FileSystem* filesystem = this->findFilesystem(absPath);
+
+		if (filesystem->IsEmulated())
+			return PSM_ERROR_ACCESS_DENIED;
+		if (!filesystem->IsRewitable())
+			return PSM_ERROR_ACCESS_DENIED;
+		
+		if (this->IsDirectory(absPath))
+			return PSM_ERROR_NOT_FOUND;
+
+		if (!this->PathExist(absPath))
+			return PSM_ERROR_NOT_FOUND;
+
+		std::string realPath = this->LocateRealPath(absPath);
+		
+		return PlatformSpecific::ChangeFileAttributes(realPath, attributes);
+	}
+
+
 	int Sandbox::SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime) {
 		// Get absoulte path of file
 		std::string absPath = this->AbsolutePath(sandboxedPath);
@@ -392,8 +416,18 @@ namespace SnowPME::IO {
 		// Determine filesystem its located in
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
+		// Check if exists
+		if (!this->PathExist(absPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
+
+		// Check if is exactly an emulated directory.
+		if (this->IsFileSystemRootDirectory(absPath))
+			return PSM_ERROR_PATH_NOT_FOUND;
+
+		// Check if emulated dir
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
+		// Check if dir is writable
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 

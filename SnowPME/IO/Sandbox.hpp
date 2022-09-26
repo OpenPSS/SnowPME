@@ -54,6 +54,7 @@ namespace SnowPME::IO {
 		int CreateDirectory(std::string sandboxedPath);
 		int DeleteDirectory(std::string sandboxedPath);
 		int ReadDirectory(PsmHandle* handle, ScePssFileInformation_t* fileInfo);
+		int SetAttributes(std::string sandboxedPath, uint32_t attributes);
 		int SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime);
 		PsmHandle* OpenDirectory(std::string sandboxedPath);
 		PsmHandle* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);		

@@ -332,8 +332,19 @@ namespace SnowPME::IO {
 
 	}
 	int ICall::PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags) {
-		Logger::Error("PsmFileSetAttributes Not Implemented");
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Logger::Debug(__func__);
+		if (pszFileName == NULL)
+			return PSM_ERROR_INVALID_PARAMETER;
+
+		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+
+		std::string relativePath = std::string(pszFileName);
+		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
+
+		if (!psmSandbox->PathExist(absolutePath))
+			return PSM_ERROR_NOT_FOUND;
+
+		return psmSandbox->SetAttributes(absolutePath, uFlags);
 	}
 	int ICall::PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime) {
 		Logger::Debug(__func__);
@@ -348,11 +359,8 @@ namespace SnowPME::IO {
 		if (!psmSandbox->PathExist(absolutePath))
 			return PSM_ERROR_NOT_FOUND;
 
-		if(psmSandbox->IsFileSystemRootDirectory(absolutePath))
-			return PSM_ERROR_NOT_FOUND;
-
 		time_t creationTime = FILETIME_TO_UNIX(*pCreationTime);
-		time_t lastAccessTime = FILETIME_TO_UNIX(* pLastAccessTime);
+		time_t lastAccessTime = FILETIME_TO_UNIX(*pLastAccessTime);
 		time_t lastWriteTime = FILETIME_TO_UNIX(*pLastWriteTime);
 
 

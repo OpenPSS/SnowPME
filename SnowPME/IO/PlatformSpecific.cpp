@@ -1,6 +1,7 @@
 #include <IO/PlatformSpecific.hpp>
 #include <LibPSM.hpp>
 #include <Runtime/AppGlobals.hpp>
+#include <mono/mono.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -17,6 +18,25 @@ namespace SnowPME::IO {
         pft->dwHighDateTime = ll >> 32;
     }
 #endif
+
+    int PlatformSpecific::ChangeFileAttributes(std::string RealFilePath, uint32_t attribute) {
+#ifdef _WIN32
+        DWORD fileAttributes = 0;
+
+        if ((attribute & SCE_PSS_FILE_FLAG_READONLY) == 0)
+            fileAttributes |= FILE_ATTRIBUTE_READONLY;
+
+        if ((attribute & SCE_PSS_FILE_FLAG_HIDDEN) == 0)
+            fileAttributes |= FILE_ATTRIBUTE_HIDDEN;
+
+        SetFileAttributesA(RealFilePath.c_str(), fileAttributes);
+
+        return PSM_ERROR_NO_ERROR;
+#else
+        return PSM_ERROR_NOT_SUPPORTED;
+#endif
+    }
+
 	int PlatformSpecific::ChangeFileTimes(std::string RealFilePath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime) {
 #ifdef _WIN32
         FILETIME creationTime;
