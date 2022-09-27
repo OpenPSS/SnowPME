@@ -17,7 +17,7 @@ namespace LibCXML {
 
 		std::vector<CXMLAttributeBase*> attributes;
 	public:
-		CXMLElement(std::string cxmlFile);
+		CXMLElement(std::string cxmlFile, std::string magic);
 		~CXMLElement();
 		std::string ElementName();
 		template <typename T> T GetAttribute(std::string attributeName) {

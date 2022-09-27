@@ -12,7 +12,6 @@ extern "C" {
 #endif
 
 #define MAGIC_LEN 4
-#define APPINFO_MAGIC "PSMA"
 
 	typedef enum CxmlAttributeType : uint32_t
 	{

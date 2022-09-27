@@ -9,7 +9,7 @@
 namespace LibCXML {
 	class CXMLReader {
 	private: 
-		bool checkMagicNumber();
+		bool checkMagicNumber(const char* magic);
 		CXMLStream* readTable(CxmlTableDeclaration dec);
 		std::fstream* cxmlFile;
 		CxmlFileHeader cxmlHeader;
@@ -25,7 +25,7 @@ namespace LibCXML {
 		CXMLStream* FloatArrayTable;
 		CXMLStream* FileTable;
 
-		CXMLReader(std::string cxmlFilePath);
+		CXMLReader(std::string cxmlFilePath, const char* magic);
 		~CXMLReader();
 	};
 

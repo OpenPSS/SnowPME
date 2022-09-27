@@ -4,8 +4,8 @@
 #include <fstream>
 
 namespace LibCXML {
-	bool CXMLReader::checkMagicNumber() {
-		if (strncmp(this->cxmlHeader.magic, APPINFO_MAGIC, MAGIC_LEN) == 0)
+	bool CXMLReader::checkMagicNumber(const char* magic) {
+		if (strncmp(this->cxmlHeader.magic, magic, MAGIC_LEN) == 0)
 			return true;
 		else
 			return false;
@@ -23,12 +23,12 @@ namespace LibCXML {
 	}
 
 
-	CXMLReader::CXMLReader(std::string cxmlFilePath) {
+	CXMLReader::CXMLReader(std::string cxmlFilePath, const char* magic) {
 		
 		this->cxmlFile = new std::fstream(cxmlFilePath, std::ios::in | std::ios::binary);
 		this->cxmlFile->read((char*)&this->cxmlHeader, sizeof(CxmlFileHeader));
 
-		if (!checkMagicNumber())
+		if (!checkMagicNumber(magic))
 			throw new std::exception("CXML File is invalid or corrupt");
 
 		this->TreeTable			= readTable(this->cxmlHeader.treeTable);
