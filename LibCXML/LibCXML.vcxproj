@@ -19,12 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CXMLAttribute.hpp" />
+    <ClInclude Include="CXMLAttributeBase.hpp" />
+    <ClInclude Include="CXMLElement.hpp" />
     <ClInclude Include="CXMLFile.hpp" />
     <ClInclude Include="CXMLReader.hpp" />
+    <ClInclude Include="CXMLStream.hpp" />
     <ClInclude Include="LibCXML.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CXMLAttribute.cpp" />
+    <ClCompile Include="CXMLAttributeBase.cpp" />
+    <ClCompile Include="CXMLElement.cpp" />
     <ClCompile Include="CXMLReader.cpp" />
+    <ClCompile Include="CXMLStream.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

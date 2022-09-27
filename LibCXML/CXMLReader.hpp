@@ -3,28 +3,28 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
-
+#include "CXMLFile.hpp"
+#include "CXMLStream.hpp"
 
 namespace LibCXML {
-
 	class CXMLReader {
 	private: 
 		bool checkMagicNumber();
-		void readTable(CxmlTableDeclaration dec, CxmlTableBuffer* buf);
-
+		CXMLStream* readTable(CxmlTableDeclaration dec);
 		std::fstream* cxmlFile;
 		CxmlFileHeader cxmlHeader;
-
-		CxmlTableBuffer treeTable;
-		CxmlTableBuffer idTable;
-		CxmlTableBuffer hashIDTable;
-		CxmlTableBuffer stringTable;
-		CxmlTableBuffer wstringTable;
-		CxmlTableBuffer hashTable;
-		CxmlTableBuffer intArrayTable;
-		CxmlTableBuffer floatArrayTable;
-		CxmlTableBuffer fileTable;
 	public:
+
+		CXMLStream* TreeTable;
+		CXMLStream* IdTable;
+		CXMLStream* HashIdTable;
+		CXMLStream* StringTable;
+		CXMLStream* WStringTable;
+		CXMLStream* HashTable;
+		CXMLStream* IntArrayTable;
+		CXMLStream* FloatArrayTable;
+		CXMLStream* FileTable;
+
 		CXMLReader(std::string cxmlFilePath);
 		~CXMLReader();
 	};

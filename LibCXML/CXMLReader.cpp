@@ -1,5 +1,6 @@
 #include "CXMLFile.hpp"
 #include "CXMLReader.hpp"
+#include "CXMLElement.hpp"
 #include <fstream>
 
 namespace LibCXML {
@@ -10,42 +11,48 @@ namespace LibCXML {
 			return false;
 	}
 
-	void CXMLReader::readTable(CxmlTableDeclaration dec, CxmlTableBuffer* buf) {
-		buf->buffer = new char[dec.tableSize];
-		this->cxmlFile->seekg(dec.tableOffset, std::ios::beg);
-		this->cxmlFile->read(buf->buffer, dec.tableSize);
-		buf->length = dec.tableSize;
+	CXMLStream* CXMLReader::readTable(CxmlTableDeclaration dec) {
+		char* tableBuffer = new char[dec.tableSize];
+		
+		this->cxmlFile->seekg(dec.tableOffset);
+		this->cxmlFile->read(tableBuffer, dec.tableSize);
+
+		CXMLStream* stream = new CXMLStream(tableBuffer, dec.tableSize);
+		delete[] tableBuffer;
+		return stream;
 	}
+
 
 	CXMLReader::CXMLReader(std::string cxmlFilePath) {
 		
 		this->cxmlFile = new std::fstream(cxmlFilePath, std::ios::in | std::ios::binary);
-		this->cxmlFile->read((char*)&(this->cxmlHeader), sizeof(CxmlFileHeader));
+		this->cxmlFile->read((char*)&this->cxmlHeader, sizeof(CxmlFileHeader));
 
 		if (!checkMagicNumber())
 			throw new std::exception("CXML File is invalid or corrupt");
 
-		readTable(this->cxmlHeader.treeTable,		&this->treeTable);
-		readTable(this->cxmlHeader.idTable,			&this->idTable);
-		readTable(this->cxmlHeader.hashIDTable,		&this->hashIDTable);
-		readTable(this->cxmlHeader.stringTable,		&this->stringTable);
-		readTable(this->cxmlHeader.wstringTable,	&this->wstringTable);
-		readTable(this->cxmlHeader.hashTable,		&this->hashTable);
-		readTable(this->cxmlHeader.intArrayTable,	&this->intArrayTable);
-		readTable(this->cxmlHeader.floatArrayTable,	&this->floatArrayTable);
-		readTable(this->cxmlHeader.fileTable,		&this->fileTable);
-
+		this->TreeTable			= readTable(this->cxmlHeader.treeTable);
+		this->IdTable			= readTable(this->cxmlHeader.idTable);
+		this->HashIdTable		= readTable(this->cxmlHeader.hashIdTable);
+		this->StringTable		= readTable(this->cxmlHeader.stringTable);
+		this->WStringTable		= readTable(this->cxmlHeader.wstringTable);
+		this->HashTable			= readTable(this->cxmlHeader.hashTable);
+		this->IntArrayTable		= readTable(this->cxmlHeader.intArrayTable);
+		this->FloatArrayTable	= readTable(this->cxmlHeader.floatArrayTable);
+		this->FileTable			= readTable(this->cxmlHeader.fileTable);
 	}
+
+
 	CXMLReader::~CXMLReader() {
-		delete[] this->treeTable.buffer;
-		delete[] this->idTable.buffer;
-		delete[] this->hashIDTable.buffer;
-		delete[] this->stringTable.buffer;
-		delete[] this->wstringTable.buffer;
-		delete[] this->hashTable.buffer;
-		delete[] this->intArrayTable.buffer;
-		delete[] this->floatArrayTable.buffer;
-		delete[] this->fileTable.buffer;
+		delete this->TreeTable;
+		delete this->IdTable;
+		delete this->HashIdTable;
+		delete this->StringTable;
+		delete this->WStringTable;
+		delete this->HashTable;
+		delete this->IntArrayTable;
+		delete this->FloatArrayTable;
+		delete this->FileTable;
 
 		this->cxmlFile->close();
 		delete this->cxmlFile;

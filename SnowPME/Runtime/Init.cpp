@@ -30,7 +30,7 @@ namespace SnowPME::Runtime {
 	void Init::LoadApplication(std::string gameFolder) {
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		CXMLReader* reader = new CXMLReader(psmSandbox->LocateRealPath("/Application/app.info"));
+		CXMLElement* cxmlElement = new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"));
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
 	}
 
