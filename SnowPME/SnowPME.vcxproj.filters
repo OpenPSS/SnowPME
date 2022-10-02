@@ -179,5 +179,8 @@
     <ClInclude Include="IO\PlatformSpecific.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Metadata\AppInfo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

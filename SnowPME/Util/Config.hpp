@@ -4,17 +4,6 @@
 
 #define RUNTIME_FOLDER "Runtime"
 
-#ifdef _WIN32
-#define PSM_CORELIB_PATH "Runtime\\lib\\psm\\Sce.PlayStation.Core.dll"
-#define RUNTIME_LIB_PATH "Runtime\\lib"
-#define RUNTIME_CONFIG_PATH "Runtime\\etc"
-#else
-#define PSM_CORELIB_PATH "Runtime/lib/psm/Sce.PlayStation.Core.dll"
-#define RUNTIME_LIB_PATH "Runtime/lib"
-#define RUNTIME_CONFIG_PATH "Runtime/etc"
-#endif
-
-
 namespace SnowPME::Util
 {
 	class Config {

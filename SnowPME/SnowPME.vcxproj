@@ -189,6 +189,7 @@
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
     <ClInclude Include="Runtime\AppGlobals.hpp" />
     <ClInclude Include="IO\DirectoryIterator.hpp" />
+    <ClInclude Include="Metadata\AppInfo.hpp" />
     <ClInclude Include="Util\Config.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
     <ClInclude Include="Runtime\Resources.hpp" />
