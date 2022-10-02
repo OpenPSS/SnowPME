@@ -7,6 +7,7 @@ namespace SnowPME::Debug
 	public:
 		static void Debug(std::string msg);
 		static void Error(std::string msg);
+		static void Warn(std::string msg);
 		static void Info(std::string msg);
 
 	};

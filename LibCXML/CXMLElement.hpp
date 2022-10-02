@@ -24,10 +24,10 @@ namespace LibCXML {
 
 			for (CXMLAttributeBase* attribute : this->attributes) {
 				if (attribute->AttributeName() == attributeName) {
-					return (T*) attribute;
+					return (T)attribute;
 				}
 			}
-
+			return NULL;
 		}
 
 		bool HasParentElement();
@@ -35,6 +35,7 @@ namespace LibCXML {
 		bool HasNextSibling();
 		bool HasFirstChild();
 		bool HasLastChild();
+
 
 		CXMLElement* ParentElement();
 		CXMLElement* PrevSibling();

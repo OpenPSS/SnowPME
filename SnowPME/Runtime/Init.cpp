@@ -24,6 +24,7 @@
 using namespace SnowPME::Util;
 using namespace SnowPME::IO;
 using namespace SnowPME::Metadata;
+using namespace SnowPME::Debug;
 
 using namespace LibCXML;
 
@@ -38,7 +39,9 @@ namespace SnowPME::Runtime {
 	void Init::LoadApplication(std::string gameFolder) {
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		AppInfo* appInfo = new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA"));
+
+		AppGlobals::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
 	}
 
@@ -49,7 +52,18 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		Debug::Logger::Debug("Initalzing Mono " + executablePath);
+		AppInfo* appInfo = AppGlobals::PsmAppInfo();
+		int heapSizeLimit = appInfo->ManagedHeapSize() * 0x400;
+		int resourceSizeLimit = appInfo->ResourceHeapSize() * 0x400;
+
+		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
+			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
+			return PSM_ERROR_OUT_OF_MEMORY;
+		}
+		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
+		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
+
+		Logger::Debug("Starting: " + executablePath);
 
 
 		// Lockdown mono if security is enabled
@@ -118,9 +132,7 @@ namespace SnowPME::Runtime {
 		mono_runtime_resource_limit(MONO_RESOURCE_JIT_CODE, 0x1000000, 0x1000000);
 		mono_runtime_resource_limit(MONO_RESOURCE_METADATA, 0x1000000, 0x1000000);
 
-		// TODO: Read this from app.info
-		
-		mono_gc_set_heap_size_limit(0x2000000, 0x2000000);
+		mono_gc_set_heap_size_limit(heapSizeLimit, heapSizeLimit);
 		mono_thread_set_max_threads(16);
 		mono_threadpool_set_max_threads(8,8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);

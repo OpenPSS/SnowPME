@@ -47,7 +47,13 @@ namespace SnowPME::Metadata {
 		// <short_name>
 		std::vector<LocaleInfo> shortNames;
 
+		// <parental_control>
+		int lockLevel = 0;
+
 		// <rating_list>
+		bool hasOnlineFeatures = false;
+		int highestAgeLimit = 0;
+
 		bool personalInfo = false;
 		bool userLocation = false;
 		bool exchangeContent = false; 
@@ -77,8 +83,8 @@ namespace SnowPME::Metadata {
 		std::vector<ProductInfo> productList;
 
 		// <runtime_config>
-		uint32_t managedHeapSize = 0;
-		uint32_t resourceHeapSize = 0;
+		int managedHeapSize = 0;
+		int resourceHeapSize = 0;
 		std::string maxScreenSize;
 		std::string maxCaptureResolution;
 
@@ -92,6 +98,8 @@ namespace SnowPME::Metadata {
 	public:
 		AppInfo(CXMLElement* elem);
 		~AppInfo();
+		int ManagedHeapSize();
+		int ResourceHeapSize();
 	};
 }
 
