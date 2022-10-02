@@ -135,6 +135,9 @@
     <ClCompile Include="IO\PlatformSpecific.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Metadata\AppInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Runtime\Init.hpp">

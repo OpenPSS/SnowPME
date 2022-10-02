@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <LibCXML.hpp>
+using namespace LibCXML;
 namespace SnowPME::Metadata {
 
 	typedef struct LocaleInfo {
@@ -27,6 +28,8 @@ namespace SnowPME::Metadata {
 
 	class AppInfo {
 	private:
+		CXMLElement* element;
+
 		// <application>
 		std::string defaultLocale;
 		std::string targetSdkVerison;
@@ -34,6 +37,10 @@ namespace SnowPME::Metadata {
 		std::string appVersion;
 		std::string targetRuntimeVersion;
 		
+		// <app_xml_format>
+		std::string sdkType;
+		std::string altVersion;
+
 		// <name>
 		std::vector<LocaleInfo> names;
 
@@ -41,17 +48,18 @@ namespace SnowPME::Metadata {
 		std::vector<LocaleInfo> shortNames;
 
 		// <rating_list>
-		bool personalInfo;
-		bool userLocation;
-		bool exchangeContent;
-		bool chat;
+		bool personalInfo = false;
+		bool userLocation = false;
+		bool exchangeContent = false; 
+		bool chat = false;
+
 		std::vector<RatingInfo> ratingList;
 
 		// <images>
-		LibCXML::CXMLStream* splash854x480;
-		LibCXML::CXMLStream* icon128x128;
-		LibCXML::CXMLStream* icon512x512;
-		LibCXML::CXMLStream* icon256x256;
+		LibCXML::CXMLStream* splash854x480 = NULL;
+		LibCXML::CXMLStream* icon128x128 = NULL;
+		LibCXML::CXMLStream* icon512x512 = NULL;
+		LibCXML::CXMLStream* icon256x256 = NULL;
 
 		// <genre_list>
 		std::vector<std::string> genreList;
@@ -61,7 +69,7 @@ namespace SnowPME::Metadata {
 		std::string website;
 		
 		// <copyright> 
-		LibCXML::CXMLStream* copyrightText;
+		LibCXML::CXMLStream* copyrightText = NULL;
 		std::string author;
 
 		// <purchase>
@@ -69,13 +77,21 @@ namespace SnowPME::Metadata {
 		std::vector<ProductInfo> productList;
 
 		// <runtime_config>
-		uint32_t managedHeapSize;
-		uint32_t resourceHeapSize;
+		uint32_t managedHeapSize = 0;
+		uint32_t resourceHeapSize = 0;
 		std::string maxScreenSize;
 		std::string maxCaptureResolution;
 
 		// <feature_list>
 		std::vector<std::string> featureList;
+
+		// <unity>
+		std::string runtimeVersion;
+		std::string unityApplicationVer;
+
+	public:
+		AppInfo(CXMLElement* elem);
+		~AppInfo();
 	};
 }
 

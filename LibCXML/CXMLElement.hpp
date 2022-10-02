@@ -29,6 +29,13 @@ namespace LibCXML {
 			}
 
 		}
+
+		bool HasParentElement();
+		bool HasPrevSibling();
+		bool HasNextSibling();
+		bool HasFirstChild();
+		bool HasLastChild();
+
 		CXMLElement* ParentElement();
 		CXMLElement* PrevSibling();
 		CXMLElement* NextSibling();

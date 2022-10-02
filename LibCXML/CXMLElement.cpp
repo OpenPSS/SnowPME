@@ -165,4 +165,35 @@ namespace LibCXML {
 		delete reader;
 	}
 
+	bool CXMLElement::HasParentElement() {
+		if (curElemPtr.parentElement == -1)
+			return false;
+		else
+			return true;
+	}
+	bool CXMLElement::HasPrevSibling() {
+		if (curElemPtr.prevSibling == -1)
+			return false;
+		else
+			return true;
+	}
+	bool CXMLElement::HasNextSibling() {
+		if (curElemPtr.nextSibling == -1)
+			return false;
+		else
+			return true;
+	}
+	bool CXMLElement::HasFirstChild() {
+		if (curElemPtr.firstChild == -1)
+			return false;
+		else
+			return true;
+	}
+	bool CXMLElement::HasLastChild() {
+		if (curElemPtr.lastChild == -1)
+			return false;
+		else
+			return true;
+	}
+
 }

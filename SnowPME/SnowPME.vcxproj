@@ -171,6 +171,7 @@
     <ClCompile Include="IO\Path.cpp" />
     <ClCompile Include="IO\PlatformSpecific.cpp" />
     <ClCompile Include="IO\Sandbox.cpp" />
+    <ClCompile Include="Metadata\AppInfo.cpp" />
     <ClCompile Include="Runtime\AppGlobals.cpp" />
     <ClCompile Include="Util\Config.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
