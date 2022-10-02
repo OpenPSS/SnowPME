@@ -14,6 +14,8 @@
 #include <LibPSM.hpp>
 #include <LibCXML.hpp>
 
+#include <mono/mono.h>
+
 #include <filesystem>
 #include <string>
 
@@ -25,7 +27,9 @@ namespace SnowPME::Runtime {
 
 	static std::string appExe = "";
 	static MonoDomain* psmDomain;
-	static MonoAssembly* psmAssembly;
+	static MonoAssembly* psmCoreLib;
+	static MonoAssembly* msCoreLib;
+	static MonoAssembly* systemLib;
 
 	void Init::LoadApplication(std::string gameFolder) {
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
@@ -49,13 +53,14 @@ namespace SnowPME::Runtime {
 			mono_security_enable_core_clr();
 			mono_security_set_core_clr_platform_callback(Security::IsSecurityCriticalExempt);
 		}
+
 				
 		// Tell mono there is no config file
 		mono_config_parse(NULL);
 
 		// Set runtime install location
 		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
-
+		
 		// Create a domain in which this application will run under.
 		psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
 
@@ -87,14 +92,20 @@ namespace SnowPME::Runtime {
 		// Add all PSM Exclusive functions.
 		Init::addFunctions();
 
-		// Load Sce.PlayStation.Core.dll
-		psmAssembly = mono_domain_assembly_open(psmDomain, Config::PsmCorelibsPath.c_str());
+
+		// Load essential dlls
+		msCoreLib = mono_domain_assembly_open(psmDomain, Config::MscorlibPath.c_str());
+		systemLib = mono_domain_assembly_open(psmDomain, Config::SystemLibPath.c_str());
+		psmCoreLib = mono_domain_assembly_open(psmDomain, Config::PsmCoreLibPath.c_str());
+
+		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
+		MonoImage* systemImage = mono_assembly_get_image(systemLib);
 
 		// Calls SetToConsole. 
-		MonoImage* psmImage = mono_assembly_get_image(psmAssembly);
-		MonoClass* psmClass = mono_class_from_name(psmImage, "Sce.PlayStation.Core.Environment", "Log");
-		MonoMethod* psmMethod = mono_class_get_method_from_name(psmClass, "SetToConsole", 0);
-		mono_runtime_invoke(psmMethod, NULL, NULL, NULL);
+		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
+		MonoClass* psmLogClass = mono_class_from_name(psmCoreLibImage, "Sce.PlayStation.Core.Environment", "Log");
+		MonoMethod* psmSetToConsoleMethod = mono_class_get_method_from_name(psmLogClass, "SetToConsole", 0);
+		mono_runtime_invoke(psmSetToConsoleMethod, NULL, NULL, NULL);
 
 		// This is automatically called when a resource limit is reached
 		mono_runtime_resource_set_callback(Resources::ResourceLimitReachedCallback);
@@ -120,7 +131,7 @@ namespace SnowPME::Runtime {
 		// Create argv
 		char* args[2] = { (char*)runExe.c_str(), NULL };
 
-		MonoObject* executionContext = NULL;
+		MonoObject* exception = NULL;
 
 		// Get executable image
 		MonoImage* runImage = mono_assembly_get_image(runAssembly);
@@ -132,10 +143,10 @@ namespace SnowPME::Runtime {
 		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, NULL);
 		
 		// Run entry point function
-		mono_runtime_run_main(entryPointMethod, 1, args, &executionContext);
+		mono_runtime_run_main(entryPointMethod, 1, args, &exception);
 		
-		if (executionContext != NULL)
-			mono_unhandled_exception(executionContext);
+		if (exception != NULL)
+			mono_unhandled_exception(exception);
 
 	}
 

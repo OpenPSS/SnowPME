@@ -12,6 +12,8 @@ extern "C" {
 #include <mono/metadata/threads.h>
 #include <mono/metadata/threadpool.h>
 #include <mono/metadata/file-io-pss.h>
+#include <mono/metadata/profiler.h>
+#include <mono/metadata/mono-debug.h>
 
 #include <mono/jit/jit.h>
 #include <mono/utils/mono-counters.h>
