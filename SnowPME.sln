@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibPSM", "LibPSM\LibPSM.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibCXML", "LibCXML\LibCXML.vcxproj", "{C196D659-BD55-4FBE-96EE-457D800BCA52}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibSnowPME", "LibSnowPME\LibSnowPME.vcxproj", "{6312B3E3-B529-4AB7-991A-02F435F834B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -45,6 +47,14 @@ Global
 		{C196D659-BD55-4FBE-96EE-457D800BCA52}.Release|x64.Build.0 = Release|x64
 		{C196D659-BD55-4FBE-96EE-457D800BCA52}.Release|x86.ActiveCfg = Release|Win32
 		{C196D659-BD55-4FBE-96EE-457D800BCA52}.Release|x86.Build.0 = Release|Win32
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Debug|x64.ActiveCfg = Debug|x64
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Debug|x64.Build.0 = Debug|x64
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Debug|x86.ActiveCfg = Debug|Win32
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Debug|x86.Build.0 = Debug|Win32
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Release|x64.ActiveCfg = Release|x64
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Release|x64.Build.0 = Release|x64
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Release|x86.ActiveCfg = Release|Win32
+		{6312B3E3-B529-4AB7-991A-02F435F834B9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
