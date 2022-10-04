@@ -2,7 +2,7 @@
 
 #include <IO/Path.hpp>
 #include <IO/Sandbox.hpp>
-#include <Runtime/AppGlobals.hpp>
+#include <Util/AppGlobals.hpp>
 #include <Debug/Logger.hpp>
 
 #include <vector>
@@ -11,8 +11,8 @@
 
 #include <LibPSM.hpp>
 
-using namespace SnowPME::Runtime;
 using namespace SnowPME::Debug;
+using namespace SnowPME::Util;
 
 namespace SnowPME::IO {
 

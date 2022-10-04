@@ -1,13 +1,14 @@
 #include <Runtime/Init.hpp>
 #include <Runtime/Resources.hpp>
 #include <Runtime/Security.hpp>
-#include <Runtime/AppGlobals.hpp>
+#include <Util/AppGlobals.hpp>
 
 #include <IO/ICall.hpp>
 #include <IO/Filesystem.hpp>
 #include <IO/Path.hpp>
 #include <IO/Sandbox.hpp>
 
+#include <Util/PlatformSpecific.hpp>
 #include <Util/Config.hpp>
 #include <Debug/Logger.hpp>
 
@@ -37,11 +38,13 @@ namespace SnowPME::Runtime {
 	static MonoAssembly* systemLib;
 
 	void Init::LoadApplication(std::string gameFolder) {
+		// Set app globals.
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-
+		AppGlobals::SetPsmMainThreadId(PlatformSpecific::CurrentThreadId());
 		AppGlobals::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
 
+		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
 	}
 

@@ -4,8 +4,8 @@
 #include <filesystem>
 #include <sys/stat.h>
 #include <mono/mono.h>
-#include <Runtime/AppGlobals.hpp>
-#include <IO/PlatformSpecific.hpp>
+#include <Util/AppGlobals.hpp>
+#include <Util/PlatformSpecific.hpp>
 #include <Debug/Logger.hpp>
 
 #include <LibPSM.hpp>

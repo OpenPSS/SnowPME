@@ -1,11 +1,11 @@
 #include <IO/ICall.hpp>
 #include <IO/Path.hpp>
-#include <Runtime/AppGlobals.hpp>
+#include <Util/AppGlobals.hpp>
 #include <Debug/Logger.hpp>
 #include <LibPSM.hpp>
 #include <mono/mono.h>
 
-using namespace SnowPME::Runtime;
+using namespace SnowPME::Util;
 using namespace SnowPME::Debug;
 
 namespace SnowPME::IO {

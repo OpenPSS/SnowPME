@@ -24,11 +24,11 @@
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
     <ClInclude Include="IO\Path.hpp" />
-    <ClInclude Include="IO\PlatformSpecific.hpp" />
+    <ClInclude Include="Util\PlatformSpecific.hpp" />
     <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
     <ClInclude Include="Metadata\AppInfo.hpp" />
-    <ClInclude Include="Runtime\AppGlobals.hpp" />
+    <ClInclude Include="Util\AppGlobals.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
     <ClInclude Include="Runtime\Resources.hpp" />
     <ClInclude Include="Runtime\Security.hpp" />
@@ -41,10 +41,10 @@
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
-    <ClCompile Include="IO\PlatformSpecific.cpp" />
+    <ClCompile Include="Util\PlatformSpecific.cpp" />
     <ClCompile Include="IO\Sandbox.cpp" />
     <ClCompile Include="Metadata\AppInfo.cpp" />
-    <ClCompile Include="Runtime\AppGlobals.cpp" />
+    <ClCompile Include="Util\AppGlobals.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
     <ClCompile Include="Runtime\Resources.cpp" />
     <ClCompile Include="Runtime\Security.cpp" />

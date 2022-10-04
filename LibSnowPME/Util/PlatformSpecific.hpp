@@ -5,11 +5,12 @@
 
 
 
-namespace SnowPME::IO {
+namespace SnowPME::Util {
 	class PlatformSpecific {
 	public:
 		static int ChangeFileAttributes(std::string RealFilePath, uint32_t attribute);
 		static int ChangeFileTimes(std::string RealFilePath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime);
+		static uint64_t CurrentThreadId();
 	};
 }
 

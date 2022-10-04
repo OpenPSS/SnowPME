@@ -48,7 +48,7 @@
     <ClInclude Include="IO\Path.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IO\PlatformSpecific.hpp">
+    <ClInclude Include="Util\PlatformSpecific.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IO\Sandbox.hpp">
@@ -57,7 +57,7 @@
     <ClInclude Include="Debug\Logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Runtime\AppGlobals.hpp">
+    <ClInclude Include="Util\AppGlobals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,7 +68,7 @@
     <ClCompile Include="Util\StringUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Runtime\AppGlobals.cpp">
+    <ClCompile Include="Util\AppGlobals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Runtime\Init.cpp">
@@ -95,7 +95,7 @@
     <ClCompile Include="IO\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IO\PlatformSpecific.cpp">
+    <ClCompile Include="Util\PlatformSpecific.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IO\Sandbox.cpp">

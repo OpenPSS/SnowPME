@@ -1,7 +1,16 @@
-#include <Runtime/AppGlobals.hpp>
-namespace SnowPME::Runtime {
+#include <Util/AppGlobals.hpp>
+namespace SnowPME::Util {
 	static Sandbox* psmSandbox;
 	static AppInfo* psmAppInfo;
+	static uint64_t psmMainThreadId;
+
+	int AppGlobals::PsmMainThreadId() {
+		return psmMainThreadId;
+	}
+
+	void AppGlobals::SetPsmMainThreadId(uint64_t threadId) {
+		psmMainThreadId = threadId;
+	}
 
 	AppInfo* AppGlobals::PsmAppInfo() {
 		return psmAppInfo;
