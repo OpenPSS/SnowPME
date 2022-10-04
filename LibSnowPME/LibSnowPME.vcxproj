@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp" />
+    <ClInclude Include="Graphics\Window.hpp" />
     <ClInclude Include="IO\DirectoryIterator.hpp" />
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
@@ -37,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
+    <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="IO\DirectoryIterator.cpp" />
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
@@ -131,7 +133,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibSnowPME;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -152,7 +154,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibSnowPME;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -173,7 +175,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibSnowPME;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -194,7 +196,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibSnowPME;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>

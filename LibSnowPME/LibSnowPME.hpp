@@ -6,5 +6,7 @@
 #include <Util/AppGlobals.hpp>
 #include <Util/Config.hpp>
 #include <Util/PlatformSpecific.hpp>
+#include <Runtime/Init.hpp>
+#include <Graphics/Window.hpp>
 
 #endif

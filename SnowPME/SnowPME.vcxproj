@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -101,7 +101,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glew32s.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,7 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -122,7 +123,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)mono\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glew32s.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -131,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -139,7 +140,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glew32s.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,7 +152,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)LibSnowPME;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -160,7 +162,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Libs\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glew32s.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

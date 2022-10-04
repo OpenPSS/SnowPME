@@ -20,6 +20,15 @@
 using namespace Sce::PlayStation::Core::Imaging;
 
 namespace Sce::PlayStation::Core::Graphics {
+	
+	typedef struct GraphicsContext {
+		int Width;
+		int Height;
+		PixelFormat ColorFormat;
+		PixelFormat DepthFormat;
+		MultiSampleMode MultiSampleMode;
+	} GraphicsContext;
+
 	class PsmGraphicsContext {
 	public:
 		static int Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int *result);

@@ -7,12 +7,32 @@ using namespace SnowPME::Util;
 
 namespace Sce::PlayStation::Core::Graphics {
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
-		std::cout << "Sce::PlayStation::Core::Graphics::Create(int, int, Sce::PlayStation::Core::Graphics::PixelFormat, Sce::PlayStation::Core::Graphics::PixelFormat, Sce::PlayStation::Core::Graphics::MultiSampleMode, int *) Unimplemented." << std::endl;
-		return 0;
+		Logger::Debug(__func__);
+		if (THREAD_CHECK) {
+			GraphicsContext* context = new GraphicsContext();
+			context->Width = width;
+			context->Height = height;
+			context->ColorFormat = colorFormat;
+			context->DepthFormat = depthFormat;
+			context->MultiSampleMode = multiSampleMode;
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::Delete(int handle){
-		std::cout << "Sce::PlayStation::Core::Graphics::Delete(int) Unimplemented." << std::endl;
-		return 0;
+		Logger::Debug(__func__);
+		if (THREAD_CHECK) {
+			delete (GraphicsContext*)handle;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, int* handles) {
 		std::cout << "Sce::PlayStation::Core::Graphics::Update(int, Sce::PlayStation::Core::Graphics::GraphicsUpdate, Sce::PlayStation::Core::Graphics::GraphicsState *, int*) Unimplemented." << std::endl;
@@ -47,8 +67,16 @@ namespace Sce::PlayStation::Core::Graphics {
 		return 0;
 	}
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
-		std::cout << "Sce::PlayStation::Core::Graphics::GetMaxScreenSize(int *, int *) Unimplemented." << std::endl;
-		return 0;
+		Logger::Debug(__func__);
+		if (THREAD_CHECK) {
+			*height = Config::ScreenHeight(0);
+			*width = Config::ScreenWidth(0);
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::GetScreenSizes(MonoArray* sizes, int* result) {
 		Logger::Debug(__func__);
@@ -68,13 +96,20 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error(std::string(__func__) + " cannot be accessed from multiple threads.");
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
-		std::cout << "Sce::PlayStation::Core::Graphics::GetScreenInfo(int, int *, int *, Sce::PlayStation::Core::Graphics::PixelFormat *, Sce::PlayStation::Core::Graphics::PixelFormat *, Sce::PlayStation::Core::Graphics::MultiSampleMode *) Unimplemented." << std::endl;
-		return 0;
+		Logger::Debug(__func__);
+		if (THREAD_CHECK) {
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error(std::string(__func__) + " cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::GetCaps(int handle, GraphicsCapsState* caps) {
 		std::cout << "Sce::PlayStation::Core::Graphics::GetCaps(int, Sce::PlayStation::Core::Graphics::GraphicsCapsState *) Unimplemented." << std::endl;

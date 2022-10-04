@@ -1,10 +1,12 @@
 #ifndef SNOW_PME_RUNTIME_APPGLOBAL_H
 #define SNOW_PME_RUNTIME_APPGLOBAL_H 1
 #include <IO/Sandbox.hpp>
+#include <Graphics/Window.hpp>
 #include <Metadata/AppInfo.hpp>
 
 using namespace SnowPME::IO;
 using namespace SnowPME::Metadata;
+using namespace SnowPME::Graphics;
 
 #define FILETIME_TICK 10000000LL
 #define UNIX_EPOCH 11644473600LL
@@ -20,6 +22,9 @@ typedef wchar_t wchar;
 namespace SnowPME::Util {
 	class AppGlobals {
 	public:
+		static Window* PsmMainWindow();
+		static void SetPsmMainWindow();
+
 		static uint64_t PsmMainThreadId();
 		static void SetPsmMainThreadId(uint64_t threadId);
 
