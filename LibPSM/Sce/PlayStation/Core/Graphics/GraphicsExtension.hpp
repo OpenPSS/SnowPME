@@ -2,7 +2,7 @@
 #define LIB_PSM_GRAPHICSEXTENSION_H
 
 namespace Sce::PlayStation::Core::Graphics {
-	enum class GraphicsExtension : unsigned int {
+	enum GraphicsExtension : unsigned int {
 		None = 0,
 		DepthTexture = 1,
 		Texture3D = 2,
@@ -18,7 +18,11 @@ namespace Sce::PlayStation::Core::Graphics {
 		TextureHalfFloat = 2048,
 		TextureFloatLinear = 4096,
 		TextureHalfFloatLinear = 8192,
-		Texture2101010Rev = 16384
+		Texture2101010Rev = 16384,
+		TextureNPot2DMipMap = 32768,
+		DrawInstanced = 65536,
+		InstancedArrays = 131072
+
 	};
 }
 

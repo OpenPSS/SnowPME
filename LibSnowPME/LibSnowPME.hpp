@@ -8,5 +8,5 @@
 #include <Util/PlatformSpecific.hpp>
 #include <Runtime/Init.hpp>
 #include <Graphics/Window.hpp>
-
+#include <Util/StringUtils.hpp>
 #endif

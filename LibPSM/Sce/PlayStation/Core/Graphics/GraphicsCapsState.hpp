@@ -5,7 +5,7 @@
 
 namespace Sce::PlayStation::Core::Graphics {
 	typedef struct GraphicsCapsState {
-		GraphicsExtension Extension;
+		int Extension;
 		int MaxViewportWidth;
 		int MaxViewportHeight;
 		int MaxTextureSize;

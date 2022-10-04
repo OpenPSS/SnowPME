@@ -31,7 +31,6 @@ namespace SnowPME::Graphics {
 			throw new std::exception("Failed to initalize GLES2.");
 		}
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
-		Logger::Info("GLES2 Version: "+this->openGlVersion);
 	}
 	Window::~Window() {
 		glfwTerminate();

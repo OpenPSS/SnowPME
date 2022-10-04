@@ -15,18 +15,24 @@
 #include "GraphicsCapsState.hpp"
 #include "MultiSampleMode.hpp"
 #include "../Imaging/ImageSize.hpp"
+
+#include <LibSnowPME.hpp>
 #include <mono/mono.h>
 
 using namespace Sce::PlayStation::Core::Imaging;
 
+
 namespace Sce::PlayStation::Core::Graphics {
-	
 	typedef struct GraphicsContext {
 		int Width;
 		int Height;
 		PixelFormat ColorFormat;
 		PixelFormat DepthFormat;
 		MultiSampleMode MultiSampleMode;
+		GraphicsCapsState* CapsState;
+		Window* MainWindow;
+		std::string Extensions;
+		std::string Renderer;
 	} GraphicsContext;
 
 	class PsmGraphicsContext {
