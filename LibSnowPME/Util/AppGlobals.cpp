@@ -4,7 +4,7 @@ namespace SnowPME::Util {
 	static AppInfo* psmAppInfo;
 	static uint64_t psmMainThreadId;
 
-	int AppGlobals::PsmMainThreadId() {
+	uint64_t AppGlobals::PsmMainThreadId() {
 		return psmMainThreadId;
 	}
 

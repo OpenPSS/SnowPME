@@ -15,7 +15,7 @@
 #include "GraphicsCapsState.hpp"
 #include "MultiSampleMode.hpp"
 #include "../Imaging/ImageSize.hpp"
-
+#include <mono/mono.h>
 
 using namespace Sce::PlayStation::Core::Imaging;
 
@@ -33,7 +33,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		static int ReadPixels(int handle, std::byte* pixels, PixelFormat format, int sx, int sy, int sw, int sh);
 		static int ReadPixels2(int handle, int texture, int level, TextureCubeFace cubeFace, int dx, int dy, int sx, int sy, int sw, int sh);
 		static int GetMaxScreenSize(int *width, int *height);
-		static int GetScreenSizes(ImageSize* sizes, int *result);
+		static int GetScreenSizes(MonoArray* sizes, int *result);
 		static int GetScreenInfo(int handle, int *width, int *height, PixelFormat *colorFormat, PixelFormat *depthFormat, MultiSampleMode *multiSampleMode);
 		static int GetCaps(int handle, GraphicsCapsState *caps);
 		static int SetActiveScreen(int handle, int x, int y, int w, int h);

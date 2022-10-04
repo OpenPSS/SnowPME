@@ -1,4 +1,9 @@
 #include "PsmGraphicsContext.hpp"
+#include <mono/mono.h>
+#include <LibSnowPME.hpp>
+#include "../Error.hpp"
+using namespace SnowPME::Debug;
+using namespace SnowPME::Util;
 
 namespace Sce::PlayStation::Core::Graphics {
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
@@ -45,9 +50,27 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << "Sce::PlayStation::Core::Graphics::GetMaxScreenSize(int *, int *) Unimplemented." << std::endl;
 		return 0;
 	}
-	int PsmGraphicsContext::GetScreenSizes(ImageSize* sizes, int* result) {
-		std::cout << "Sce::PlayStation::Core::Graphics::GetScreenSizes(Sce::PlayStation::Core::Imaging::ImageSize*, int *) Unimplemented." << std::endl;
-		return 0;
+	int PsmGraphicsContext::GetScreenSizes(MonoArray* sizes, int* result) {
+		Logger::Debug(__func__);
+		if (THREAD_CHECK) {
+			int numScreens = Config::ScreenTotal();
+			if (sizes) {
+				uintptr_t arraySize = mono_array_length(sizes);
+				for (uint32_t i = 0; i < arraySize; i++) {
+					ImageSize* imgsize = (ImageSize*)mono_array_addr_with_size(sizes, sizeof(ImageSize), i);
+
+					imgsize->Height = Config::ScreenHeight(i);
+					imgsize->Width = Config::ScreenWidth(i);
+				}
+			}
+
+			*result = numScreens;
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error(std::string(__func__) + " cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
 		std::cout << "Sce::PlayStation::Core::Graphics::GetScreenInfo(int, int *, int *, Sce::PlayStation::Core::Graphics::PixelFormat *, Sce::PlayStation::Core::Graphics::PixelFormat *, Sce::PlayStation::Core::Graphics::MultiSampleMode *) Unimplemented." << std::endl;

@@ -422,5 +422,8 @@
     <ClInclude Include="LibPSM.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ImportDialogEnum.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 namespace SnowPME::Util
 {
 	class Config {
+	private:
 	public:
 		static bool SecurityCritical; // If mono is allowed full access to native functions.
 		static std::string PsmCoreLibPath; // Path to Sce.PlayStation.Core.dll
@@ -19,7 +20,13 @@ namespace SnowPME::Util
 		static std::string RuntimeVerisonPath; // Path to lib/2.1 folder.
 		static std::string PsmLibsPath; // Path to lib/psm folder
 
+
 		static std::string RuntimeConfigPath; // Path to etc folder.
+		
+		static int ScreenWidth(int idx);
+		static int ScreenHeight(int idx);
+		static int ScreenTotal();
+
 		static int ReadConfig(std::string configFile);
 	};
 }
