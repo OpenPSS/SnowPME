@@ -39,10 +39,12 @@ namespace SnowPME::Runtime {
 
 	void Init::LoadApplication(std::string gameFolder) {
 		// Set app globals.
+
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
 		AppGlobals::SetPsmMainThreadId(PlatformSpecific::CurrentThreadId());
 		AppGlobals::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+		AppGlobals::SetPsmMainWindow(new Window(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME -"));
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
