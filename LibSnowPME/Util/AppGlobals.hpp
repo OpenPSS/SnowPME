@@ -23,7 +23,7 @@ namespace SnowPME::Util {
 	class AppGlobals {
 	public:
 		static Window* PsmMainWindow();
-		static void SetPsmMainWindow();
+		static void SetPsmMainWindow(Window* mainWindow);
 
 		static uint64_t PsmMainThreadId();
 		static void SetPsmMainThreadId(uint64_t threadId);

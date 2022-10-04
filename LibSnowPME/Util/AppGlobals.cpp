@@ -3,6 +3,14 @@ namespace SnowPME::Util {
 	static Sandbox* psmSandbox;
 	static AppInfo* psmAppInfo;
 	static uint64_t psmMainThreadId;
+	static Window* psmMainWindow;
+	Window* AppGlobals::PsmMainWindow() {
+		return psmMainWindow;
+	}
+
+	void AppGlobals::SetPsmMainWindow(Window* mainWindow) {
+		psmMainWindow = mainWindow;
+	}
 
 	uint64_t AppGlobals::PsmMainThreadId() {
 		return psmMainThreadId;
