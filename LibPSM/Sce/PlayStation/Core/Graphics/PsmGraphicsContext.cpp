@@ -24,6 +24,44 @@ namespace Sce::PlayStation::Core::Graphics {
 			context->MainWindow = AppGlobals::PsmMainWindow();
 			context->CapsState = new GraphicsCapsState();
 			
+			
+			// Set width/height
+			context->Width = Config::ScreenWidth(0);
+			context->Height = Config::ScreenHeight(0);
+
+			// set depth formats and stuff
+			int redBits = 0;
+			int greenBits = 0;
+			int blueBits = 0;
+			int alphaBits = 0;
+			int depthBits = 0;
+			int stencilBits = 0; 
+			int glSamples = 0;
+
+			glGetIntegerv(GL_RED_BITS, &redBits);
+			glGetIntegerv(GL_GREEN_BITS, &greenBits);
+			glGetIntegerv(GL_BLUE_BITS, &blueBits);
+			glGetIntegerv(GL_ALPHA_BITS, &alphaBits);
+			glGetIntegerv(GL_DEPTH_BITS, &depthBits);
+			glGetIntegerv(GL_STENCIL_BITS, &stencilBits);
+			glGetIntegerv(GL_SAMPLES, &glSamples);
+
+			context->DepthFormat = PixelFormat::None;
+			context->MultiSampleMode = MultiSampleMode::None;
+			context->ColorFormat = PixelFormat::Rgb565;
+
+			if (redBits >= 8 && greenBits >= 8 && blueBits >= 8 && alphaBits >= 8)
+				context->ColorFormat = PixelFormat::Rgba;
+			if (depthBits >= 16)
+				context->DepthFormat = (stencilBits >= 8) ? PixelFormat::Depth16Stencil8 : PixelFormat::Depth16;
+			if (depthBits >= 24)
+				context->DepthFormat = (stencilBits >= 8) ? PixelFormat::Depth24Stencil8 : PixelFormat::Depth24;
+
+			if (glSamples >= 2)
+				context->MultiSampleMode = MultiSampleMode::Msaa2x;
+			if (glSamples >= 4)
+				context->MultiSampleMode = MultiSampleMode::Msaa4x;
+
 			// Populate CapsState
 
 			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &context->CapsState->MaxViewportWidth);
@@ -37,6 +75,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &context->CapsState->MaxCombinedTextureImageUnits);
 			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &context->CapsState->MaxTextureImageUnits);
 			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &context->CapsState->MaxVertexTextureImageUnits);
+
 			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &context->CapsState->MaxTextureMaxAnisotropy);
 			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &context->CapsState->MinAliasedLineWidth);
 			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &context->CapsState->MinAliasedPointSize);
@@ -105,7 +144,6 @@ namespace Sce::PlayStation::Core::Graphics {
 				if (extension == "GL_EXT_instanced_arrays")
 					gext |= GraphicsExtension::InstancedArrays;
 
-
 			}
 			if (context->CapsState->MaxTextureSize > 0x800)
 				context->CapsState->MaxTextureSize = 0x800;
@@ -127,6 +165,7 @@ namespace Sce::PlayStation::Core::Graphics {
 				context->CapsState->MaxTextureImageUnits = 0x8;
 			if (context->CapsState->MaxVertexTextureImageUnits > 0x0)
 				context->CapsState->MaxVertexTextureImageUnits = 0x0;
+
 			if (context->CapsState->MaxAliasedLineWidth > 8.0)
 				context->CapsState->MaxAliasedLineWidth = 8.0;
 			if (context->CapsState->MaxAliasedPointSize > 128.0)
@@ -229,11 +268,18 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
 		Logger::Debug(__func__);
 		if (THREAD_CHECK) {
+			if (currentContext == NULL)
+				return PSM_ERROR_GRAPHICS_SYSTEM;
 
-			return PSM_ERROR_NO_ERROR;
+			*width = currentContext->Width;
+			*height = currentContext->Width;
+			*colorFormat = currentContext->ColorFormat;
+			*depthFormat = currentContext->DepthFormat;
+			*multiSampleMode = currentContext->MultiSampleMode;
+
 		}
 		else {
-			Logger::Error(std::string(__func__) + " cannot be accessed from multiple threads.");
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
