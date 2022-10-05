@@ -9,4 +9,6 @@
 #include <Runtime/Init.hpp>
 #include <Graphics/Window.hpp>
 #include <Util/StringUtils.hpp>
+#include <Util/MonoUtil.hpp>
+
 #endif

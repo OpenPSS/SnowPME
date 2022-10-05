@@ -25,6 +25,7 @@
     <ClInclude Include="IO\FileSystem.hpp" />
     <ClInclude Include="IO\ICall.hpp" />
     <ClInclude Include="IO\Path.hpp" />
+    <ClInclude Include="Util\MonoUtil.hpp" />
     <ClInclude Include="Util\PlatformSpecific.hpp" />
     <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="IO\FileSystem.cpp" />
     <ClCompile Include="IO\ICall.cpp" />
     <ClCompile Include="IO\Path.cpp" />
+    <ClCompile Include="Util\MonoUtil.cpp" />
     <ClCompile Include="Util\PlatformSpecific.cpp" />
     <ClCompile Include="IO\Sandbox.cpp" />
     <ClCompile Include="Metadata\AppInfo.cpp" />

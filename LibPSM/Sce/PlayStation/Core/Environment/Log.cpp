@@ -1,22 +1,26 @@
 #include "Log.hpp"
 #include "../Error.hpp"
+#include <LibSnowPME.hpp>
+using namespace SnowPME::Debug;
 using namespace Sce::PlayStation::Core;
 
 namespace Sce::PlayStation::Core::Environment {
 	int Log::WriteNative(MonoString* text){
+		Logger::Debug(__FUNCTION__);
+
 		if (!text) {
-			std::cout << "[ERROR] Log::WriteNative() - Text* = NULL" << std::endl;
+			Logger::Error("\"text\" was a nullptr.");
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		}
 		char* str = mono_string_to_utf8(text);
-		std::cout << "[INFO] " << std::string(str);
+		Logger::Info(std::string(str));
 		mono_free(text);
-		return 0;
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Log::GetNeedsRedirection(){
-#ifdef _DEBUG
-		std::cout << "[DEBUG] Log::GetNeedsRedirection() = 0" << std::endl;
-#endif
-		return 0;
+		Logger::Debug(__FUNCTION__);
+
+		Logger::Debug("Redirection Needed: false");
+		return false;
 	}
 }

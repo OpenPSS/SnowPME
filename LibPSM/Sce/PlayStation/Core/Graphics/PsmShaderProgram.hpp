@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <mono/mono.h>
 
 #include "ShaderUniformType.hpp"
 #include "ShaderAttributeType.hpp"
@@ -19,7 +20,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	class PsmShaderProgram {
 	public:
 		static int FromFile(std::string vpFileName, std::string fpFileName, std::string* constKeys, int* constVals, int* result);
-		static int FromImage(std::byte* vpFileName, std::byte* fpFileImage, std::string* constKeys, int* constVals, int* result);
+		static int FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int* result);
 		static int Delete(int handle);
 		static int AddRef(int handle);
 		static int GetUniformCount(int handle, int *result);

@@ -11,7 +11,7 @@ using namespace SnowPME::Debug;
 namespace SnowPME::IO {
 
 	int ICall::PsmClose(uint64_t handle) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (handle == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
@@ -32,7 +32,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectoryCreate(char* pszDirectoryPath) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -45,7 +45,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectoryRemove(char* pszDirectoryPath) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -60,7 +60,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszDirectoryPath == NULL || pDirectory == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -95,7 +95,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pFileInfo == NULL || directory == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -115,7 +115,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectoryGetWorking(char* pszDirectoryPath, uint32_t uBufferSize) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszDirectoryPath == NULL || uBufferSize == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -130,7 +130,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmDirectorySetWorking(char* pszDirectoryPath) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -141,7 +141,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -169,7 +169,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileDelete(char* pszFileName) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -188,7 +188,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo) { 
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 
 		if (file == NULL || pFileInfo == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -209,7 +209,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 
 		if (file == NULL || buffer == NULL || uBytesToRead == NULL || puBytesRead == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -232,7 +232,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (file == NULL || buffer == NULL || uBytesToWrite == NULL || puBytesWritten == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -255,7 +255,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileSeek(uint64_t file, int32_t nOffset, ScePssFileSeekType_t seekType) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (file == NULL || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -272,7 +272,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileFlush(uint64_t file) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (file == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -282,7 +282,7 @@ namespace SnowPME::IO {
 	}
 	
 	int ICall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (puSize == NULL || file == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
@@ -298,7 +298,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (file == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -319,7 +319,7 @@ namespace SnowPME::IO {
 		return errorcode;
 	}
 	int ICall::PsmFileCopy(const char* pszOldName, const char* pszNewName, int32_t bMove) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszOldName == NULL || pszNewName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -335,7 +335,7 @@ namespace SnowPME::IO {
 
 	}
 	int ICall::PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -350,7 +350,7 @@ namespace SnowPME::IO {
 		return psmSandbox->SetAttributes(absolutePath, uFlags);
 	}
 	int ICall::PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL || pCreationTime == NULL || pLastAccessTime == NULL || pLastWriteTime == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -368,7 +368,7 @@ namespace SnowPME::IO {
 	}
 
 	int ICall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {
-		Logger::Debug(__func__);
+		Logger::Debug(__FUNCTION__);
 
 		if (pFileInfo == NULL || pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;

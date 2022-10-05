@@ -2,27 +2,27 @@
 
 namespace Sce::PlayStation::Core::Device {
 	int CameraImportDialog::NewNative(int type, int *handle){
-		std::cout << "Sce::PlayStation::Core::Device::NewNative(int, int *) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int CameraImportDialog::ReleaseNative(int type, int handle){
-		std::cout << "Sce::PlayStation::Core::Device::ReleaseNative(int, int) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int CameraImportDialog::OpenNative(int type, int handle, DialogArguments *dialogArguments){
-		std::cout << "Sce::PlayStation::Core::Device::OpenNative(int, int, Sce::PlayStation::Core::Device::CameraImportDialog/DialogArguments *) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int CameraImportDialog::AbortNative(int type, int handle){
-		std::cout << "Sce::PlayStation::Core::Device::AbortNative(int, int) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int CameraImportDialog::GetState(int type, int handle, CommonDialogState* commonDialogState){
-		std::cout << "Sce::PlayStation::Core::Device::GetState(int, int, Sce::PlayStation::Core::Environment::CommonDialogState *) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int CameraImportDialog::GetResult(int type, int handle, CommonDialogResult* commonDialogResult, DialogResults* dialogResults){
-		std::cout << "Sce::PlayStation::Core::Device::GetResult(int, int, Sce::PlayStation::Core::Environment::CommonDialogResult *, Sce::PlayStation::Core::Device::CameraImportDialog/DialogResults *) Unimplemented." << std::endl;
+		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 }

@@ -19,7 +19,11 @@
 #include <LibSnowPME.hpp>
 #include <mono/mono.h>
 
+using namespace SnowPME::Util;
 using namespace Sce::PlayStation::Core::Imaging;
+
+#define CTX_CHECK (PsmGraphicsContext::GetContext() == NULL)
+#define THREAD_CHECK (AppGlobals::PsmMainThreadId() == PlatformSpecific::CurrentThreadId())
 
 
 namespace Sce::PlayStation::Core::Graphics {
@@ -33,10 +37,12 @@ namespace Sce::PlayStation::Core::Graphics {
 		Window* MainWindow;
 		std::string Extensions;
 		std::string Renderer;
+		uint64_t ThreadId;
 	} GraphicsContext;
 
 	class PsmGraphicsContext {
 	public:
+		static GraphicsContext* GetContext();
 		static int Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int *result);
 		static int Delete(int handle);
 		static int Update(int handle, GraphicsUpdate update, GraphicsState *state, int *handles);

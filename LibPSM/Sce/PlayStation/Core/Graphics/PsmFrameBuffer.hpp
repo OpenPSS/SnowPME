@@ -8,6 +8,10 @@
 
 
 namespace Sce::PlayStation::Core::Graphics {
+	typedef struct FrameBuffer {
+		int frameBufferId;
+	} FrameBuffer;
+
 	class PsmFrameBuffer {
 	public:
 		static int Create(int *result);
