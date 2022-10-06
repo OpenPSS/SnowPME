@@ -75,7 +75,19 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_GRAPHICS_SYSTEM;
 		}
 
-		*res = program;
+		ShaderProgram* shdrPrg = new ShaderProgram();
+		shdrPrg->Program = program;
+		
+		int uniformCount = 0;
+		int attributeCount = 0;
+
+		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniformCount);
+		glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+
+		shdrPrg->AttributeCount = attributeCount;
+		shdrPrg->UniformCount = uniformCount;
+
+		*res = (uint32_t)shdrPrg;
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -85,10 +97,8 @@ namespace Sce::PlayStation::Core::Graphics {
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
-		if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (THREAD_CHECK) {
-			
-
+			//if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
 			size_t fnameSz = MonoUtil::MonoArrayLength(vpFileName);
 			size_t fimgSz = MonoUtil::MonoArrayLength(fpFileImage);
 			std::byte* fnameBuf = NULL;
@@ -123,10 +133,10 @@ namespace Sce::PlayStation::Core::Graphics {
 			try {
 				cgxObj = new SnowPME::Graphics::CGX(cgx, cgxSz);
 				fragmentShader = cgxObj->FragmentShader("GLSL");
-				Logger::Debug("FRAGMENT SHADER: " + fragmentShader);
+				Logger::Debug("Frag Source: " + fragmentShader);
 
 				vertexShader = cgxObj->VertexShader("GLSL");
-				Logger::Debug("VERTEX SHADER: " + vertexShader);
+				Logger::Debug("Vert Source: " + vertexShader);
 
 				if (cgxObj != NULL)
 					delete cgxObj;
@@ -158,12 +168,36 @@ namespace Sce::PlayStation::Core::Graphics {
 		return 0;
 	}
 	int PsmShaderProgram::GetUniformCount(int handle, int* result){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (THREAD_CHECK) {
+			ShaderProgram* prog = (ShaderProgram*)handle;
+			if (prog == NULL) {
+				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			}
+
+			*result = prog->UniformCount;
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmShaderProgram::GetAttributeCount(int handle, int* result){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (THREAD_CHECK) {
+			ShaderProgram* prog = (ShaderProgram*)handle;
+			if (prog == NULL) {
+				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			}
+
+			*result = prog->AttributeCount;
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmShaderProgram::FindUniform(int handle, std::string name, int* result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

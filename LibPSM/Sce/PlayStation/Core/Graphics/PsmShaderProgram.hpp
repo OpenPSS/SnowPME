@@ -17,6 +17,12 @@ using namespace Sce::PlayStation::Core;
 
 
 namespace Sce::PlayStation::Core::Graphics {
+	typedef struct ShaderProgram {
+		int Program;
+		int UniformCount;
+		int AttributeCount;
+	} ShaderProgram;
+
 	class PsmShaderProgram {
 	private:
 		static int compileShader(int type, char* source);
