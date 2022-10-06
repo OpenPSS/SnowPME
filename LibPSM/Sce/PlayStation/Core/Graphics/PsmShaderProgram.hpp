@@ -18,6 +18,9 @@ using namespace Sce::PlayStation::Core;
 
 namespace Sce::PlayStation::Core::Graphics {
 	class PsmShaderProgram {
+	private:
+		static int compileShader(int type, char* source);
+		static int createProgram(std::string vertexSrc, std::string fragmentSrc, int* res);
 	public:
 		static int FromFile(std::string vpFileName, std::string fpFileName, std::string* constKeys, int* constVals, int* result);
 		static int FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int* result);

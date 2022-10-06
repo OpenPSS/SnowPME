@@ -21,6 +21,9 @@ typedef wchar_t wchar;
 namespace SnowPME::Util {
 	class AppGlobals {
 	public:
+		static uint32_t PsmLastError();
+		static void SetPsmLastError(uint32_t err);
+
 		static Window* PsmMainWindow();
 		static void SetPsmMainWindow(Window* mainWindow);
 

@@ -101,7 +101,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;cg.lib;cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;opengl32.lib;cg.lib;cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libsnowpme.lib;libcxml.lib;libpsm.lib;libglad.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;glfw3_mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>

@@ -3,6 +3,9 @@
 #include <string>
 
 namespace SnowPME::Graphics {
+#define CGX_MAX_LEN (0x10000)
+#define CGX_MAGIC_LEN (0x4)
+
 	typedef struct CGXVarientTableEntry {
 		uint32_t nullSeperatorListPtr;
 		uint32_t varientListPtr;
@@ -11,21 +14,43 @@ namespace SnowPME::Graphics {
 	} CGXVarientTableEntry;
 
 	typedef struct CGXVarient {
-		char language[4];
+		char language[CGX_MAGIC_LEN];
 		uint32_t sourcePtr;
 		uint32_t sourceSz;
-	};
+		uint32_t reserved;
+	} CGXVarient;
 
 	typedef struct CGXHeader {
-		char magic[4];
-		char cgxVer[4];
-		char glesVer[4];
+		char magic[CGX_MAGIC_LEN];
+		char cgVer[CGX_MAGIC_LEN];
+		char glesVer[CGX_MAGIC_LEN];
 		uint32_t flags;
 		char unk0[8];
 		uint32_t varientTablePtr;
 		char unk1[0x24];
-		char hash[0x10];
+//		char hash[0x10];
 	} CGXHeader;
+
+	class CGX {
+	private:
+		std::byte* cgxBuf;
+		size_t cgxSz;
+
+		std::string magic;
+		std::string cgVer;
+		std::string glesVer;
+
+		CGXHeader header;
+		CGXVarientTableEntry fragmentVarientTableEntry;
+		CGXVarientTableEntry vertexVarientTableEntry;
+		CGXVarient* fragmentVarients;
+		CGXVarient* vertexVarients;
+	public:
+		CGX(std::byte* cgx, size_t cgxSz);
+		~CGX();
+		std::string FragmentShader(std::string shaderLanguage);
+		std::string VertexShader(std::string shaderLanguage);
+	};
 }
 
 #endif

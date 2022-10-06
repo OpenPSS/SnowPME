@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
+    <ClCompile Include="Graphics\CGX.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="IO\DirectoryIterator.cpp" />
     <ClCompile Include="IO\FileSystem.cpp" />

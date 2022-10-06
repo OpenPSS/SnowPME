@@ -13,6 +13,7 @@ namespace SnowPME::Util {
 		static std::string Replace(std::string str, std::string find, std::string replace);
 		static std::string ToLower(std::string str);
 		static std::string ToUpper(std::string str);
+		static std::string Reverse(std::string str);
 	};
 }
 #endif

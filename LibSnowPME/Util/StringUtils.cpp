@@ -2,6 +2,17 @@
 
 namespace SnowPME::Util {
 
+	std::string StringUtils::Reverse(std::string str) {
+		std::string littleEndainStr = str;
+		std::string bigEndainStr = "";
+
+		// Read string in reverse order
+		for (int i = littleEndainStr.length(); i >= 0; i--)
+			bigEndainStr += littleEndainStr.substr(i, 1);
+
+		return bigEndainStr;
+	}
+
 	std::string StringUtils::ToLower(std::string str) {
 		// dont modify the original string
 		std::string strcopy = str;
