@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp" />
+    <ClInclude Include="Graphics\CGX.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
     <ClInclude Include="IO\DirectoryIterator.hpp" />
     <ClInclude Include="IO\FileSystem.hpp" />

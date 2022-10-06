@@ -66,6 +66,9 @@
     <ClInclude Include="Util\MonoUtil.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\CGX.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util\Config.cpp">
