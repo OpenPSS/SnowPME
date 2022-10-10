@@ -40,6 +40,10 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::createProgram(std::string vertexSrc, std::string fragmentSrc, int* res) {
 
 		int program = glCreateProgram();
+
+		// ugly hack - append #version 150 to the shaders
+		// required because the version directive is not included in CGX file's GLSL shaders
+		// i dont know why.
 		fragmentSrc = "#version 150\r\n" + fragmentSrc;
 		vertexSrc = "#version 150\r\n" + vertexSrc;
 
@@ -50,8 +54,6 @@ namespace Sce::PlayStation::Core::Graphics {
 		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)vertexSrc.c_str());
 		if (compileVertexShader == 0)
 			return PSM_ERROR_GRAPHICS_SYSTEM;
-
-
 
 		glAttachShader(program, compileFragmentShader);
 		glAttachShader(program, compileVertexShader);
@@ -82,7 +84,52 @@ namespace Sce::PlayStation::Core::Graphics {
 		int attributeCount = 0;
 
 		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniformCount);
+
+		for (int i = 0; i < uniformCount; i++) {
+			ProgramUniform* uniform = new ProgramUniform();
+
+			int nameLen;
+			char name[0x100];
+
+
+			glGetActiveUniform(program, i, sizeof(name), &nameLen, &uniform->Size, &uniform->Type, name);			
+			uniform->Location = glGetUniformLocation(program, name);
+			uniform->Index = i;
+			uniform->Name = std::string(name, nameLen);
+			
+
+			Logger::Debug("Uniform: " + uniform->Name + " location: " + std::to_string(uniform->Location));
+
+			if (uniform->Name.find(']') != std::string::npos) {
+				Logger::Error(uniform->Name + " has a [], theres some special processing for these, but i dunno what it is.");
+			}
+			
+			shdrPrg->Uniforms.push_back(uniform);
+		}
+
 		glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+
+
+		for (int i = 0; i < attributeCount; i++) {
+			ProgramAttribute* attribute = new ProgramAttribute();
+
+			int nameLen;
+			char name[0x100];
+
+
+			glGetActiveAttrib(program, i, sizeof(name), &nameLen, &attribute->Size, &attribute->Type, name);
+			attribute->Location = glGetAttribLocation(program, name);
+			attribute->Index = i;
+			attribute->Name = std::string(name, nameLen);
+
+			Logger::Debug("Attribute: " + attribute->Name + " location: " + std::to_string(attribute->Location));
+
+			if (attribute->Name.find(']') != std::string::npos) {
+				Logger::Error(attribute->Name + "  has a [], theres some special processing for these, but i dunno what it is.");
+			}
+
+			shdrPrg->Attributes.push_back(attribute);
+		}
 
 		shdrPrg->AttributeCount = attributeCount;
 		shdrPrg->UniformCount = uniformCount;
@@ -91,14 +138,13 @@ namespace Sce::PlayStation::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PsmShaderProgram::FromFile(std::string vpFileName, std::string fpFileName, std::string* constKeys, int* constVals, int *result){
+	int PsmShaderProgram::FromFile(MonoString*  vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
-			//if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
 			size_t fnameSz = MonoUtil::MonoArrayLength(vpFileName);
 			size_t fimgSz = MonoUtil::MonoArrayLength(fpFileImage);
 			std::byte* fnameBuf = NULL;
@@ -199,29 +245,94 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
-	int PsmShaderProgram::FindUniform(int handle, std::string name, int* result){
+	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::FindAttribute(int handle, std::string name, int* result) {
+	int PsmShaderProgram::FindAttribute(int handle, MonoString* name, int* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::GetUniformBinding(int handle, int index, std::string* result) {
+	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoString* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::SetUniformBinding(int handle, int index, std::string name) {
+	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
+		Logger::Debug(__FUNCTION__);
+		if (THREAD_CHECK) {
+			ShaderProgram* prog = (ShaderProgram*)handle;
+			if (prog == NULL) {
+				Logger::Error("handle was null.");
+				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			}
+
+			char* str = mono_string_to_utf8(name);
+			std::string uniformName(str);
+
+			bool found = false;
+			for (ProgramUniform* uniform : prog->Uniforms)
+			{
+				if (uniform->Name == uniformName) {
+					Logger::Debug("Setting uniform binding of " + uniformName + " to " + std::to_string(index));
+					uniform->Binding = index;
+					found = true;
+				}
+			}
+
+			mono_free(str);
+
+			if (!found) {
+				Logger::Error("No uniform with name " + uniformName + " was found.");
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			}
+
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+	}
+	int PsmShaderProgram::GetAttributeBinding(int handle, int index, MonoString* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::GetAttributeBinding(int handle, int index, std::string* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetAttributeBinding(int handle, int index, std::string name) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int PsmShaderProgram::SetAttributeBinding(int handle, int index, MonoString* name) {
+		Logger::Debug(__FUNCTION__);
+		if (THREAD_CHECK) {
+			ShaderProgram* prog = (ShaderProgram*)handle;
+			if (prog == NULL) {
+				Logger::Error("handle was null.");
+				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			}
+
+			char* str = mono_string_to_utf8(name);
+			std::string attributeName(str);
+
+			bool found = false;
+			for (ProgramAttribute* attribute : prog->Attributes)
+			{
+				if (attribute->Name == attributeName) {
+					Logger::Debug("Setting attribute binding of " + attributeName + " to " + std::to_string(index));
+					attribute->Binding = index;
+					found = true;
+				}
+			}
+			
+			mono_free(str);
+
+			if (!found) {
+				Logger::Error("No attribute with name " + attributeName + " was found.");
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			}
+			
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmShaderProgram::GetUniformType(int handle, int index, ShaderUniformType* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
@@ -231,11 +342,11 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::GetUniformName(int handle, int index, std::string* result){
+	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString* result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::GetAttributeName(int handle, int index, std::string* result) {
+	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoString* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

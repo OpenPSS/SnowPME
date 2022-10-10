@@ -4,6 +4,8 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+
 #include <mono/mono.h>
 
 #include "ShaderUniformType.hpp"
@@ -12,15 +14,28 @@
 #include "../Vector3.hpp"
 #include "../Vector4.hpp"
 #include "../Matrix4.hpp"
-
 using namespace Sce::PlayStation::Core;
 
 
 namespace Sce::PlayStation::Core::Graphics {
+	typedef struct ProgramUniform {
+		std::string Name;
+		int Size;
+		int Index;
+		uint32_t Type;
+		int Location;
+		int Binding = -1;
+	} ProgramUniform;
+
+	typedef ProgramUniform ProgramAttribute;
+
+
 	typedef struct ShaderProgram {
 		int Program;
 		int UniformCount;
 		int AttributeCount;
+		std::vector<ProgramUniform*> Uniforms;
+		std::vector<ProgramAttribute*> Attributes;
 	} ShaderProgram;
 
 	class PsmShaderProgram {
@@ -28,22 +43,22 @@ namespace Sce::PlayStation::Core::Graphics {
 		static int compileShader(int type, char* source);
 		static int createProgram(std::string vertexSrc, std::string fragmentSrc, int* res);
 	public:
-		static int FromFile(std::string vpFileName, std::string fpFileName, std::string* constKeys, int* constVals, int* result);
+		static int FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString*  constKeys, int* constVals, int* result);
 		static int FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int* result);
 		static int Delete(int handle);
 		static int AddRef(int handle);
 		static int GetUniformCount(int handle, int *result);
 		static int GetAttributeCount(int handle, int *result);
-		static int FindUniform(int handle, std::string name, int *result);
-		static int FindAttribute(int handle, std::string name, int *result);
-		static int GetUniformBinding(int handle, int index, std::string *result);
-		static int SetUniformBinding(int handle, int index, std::string name);
-		static int GetAttributeBinding(int handle, int index, std::string *result);
-		static int SetAttributeBinding(int handle, int index, std::string name);
+		static int FindUniform(int handle, MonoString* name, int *result);
+		static int FindAttribute(int handle, MonoString* name, int *result);
+		static int GetUniformBinding(int handle, int index, MonoString* result);
+		static int SetUniformBinding(int handle, int index, MonoString* name);
+		static int GetAttributeBinding(int handle, int index, MonoString* result);
+		static int SetAttributeBinding(int handle, int index, MonoString* name);
 		static int GetUniformType(int handle, int index, ShaderUniformType *result);
 		static int GetAttributeType(int handle, int index, ShaderAttributeType *result);
-		static int GetUniformName(int handle, int index, std::string *result);
-		static int GetAttributeName(int handle, int index, std::string *result);
+		static int GetUniformName(int handle, int index, MonoString* result);
+		static int GetAttributeName(int handle, int index, MonoString* result);
 		static int GetUniformSize(int handle, int index, int *result);
 		static int GetAttributeSize(int handle, int index, int *result);
 		static int SetUniformValueMatrix4(int handle, int index, int, Matrix4 *value, ShaderUniformType type);

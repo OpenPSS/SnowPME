@@ -1,7 +1,7 @@
 #include "PsmTexture.hpp"
 
 namespace Sce::PlayStation::Core::Graphics {
-	int PsmTexture::FromFile(PixelBufferType type, std::string fileName, bool mipmap, PixelFormat format, int* result) {
+	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

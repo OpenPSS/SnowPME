@@ -13,14 +13,13 @@ namespace Sce::PlayStation::Core::Environment {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		}
 		char* str = mono_string_to_utf8(text);
-		Logger::Info(std::string(str));
-		mono_free(text);
+		Logger::Game(std::string(str));
+		mono_free(str);
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Log::GetNeedsRedirection(){
 		Logger::Debug(__FUNCTION__);
-
-		Logger::Debug("Redirection Needed: false");
-		return false;
+		Logger::Debug("Redirection Needed: true");
+		return true;
 	}
 }
