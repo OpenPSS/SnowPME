@@ -2,21 +2,21 @@
 Win32/*
 Debug/*
 
-*/LibPSM.idb
-*/LibPSM.lib
-*/LibPSM.pdb
+External/lib/*/LibPSM.idb
+External/lib/*/LibPSM.lib
+External/lib/*/LibPSM.pdb
 
-*/LibCXML.idb
-*/LibCXML.lib
-*/LibCXML.pdb
+External/lib/*/LibCXML.idb
+External/lib/*/LibCXML.lib
+External/lib/*/LibCXML.pdb
 
-*/LibGLAD.idb
-*/LibGLAD.lib
-*/LibGLAD.pdb
+External/lib/*/LibGLAD.idb
+External/lib/*/LibGLAD.lib
+External/lib/*/LibGLAD.pdb
 
-*/LibSnowPME.idb
-*/LibSnowPME.lib
-*/LibSnowPME.pdb
+External/lib/*/LibSnowPME.idb
+External/lib/*/LibSnowPME.lib
+External/lib/*/LibSnowPME.pdb
 
 
 
