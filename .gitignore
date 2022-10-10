@@ -2,4 +2,22 @@
 Win32/*
 Debug/*
 
+*/LibPSM.idb
+*/LibPSM.lib
+*/LibPSM.pdb
+
+*/LibCXML.idb
+*/LibCXML.lib
+*/LibCXML.pdb
+
+*/LibGLAD.idb
+*/LibGLAD.lib
+*/LibGLAD.pdb
+
+*/LibSnowPME.idb
+*/LibSnowPME.lib
+*/LibSnowPME.pdb
+
+
+
 *.user
