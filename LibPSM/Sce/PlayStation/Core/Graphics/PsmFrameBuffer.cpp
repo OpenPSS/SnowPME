@@ -11,8 +11,8 @@ namespace Sce::PlayStation::Core::Graphics {
 		return 0;
 
 		Logger::Debug(__FUNCTION__);
-		if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (THREAD_CHECK) {
+			if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {

@@ -38,11 +38,14 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::string Extensions;
 		std::string Renderer;
 		uint64_t ThreadId;
+		uint32_t BoundArrayBuffer;
 	} GraphicsContext;
 
 	class PsmGraphicsContext {
 	public:
 		static GraphicsContext* GetContext();
+		static int BindArrayBuffer(uint32_t buffer);
+
 		static int Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int *result);
 		static int Delete(int handle);
 		static int Update(int handle, GraphicsUpdate update, GraphicsState *state, int *handles);

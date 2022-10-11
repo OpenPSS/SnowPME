@@ -14,6 +14,8 @@ using namespace SnowPME::Graphics;
 #define FILETIME_TO_UNIX(filetime) (time_t)(filetime == -1 ? filetime : filetime / FILETIME_TICK - UNIX_EPOCH);
 #define UNIX_TO_FILETIME(unixtime) ((unixtime+UNIX_EPOCH) * FILETIME_TICK);
 
+#define ClearOpenGLErrors() while (glGetError()) {};
+
 #ifdef _MSC_VER
 typedef wchar_t wchar;
 #endif
