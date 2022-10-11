@@ -7,8 +7,8 @@ using namespace SnowPME::Debug;
 
 
 namespace Sce::PlayStation::Core::Graphics {
-	size_t PsmVertexBuffer::determineVertexFormatSize(VertexFormat format) {
-		size_t sz = 0;
+	int PsmVertexBuffer::determineVertexFormatSize(VertexFormat format) {
+		int sz = 0;
 		switch (format) {
 		case VertexFormat::Float:
 			sz += sizeof(float);
@@ -142,8 +142,8 @@ namespace Sce::PlayStation::Core::Graphics {
 
 		case VertexFormat::None:
 		default:
-			Logger::Error("VertexFormat was None or Unknown.");
-			break;
+			Logger::Error("Unsupported format on this device");
+			return PSM_ERROR_COMMON_NOT_SUPPORTED;
 		}
 
 		return sz;
@@ -176,6 +176,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			int extensions = graphicsContext->CapsState->Extension;
 			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
 				Logger::Error("Unsupported extension on this device");
+			
 				return PSM_ERROR_COMMON_NOT_SUPPORTED;
 			}
 
@@ -187,7 +188,12 @@ namespace Sce::PlayStation::Core::Graphics {
 
 			for (int i = 0; i < vertexFormatsLen; i++) {
 				VertexFormat format = vertexFormats[i];
-				sz += determineVertexFormatSize(format);
+
+				int versionFormatSz = determineVertexFormatSize(format);
+				if (versionFormatSz < 0)
+					return versionFormatSz;
+				sz += versionFormatSz;
+
 				vertexBuffer->VertexFormats.push_back(format);
 			}
 
@@ -201,7 +207,6 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_OUT_OF_MEMORY;
 
 			*result = (uint32_t)vertexBuffer;
-
 
 			return PSM_ERROR_NO_ERROR;
 		}

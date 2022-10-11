@@ -28,7 +28,7 @@ namespace Sce::PlayStation::Core::Graphics {
 
 	class PsmVertexBuffer {
 	private:
-		static size_t determineVertexFormatSize(VertexFormat format);
+		static int determineVertexFormatSize(VertexFormat format);
 	public:
 		static int Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray *formats, int *result);
 		static int Delete(int handle);
