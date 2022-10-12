@@ -14,6 +14,7 @@ extern "C" {
 #include <mono/metadata/file-io-pss.h>
 #include <mono/metadata/profiler.h>
 #include <mono/metadata/mono-debug.h>
+#include <mono/metadata/tabledefs.h>
 
 #include <mono/jit/jit.h>
 #include <mono/utils/mono-counters.h>

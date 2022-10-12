@@ -11,6 +11,7 @@ namespace SnowPME::Graphics {
 		std::string openGlVersion;
 	public:
 		Window(int height, int width, std::string title);
+		bool ShouldClose();
 		~Window();
 	};
 }

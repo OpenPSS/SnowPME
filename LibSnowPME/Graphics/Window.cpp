@@ -27,11 +27,22 @@ namespace SnowPME::Graphics {
 		glfwMakeContextCurrent(this->window);
 
 		if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
-			Logger::Error("Failed to initalize GLES2.");
-			throw new std::exception("Failed to initalize GLES2.");
+			Logger::Error("Failed to initalize GL.");
+			throw new std::exception("Failed to initalize GL.");
 		}
+
+		int framebufferWidth = 0;
+		int framebufferHeight = 0;
+		glfwGetFramebufferSize(this->window, &framebufferWidth, &framebufferHeight);
+		glViewport(0, 0, framebufferWidth, framebufferHeight);
+
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
 	}
+
+	bool Window::ShouldClose() {
+		return glfwWindowShouldClose(this->window);
+	}
+
 	Window::~Window() {
 		glfwTerminate();
 	}

@@ -24,6 +24,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		uint32_t Buffer;
 		size_t Size;
 		std::vector<VertexFormat> VertexFormats;
+		size_t VertexFormatsSz;
 	} VertexBuffer;
 
 	class PsmVertexBuffer {
@@ -34,7 +35,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		static int Delete(int handle);
 		static int AddRef(int handle);
 		static int SetVertices(int handle, int *vertices, int to, int from, int count);
-		static int SetVertices2(int handle, int stream, int *vertices, VertexFormat format, Vector4 *trans, Vector4 *scale, int offset, int stride, int to, int from, int count);
+		static int SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4 *trans, Vector4 *scale, int offset, int stride, int to, int from, int count);
 		static int SetIndices(int handle, uint16_t* indices, int to, int from, int count);
 	};
 }

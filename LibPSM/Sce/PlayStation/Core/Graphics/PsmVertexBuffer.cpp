@@ -152,10 +152,12 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
 			if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
+			// Get graphics context
 			GraphicsContext* graphicsContext = PsmGraphicsContext::GetContext();
 
 			VertexBuffer* vertexBuffer = new VertexBuffer();
 
+			// Store state passed to parameters
 			vertexBuffer->VertexCount = vertexCount;
 			vertexBuffer->InstDivisor = instDivisor;
 			vertexBuffer->Option = option;
@@ -164,13 +166,21 @@ namespace Sce::PlayStation::Core::Graphics {
 			VertexFormat* vertexFormats = (VertexFormat*)mono_array_addr_with_size(formats, 1, 0);
 			int vertexFormatsLen = mono_array_length(formats);
 
+			// Check arguments are valid
+
+			// is vertexFormats null, or less than 0 formats?
 			if (vertexFormats == NULL && vertexFormatsLen > 0)
 				return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
+			// Is there more than 0xFFFF vertexes, or indexes? 
+			// are there more than 0x100 unique formats?
+			// is the instDivisor > 1?
+			// if any of those are true, error
 			if (vertexCount > 0xFFFF || indexCount > 0xFFFF || vertexFormatsLen > 0x100 || instDivisor > 1)
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
-			if (option)
+			// is option set?
+			if (option != NULL)
 				return PSM_ERROR_COMMON_ARGUMENT;
 
 			int extensions = graphicsContext->CapsState->Extension;
@@ -186,6 +196,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			
 			size_t sz = 0;
 
+			// Determine required buffer size
 			for (int i = 0; i < vertexFormatsLen; i++) {
 				VertexFormat format = vertexFormats[i];
 
@@ -197,8 +208,12 @@ namespace Sce::PlayStation::Core::Graphics {
 				vertexBuffer->VertexFormats.push_back(format);
 			}
 
-			sz *= vertexCount; 
+			sz *= vertexBuffer->VertexCount;
+
+			vertexBuffer->VertexFormatsSz = vertexFormatsLen;
 			vertexBuffer->Size = sz;
+
+			// Allocate array buffer in opengl.
 
 			PsmGraphicsContext::BindArrayBuffer(vertexBuffer->Buffer);
 			glBufferData(GL_ARRAY_BUFFER, sz, 0, GL_STATIC_DRAW);
@@ -214,8 +229,6 @@ namespace Sce::PlayStation::Core::Graphics {
 			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-
-		return 0;
 	}
 	int PsmVertexBuffer::Delete(int handle) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
@@ -229,9 +242,45 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmVertexBuffer::SetVertices2(int handle, int stream, int* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
+		Logger::Debug(__FUNCTION__);
+		if (THREAD_CHECK) {
+			if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (handle == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			VertexBuffer* buffer = (VertexBuffer*)handle;
+
+			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
+			
+			if (!MonoUtil::MonoTypeIsValueType(type)) {
+				Logger::Error("Vertex data need to be ValueType");
+				return PSM_ERROR_COMMON_INVALID_OPERATION;
+			}
+
+			void* verticesBuffer = (void*)mono_array_addr_with_size(vertices, 1, 0);
+			size_t arrayLen = MonoUtil::MonoArrayLength(vertices);
+
+			// Check the stream number is valid
+			if (stream < 0 || stream >= buffer->VertexFormats.size()) {
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			}
+
+			// Check the size is what is expected.
+			int formatSize = determineVertexFormatSize(buffer->VertexFormats[stream]);
+			if (arrayLen != buffer->VertexCount * formatSize) {
+				Logger::Error("Vertex array has wrong size");
+				return PSM_ERROR_COMMON_INVALID_OPERATION;
+			}
+
+
+			// TODO: actually set verticies here!
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+		
 	}
 	int PsmVertexBuffer::SetIndices(int handle, uint16_t* indices, int to, int from, int count){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

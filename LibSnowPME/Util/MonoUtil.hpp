@@ -5,6 +5,8 @@ namespace SnowPME::Util {
 	class MonoUtil {
 	public:
 		static size_t MonoArrayLength(MonoArray* ar);
+		static MonoType* MonoArrayElementsType(MonoArray* ar);
+		static bool MonoTypeIsValueType(MonoType* type);
 	};
 }
 #endif
