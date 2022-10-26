@@ -8,7 +8,7 @@
 #include <Util/PlatformSpecific.hpp>
 #include <Runtime/Init.hpp>
 #include <Graphics/Window.hpp>
-#include <Graphics/CGX.hpp>
 #include <Util/StringUtils.hpp>
 #include <Util/MonoUtil.hpp>
+
 #endif

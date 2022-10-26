@@ -1,142 +1,22 @@
-#include "PsmShaderProgram.hpp"
-#include "PsmGraphicsContext.hpp"
-#include "../Error.hpp"
+#include <Sce/PlayStation/Core/Graphics/PsmShaderProgram.hpp>
+#include <Sce/PlayStation/Core/Graphics/PsmGraphicsContext.hpp>
+#include <Sce/PlayStation/Core/Error.hpp>
+
+#include <Sce/Pss/Core/Graphics/CGX.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
+#include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Handles.hpp>
+
 #include <iostream>
 #include <string>
 #include <LibSnowPME.hpp>
 using namespace SnowPME::Debug;
 using namespace SnowPME::Util;
 
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Graphics;
+
 namespace Sce::PlayStation::Core::Graphics {
-
-	int PsmShaderProgram::compileShader(int type, char* source) {
-		int shader = glCreateShader(type);
-		glShaderSource(shader, 1, &source, 0);
-		glCompileShader(shader);
-
-		int status;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-
-		if (status == GL_TRUE) {
-			return shader;
-		}
-		else {
-			char log[0x1000];
-			memset(log, 0, sizeof(log));
-
-			int sz = 0;
-
-			glGetShaderInfoLog(shader, 0xFFF, &sz, log);
-			if (type == GL_VERTEX_SHADER)
-				Logger::Error("vertex shader compile failed: " + std::string(log));
-			else
-				Logger::Error("fragment shader compile failed: " + std::string(log));
-
-			glDeleteShader(shader);
-			return 0;
-		}
-	}
-
-	int PsmShaderProgram::createProgram(std::string vertexSrc, std::string fragmentSrc, int* res) {
-
-		int program = glCreateProgram();
-
-		// ugly hack - append #version 150 to the shaders
-		// required because the version directive is not included in CGX file's GLSL shaders
-		// i dont know why.
-		fragmentSrc = "#version 150\r\n" + fragmentSrc;
-		vertexSrc = "#version 150\r\n" + vertexSrc;
-
-		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)fragmentSrc.c_str());
-		if (compileFragmentShader == 0)
-			return PSM_ERROR_GRAPHICS_SYSTEM;
-
-		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)vertexSrc.c_str());
-		if (compileVertexShader == 0)
-			return PSM_ERROR_GRAPHICS_SYSTEM;
-
-		glAttachShader(program, compileFragmentShader);
-		glAttachShader(program, compileVertexShader);
-
-		glLinkProgram(program);
-
-		glDeleteShader(compileFragmentShader);
-		glDeleteShader(compileVertexShader);
-
-		int status = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, &status);
-
-		if (status == GL_FALSE) {
-			char log[0x1000];
-			memset(log, 0, sizeof(log));
-
-			int sz = 0;
-			glGetProgramInfoLog(program, 0xFFF, &sz, log);
-			Logger::Error("program link error: " + std::string(log));
-			glDeleteProgram(program);
-			return PSM_ERROR_GRAPHICS_SYSTEM;
-		}
-
-		ShaderProgram* shdrPrg = new ShaderProgram();
-		shdrPrg->Program = program;
-		
-		int uniformCount = 0;
-		int attributeCount = 0;
-
-		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniformCount);
-
-		for (int i = 0; i < uniformCount; i++) {
-			ProgramUniform* uniform = new ProgramUniform();
-
-			int nameLen;
-			char name[0x100];
-
-
-			glGetActiveUniform(program, i, sizeof(name), &nameLen, &uniform->Size, &uniform->Type, name);			
-			uniform->Location = glGetUniformLocation(program, name);
-			uniform->Index = i;
-			uniform->Name = std::string(name, nameLen);
-			
-
-			Logger::Debug("Uniform: " + uniform->Name + " location: " + std::to_string(uniform->Location));
-
-			if (uniform->Name.find(']') != std::string::npos) {
-				Logger::Error(uniform->Name + " has a [], theres some special processing for these, but i dunno what it is.");
-			}
-			
-			shdrPrg->Uniforms.push_back(uniform);
-		}
-
-		glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &attributeCount);
-
-
-		for (int i = 0; i < attributeCount; i++) {
-			ProgramAttribute* attribute = new ProgramAttribute();
-
-			int nameLen;
-			char name[0x100];
-
-
-			glGetActiveAttrib(program, i, sizeof(name), &nameLen, &attribute->Size, &attribute->Type, name);
-			attribute->Location = glGetAttribLocation(program, name);
-			attribute->Index = i;
-			attribute->Name = std::string(name, nameLen);
-
-			Logger::Debug("Attribute: " + attribute->Name + " location: " + std::to_string(attribute->Location));
-
-			if (attribute->Name.find(']') != std::string::npos) {
-				Logger::Error(attribute->Name + "  has a [], theres some special processing for these, but i dunno what it is.");
-			}
-
-			shdrPrg->Attributes.push_back(attribute);
-		}
-
-		shdrPrg->AttributeCount = attributeCount;
-		shdrPrg->UniformCount = uniformCount;
-
-		*res = (uint32_t)shdrPrg;
-		return PSM_ERROR_NO_ERROR;
-	}
 
 	int PsmShaderProgram::FromFile(MonoString*  vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
@@ -171,34 +51,24 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_ARGUMENT_NULL;
 			}
 
-
-			CGX* cgxObj = NULL;
 			std::string fragmentShader;
 			std::string vertexShader;
 
-			try {
-				cgxObj = new SnowPME::Graphics::CGX(cgx, cgxSz);
-				fragmentShader = cgxObj->FragmentShader("GLSL");
-				Logger::Debug("Frag Source: " + fragmentShader);
+			CGX* cgxObj = new CGX(cgx, cgxSz);
+			ReturnErrorable(cgxObj);
+			fragmentShader = cgxObj->FragmentShader("GLSL");
+			ReturnErrorable(cgxObj);
+			vertexShader = cgxObj->VertexShader("GLSL");
+			ReturnErrorable(cgxObj);
 
-				vertexShader = cgxObj->VertexShader("GLSL");
-				Logger::Debug("Vert Source: " + vertexShader);
+			ShaderProgram* shdrPrg = new ShaderProgram(vertexShader, fragmentShader);
+			ReturnErrorable(shdrPrg);
 
-				if (cgxObj != NULL)
-					delete cgxObj;
-				cgxObj = NULL;
-			}
-			catch (std::exception e) {
-				if (cgxObj != NULL)
-					delete cgxObj;
-				cgxObj = NULL;
-				return AppGlobals::PsmLastError();
-			}
-
-			return createProgram(vertexShader, fragmentShader, result);
+			*result = Handles::CreateHandle((uintptr_t)shdrPrg);
+			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
@@ -216,12 +86,12 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::GetUniformCount(int handle, int* result){
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
-			ShaderProgram* prog = (ShaderProgram*)handle;
+			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
 
-			*result = prog->UniformCount;
+			*result = prog->UniformCount();
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
@@ -232,16 +102,16 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::GetAttributeCount(int handle, int* result){
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
-			ShaderProgram* prog = (ShaderProgram*)handle;
+			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
 
-			*result = prog->AttributeCount;
+			*result = prog->AttributeCount();
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -260,7 +130,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
-			ShaderProgram* prog = (ShaderProgram*)handle;
+			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -270,11 +140,11 @@ namespace Sce::PlayStation::Core::Graphics {
 			std::string uniformName(str);
 
 			bool found = false;
-			for (ProgramUniform* uniform : prog->Uniforms)
+			for (ProgramUniform uniform : *prog->Uniforms())
 			{
-				if (uniform->Name == uniformName) {
+				if (uniform.Name == uniformName) {
 					Logger::Debug("Setting uniform binding of " + uniformName + " to " + std::to_string(index));
-					uniform->Binding = index;
+					uniform.Binding = index;
 					found = true;
 				}
 			}
@@ -290,7 +160,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -301,7 +171,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::SetAttributeBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
-			ShaderProgram* prog = (ShaderProgram*)handle;
+			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -311,11 +181,11 @@ namespace Sce::PlayStation::Core::Graphics {
 			std::string attributeName(str);
 
 			bool found = false;
-			for (ProgramAttribute* attribute : prog->Attributes)
+			for (ProgramAttribute attribute : *prog->Attributes())
 			{
-				if (attribute->Name == attributeName) {
+				if (attribute.Name == attributeName) {
 					Logger::Debug("Setting attribute binding of " + attributeName + " to " + std::to_string(index));
-					attribute->Binding = index;
+					attribute.Binding = index;
 					found = true;
 				}
 			}
@@ -330,7 +200,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads."); 
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}

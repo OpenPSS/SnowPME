@@ -1,5 +1,6 @@
 #ifndef SNOW_PME_RUNTIME_APPGLOBAL_H
 #define SNOW_PME_RUNTIME_APPGLOBAL_H 1
+
 #include <IO/Sandbox.hpp>
 #include <Graphics/Window.hpp>
 #include <Metadata/AppInfo.hpp>
@@ -14,7 +15,6 @@ using namespace SnowPME::Graphics;
 #define FILETIME_TO_UNIX(filetime) (time_t)(filetime == -1 ? filetime : filetime / FILETIME_TICK - UNIX_EPOCH);
 #define UNIX_TO_FILETIME(unixtime) ((unixtime+UNIX_EPOCH) * FILETIME_TICK);
 
-#define ClearOpenGLErrors() while (glGetError()) {};
 
 #ifdef _MSC_VER
 typedef wchar_t wchar;
@@ -23,8 +23,6 @@ typedef wchar_t wchar;
 namespace SnowPME::Util {
 	class AppGlobals {
 	public:
-		static uint32_t PsmLastError();
-		static void SetPsmLastError(uint32_t err);
 
 		static Window* PsmMainWindow();
 		static void SetPsmMainWindow(Window* mainWindow);

@@ -1,10 +1,9 @@
 #ifndef LIB_PSM_ERROR_H
 #define LIB_PSM_ERROR_H 1
 #include <cstdint>
-
 #include <string>
 #include <iostream>
-
+#include <mono/mono.h>
 
 enum PsmError : unsigned int {
 	PSM_ERROR_NO_ERROR = 0,
@@ -73,7 +72,7 @@ enum PsmError : unsigned int {
 namespace Sce::PlayStation::Core {
 	class Error {
 	public:
-		static int GetExceptionInfoNative(std::string *message, std::string *param);
+		static int GetExceptionInfoNative(MonoString* message, MonoString* param);
 	};
 }
 #endif

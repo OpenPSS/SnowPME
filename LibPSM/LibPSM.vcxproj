@@ -52,6 +52,11 @@
     <ClCompile Include="Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
+    <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Handles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LibPSM.hpp" />
@@ -157,6 +162,11 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector2.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Handles.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

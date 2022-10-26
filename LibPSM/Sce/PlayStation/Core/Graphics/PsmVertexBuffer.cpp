@@ -1,10 +1,12 @@
 #include "PsmGraphicsContext.hpp"
 #include "PsmVertexBuffer.hpp"
-#include "../Error.hpp"
+
+#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Handles.hpp>
 
 #include <LibSnowPME.hpp>
 using namespace SnowPME::Debug;
-
+using namespace Sce::Pss::Core;
 
 namespace Sce::PlayStation::Core::Graphics {
 	int PsmVertexBuffer::determineVertexFormatSize(VertexFormat format) {
@@ -190,7 +192,7 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_NOT_SUPPORTED;
 			}
 
-			ClearOpenGLErrors();
+			while (glGetError()) {};
 
 			glGenBuffers(1, &vertexBuffer->Buffer);
 			
@@ -221,7 +223,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			if (glGetError() == GL_OUT_OF_MEMORY)
 				return PSM_ERROR_COMMON_OUT_OF_MEMORY;
 
-			*result = (uint32_t)vertexBuffer;
+			*result = Handles::CreateHandle((uintptr_t)vertexBuffer);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -246,8 +248,8 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (THREAD_CHECK) {
 			if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
-			if (handle == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			VertexBuffer* buffer = (VertexBuffer*)handle;
+			VertexBuffer* buffer = (VertexBuffer*)Handles::GetHandle(handle);
+			if (buffer == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
 			
@@ -260,7 +262,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			size_t arrayLen = MonoUtil::MonoArrayLength(vertices);
 
 			// Check the stream number is valid
-			if (stream < 0 || stream >= buffer->VertexFormats.size()) {
+			if (stream < 0 || stream >= (int)buffer->VertexFormats.size()) {
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
 

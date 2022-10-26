@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp" />
-    <ClInclude Include="Graphics\CGX.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
     <ClInclude Include="IO\DirectoryIterator.hpp" />
     <ClInclude Include="IO\FileSystem.hpp" />
@@ -40,7 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
-    <ClCompile Include="Graphics\CGX.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="IO\DirectoryIterator.cpp" />
     <ClCompile Include="IO\FileSystem.cpp" />

@@ -1,8 +1,9 @@
-#ifndef SNOW_PME_CGX_H
-#define SNOW_PME_CGX_H 1
+#ifndef LIB_PSM_CGX_H
+#define LIB_PSM_CGX_H 1
 #include <string>
+#include <Sce/Pss/Core/Errorable.hpp>
 
-namespace SnowPME::Graphics {
+namespace Sce::Pss::Core::Graphics {
 #define CGX_MAX_LEN (0x10000)
 #define CGX_MAGIC_LEN (0x4)
 
@@ -28,10 +29,10 @@ namespace SnowPME::Graphics {
 		char unk0[8];
 		uint32_t varientTablePtr;
 		char unk1[0x24];
-//		char hash[0x10];
+		//char hash[0x10];
 	} CGXHeader;
 
-	class CGX {
+	class CGX : public Errorable{
 	private:
 		std::byte* cgxBuf;
 		size_t cgxSz;

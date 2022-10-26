@@ -1,26 +1,28 @@
-#include <Graphics/CGX.hpp>
-#include <Debug/Logger.hpp>
-#include <mono/mono.h>
-#include <LibPSM.hpp>
-using namespace SnowPME::Debug;
+#include <Sce/Pss/Core/Graphics/CGX.hpp>
+#include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/PlayStation/Core/Error.hpp>
 
-namespace SnowPME::Graphics {
+#include <LibSnowPME.hpp>
+#include <mono/mono.h>
+using namespace SnowPME::Debug;
+using namespace SnowPME::Util;
+
+namespace Sce::Pss::Core::Graphics {
 
 	CGX::CGX(std::byte* cgx, size_t cgxSz) {
 		
 		if (cgx == NULL) {
-			Logger::Error("CGX was null");
-			AppGlobals::SetPsmLastError(PSM_ERROR_COMMON_ARGUMENT_NULL);
-			throw new std::exception("CGX was null");
+			ExceptionInfo::AddMessage("CGX was null");
+			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
+			return;
 		}
 		if (cgxSz < sizeof(CGXHeader) ||
 			cgxSz > CGX_MAX_LEN) {
 
-			Logger::Error("Unsupported shader file");
-			AppGlobals::SetPsmLastError(PSM_ERROR_COMMON_FILE_LOAD);
-			throw new std::exception("Unsupported shader file");
+			ExceptionInfo::AddMessage("CGX was null");
+			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
+			return;
 		}
-
 
 		this->cgxBuf = cgx;
 		this->cgxSz = cgxSz;
@@ -37,9 +39,9 @@ namespace SnowPME::Graphics {
 			this->cgVer == "0.95" &&
 			this->glesVer == "ES20")) {
 
-			Logger::Error("Unsupported shader file");
-			AppGlobals::SetPsmLastError(PSM_ERROR_COMMON_FILE_LOAD);
-			throw new std::exception("Unsupported shader file");
+			ExceptionInfo::AddMessage("Unsupported shader file");
+			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
+			return;
 		}
 		CGXVarientTableEntry* varientTable = (CGXVarientTableEntry*)(this->cgxBuf + this->header.varientTablePtr);
 
@@ -70,10 +72,9 @@ namespace SnowPME::Graphics {
 				return std::string((char*)(this->cgxBuf + this->vertexVarients[i].sourcePtr), this->vertexVarients[i].sourceSz);
 			}
 		}
-
-		AppGlobals::SetPsmLastError(PSM_ERROR_COMMON_FILE_LOAD);
-		Logger::Error("Vertex shader not found");
-		throw new std::exception("Vertex shader not found");
+		ExceptionInfo::AddMessage("Vertex shader not found");
+		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
+		return std::string();
 	}
 
 	std::string CGX::FragmentShader(std::string shaderLanguage) {
@@ -85,9 +86,9 @@ namespace SnowPME::Graphics {
 			}
 		}
 
-		AppGlobals::SetPsmLastError(PSM_ERROR_COMMON_FILE_LOAD);
-		Logger::Error("Fragment shader not found");
-		throw new std::exception("Fragment shader not found");
+		ExceptionInfo::AddMessage("Fragment shader not found");
+		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
+		return std::string();
 	}
 
 	CGX::~CGX() {		

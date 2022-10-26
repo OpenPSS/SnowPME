@@ -4,15 +4,8 @@ namespace SnowPME::Util {
 	static AppInfo* psmAppInfo;
 	static uint64_t psmMainThreadId;
 	static Window* psmMainWindow;
-	static uint32_t psmLastError;
 	
 
-	uint32_t AppGlobals::PsmLastError() {
-		return psmLastError;
-	}
-	void AppGlobals::SetPsmLastError(uint32_t err) {
-		psmLastError = err;
-	}
 
 	Window* AppGlobals::PsmMainWindow() {
 		return psmMainWindow;

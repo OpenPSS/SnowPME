@@ -18,30 +18,7 @@ using namespace Sce::PlayStation::Core;
 
 
 namespace Sce::PlayStation::Core::Graphics {
-	typedef struct ProgramUniform {
-		std::string Name;
-		int Size;
-		int Index;
-		uint32_t Type;
-		int Location;
-		int Binding = -1;
-	} ProgramUniform;
-
-	typedef ProgramUniform ProgramAttribute;
-
-
-	typedef struct ShaderProgram {
-		int Program;
-		int UniformCount;
-		int AttributeCount;
-		std::vector<ProgramUniform*> Uniforms;
-		std::vector<ProgramAttribute*> Attributes;
-	} ShaderProgram;
-
 	class PsmShaderProgram {
-	private:
-		static int compileShader(int type, char* source);
-		static int createProgram(std::string vertexSrc, std::string fragmentSrc, int* res);
 	public:
 		static int FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString*  constKeys, int* constVals, int* result);
 		static int FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int* result);

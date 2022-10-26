@@ -1,7 +1,7 @@
-#include "Error.hpp"
-
+#include <Sce/PlayStation/Core/Error.hpp>
+#include <mono/mono.h>
 namespace Sce::PlayStation::Core {
-	int Error::GetExceptionInfoNative(std::string* message, std::string* param) {
+	int Error::GetExceptionInfoNative(MonoString* message, MonoString* param) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
