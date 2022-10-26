@@ -2,11 +2,11 @@
 #include <Sce/PlayStation/Core/Graphics/PsmGraphicsContext.hpp>
 #include <Sce/PlayStation/Core/Error.hpp>
 
+#include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
-
 #include <iostream>
 #include <string>
 #include <LibSnowPME.hpp>
@@ -14,6 +14,7 @@ using namespace SnowPME::Debug;
 using namespace SnowPME::Util;
 
 using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
 
 namespace Sce::PlayStation::Core::Graphics {
@@ -24,7 +25,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
+		if (Thread::IsMainThread()) {
 			size_t fnameSz = MonoUtil::MonoArrayLength(vpFileName);
 			size_t fimgSz = MonoUtil::MonoArrayLength(fpFileImage);
 			std::byte* fnameBuf = NULL;
@@ -85,7 +86,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	}
 	int PsmShaderProgram::GetUniformCount(int handle, int* result){
 		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
+		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -95,13 +96,13 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
 	int PsmShaderProgram::GetAttributeCount(int handle, int* result){
 		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
+		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -129,7 +130,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	}
 	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
+		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");
@@ -170,7 +171,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	}
 	int PsmShaderProgram::SetAttributeBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
+		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");

@@ -9,16 +9,6 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmFrameBuffer::Create(int *result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
-
-		Logger::Debug(__FUNCTION__);
-		if (THREAD_CHECK) {
-			if (CTX_CHECK) return PSM_ERROR_GRAPHICS_SYSTEM;
-			return PSM_ERROR_NO_ERROR;
-		}
-		else {
-			Logger::Error("Sce::PlayStation::Core::Graphics cannot be accessed from multiple threads.");
-			return PSM_ERROR_COMMON_INVALID_OPERATION;
-		}
 	}
 	int PsmFrameBuffer::Delete(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

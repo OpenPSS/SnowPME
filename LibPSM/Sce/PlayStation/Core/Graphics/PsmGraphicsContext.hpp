@@ -5,16 +5,16 @@
 #include <string>
 #include <iostream>
 
-#include "DrawMode.hpp"
-#include "PixelFormat.hpp"
-#include "GraphicsUpdate.hpp"
-#include "ClearMask.hpp"
-#include "TextureCubeFace.hpp"
-#include "GraphicsState.hpp"
-#include "Primitive.hpp"
-#include "GraphicsCapsState.hpp"
-#include "MultiSampleMode.hpp"
-#include "../Imaging/ImageSize.hpp"
+#include <Sce/PlayStation/Core/Graphics/DrawMode.hpp>
+#include <Sce/PlayStation/Core/Graphics/PixelFormat.hpp>
+#include <Sce/PlayStation/Core/Graphics/GraphicsUpdate.hpp>
+#include <Sce/PlayStation/Core/Graphics/ClearMask.hpp>
+#include <Sce/PlayStation/Core/Graphics/TextureCubeFace.hpp>
+#include <Sce/PlayStation/Core/Graphics/GraphicsState.hpp>
+#include <Sce/PlayStation/Core/Graphics/Primitive.hpp>
+#include <Sce/PlayStation/Core/Graphics/GraphicsCapsState.hpp>
+#include <Sce/PlayStation/Core/Graphics/MultiSampleMode.hpp>
+#include <Sce/PlayStation/Core/Imaging/ImageSize.hpp>
 
 #include <LibSnowPME.hpp>
 #include <mono/mono.h>
@@ -22,30 +22,12 @@
 using namespace SnowPME::Util;
 using namespace Sce::PlayStation::Core::Imaging;
 
-#define CTX_CHECK (PsmGraphicsContext::GetContext() == NULL)
-#define THREAD_CHECK (AppGlobals::PsmMainThreadId() == PlatformSpecific::CurrentThreadId())
 
 
 namespace Sce::PlayStation::Core::Graphics {
-	typedef struct GraphicsContext {
-		int Width;
-		int Height;
-		PixelFormat ColorFormat;
-		PixelFormat DepthFormat;
-		MultiSampleMode MultiSampleMode;
-		GraphicsCapsState* CapsState;
-		Window* MainWindow;
-		std::string Extensions;
-		std::string Renderer;
-		uint64_t ThreadId;
-		uint32_t BoundArrayBuffer;
-	} GraphicsContext;
 
 	class PsmGraphicsContext {
 	public:
-		static GraphicsContext* GetContext();
-		static int BindArrayBuffer(uint32_t buffer);
-
 		static int Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int *result);
 		static int Delete(int handle);
 		static int Update(int handle, GraphicsUpdate update, GraphicsState *state, int *handles);

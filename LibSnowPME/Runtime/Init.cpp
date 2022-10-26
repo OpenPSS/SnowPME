@@ -27,6 +27,7 @@ using namespace SnowPME::IO;
 using namespace SnowPME::Metadata;
 using namespace SnowPME::Debug;
 
+using namespace Sce::Pss::Core::Threading;
 using namespace LibCXML;
 
 namespace SnowPME::Runtime {
@@ -42,7 +43,7 @@ namespace SnowPME::Runtime {
 
 		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		AppGlobals::SetPsmMainThreadId(PlatformSpecific::CurrentThreadId());
+		Thread::SetMainThread(PlatformSpecific::CurrentThreadId());
 		AppGlobals::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
 		AppGlobals::SetPsmMainWindow(new Window(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME -"));
 

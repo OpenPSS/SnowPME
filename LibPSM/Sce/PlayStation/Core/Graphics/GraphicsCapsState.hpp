@@ -1,7 +1,6 @@
 #ifndef LIB_PSM_GRAPHICSCAPSSTATE_H
 #define LIB_PSM_GRAPHICSCAPSSTATE_H
 #include <string>
-#include "GraphicsExtension.hpp"
 
 namespace Sce::PlayStation::Core::Graphics {
 	typedef struct GraphicsCapsState {

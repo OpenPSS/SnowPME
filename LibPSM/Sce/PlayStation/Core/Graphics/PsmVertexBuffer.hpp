@@ -11,25 +11,7 @@
 using namespace Sce::PlayStation::Core;
 
 namespace Sce::PlayStation::Core::Graphics {
-	
-	typedef uint16_t half;
-	typedef int8_t byte;
-	typedef uint8_t ubyte;
-
-	typedef struct VertexBuffer {
-		int VertexCount;
-		int IndexCount;
-		int InstDivisor;
-		int Option;
-		uint32_t Buffer;
-		size_t Size;
-		std::vector<VertexFormat> VertexFormats;
-		size_t VertexFormatsSz;
-	} VertexBuffer;
-
 	class PsmVertexBuffer {
-	private:
-		static int determineVertexFormatSize(VertexFormat format);
 	public:
 		static int Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray *formats, int *result);
 		static int Delete(int handle);
