@@ -7,6 +7,8 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/Io/ICall.hpp>
+
 #include <iostream>
 #include <string>
 #include <LibSnowPME.hpp>
@@ -16,12 +18,68 @@ using namespace SnowPME::Util;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::Io;
 
 namespace Sce::PlayStation::Core::Graphics {
 
-	int PsmShaderProgram::FromFile(MonoString*  vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+
+	int PsmShaderProgram::FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result) {
+		Logger::Debug(__FUNCTION__);
+		if (Thread::IsMainThread()) {
+			char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
+			char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
+
+			char* useFilename = NULL;
+			
+			if (vertexProgramFileName != NULL)
+				useFilename = vertexProgramFileName;
+			if (fragmentProgramFileName != NULL)
+				useFilename = fragmentProgramFileName;
+
+			if(vertexProgramFileName == NULL && fragmentProgramFileName == NULL)
+				return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+			if(useFilename == NULL)
+				return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+			uint64_t file;
+			uint32_t totalRead;
+			int res = ICall::PsmFileOpen(useFilename, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
+
+			if (res != PSM_ERROR_NO_ERROR)
+				return res;
+
+			uint32_t cgxSz;
+			ICall::PsmFileGetSize(file, &cgxSz);
+			std::byte* cgx = new std::byte[cgxSz];
+
+
+			ICall::PsmFileRead(file, cgx, cgxSz, &totalRead);
+			ICall::PsmClose(file);
+
+
+			std::string fragmentShader;
+			std::string vertexShader;
+
+			CGX* cgxObj = new CGX(cgx, cgxSz);
+			fragmentShader = cgxObj->FragmentShader("GLSL");
+			vertexShader = cgxObj->VertexShader("GLSL");
+			ReturnErrorable(cgxObj);
+
+			ShaderProgram* shdrPrg = new ShaderProgram(vertexShader, fragmentShader);
+			ReturnErrorable(shdrPrg);
+
+			*result = Handles::CreateHandle((uintptr_t)shdrPrg);
+
+			delete[] cgx;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
@@ -56,9 +114,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			std::string vertexShader;
 
 			CGX* cgxObj = new CGX(cgx, cgxSz);
-			ReturnErrorable(cgxObj);
 			fragmentShader = cgxObj->FragmentShader("GLSL");
-			ReturnErrorable(cgxObj);
 			vertexShader = cgxObj->VertexShader("GLSL");
 			ReturnErrorable(cgxObj);
 

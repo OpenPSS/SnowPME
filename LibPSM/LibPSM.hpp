@@ -35,7 +35,14 @@
 #include <Sce/PlayStation/Core/Services/NetworkRequest.hpp>
 #include <Sce/PlayStation/Core/Services/Network.hpp>
 
+// Sce::Pss
+
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
+
+#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/Sandbox.hpp>
+#include <Sce/Pss/Core/Io/Path.hpp>
+#include <Sce/Pss/Core/Io/FileSystem.hpp>
 
 #endif

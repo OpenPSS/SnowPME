@@ -1,6 +1,6 @@
 #include <Util/Config.hpp>
-#include <IO/Path.hpp>
-using namespace SnowPME::IO;
+#include <LibPSM.hpp>
+using namespace Sce::Pss::Core::Io;
 namespace SnowPME::Util
 {
 	static int screenWidth = 960;

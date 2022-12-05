@@ -1,10 +1,10 @@
-#ifndef SNOW_PME_FILESYSTEM_H
-#define SNOW_PME_FILESYSTEM_H 1
+#ifndef LIB_PSM_FILESYSTEM_H
+#define LIB_PSM_FILESYSTEM_H 1
 
 #include <string>
 #include <filesystem>
 
-namespace SnowPME::IO{
+namespace Sce::Pss::Core::Io {
 	class FileSystem {
 	private:
 		std::byte gamekey[0x20];

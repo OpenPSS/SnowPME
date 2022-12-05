@@ -21,13 +21,8 @@
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
-    <ClInclude Include="IO\DirectoryIterator.hpp" />
-    <ClInclude Include="IO\FileSystem.hpp" />
-    <ClInclude Include="IO\ICall.hpp" />
-    <ClInclude Include="IO\Path.hpp" />
     <ClInclude Include="Util\MonoUtil.hpp" />
     <ClInclude Include="Util\PlatformSpecific.hpp" />
-    <ClInclude Include="IO\Sandbox.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
     <ClInclude Include="Metadata\AppInfo.hpp" />
     <ClInclude Include="Util\AppGlobals.hpp" />
@@ -40,13 +35,8 @@
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
-    <ClCompile Include="IO\DirectoryIterator.cpp" />
-    <ClCompile Include="IO\FileSystem.cpp" />
-    <ClCompile Include="IO\ICall.cpp" />
-    <ClCompile Include="IO\Path.cpp" />
     <ClCompile Include="Util\MonoUtil.cpp" />
     <ClCompile Include="Util\PlatformSpecific.cpp" />
-    <ClCompile Include="IO\Sandbox.cpp" />
     <ClCompile Include="Metadata\AppInfo.cpp" />
     <ClCompile Include="Util\AppGlobals.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />

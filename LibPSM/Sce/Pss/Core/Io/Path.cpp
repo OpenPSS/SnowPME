@@ -1,11 +1,10 @@
-#include <IO/Path.hpp>
-#include <IO/FileSystem.hpp>
-#include <Util/StringUtils.hpp>
+#include <Sce/Pss/Core/Io/Path.hpp>
+#include <Sce/Pss/Core/Io/FileSystem.hpp>
+#include <LibSnowPME.hpp>
 #include <vector>
 
 using namespace SnowPME::Util;
-namespace SnowPME::IO
-{
+namespace Sce::Pss::Core::Io {
 	std::string Path::ChangeSlashesToPsmStyle(std::string path) {
 		return StringUtils::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
 	}

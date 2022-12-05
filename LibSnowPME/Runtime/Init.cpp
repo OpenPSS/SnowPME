@@ -3,11 +3,6 @@
 #include <Runtime/Security.hpp>
 #include <Util/AppGlobals.hpp>
 
-#include <IO/ICall.hpp>
-#include <IO/Filesystem.hpp>
-#include <IO/Path.hpp>
-#include <IO/Sandbox.hpp>
-
 #include <Util/PlatformSpecific.hpp>
 #include <Util/Config.hpp>
 #include <Debug/Logger.hpp>
@@ -23,10 +18,10 @@
 #include <string>
 
 using namespace SnowPME::Util;
-using namespace SnowPME::IO;
 using namespace SnowPME::Metadata;
 using namespace SnowPME::Debug;
 
+using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Threading;
 using namespace LibCXML;
 
@@ -97,7 +92,6 @@ namespace SnowPME::Runtime {
 			ICall::PsmDirectoryRead,
 			ICall::PsmDirectoryGetWorking,
 			ICall::PsmDirectorySetWorking,
-			
 			ICall::PsmFileOpen,
 			ICall::PsmFileDelete,
 			ICall::PsmFileGetInformation,
@@ -110,7 +104,6 @@ namespace SnowPME::Runtime {
 			ICall::PsmFileCopy,
 			ICall::PsmFileSetAttributes,
 			ICall::PsmFileSetTimes,
-
 			ICall::PsmFileGetPathInformation); 
 
 		// Add all PSM Exclusive functions.

@@ -22,8 +22,6 @@
 using namespace SnowPME::Util;
 using namespace Sce::PlayStation::Core::Imaging;
 
-
-
 namespace Sce::PlayStation::Core::Graphics {
 
 	class PsmGraphicsContext {

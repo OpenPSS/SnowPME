@@ -1,5 +1,5 @@
-#ifndef SNOW_PME_PATH_H
-#define SNOW_PME_PATH_H 1
+#ifndef LIB_PSM_PATH_H
+#define LIB_PSM_PATH_H 1
 
 #include <string>
 
@@ -7,8 +7,8 @@
 #define WINDOWS_PATH_SEPERATOR "\\"
 #define PSM_PATH_MAX (0xA0)
 
-namespace SnowPME::IO
-{
+namespace Sce::Pss::Core::Io {
+
 	class Path {
 	public:
 		static std::string ChangeSlashesToPsmStyle(std::string path);

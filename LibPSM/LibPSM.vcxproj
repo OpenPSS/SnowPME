@@ -59,6 +59,11 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Handles.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\ICall.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\Path.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\Sandbox.cpp" />
     <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +110,7 @@
     <ClInclude Include="Sce\PlayStation\Core\Graphics\DepthFunc.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Graphics\DepthFuncMode.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Graphics\DrawMode.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Graphics\ElementType.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Graphics\EnableMode.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsCapsState.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Graphics\GraphicsExtension.hpp" />
@@ -172,6 +178,11 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Handles.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\ICall.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\Path.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\Sandbox.hpp" />
     <ClInclude Include="Sce\Pss\Core\Threading\Thread.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -238,7 +249,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>

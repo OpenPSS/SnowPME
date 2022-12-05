@@ -1,11 +1,11 @@
-#include "Sound.hpp"
+#include <Sce/PlayStation/Core/Audio/Sound.hpp>
 
 namespace Sce::PlayStation::Core::Audio {
-	int Sound::NewFromFilename(std::string filename, int *handle){
+	int Sound::NewFromFilename(MonoString* filename, int *handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int Sound::NewFromFileImage(std::byte* fileImage, int *handle){
+	int Sound::NewFromFileImage(MonoArray* fileImage, int *handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

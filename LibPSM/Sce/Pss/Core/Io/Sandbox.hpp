@@ -1,13 +1,13 @@
-#ifndef SNOW_PME_SANDBOX_H
-#define SNOW_PME_SANDBOX_H 1
-#include <IO/DirectoryIterator.hpp>
-#include <IO/FileSystem.hpp>
+#ifndef LIB_PSM_SANDBOX_H
+#define LIB_PSM_SANDBOX_H 1
+#include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
+#include <Sce/Pss/Core/Io/FileSystem.hpp>
 #include <vector>
 #include <fstream>
 #include <mono/mono.h>
 
 
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 	typedef struct PsmHandle {
 		bool opened = false;
 		bool rw = false;

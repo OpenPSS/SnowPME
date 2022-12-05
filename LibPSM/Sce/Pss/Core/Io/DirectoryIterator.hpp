@@ -1,10 +1,10 @@
-#ifndef SNOW_PME_DIRECTORY_ITERATOR_H
-#define SNOW_PME_DIRECTORY_ITERATOR_H 1
+#ifndef LIB_PSM_DIRECTORY_ITERATOR_H
+#define LIB_PSM_DIRECTORY_ITERATOR_H 1
 #include <vector>
 #include <string>
 #include <filesystem>
 #include <mono/mono.h>
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 	typedef struct StackItem {
 		std::filesystem::directory_iterator* iterator = NULL;
 		int positionInFolder = 0;

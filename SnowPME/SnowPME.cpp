@@ -1,7 +1,6 @@
 #include <LibSnowPME.hpp>
 
 using namespace SnowPME::Runtime;
-using namespace SnowPME::IO;
 using namespace SnowPME::Util;
 using namespace SnowPME::Graphics;
 

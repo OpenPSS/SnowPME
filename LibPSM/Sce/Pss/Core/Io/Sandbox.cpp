@@ -1,19 +1,17 @@
-#include <IO/Sandbox.hpp>
-#include <IO/Path.hpp>
+#include <Sce/Pss/Core/Io/Sandbox.hpp>
+#include <Sce/Pss/Core/Io/Path.hpp>
 #include <Util/StringUtils.hpp>
 #include <filesystem>
 #include <sys/stat.h>
 #include <mono/mono.h>
-#include <Util/AppGlobals.hpp>
-#include <Util/PlatformSpecific.hpp>
-#include <Debug/Logger.hpp>
 
+#include <LibSnowPME.hpp>
 #include <LibPSM.hpp>
 
 using namespace SnowPME::Util;
 using namespace SnowPME::Debug;
 
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 
 
 	Sandbox::Sandbox(std::string gameFolder) {
@@ -668,7 +666,12 @@ namespace SnowPME::IO {
 			fsRealPath.append(pathRelativeToFilesystem);
 		}
 
-		return fsRealPath.string();
+
+		// Swap slahses to the format used by the current Operating System,
+		std::string outPath = fsRealPath.string();
+		outPath = Path::ChangeSlashesToNativeStyle(outPath);
+
+		return outPath;
 	}
 
 	std::string Sandbox::AbsolutePath(std::string sandboxedPath) {

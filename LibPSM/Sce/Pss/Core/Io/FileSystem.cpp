@@ -1,12 +1,13 @@
-#include <IO/FileSystem.hpp>
-#include <IO/Path.hpp>
-#include <Util/StringUtils.hpp>
+#include <Sce/Pss/Core/Io/FileSystem.hpp>
+#include <Sce/Pss/Core/Io/Path.hpp>
 
 #include <vector>
 #include <filesystem>
+
+#include <LibSnowPME.hpp>
 using namespace SnowPME::Util;
 
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 	 
 	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated) {
 		this->sandboxPath = sandboxPathName;

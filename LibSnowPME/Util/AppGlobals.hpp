@@ -1,11 +1,10 @@
 #ifndef SNOW_PME_RUNTIME_APPGLOBAL_H
 #define SNOW_PME_RUNTIME_APPGLOBAL_H 1
 
-#include <IO/Sandbox.hpp>
+#include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Graphics/Window.hpp>
 #include <Metadata/AppInfo.hpp>
 
-using namespace SnowPME::IO;
 using namespace SnowPME::Metadata;
 using namespace SnowPME::Graphics;
 
@@ -33,8 +32,8 @@ namespace SnowPME::Util {
 		static AppInfo* PsmAppInfo();
 		static void SetPsmAppInfo(AppInfo* Sandbox);
 
-		static Sandbox* PsmSandbox();
-		static void SetPsmSandbox(Sandbox* Sandbox);
+		static Sce::Pss::Core::Io::Sandbox* PsmSandbox();
+		static void SetPsmSandbox(Sce::Pss::Core::Io::Sandbox* Sandbox);
 	};
 }
 #endif

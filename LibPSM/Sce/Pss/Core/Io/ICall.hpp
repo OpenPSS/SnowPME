@@ -1,10 +1,10 @@
-#ifndef SNOW_PME_ICALL_H
-#define SNOW_PME_ICALL_H 1
+#ifndef LIB_PSM_ICALL_H
+#define LIB_PSM_ICALL_H 1
 
 #include <mono/mono.h>
 #include <cstdint>
 
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 
 	class ICall
 	{

@@ -129,6 +129,11 @@ namespace SnowPME::Metadata {
 			else if (element->ElementName() == "camera") {
 				READATTRIBUTE(std::string, "max_capture_resolution", this->maxCaptureResolution);
 			}
+			if (element->ElementName() == "feature") {
+				std::string featureName;
+				READATTRIBUTE(std::string, "value", featureName);
+				this->featureList.push_back(featureName);
+			}
 			else if (element->ElementName() == "runtime_config" || element->ElementName() == "feature_list") {
 				Logger::Debug("Skipping reading: " + element->ElementName());
 			}

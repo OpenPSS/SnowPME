@@ -1,4 +1,7 @@
 #include <Util/AppGlobals.hpp>
+#include <LibPSM.hpp>
+using namespace Sce::Pss::Core::Io;
+
 namespace SnowPME::Util {
 	static Sandbox* psmSandbox;
 	static AppInfo* psmAppInfo;

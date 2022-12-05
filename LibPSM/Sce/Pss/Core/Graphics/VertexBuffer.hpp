@@ -2,10 +2,14 @@
 #define LIB_PSM_VERTEXBUFFER_H 1
 #include <cstdint>
 #include <vector>
+#include <Sce/PlayStation/Core/Vector4.hpp>
+#include <Sce/PlayStation/Core/Graphics/ElementType.hpp>
 #include <Sce/PlayStation/Core/Graphics/VertexFormat.hpp>
+
 #include <Sce/Pss/Core/Errorable.hpp>
 
 using namespace Sce::PlayStation::Core::Graphics;
+using namespace Sce::PlayStation::Core;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -25,8 +29,14 @@ namespace Sce::Pss::Core::Graphics {
 	public:
 		VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen);
 		~VertexBuffer();
-		int GetFormatVectorSize(VertexFormat format);
+		static bool GetFormatIsValid(VertexFormat format);
+		static ElementType GetFormatElementType(VertexFormat format);
+		static int GetFormatVectorHeight(VertexFormat format);
+		static int GetFormatVectorWidth(VertexFormat format);
+		static int GetFormatVectorSize(VertexFormat format);
+		static bool GetFormatElementNormalize(VertexFormat format);
 		int VertexCount();
+		int SetVerticies(int stream, float* vertexBuffer, size_t vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		int IndexCount();
 		int InstDivisor();
 		int Option();

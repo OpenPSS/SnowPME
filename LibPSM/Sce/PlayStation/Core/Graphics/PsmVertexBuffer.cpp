@@ -69,10 +69,7 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
-
-			// TODO: actually set verticies here!
-
-			return PSM_ERROR_NO_ERROR;
+			return buffer->SetVerticies(stream, (float*)verticesBuffer, arrayLen, offset, stride, format, trans, scale, to, from, count);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");

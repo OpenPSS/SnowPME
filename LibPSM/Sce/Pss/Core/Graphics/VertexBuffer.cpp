@@ -4,153 +4,456 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/PlayStation/Core/Vector4.hpp>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 
 namespace Sce::Pss::Core::Graphics {
 
-	int VertexBuffer::GetFormatVectorSize(VertexFormat format) {
-		int sz = 0;
+	bool VertexBuffer::GetFormatElementNormalize(VertexFormat format) {
 		switch (format) {
-		case VertexFormat::Float:
-			sz += sizeof(float);
-			break;
+			case VertexFormat::None:
+			case VertexFormat::Float:
+			case VertexFormat::Float2:
+			case VertexFormat::Float3:
+			case VertexFormat::Float4:
+			case VertexFormat::Half:
+			case VertexFormat::Half2:
+			case VertexFormat::Half3:
+			case VertexFormat::Half4:
+			case VertexFormat::Short:
+			case VertexFormat::Short2:
+			case VertexFormat::Short3:
+			case VertexFormat::Short4:
+			case VertexFormat::UShort:
+			case VertexFormat::UShort2:
+			case VertexFormat::UShort3:
+			case VertexFormat::UShort4:
+			case VertexFormat::Byte:
+			case VertexFormat::Byte2:
+			case VertexFormat::Byte3:
+			case VertexFormat::Byte4:
+			case VertexFormat::UByte:
+			case VertexFormat::UByte2:
+			case VertexFormat::UByte3:
+			case VertexFormat::UByte4:
+			default:
+				return false;
 
-		case VertexFormat::Float2:
-			sz += sizeof(float) * 2;
-			break;
-
-		case VertexFormat::Float3:
-			sz += sizeof(float) * 3;
-			break;
-
-		case VertexFormat::Float4:
-			sz += sizeof(float) * 4;
-			break;
-
-		case VertexFormat::Half:
-			sz += sizeof(half);
-			break;
-		case VertexFormat::Half2:
-			sz += sizeof(half) * 2;
-			break;
-		case VertexFormat::Half3:
-			sz += sizeof(half) * 3;
-			break;
-		case VertexFormat::Half4:
-			sz += sizeof(half) * 4;
-			break;
-
-		case VertexFormat::Short:
-			sz += sizeof(short);
-			break;
-		case VertexFormat::Short2:
-			sz += sizeof(short) * 2;
-			break;
-		case VertexFormat::Short3:
-			sz += sizeof(short) * 3;
-			break;
-		case VertexFormat::Short4:
-			sz += sizeof(short) * 4;
-			break;
-
-		case VertexFormat::UShort:
-			sz += sizeof(unsigned short);
-			break;
-		case VertexFormat::UShort2:
-			sz += sizeof(unsigned short) * 2;
-			break;
-		case VertexFormat::UShort3:
-			sz += sizeof(unsigned short) * 3;
-			break;
-		case VertexFormat::UShort4:
-			sz += sizeof(unsigned short) * 4;
-			break;
-
-		case VertexFormat::Byte:
-			sz += sizeof(byte);
-			break;
-		case VertexFormat::Byte2:
-			sz += sizeof(byte) * 2;
-			break;
-		case VertexFormat::Byte3:
-			sz += sizeof(byte) * 3;
-			break;
-		case VertexFormat::Byte4:
-			sz += sizeof(byte) * 4;
-			break;
-
-		case VertexFormat::UByte:
-			sz += sizeof(ubyte);
-			break;
-		case VertexFormat::UByte2:
-			sz += sizeof(ubyte) * 2;
-			break;
-		case VertexFormat::UByte3:
-			sz += sizeof(ubyte) * 3;
-			break;
-		case VertexFormat::UByte4:
-			sz += sizeof(ubyte) * 4;
-			break;
-
-
-		case VertexFormat::ShortN:
-			sz += sizeof(short);
-			break;
-		case VertexFormat::Short2N:
-			sz += sizeof(short) * 2;
-			break;
-		case VertexFormat::Short3N:
-			sz += sizeof(short) * 3;
-			break;
-		case VertexFormat::Short4N:
-			sz += sizeof(short) * 4;
-			break;
-
-		case VertexFormat::UShortN:
-			sz += sizeof(unsigned short);
-			break;
-		case VertexFormat::UShort2N:
-			sz += sizeof(unsigned short) * 2;
-			break;
-		case VertexFormat::UShort3N:
-			sz += sizeof(unsigned short) * 3;
-			break;
-		case VertexFormat::UShort4N:
-			sz += sizeof(unsigned short) * 4;
-			break;
-
-		case VertexFormat::ByteN:
-			sz += sizeof(byte);
-			break;
-		case VertexFormat::Byte2N:
-			sz += sizeof(byte) * 2;
-			break;
-		case VertexFormat::Byte3N:
-			sz += sizeof(byte) * 3;
-			break;
-		case VertexFormat::Byte4N:
-			sz += sizeof(byte) * 4;
-			break;
-
-		case VertexFormat::UByteN:
-			sz += sizeof(ubyte);
-		case VertexFormat::UByte2N:
-			sz += sizeof(ubyte) * 2;
-		case VertexFormat::UByte3N:
-			sz += sizeof(ubyte) * 3;
-		case VertexFormat::UByte4N:
-			sz += sizeof(ubyte) * 4;
-
-		case VertexFormat::None:
-		default:
-			ExceptionInfo::AddMessage("Unsupported format on this device");
-			this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
-			return 0;
+			case VertexFormat::ShortN:
+			case VertexFormat::Short2N:
+			case VertexFormat::Short3N:
+			case VertexFormat::Short4N:
+			case VertexFormat::UShortN:
+			case VertexFormat::UShort2N:
+			case VertexFormat::UShort3N:
+			case VertexFormat::UShort4N:
+			case VertexFormat::ByteN:
+			case VertexFormat::Byte2N:
+			case VertexFormat::Byte3N:
+			case VertexFormat::Byte4N:
+			case VertexFormat::UByteN:
+			case VertexFormat::UByte2N:
+			case VertexFormat::UByte3N:
+			case VertexFormat::UByte4N:
+				return true;
 		}
+	}
 
-		return sz;
+	bool VertexBuffer::GetFormatIsValid(VertexFormat format) {
+		switch (format) {
+			case VertexFormat::None:
+			case VertexFormat::Float:
+			case VertexFormat::Float2:
+			case VertexFormat::Float3:
+			case VertexFormat::Float4:
+			case VertexFormat::Half:
+			case VertexFormat::Half2:
+			case VertexFormat::Half3:
+			case VertexFormat::Half4:
+			case VertexFormat::Short:
+			case VertexFormat::Short2:
+			case VertexFormat::Short3:
+			case VertexFormat::Short4:
+			case VertexFormat::UShort:
+			case VertexFormat::UShort2:
+			case VertexFormat::UShort3:
+			case VertexFormat::UShort4:
+			case VertexFormat::Byte:
+			case VertexFormat::Byte2:
+			case VertexFormat::Byte3:
+			case VertexFormat::Byte4:
+			case VertexFormat::UByte:
+			case VertexFormat::UByte2:
+			case VertexFormat::UByte3:
+			case VertexFormat::UByte4:
+			case VertexFormat::ShortN:
+			case VertexFormat::Short2N:
+			case VertexFormat::Short3N:
+			case VertexFormat::Short4N:
+			case VertexFormat::UShortN:
+			case VertexFormat::UShort2N:
+			case VertexFormat::UShort3N:
+			case VertexFormat::UShort4N:
+			case VertexFormat::ByteN:
+			case VertexFormat::Byte2N:
+			case VertexFormat::Byte3N:
+			case VertexFormat::Byte4N:
+			case VertexFormat::UByteN:
+			case VertexFormat::UByte2N:
+			case VertexFormat::UByte3N:
+			case VertexFormat::UByte4N:
+				return true;
+			default:
+				return false;
+		}
+	}
+	ElementType VertexBuffer::GetFormatElementType(VertexFormat format) {
+		switch (format) {
+			case VertexFormat::None:
+				return ElementType::None;
+
+			case VertexFormat::Float:
+			case VertexFormat::Float2:
+			case VertexFormat::Float3:
+			case VertexFormat::Float4:
+				return ElementType::Float;
+
+			case VertexFormat::Half:
+			case VertexFormat::Half2:
+			case VertexFormat::Half3:
+			case VertexFormat::Half4:
+				return ElementType::Half;
+
+			case VertexFormat::Short:
+			case VertexFormat::Short2:
+			case VertexFormat::Short3:
+			case VertexFormat::Short4:
+				return ElementType::Short;
+
+			case VertexFormat::UShort:
+			case VertexFormat::UShort2:
+			case VertexFormat::UShort3:
+			case VertexFormat::UShort4:
+				return ElementType::UShort;
+
+			case VertexFormat::Byte:
+			case VertexFormat::Byte2:
+			case VertexFormat::Byte3:
+			case VertexFormat::Byte4:
+				return ElementType::Byte;
+
+			case VertexFormat::UByte:
+			case VertexFormat::UByte2:
+			case VertexFormat::UByte3:
+			case VertexFormat::UByte4:
+				return ElementType::UByte;
+
+			case VertexFormat::ShortN:
+			case VertexFormat::Short2N:
+			case VertexFormat::Short3N:
+			case VertexFormat::Short4N:
+				return ElementType::Short;
+
+			case VertexFormat::UShortN:
+			case VertexFormat::UShort2N:
+			case VertexFormat::UShort3N:
+			case VertexFormat::UShort4N:
+				return ElementType::UShort;
+
+			case VertexFormat::ByteN:
+			case VertexFormat::Byte2N:
+			case VertexFormat::Byte3N:
+			case VertexFormat::Byte4N:
+				return ElementType::Byte;
+
+			case VertexFormat::UByteN:
+			case VertexFormat::UByte2N:
+			case VertexFormat::UByte3N:
+			case VertexFormat::UByte4N:
+				return ElementType::UByte;
+
+			default:
+				return ElementType::None;
+		};
+	}
+	int VertexBuffer::GetFormatVectorHeight(VertexFormat format) {
+		switch (format) {
+			case VertexFormat::None:
+			case VertexFormat::Float:
+			case VertexFormat::Float2:
+			case VertexFormat::Float3:
+			case VertexFormat::Float4:
+			case VertexFormat::Half:
+			case VertexFormat::Half2:
+			case VertexFormat::Half3:
+			case VertexFormat::Half4:
+			case VertexFormat::Short:
+			case VertexFormat::Short2:
+			case VertexFormat::Short3:
+			case VertexFormat::Short4:
+			case VertexFormat::UShort:
+			case VertexFormat::UShort2:
+			case VertexFormat::UShort3:
+			case VertexFormat::UShort4:
+			case VertexFormat::Byte:
+			case VertexFormat::Byte2:
+			case VertexFormat::Byte3:
+			case VertexFormat::Byte4:
+			case VertexFormat::UByte:
+			case VertexFormat::UByte2:
+			case VertexFormat::UByte3:
+			case VertexFormat::UByte4:
+			case VertexFormat::ShortN:
+			case VertexFormat::Short2N:
+			case VertexFormat::Short3N:
+			case VertexFormat::Short4N:
+			case VertexFormat::UShortN:
+			case VertexFormat::UShort2N:
+			case VertexFormat::UShort3N:
+			case VertexFormat::UShort4N:
+			case VertexFormat::ByteN:
+			case VertexFormat::Byte2N:
+			case VertexFormat::Byte3N:
+			case VertexFormat::Byte4N:
+			case VertexFormat::UByteN:
+			case VertexFormat::UByte2N:
+			case VertexFormat::UByte3N:
+			case VertexFormat::UByte4N:
+			default:
+				return 0x1;
+		}
+	}
+	int VertexBuffer::GetFormatVectorWidth(VertexFormat format) {
+		switch (format) {
+			case VertexFormat::None:
+				return 0x1;
+			case VertexFormat::Float:
+				return 0x1;
+			case VertexFormat::Float2:
+				return 0x2;
+			case VertexFormat::Float3:
+				return 0x3;
+			case VertexFormat::Float4:
+				return 0x4;
+			case VertexFormat::Half:
+				return 0x1;
+			case VertexFormat::Half2:
+				return 0x2;
+			case VertexFormat::Half3:
+				return 0x3;
+			case VertexFormat::Half4:
+				return 0x4;
+			case VertexFormat::Short:
+				return 0x1;
+			case VertexFormat::Short2:
+				return 0x2;
+			case VertexFormat::Short3:
+				return 0x3;
+			case VertexFormat::Short4:
+				return 0x4;
+			case VertexFormat::UShort:
+				return 0x1;
+			case VertexFormat::UShort2:
+				return 0x2;
+			case VertexFormat::UShort3:
+				return 0x3;
+			case VertexFormat::UShort4:
+				return 0x4;
+			case VertexFormat::Byte:
+				return 0x1;
+			case VertexFormat::Byte2:
+				return 0x2;
+			case VertexFormat::Byte3:
+				return 0x3;
+			case VertexFormat::Byte4:
+				return 0x4;
+			case VertexFormat::UByte:
+				return 0x1;
+			case VertexFormat::UByte2:
+				return 0x2;
+			case VertexFormat::UByte3:
+				return 0x3;
+			case VertexFormat::UByte4:
+				return 0x4;
+			case VertexFormat::ShortN:
+				return 0x1;
+			case VertexFormat::Short2N:
+				return 0x2;
+			case VertexFormat::Short3N:
+				return 0x3;
+			case VertexFormat::Short4N:
+				return 0x4;
+			case VertexFormat::UShortN:
+				return 0x1;
+			case VertexFormat::UShort2N:
+				return 0x2;
+			case VertexFormat::UShort3N:
+				return 0x3;
+			case VertexFormat::UShort4N:
+				return 0x4;
+			case VertexFormat::ByteN:
+				return 0x1;
+			case VertexFormat::Byte2N:
+				return 0x2;
+			case VertexFormat::Byte3N:
+				return 0x3;
+			case VertexFormat::Byte4N:
+				return 0x4;
+			case VertexFormat::UByteN:
+				return 0x1;
+			case VertexFormat::UByte2N:
+				return 0x2;
+			case VertexFormat::UByte3N:
+				return 0x3;
+			case VertexFormat::UByte4N:
+				return 0x4;
+
+			default:
+				return 0x1;
+		}
+	}
+
+	int VertexBuffer::GetFormatVectorSize(VertexFormat format) {
+		switch (format) {
+			case VertexFormat::None:
+				return 0;
+
+			case VertexFormat::Float:
+				return sizeof(float);
+
+			case VertexFormat::Float2:
+				return sizeof(float) * 2;
+
+			case VertexFormat::Float3:
+				return sizeof(float) * 3;
+
+			case VertexFormat::Float4:
+				return sizeof(float) * 4;
+				
+
+			case VertexFormat::Half:
+				return sizeof(half);
+				
+			case VertexFormat::Half2:
+				return sizeof(half) * 2;
+				
+			case VertexFormat::Half3:
+				return sizeof(half) * 3;
+				
+			case VertexFormat::Half4:
+				return sizeof(half) * 4;
+				
+
+			case VertexFormat::Short:
+				return sizeof(short);
+				
+			case VertexFormat::Short2:
+				return sizeof(short) * 2;
+				
+			case VertexFormat::Short3:
+				return sizeof(short) * 3;
+				
+			case VertexFormat::Short4:
+				return sizeof(short) * 4;
+				
+
+			case VertexFormat::UShort:
+				return sizeof(unsigned short);
+				
+			case VertexFormat::UShort2:
+				return sizeof(unsigned short) * 2;
+				
+			case VertexFormat::UShort3:
+				return sizeof(unsigned short) * 3;
+				
+			case VertexFormat::UShort4:
+				return sizeof(unsigned short) * 4;
+				
+
+			case VertexFormat::Byte:
+				return sizeof(byte);
+				
+			case VertexFormat::Byte2:
+				return sizeof(byte) * 2;
+				
+			case VertexFormat::Byte3:
+				return sizeof(byte) * 3;
+				
+			case VertexFormat::Byte4:
+				return sizeof(byte) * 4;
+				
+
+			case VertexFormat::UByte:
+				return sizeof(ubyte);
+				
+			case VertexFormat::UByte2:
+				return sizeof(ubyte) * 2;
+				
+			case VertexFormat::UByte3:
+				return sizeof(ubyte) * 3;
+				
+			case VertexFormat::UByte4:
+				return sizeof(ubyte) * 4;
+				
+
+
+			case VertexFormat::ShortN:
+				return sizeof(short);
+				
+			case VertexFormat::Short2N:
+				return sizeof(short) * 2;
+				
+			case VertexFormat::Short3N:
+				return sizeof(short) * 3;
+				
+			case VertexFormat::Short4N:
+				return sizeof(short) * 4;
+				
+
+			case VertexFormat::UShortN:
+				return sizeof(unsigned short);
+				
+			case VertexFormat::UShort2N:
+				return sizeof(unsigned short) * 2;
+				
+			case VertexFormat::UShort3N:
+				return sizeof(unsigned short) * 3;
+				
+			case VertexFormat::UShort4N:
+				return sizeof(unsigned short) * 4;
+				
+
+			case VertexFormat::ByteN:
+				return sizeof(byte);
+				
+			case VertexFormat::Byte2N:
+				return sizeof(byte) * 2;
+				
+			case VertexFormat::Byte3N:
+				return sizeof(byte) * 3;
+				
+			case VertexFormat::Byte4N:
+				return sizeof(byte) * 4;
+				
+
+			case VertexFormat::UByteN:
+				return sizeof(ubyte);
+				
+			case VertexFormat::UByte2N:
+				return sizeof(ubyte) * 2;
+				
+			case VertexFormat::UByte3N:
+				return sizeof(ubyte) * 3;
+				
+			case VertexFormat::UByte4N:
+				return sizeof(ubyte) * 4;
+
+
+			default:
+				return 0;
+		}
 	}
 	VertexBuffer::~VertexBuffer() {
 		if (this->vertexFormats != NULL) {
@@ -177,6 +480,25 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	std::vector<VertexFormat>* VertexBuffer::VertexFormats() {
 		return this->vertexFormats;
+	}
+	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, size_t vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
+		if (!vertexBuffer)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (stream < 0 || stream >= (int)VertexFormats()->size())
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+
+		if (!GetFormatIsValid(format))
+			return PSM_ERROR_COMMON_ARGUMENT;
+
+		VertexFormat streamCurrentFormat = VertexFormats()->at(stream);
+
+		if (format != VertexFormat::None) {
+			ExceptionInfo::AddMessage("Incompatible format with vertex stream");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen) {

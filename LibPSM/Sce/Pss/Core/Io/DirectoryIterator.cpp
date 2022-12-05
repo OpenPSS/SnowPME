@@ -1,7 +1,7 @@
-#include <IO/DirectoryIterator.hpp>
+#include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
+#include <Sce/Pss/Core/Io/Path.hpp>
+#include <Sce/Pss/Core/Io/Sandbox.hpp>
 
-#include <IO/Path.hpp>
-#include <IO/Sandbox.hpp>
 #include <Util/AppGlobals.hpp>
 #include <Debug/Logger.hpp>
 
@@ -10,11 +10,11 @@
 #include <filesystem>
 
 #include <LibPSM.hpp>
+#include <LibSnowPME.hpp>
 
-using namespace SnowPME::Debug;
 using namespace SnowPME::Util;
 
-namespace SnowPME::IO {
+namespace Sce::Pss::Core::Io {
 
 	DirectoryIterator::DirectoryIterator(std::string relativePath, bool recursive) {
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
@@ -81,10 +81,6 @@ namespace SnowPME::IO {
 			std::string filename = Path::GetFilename(nextPath);
 			std::string sandboxAbsPath = Path::Combine(item->sandboxPath, filename);
 			std::string sandboxRelativePath = Path::Combine(item->relativePath, filename);
-
-			Logger::Debug("filename: " + filename);
-			Logger::Debug("sandboxAbsPath: " + sandboxAbsPath);
-			Logger::Debug("sandboxRelativePath: " + sandboxRelativePath);
 
 			psmPathInformation = psmSandbox->Stat(sandboxAbsPath, sandboxRelativePath);
 

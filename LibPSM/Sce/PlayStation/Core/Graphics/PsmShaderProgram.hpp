@@ -8,12 +8,12 @@
 
 #include <mono/mono.h>
 
-#include "ShaderUniformType.hpp"
-#include "ShaderAttributeType.hpp"
-#include "../Vector2.hpp"
-#include "../Vector3.hpp"
-#include "../Vector4.hpp"
-#include "../Matrix4.hpp"
+#include <Sce/PlayStation/Core/Graphics/ShaderUniformType.hpp>
+#include <Sce/PlayStation/Core/Graphics/ShaderAttributeType.hpp>
+#include <Sce/PlayStation/Core/Vector2.hpp>
+#include <Sce/PlayStation/Core/Vector3.hpp>
+#include <Sce/PlayStation/Core/Vector4.hpp>
+#include <Sce/PlayStation/Core/Matrix4.hpp>
 using namespace Sce::PlayStation::Core;
 
 
