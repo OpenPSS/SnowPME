@@ -478,20 +478,90 @@ namespace Sce::Pss::Core::Graphics {
 	size_t VertexBuffer::Size() {
 		return this->size;
 	}
+
+	int VertexBuffer::StreamCount() {
+		return (int)VertexFormats()->size();
+	}
+
 	std::vector<VertexFormat>* VertexBuffer::VertexFormats() {
 		return this->vertexFormats;
 	}
+
+	int VertexBuffer::doTranslationAndScale(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale) {
+		bool result = false;
+
+
+		// Check provided formats are correct ...
+		VertexFormat outpFormat = *outputFormat;
+		if (outpFormat != VertexFormat::None) {
+			if (inputFormat == outpFormat) {
+				result = false;
+			}
+			else {
+				bool isValid = VertexBuffer::GetFormatIsValid(outpFormat);
+				ElementType type = VertexBuffer::GetFormatElementType(outpFormat);
+				int formatVectorWidth = VertexBuffer::GetFormatVectorWidth(outpFormat);
+				int formatVectorHeight = VertexBuffer::GetFormatVectorHeight(outpFormat);
+
+				if ((!isValid || type != ElementType::Float) ||
+					(formatVectorWidth != VertexBuffer::GetFormatVectorWidth(inputFormat)) ||
+					(formatVectorHeight != VertexBuffer::GetFormatVectorHeight(inputFormat))
+					) {
+					*outputFormat = VertexFormat::None;
+					return PSM_ERROR_NO_ERROR;
+				}
+
+				result = true;
+			}
+
+		}
+		else
+		{
+			*outputFormat = inputFormat;
+			result = false;
+		}
+
+
+		// Do we need **Trans Rights** ???
+		Vector4* transRights = *trans;
+		if (transRights->X != 0.0 || transRights->Y != 0.0 || transRights->Z != 0.0 || transRights->W != 0.0) {
+			result = true;
+
+			Vector4 transLefts;
+			transLefts.X = -transRights->X;
+			transLefts.Y = -transRights->Y;
+			transLefts.Z = -transRights->Z;
+			transLefts.W = -transRights->W;
+
+			memcpy(trans, &transLefts, sizeof(Vector4));
+		}
+		
+
+		// Do we need Scale ???
+
+		Vector4* scaleRights = *scale;
+		if (scaleRights->X != 0.0 || scaleRights->Y != 0.0) {
+			if (scaleRights->X == 0.0) {
+				result = true;
+
+			}
+
+		}
+
+	}
+
 	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, size_t vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
 		if (!vertexBuffer)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
-		if (stream < 0 || stream >= (int)VertexFormats()->size())
+		if (stream < 0 || stream >= this->StreamCount())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (!GetFormatIsValid(format))
 			return PSM_ERROR_COMMON_ARGUMENT;
 
 		VertexFormat streamCurrentFormat = VertexFormats()->at(stream);
+		doTranslationAndScale(streamCurrentFormat, &format, &trans, &scale);
 
 		if (format != VertexFormat::None) {
 			ExceptionInfo::AddMessage("Incompatible format with vertex stream");

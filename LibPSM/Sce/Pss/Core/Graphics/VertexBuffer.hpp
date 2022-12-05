@@ -26,6 +26,7 @@ namespace Sce::Pss::Core::Graphics {
 		uint32_t buffer = 0;
 		size_t size = 0;
 		std::vector<VertexFormat>* vertexFormats = NULL;
+		int doTranslationAndScale(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
 	public:
 		VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen);
 		~VertexBuffer();
@@ -39,6 +40,7 @@ namespace Sce::Pss::Core::Graphics {
 		int SetVerticies(int stream, float* vertexBuffer, size_t vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		int IndexCount();
 		int InstDivisor();
+		int StreamCount();
 		int Option();
 		uint32_t Buffer();
 		size_t Size();
