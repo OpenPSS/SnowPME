@@ -533,7 +533,7 @@ namespace Sce::Pss::Core::Graphics {
 			transLefts.Z = -transRights->Z;
 			transLefts.W = -transRights->W;
 
-			memcpy(trans, &transLefts, sizeof(Vector4));
+			memcpy(*trans, &transLefts, sizeof(Vector4));
 		}
 		
 
