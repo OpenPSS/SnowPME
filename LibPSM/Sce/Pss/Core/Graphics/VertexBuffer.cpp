@@ -109,6 +109,64 @@ namespace Sce::Pss::Core::Graphics {
 				return false;
 		}
 	}
+	int VertexBuffer::GetFormatElementSize(VertexFormat format) {
+		switch (format) {
+			default:
+			case VertexFormat::None:
+				return 0x0;
+			case VertexFormat::Float:
+			case VertexFormat::Float2:
+			case VertexFormat::Float3:
+			case VertexFormat::Float4:
+				return sizeof(float);
+			case VertexFormat::Half:
+			case VertexFormat::Half2:
+			case VertexFormat::Half3:
+			case VertexFormat::Half4:
+				return sizeof(half);
+			case VertexFormat::Short:
+			case VertexFormat::Short2:
+			case VertexFormat::Short3:
+			case VertexFormat::Short4:
+				return sizeof(short);
+			case VertexFormat::UShort:
+			case VertexFormat::UShort2:
+			case VertexFormat::UShort3:
+			case VertexFormat::UShort4:
+				return sizeof(unsigned short);
+			case VertexFormat::Byte:
+			case VertexFormat::Byte2:
+			case VertexFormat::Byte3:
+			case VertexFormat::Byte4:
+				return sizeof(byte);
+			case VertexFormat::UByte:
+			case VertexFormat::UByte2:
+			case VertexFormat::UByte3:
+			case VertexFormat::UByte4:
+				return sizeof(ubyte);
+			case VertexFormat::ShortN:
+			case VertexFormat::Short2N:
+			case VertexFormat::Short3N:
+			case VertexFormat::Short4N:
+				return sizeof(short);
+			case VertexFormat::UShortN:
+			case VertexFormat::UShort2N:
+			case VertexFormat::UShort3N:
+			case VertexFormat::UShort4N:
+				return sizeof(unsigned short);
+			case VertexFormat::ByteN:
+			case VertexFormat::Byte2N:
+			case VertexFormat::Byte3N:
+			case VertexFormat::Byte4N:
+				return sizeof(byte);
+			case VertexFormat::UByteN:
+			case VertexFormat::UByte2N:
+			case VertexFormat::UByte3N:
+			case VertexFormat::UByte4N:
+				return sizeof(ubyte);
+		}
+	}
+
 	ElementType VertexBuffer::GetFormatElementType(VertexFormat format) {
 		switch (format) {
 			case VertexFormat::None:
@@ -487,15 +545,14 @@ namespace Sce::Pss::Core::Graphics {
 		return this->vertexFormats;
 	}
 
-	int VertexBuffer::doTranslationAndScale(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale) {
-		bool result = false;
-
+	bool VertexBuffer::translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale) {
+		bool changed = false;
 
 		// Check provided formats are correct ...
 		VertexFormat outpFormat = *outputFormat;
 		if (outpFormat != VertexFormat::None) {
 			if (inputFormat == outpFormat) {
-				result = false;
+				changed = false;
 			}
 			else {
 				bool isValid = VertexBuffer::GetFormatIsValid(outpFormat);
@@ -508,24 +565,23 @@ namespace Sce::Pss::Core::Graphics {
 					(formatVectorHeight != VertexBuffer::GetFormatVectorHeight(inputFormat))
 					) {
 					*outputFormat = VertexFormat::None;
-					return PSM_ERROR_NO_ERROR;
+					return false;
 				}
 
-				result = true;
+				changed = true;
 			}
 
 		}
 		else
 		{
 			*outputFormat = inputFormat;
-			result = false;
+			changed = false;
 		}
-
 
 		// Do we need **Trans Rights** ???
 		Vector4* transRights = *trans;
-		if (transRights->X != 0.0 || transRights->Y != 0.0 || transRights->Z != 0.0 || transRights->W != 0.0) {
-			result = true;
+		if (transRights->X != 0.0f || transRights->Y != 0.0f || transRights->Z != 0.0f || transRights->W != 0.0f) {
+			changed = true;
 
 			Vector4 transLefts;
 			transLefts.X = -transRights->X;
@@ -539,34 +595,145 @@ namespace Sce::Pss::Core::Graphics {
 
 		// Do we need Scale ???
 
-		Vector4* scaleRights = *scale;
-		if (scaleRights->X != 0.0 || scaleRights->Y != 0.0) {
-			if (scaleRights->X == 0.0) {
-				result = true;
+		Vector4* scaleRef = *scale;
+		if (scaleRef->X != 1.0f || scaleRef->Y != 1.0f || scaleRef->Z != 1.0f || scaleRef->W != 1.0f) {
+			changed = true;
+			Vector4 newScale;
 
-			}
+			if (scaleRef->X == 0.0f)
+				newScale.X = 0.0f;
+			else
+				newScale.X = 1.0f / scaleRef->X;
 
+			if (scaleRef->Y == 0.0f)
+				newScale.Y = 0.0f;
+			else
+				newScale.Y = 1.0f / scaleRef->Y;
+
+			if (scaleRef->Z == 0.0f)
+				newScale.Z = 0.0f;
+			else
+				newScale.Z = 1.0f / scaleRef->Z;
+
+			if (scaleRef->W == 0.0f)
+				newScale.W = 0.0f;
+			else
+				newScale.W = 1.0f / scaleRef->W;
+
+			memcpy(*scale, &newScale, sizeof(Vector4));
+		}
+		else if (!changed) {
+			return changed;
 		}
 
+		// Do we need to normalize this ?
+
+		if (!GetFormatElementNormalize(inputFormat))
+			return changed;
+
+		ElementType elemType = GetFormatElementType(inputFormat);
+
+		Vector4 newScale;
+		Vector4 newTrans;
+
+		if (elemType == ElementType::UShort) {
+			newScale.X = scaleRef->X * 65535.0f;
+			newScale.Y = scaleRef->Y * 65535.0f;
+			newScale.Z = scaleRef->Z * 65535.0f;
+			newScale.W = scaleRef->W * 65535.0f;
+
+			memcpy(*scale, &newScale, sizeof(Vector4));
+			return changed;
+		}
+		else if (elemType == ElementType::Short) {
+			newTrans.X = transRights->X + (-0.000015259f * scaleRef->X);
+			newTrans.Y = transRights->Y + (-0.000015259f * scaleRef->Y);
+			newTrans.Z = transRights->Z + (-0.000015259f * scaleRef->Z);
+			newTrans.W = transRights->W + (-0.000015259f * scaleRef->W);
+			
+			newScale.X = scaleRef->X * 32768.0f;
+			newScale.Y = scaleRef->Y * 32768.0f;
+			newScale.Z = scaleRef->Z * 32768.0f;
+			newScale.Z = scaleRef->W * 32768.0f;
+
+			memcpy(*trans, &newTrans, sizeof(Vector4));
+			memcpy(*scale, &newScale, sizeof(Vector4));
+			return changed;
+		}
+		else if (elemType == ElementType::Byte) {
+			newTrans.X = transRights->X + (-0.0039216f * scaleRef->X);
+			newTrans.Y = transRights->Y + (-0.0039216f * scaleRef->Y);
+			newTrans.Z = transRights->Z + (-0.0039216f * scaleRef->Z);
+			newTrans.W = transRights->W + (-0.0039216f * scaleRef->W);
+
+			newScale.X = scaleRef->X * 127.5f;
+			newScale.Y = scaleRef->Y * 127.5f;
+			newScale.Z = scaleRef->Z * 127.5f;
+			newScale.Z = scaleRef->W * 127.5f;
+
+			memcpy(*trans, &newTrans, sizeof(Vector4));
+			memcpy(*scale, &newScale, sizeof(Vector4));
+			return changed;
+		}
+		else if (elemType == ElementType::UByte) {
+			newScale.X = scaleRef->X * 255.0f;
+			newScale.Y = scaleRef->Y * 255.0f;
+			newScale.Z = scaleRef->Z * 255.0f;
+			newScale.W = scaleRef->W * 255.0f;
+
+			memcpy(*scale, &newScale, sizeof(Vector4));
+			return changed;
+		}
+		else if (elemType == ElementType::Half || elemType == ElementType::Float || elemType == ElementType::None) {
+			return changed;
+		}
+
+		return changed;
 	}
 
-	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, size_t vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
+	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
+		// is the vertex buffer not null?
 		if (!vertexBuffer)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
+		// is selected stream actually in the stream set?
 		if (stream < 0 || stream >= this->StreamCount())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
+		// is the format valid?
 		if (!GetFormatIsValid(format))
 			return PSM_ERROR_COMMON_ARGUMENT;
 
+		// Get format for this specific stream
 		VertexFormat streamCurrentFormat = VertexFormats()->at(stream);
-		doTranslationAndScale(streamCurrentFormat, &format, &trans, &scale);
-
-		if (format != VertexFormat::None) {
+		// normalize scale/trans ..
+		translationScaleNormalize(streamCurrentFormat, &format, &trans, &scale);
+		
+		if (format == VertexFormat::None) {
 			ExceptionInfo::AddMessage("Incompatible format with vertex stream");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
+		// get the format size
+		int formatVectorSize = GetFormatVectorSize(format);
+		if (!stride) // if vector is 0 
+			stride = formatVectorSize;
+
+		// check the from/to is within the range of the vertex array
+		if (to < 0 || from < 0 || count < 0 || offset < 0 || count + to > this->VertexCount() || stride < formatVectorSize) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+		// check vertex array is big enough
+		if (vertexBufferSz < (formatVectorSize + offset + (count + from - 1) * stride)) {
+			ExceptionInfo::AddMessage("Vertex array is smaller than required");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+		// check the offset is properly aligned to the element size
+		int elmSz = GetFormatElementSize(format) - 1;
+		if ((elmSz & offset) != 0 || (elmSz & stride) != 0) {
+			ExceptionInfo::AddMessage("Offset or stride is not aligned properly");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
 
 		return PSM_ERROR_NO_ERROR;
 	}

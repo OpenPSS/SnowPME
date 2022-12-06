@@ -57,8 +57,13 @@ namespace Sce::PlayStation::Core::Graphics {
 			void* verticesBuffer = (void*)mono_array_addr_with_size(vertices, 1, 0);
 			size_t arrayLen = MonoUtil::MonoArrayLength(vertices);
 
+			// if count < 0, set the count to the vertex count
+			if (count < 0) {
+				count = buffer->VertexCount();
+			}
+
 			// Check the stream number is valid
-			if (stream < 0 || stream >= (int)buffer->VertexFormats()->size()) {
+			if (stream < 0 || stream >= buffer->StreamCount()) {
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
 
@@ -68,7 +73,7 @@ namespace Sce::PlayStation::Core::Graphics {
 				Logger::Error("Vertex array has wrong size");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
-
+			
 			return buffer->SetVerticies(stream, (float*)verticesBuffer, arrayLen, offset, stride, format, trans, scale, to, from, count);
 		}
 		else {
