@@ -600,6 +600,9 @@ namespace Sce::Pss::Core::Graphics {
 			changed = true;
 			Vector4 newScale;
 
+			// If its 0 set it to 0 (avoid devide by 0 errors) 
+			// otherwise, scale by the factor
+
 			if (scaleRef->X == 0.0f)
 				newScale.X = 0.0f;
 			else
@@ -637,6 +640,8 @@ namespace Sce::Pss::Core::Graphics {
 		Vector4 newTrans;
 
 		if (elemType == ElementType::UShort) {
+			// Multiply by the types max value, as a float
+
 			newScale.X = scaleRef->X * 65535.0f;
 			newScale.Y = scaleRef->Y * 65535.0f;
 			newScale.Z = scaleRef->Z * 65535.0f;
@@ -646,11 +651,16 @@ namespace Sce::Pss::Core::Graphics {
 			return changed;
 		}
 		else if (elemType == ElementType::Short) {
+			// i took this '-0.000015259f' constant directly from PSM Runtime,
+			// i have no idea what this constant is actually for, or why it specifically was chosen.
+
 			newTrans.X = transRights->X + (-0.000015259f * scaleRef->X);
 			newTrans.Y = transRights->Y + (-0.000015259f * scaleRef->Y);
 			newTrans.Z = transRights->Z + (-0.000015259f * scaleRef->Z);
 			newTrans.W = transRights->W + (-0.000015259f * scaleRef->W);
 			
+			// Multiply by the types max value, as a float
+
 			newScale.X = scaleRef->X * 32768.0f;
 			newScale.Y = scaleRef->Y * 32768.0f;
 			newScale.Z = scaleRef->Z * 32768.0f;
@@ -661,10 +671,15 @@ namespace Sce::Pss::Core::Graphics {
 			return changed;
 		}
 		else if (elemType == ElementType::Byte) {
+			// i took this '-0.0039216f' constant directly from PSM Runtime,
+			// i have no idea what this constant is actually for, or why it specifically was chosen.
+
 			newTrans.X = transRights->X + (-0.0039216f * scaleRef->X);
 			newTrans.Y = transRights->Y + (-0.0039216f * scaleRef->Y);
 			newTrans.Z = transRights->Z + (-0.0039216f * scaleRef->Z);
 			newTrans.W = transRights->W + (-0.0039216f * scaleRef->W);
+
+			// Multiply by the types max value, as a float
 
 			newScale.X = scaleRef->X * 127.5f;
 			newScale.Y = scaleRef->Y * 127.5f;
@@ -676,6 +691,8 @@ namespace Sce::Pss::Core::Graphics {
 			return changed;
 		}
 		else if (elemType == ElementType::UByte) {
+			// Multiply by the types max value, as a float
+
 			newScale.X = scaleRef->X * 255.0f;
 			newScale.Y = scaleRef->Y * 255.0f;
 			newScale.Z = scaleRef->Z * 255.0f;
@@ -685,6 +702,7 @@ namespace Sce::Pss::Core::Graphics {
 			return changed;
 		}
 		else if (elemType == ElementType::Half || elemType == ElementType::Float || elemType == ElementType::None) {
+			// These types are already floats, dont need to do any calclulation here.
 			return changed;
 		}
 
