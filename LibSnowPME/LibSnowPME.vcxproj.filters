@@ -51,6 +51,12 @@
     <ClInclude Include="Util\MonoUtil.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Util\Crypto.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Gui.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Util\Config.cpp">
@@ -84,6 +90,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Util\MonoUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Crypto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

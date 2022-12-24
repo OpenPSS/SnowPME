@@ -26,9 +26,6 @@ namespace SnowPME::Util {
 		static Window* PsmMainWindow();
 		static void SetPsmMainWindow(Window* mainWindow);
 
-		static uint64_t PsmMainThreadId();
-		static void SetPsmMainThreadId(uint64_t threadId);
-
 		static AppInfo* PsmAppInfo();
 		static void SetPsmAppInfo(AppInfo* Sandbox);
 

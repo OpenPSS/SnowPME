@@ -7,9 +7,11 @@ namespace SnowPME::Util
 	static int screenHeight = 544;
 	static int screenTotal = 1;
 
+	std::string RuntimeFolder = "Runtime";
+
 	bool Config::SecurityCritical = false; 
-	std::string Config::RuntimeLibPath = Path::Combine(RUNTIME_FOLDER, "lib");
-	std::string Config::RuntimeConfigPath = Path::Combine(RUNTIME_FOLDER, "etc");
+	std::string Config::RuntimeLibPath = Path::Combine(RuntimeFolder, "lib");
+	std::string Config::RuntimeConfigPath = Path::Combine(RuntimeFolder, "etc");
 	std::string Config::RuntimeMonoPath = Path::Combine(RuntimeLibPath, "mono");
 	std::string Config::RuntimeVerisonPath = Path::Combine(RuntimeMonoPath, "2.1");
 	std::string Config::PsmLibsPath = Path::Combine(RuntimeLibPath, "psm");

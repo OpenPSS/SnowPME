@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp" />
+    <ClInclude Include="Graphics\Gui.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
+    <ClInclude Include="Util\Crypto.hpp" />
     <ClInclude Include="Util\MonoUtil.hpp" />
     <ClInclude Include="Util\PlatformSpecific.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
@@ -34,7 +36,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Debug\Logger.cpp" />
+    <ClCompile Include="Graphics\Gui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
+    <ClCompile Include="Util\Crypto.cpp" />
     <ClCompile Include="Util\MonoUtil.cpp" />
     <ClCompile Include="Util\PlatformSpecific.cpp" />
     <ClCompile Include="Metadata\AppInfo.cpp" />

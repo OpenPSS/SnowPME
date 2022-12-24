@@ -10,6 +10,7 @@
 #include <Util/MonoUtil.hpp>
 
 #include <Runtime/Init.hpp>
+#include <Graphics/Gui.hpp>
 #include <Graphics/Window.hpp>
 
 #endif

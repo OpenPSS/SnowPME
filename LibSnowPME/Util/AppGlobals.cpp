@@ -6,8 +6,6 @@ namespace SnowPME::Util {
 	static Sandbox* psmSandbox;
 	static AppInfo* psmAppInfo;
 	static Window* psmMainWindow;
-	
-
 
 	Window* AppGlobals::PsmMainWindow() {
 		return psmMainWindow;

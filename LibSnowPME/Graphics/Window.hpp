@@ -1,5 +1,5 @@
-#ifndef SNOW_PME_INIT_H
-#define SNOW_PME_INIT_H 1
+#ifndef SNOW_PME_WINDOW_H
+#define SNOW_PME_WINDOW_H 1
 #include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

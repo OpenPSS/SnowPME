@@ -28,8 +28,9 @@ namespace LibCXML {
 		this->cxmlFile = new std::fstream(cxmlFilePath, std::ios::in | std::ios::binary);
 		this->cxmlFile->read((char*)&this->cxmlHeader, sizeof(CxmlFileHeader));
 
-		if (!checkMagicNumber(magic))
+		if (!checkMagicNumber(magic)) {
 			throw new std::exception("CXML File is invalid or corrupt");
+		}
 
 		this->TreeTable			= readTable(this->cxmlHeader.treeTable);
 		this->IdTable			= readTable(this->cxmlHeader.idTable);

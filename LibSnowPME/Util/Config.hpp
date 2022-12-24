@@ -2,8 +2,6 @@
 #define SNOW_PME_CONFIG_H 1
 #include <string>
 
-#define RUNTIME_FOLDER "Runtime"
-
 namespace SnowPME::Util
 {
 	class Config {
