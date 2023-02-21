@@ -143,7 +143,13 @@ namespace Sce::Pss::Core::Graphics {
 			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &this->capsState->MinAliasedLineWidth);
 			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &this->capsState->MinAliasedPointSize);
 
-			this->extensions = std::string((char*)glGetString(GL_EXTENSIONS));
+			char* glExtensions = (char*)glGetString(GL_EXTENSIONS);
+
+			if(glExtensions == NULL)
+				this->extensions = std::string();
+			else
+				this->extensions = std::string(glExtensions);
+
 			std::vector<std::string> extensionList = StringUtils::Split(this->extensions, " ");
 
 			Logger::Info("GL Vendor: " + std::string((char*)glGetString(GL_VENDOR)));
