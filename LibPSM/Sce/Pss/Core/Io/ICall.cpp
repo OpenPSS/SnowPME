@@ -147,7 +147,6 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-
 		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
 
 		std::string relativePath = std::string(pszFileName);

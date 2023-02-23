@@ -28,7 +28,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	public:
 		static int Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int *result);
 		static int Delete(int handle);
-		static int Update(int handle, GraphicsUpdate update, GraphicsState *state, int *handles);
+		static int Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles);
 		static int SwapBuffers(int handle);
 		static int Clear(int handle, ClearMask mask);
 		static int DrawArrays(int handle, DrawMode mode, int first, int count, int repeat);

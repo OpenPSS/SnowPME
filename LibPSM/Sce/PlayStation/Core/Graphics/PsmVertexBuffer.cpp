@@ -24,7 +24,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		VertexBuffer* vertxBuffer = new VertexBuffer(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
 		ReturnErrorable(vertxBuffer);
 
-		*result = Handles::CreateHandle((uintptr_t)vertxBuffer);
+		*result = vertxBuffer->Handle();
 
 		return PSM_ERROR_NO_ERROR;
 	}

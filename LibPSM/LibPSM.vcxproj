@@ -56,6 +56,7 @@
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Handles.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Handles.hpp" />

@@ -5,6 +5,8 @@
 
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
@@ -41,9 +43,25 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
-	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, int* handles) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles) {
+		Logger::Debug(__FUNCTION__);
+		if (Thread::IsMainThread()) {
+			GraphicsContext* ctx = GraphicsContext::GetGraphicsContext();
+			if (ctx == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+
+			int* handlesList = NULL;
+
+			if (handles) {
+				handlesList = (int*)mono_array_addr_with_size(handles, 1, 0);
+			}
+
+
+			ctx->Update(update, state, handlesList);
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::SwapBuffers(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

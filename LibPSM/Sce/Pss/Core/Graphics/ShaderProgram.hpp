@@ -2,7 +2,7 @@
 #define LIB_PSM_SHADERPROGRAM_H 1
 #include <string>
 #include <vector>
-#include <Sce/Pss/Core/Errorable.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -17,7 +17,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	typedef ProgramUniform ProgramAttribute;
 
-	class ShaderProgram : public Errorable{
+	class ShaderProgram : public GraphicsObject {
 	private:
 		int program;
 		std::vector<ProgramUniform>* uniforms;

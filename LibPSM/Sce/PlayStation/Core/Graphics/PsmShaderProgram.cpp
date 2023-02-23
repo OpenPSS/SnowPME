@@ -69,7 +69,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			ShaderProgram* shdrPrg = new ShaderProgram(vertexShader, fragmentShader);
 			ReturnErrorable(shdrPrg);
 
-			*result = Handles::CreateHandle((uintptr_t)shdrPrg);
+			*result = shdrPrg->Handle();
 
 			delete[] cgx;
 

@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
+#include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
@@ -36,6 +37,40 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	GraphicsCapsState* GraphicsContext::CapsState() {
 		return this->capsState;
+	}
+
+	int GraphicsContext::Update(GraphicsUpdate update, GraphicsState* state, int* handles) {
+
+
+		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
+		if (((int)update & 0xFFFF0000) == 0)
+		{
+		}
+
+		if (((int)update & (int)GraphicsUpdate::ShaderProgram) != 0) {
+			ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
+			if (graphObj != this->currentShader) {
+				if (this->currentShader != NULL) {
+					GraphicsObject::Release(this->currentShader);
+				}
+				
+				this->currentShader = graphObj;
+
+				if (graphObj != NULL)
+					graphObj->Update = true;
+			}
+		}
+
+		if (((int)update & (int)GraphicsUpdate::FrameBuffer) != 0) {
+
+		}
+
+		if ((int)update >= (int)GraphicsUpdate::VertexBuffer && (int)update <= (int)GraphicsUpdate::Texture0)
+		{
+
+		}
+
+		int flg = ((int)update & (int)GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
 	}
 
 	Window* GraphicsContext::MainWindow() {
@@ -243,6 +278,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->capsState->Extension = (gext & 0x3A9B8);
 
 			activeGraphicsContext = this;
+
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");

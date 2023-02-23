@@ -1,17 +1,17 @@
 #ifndef LIB_PSM_GRAPHICSSTATE_H
 #define LIB_PSM_GRAPHICSSTATE_H
 #include <string>
-#include "DepthFunc.hpp"
-#include "BlendFunc.hpp"
-#include "ColorMask.hpp"
-#include "StencilOp.hpp"
-#include "StencilFunc.hpp"
-#include "PolygonOffset.hpp"
-#include "EnableMode.hpp"
-#include "CullFace.hpp"
-#include "../Imaging/ImageRect.hpp"
-#include "../Vector4.hpp"
-#include "../Vector2.hpp"
+#include <Sce/PlayStation/Core/Graphics/DepthFunc.hpp>
+#include <Sce/PlayStation/Core/Graphics/BlendFunc.hpp>
+#include <Sce/PlayStation/Core/Graphics/ColorMask.hpp>
+#include <Sce/PlayStation/Core/Graphics/StencilOp.hpp>
+#include <Sce/PlayStation/Core/Graphics/StencilFunc.hpp>
+#include <Sce/PlayStation/Core/Graphics/PolygonOffset.hpp>
+#include <Sce/PlayStation/Core/Graphics/EnableMode.hpp>
+#include <Sce/PlayStation/Core/Graphics/CullFace.hpp>
+#include <Sce/PlayStation/Core/Imaging/ImageRect.hpp>
+#include <Sce/PlayStation/Core/Vector4.hpp>
+#include <Sce/PlayStation/Core/Vector2.hpp>
 using namespace Sce::PlayStation::Core::Imaging;
 using namespace Sce::PlayStation::Core;
 

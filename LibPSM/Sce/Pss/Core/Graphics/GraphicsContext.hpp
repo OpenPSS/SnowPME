@@ -11,6 +11,9 @@
 #include <Sce/PlayStation/Core/Graphics/GraphicsCapsState.hpp>
 #include <Sce/PlayStation/Core/Graphics/MultiSampleMode.hpp>
 #include <Sce/PlayStation/Core/Imaging/ImageSize.hpp>
+
+#include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
 
 #include <LibSnowPME.hpp>
@@ -21,14 +24,18 @@ using namespace Sce::PlayStation::Core::Imaging;
 using namespace Sce::PlayStation::Core::Graphics;
 
 namespace Sce::Pss::Core::Graphics {
-	class GraphicsContext : public Errorable {
+	class GraphicsContext : public GraphicsObject {
 	private:
-		int width;
-		int height;
+		ShaderProgram* currentShader = NULL;
+		int numShaderUpdates = 0;
+
+		int width = 0;
+		int height = 0;
 		PixelFormat colorFormat;
 		PixelFormat depthFormat;
 		MultiSampleMode multiSampleMode;
 		GraphicsCapsState* capsState;
+
 
 		std::string extensions;
 		std::string renderer;
@@ -38,6 +45,7 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
 		~GraphicsContext();
 
+		int Update(GraphicsUpdate update, GraphicsState* state, int* handles);
 		int Width();
 		int Height();
 		PixelFormat ColorFormat();

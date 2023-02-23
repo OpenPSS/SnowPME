@@ -5,8 +5,7 @@
 #include <Sce/PlayStation/Core/Vector4.hpp>
 #include <Sce/PlayStation/Core/Graphics/ElementType.hpp>
 #include <Sce/PlayStation/Core/Graphics/VertexFormat.hpp>
-
-#include <Sce/Pss/Core/Errorable.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
 using namespace Sce::PlayStation::Core::Graphics;
 using namespace Sce::PlayStation::Core;
@@ -17,7 +16,7 @@ namespace Sce::Pss::Core::Graphics {
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
-	class VertexBuffer : public Errorable {
+	class VertexBuffer : public GraphicsObject {
 	private:
 		int vertexCount = 0;
 		int indexCount = 0;
