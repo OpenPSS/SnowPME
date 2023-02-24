@@ -8,9 +8,9 @@ namespace Sce::Pss::Core {
 	typedef int PsmHandle;
 	class Handles {
 	private:
-		static void init();
-		static bool handleValid(PsmHandle handle);
+		static void init();		
 	public:
+		static bool IsValid(PsmHandle handle);
 		static PsmHandle CreateHandle(uintptr_t address);
 		static uintptr_t GetHandle(PsmHandle handle);
 		static void DeleteHandle(PsmHandle handle);

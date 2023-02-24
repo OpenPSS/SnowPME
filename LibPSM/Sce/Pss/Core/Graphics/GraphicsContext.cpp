@@ -13,7 +13,7 @@ using namespace SnowPME::Debug;
 
 namespace Sce::Pss::Core::Graphics {
 	static GraphicsContext* activeGraphicsContext = NULL;
-	
+
 	GraphicsContext* GraphicsContext::GetGraphicsContext() {
 		return activeGraphicsContext;
 	}
@@ -43,34 +43,67 @@ namespace Sce::Pss::Core::Graphics {
 
 
 		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
-		if (((int)update & 0xFFFF0000) == 0)
+		if ((update & 0xFFFF0000) != 0)
 		{
-		}
+			if ((update & GraphicsUpdate::ShaderProgram) != 0) {
+				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
+				if (graphObj != this->currentShader) {
+					if (this->currentShader != NULL) {
+						GraphicsObject::Release(this->currentShader);
+					}
 
-		if (((int)update & (int)GraphicsUpdate::ShaderProgram) != 0) {
-			ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
-			if (graphObj != this->currentShader) {
-				if (this->currentShader != NULL) {
-					GraphicsObject::Release(this->currentShader);
+					this->currentShader = graphObj;
+
+					if (graphObj != NULL)
+						graphObj->Update = true;
 				}
-				
-				this->currentShader = graphObj;
-
-				if (graphObj != NULL)
-					graphObj->Update = true;
 			}
+
+			if ((update & GraphicsUpdate::FrameBuffer) != 0) {
+				if (Handles::IsValid(handles[1])) {
+					GraphicsObject* graphObj = (GraphicsObject*)Handles::GetHandle(handles[1]);
+					if (graphObj != this->currentFrameBuffer) {
+						if (this->currentFrameBuffer != NULL) {
+							GraphicsObject::Release(this->currentFrameBuffer);
+						}
+
+						this->currentFrameBuffer = graphObj;
+
+						if (graphObj != NULL)
+							graphObj->Update = true;
+					}
+				}
+				else {
+					if (this->currentFrameBuffer != NULL) {
+						GraphicsObject::Release(this->currentFrameBuffer);
+					}
+					this->currentFrameBuffer = NULL;
+				}
+			}
+
+			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == 0)
+			{
+
+				if ((update & (GraphicsUpdate::Texture | GraphicsUpdate::TextureN)) != 0) {
+
+					if (((update & (GraphicsUpdate::TextureN)) == 0)) {
+						update = (GraphicsUpdate)(update | GraphicsUpdate::Enable);
+					}
+
+					if (((update & (GraphicsUpdate::TextureN)) != 0)) {
+						update = (GraphicsUpdate)(update | GraphicsUpdate::DepthRange);
+					}
+
+				}
+
+			}
+
+			int flg = (update & GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
 		}
 
-		if (((int)update & (int)GraphicsUpdate::FrameBuffer) != 0) {
+		
 
-		}
-
-		if ((int)update >= (int)GraphicsUpdate::VertexBuffer && (int)update <= (int)GraphicsUpdate::Texture0)
-		{
-
-		}
-
-		int flg = ((int)update & (int)GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	Window* GraphicsContext::MainWindow() {

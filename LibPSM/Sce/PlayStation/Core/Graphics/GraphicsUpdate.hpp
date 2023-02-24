@@ -2,7 +2,7 @@
 #define LIB_PSM_GRAPHICSUPDATE_H
 
 namespace Sce::PlayStation::Core::Graphics {
-	enum class GraphicsUpdate : unsigned int {
+	enum GraphicsUpdate : unsigned int {
 		None = 0,
 		Enable = 1,
 		Scissor = 2,

@@ -27,6 +27,7 @@ namespace Sce::Pss::Core::Graphics {
 	class GraphicsContext : public GraphicsObject {
 	private:
 		ShaderProgram* currentShader = NULL;
+		GraphicsObject* currentFrameBuffer = NULL;
 		int numShaderUpdates = 0;
 
 		int width = 0;
