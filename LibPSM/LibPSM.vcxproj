@@ -70,6 +70,7 @@
     <ClCompile Include="Sce\Pss\Core\Mono\Security.cpp" />
     <ClCompile Include="Sce\Pss\Core\Mono\Util.cpp" />
     <ClCompile Include="Sce\Pss\Core\PlatformSpecific.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\UniqueId.cpp" />
     <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +196,7 @@
     <ClInclude Include="Sce\Pss\Core\Mono\Security.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\Util.hpp" />
     <ClInclude Include="Sce\Pss\Core\PlatformSpecific.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\UniqueId.hpp" />
     <ClInclude Include="Sce\Pss\Core\Threading\Thread.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

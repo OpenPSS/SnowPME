@@ -4,6 +4,12 @@
 
 namespace Shared
 {
+	typedef enum class RuntimeImplementation : unsigned int{
+		Android,
+		PSVita,
+		Windows
+	} PsmDevice;
+
 	class Config {
 	private:
 	public:
@@ -18,9 +24,10 @@ namespace Shared
 		static std::string RuntimeVerisonPath; // Path to lib/2.1 folder.
 		static std::string PsmLibsPath; // Path to lib/psm folder
 
-
 		static std::string RuntimeConfigPath; // Path to etc folder.
 		
+		static RuntimeImplementation GetRuntimeImplementation();
+
 		static int ScreenWidth(int idx);
 		static int ScreenHeight(int idx);
 		static int ScreenTotal();

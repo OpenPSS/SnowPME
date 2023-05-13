@@ -11,7 +11,7 @@ namespace Sce::Pss::Core {
 #ifdef _WIN32
         return (uint64_t)GetCurrentThreadId();
 #else
-        reeturn PSM_ERROR_NOT_SUPPORTED;
+        return PSM_ERROR_NOT_SUPPORTED;
 #endif
     }
 
@@ -28,6 +28,22 @@ namespace Sce::Pss::Core {
         SetFileAttributesA(RealFilePath.c_str(), fileAttributes);
 
         return PSM_ERROR_NO_ERROR;
+#else
+        return PSM_ERROR_NOT_SUPPORTED;
+#endif
+    }
+
+    std::string PlatformSpecific::Username() {
+#ifdef _WIN32
+
+        char name[0x1000];
+        DWORD size = sizeof(name);
+
+        memset(name, 0, size);
+        GetUserNameA(name, &size);
+
+        return std::string(name);
+
 #else
         return PSM_ERROR_NOT_SUPPORTED;
 #endif

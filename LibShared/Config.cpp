@@ -27,6 +27,11 @@ namespace Shared
 		return screenWidth;
 	}
 
+	RuntimeImplementation Config::GetRuntimeImplementation() {
+		// for now windows version of runtime is only supported one.
+		return RuntimeImplementation::Windows;
+	}
+
 	int Config::ScreenHeight(int idx) {
 		return screenHeight;
 	}
