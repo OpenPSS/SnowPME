@@ -5,7 +5,7 @@
 #define MAX_HANDLES (0x500000)
 
 namespace Sce::Pss::Core {
-	typedef int PsmHandle;
+	typedef uint32_t PsmHandle;
 	class Handles {
 	private:
 		static void init();		

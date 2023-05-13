@@ -1,10 +1,10 @@
 #include <Graphics/Window.hpp>
-#include <Debug/Logger.hpp>
 
+#include <LibShared.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
 	Window::Window(int height, int width, std::string title) {

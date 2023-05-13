@@ -1,11 +1,8 @@
-#include <Runtime/Security.hpp>
-#include <Util/Config.hpp>
-#include <Debug/Logger.hpp>
-#include <LibPSM.hpp>
+#include <Sce/Pss/Core/Mono/Security.hpp>
+#include <LibShared.hpp>
 
-using namespace Sce::Pss::Core::Io;
-using namespace SnowPME::Debug;
-namespace SnowPME::Runtime
+using namespace Shared::Debug;
+namespace Sce::Pss::Core::Mono
 {
 	std::string securityWhitelist[3]{
 		"mscorlib.dll",
@@ -16,7 +13,7 @@ namespace SnowPME::Runtime
 	int Security::IsSecurityCriticalExempt(const char* exeFullPath) {
 
 		std::string exePath = std::string(exeFullPath);
-		std::string filename = Path::GetFilename(exePath);
+		std::string filename = Shared::String::Path::GetFilename(exePath);
 		for (std::string exemptFilename : securityWhitelist) {
 			if (filename == exemptFilename) {
 				Logger::Debug("Determined Security Level for : " + filename + " as [SecurityCritical]");

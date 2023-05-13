@@ -52,6 +52,7 @@
     <ClCompile Include="Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Application.cpp" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
@@ -63,8 +64,12 @@
     <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\ICall.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Io\Path.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\Sandbox.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Metadata\AppInfo.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Resources.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Security.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Util.cpp" />
+    <ClCompile Include="Sce\Pss\Core\PlatformSpecific.cpp" />
     <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +177,7 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector2.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Application.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
@@ -183,8 +189,12 @@
     <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\ICall.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Io\Path.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Sandbox.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Metadata\AppInfo.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Resources.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Security.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Util.hpp" />
+    <ClInclude Include="Sce\Pss\Core\PlatformSpecific.hpp" />
     <ClInclude Include="Sce\Pss\Core\Threading\Thread.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -258,7 +268,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -278,7 +288,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibSnowPME;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

@@ -1,8 +1,8 @@
-#ifndef SNOW_PME_CONFIG_H
-#define SNOW_PME_CONFIG_H 1
+#ifndef SHARED_CONFIG_H
+#define SHARED_CONFIG_H 1
 #include <string>
 
-namespace SnowPME::Util
+namespace Shared
 {
 	class Config {
 	private:

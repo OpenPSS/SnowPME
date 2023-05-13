@@ -1,24 +1,25 @@
 #include <Sce/Pss/Core/Io/ICall.hpp>
-#include <Sce/Pss/Core/Io/Path.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
+#include <Sce/Pss/Core/Application.hpp>
+#include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/PlatformSpecific.hpp>
 
 #include <Debug/Logger.hpp>
 #include <LibPSM.hpp>
 #include <mono/mono.h>
 
-#include <LibSnowPME.hpp>
-using namespace SnowPME::Util;
-using namespace SnowPME::Debug;
+#include <LibShared.hpp>
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmClose(uint64_t handle) {
 		Logger::Debug(__FUNCTION__);
-		if (handle == NULL)
+		if (!Handles::IsValid(handle))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		PsmHandle* psmHandle = (PsmHandle*)handle;
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
+		PsmFileDescriptor* psmHandle = (PsmFileDescriptor*)Handles::GetHandle(handle);
 	
 		if (!psmHandle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -29,7 +30,8 @@ namespace Sce::Pss::Core::Io {
 		else {
 			psmSandbox->CloseFile(psmHandle);
 		}
-			
+
+		Handles::DeleteHandle(handle);
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -38,7 +40,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
@@ -51,7 +53,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
@@ -69,7 +71,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileExtension != NULL)
 			Logger::Debug("Oh oh- pszFileExtension is not null.");
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
@@ -80,7 +82,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		if (psmSandbox->IsDirectory(absolutePath)) {
-			PsmHandle* directoryHandle = psmSandbox->OpenDirectory(absolutePath);
+			PsmFileDescriptor* directoryHandle = psmSandbox->OpenDirectory(absolutePath);
 			
 			if (directoryHandle->failReason != PSM_ERROR_NO_ERROR)
 			{
@@ -89,7 +91,8 @@ namespace Sce::Pss::Core::Io {
 				return failReason;
 			}
 			
-			*pDirectory = (uint64_t)directoryHandle;
+			
+			*pDirectory = Handles::CreateHandle((uintptr_t)directoryHandle);
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -98,12 +101,12 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
 		Logger::Debug(__FUNCTION__);
-		if (pFileInfo == NULL || directory == NULL)
+		if (pFileInfo == NULL || !Handles::IsValid(directory))
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
-		PsmHandle* handle = (PsmHandle*)directory;
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(directory);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -124,7 +127,7 @@ namespace Sce::Pss::Core::Io {
 		if (uBufferSize < PSM_PATH_MAX)
 			return PSM_ERROR_BUFFER_FULL;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		memset(pszDirectoryPath, 0, uBufferSize);
 		strncpy(pszDirectoryPath, psmSandbox->GetCurrentDirectory().c_str(), uBufferSize - 1);
 
@@ -136,7 +139,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszDirectoryPath == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 		return psmSandbox->SetCurrentDirectory(absolutePath);
@@ -147,13 +150,13 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
 
 		if (!psmSandbox->IsDirectory(absolutePath)) {
-			PsmHandle* fileHandle = psmSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags);
+			PsmFileDescriptor* fileHandle = psmSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags);
 
 			if (fileHandle->failReason != PSM_ERROR_NO_ERROR)
 			{
@@ -162,7 +165,7 @@ namespace Sce::Pss::Core::Io {
 				return failReason;
 			}
 
-			*phFile = (uint64_t)fileHandle;
+			*phFile = (uint64_t)Handles::CreateHandle((uintptr_t)fileHandle);
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -174,7 +177,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		std::string relativePath = std::string(pszFileName);
 		
 		if (relativePath.length() > PSM_PATH_MAX)
@@ -191,10 +194,10 @@ namespace Sce::Pss::Core::Io {
 	int ICall::PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo) { 
 		Logger::Debug(__FUNCTION__);
 
-		if (file == NULL || pFileInfo == NULL)
+		if (!Handles::IsValid(file) || pFileInfo == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -202,7 +205,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->directory)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		ScePssFileInformation_t fileInfo = psmSandbox->Stat(handle->sandboxPath, handle->sandboxPath);
 		memcpy(pFileInfo, &fileInfo, sizeof(ScePssFileInformation_t));
 
@@ -212,11 +215,11 @@ namespace Sce::Pss::Core::Io {
 	int ICall::PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead) {
 		Logger::Debug(__FUNCTION__);
 
-		if (file == NULL || buffer == NULL || uBytesToRead == NULL || puBytesRead == NULL)
+		if (!Handles::IsValid(file) || buffer == NULL || uBytesToRead == NULL || puBytesRead == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -225,7 +228,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		*puBytesRead = psmSandbox->ReadFile(handle, uBytesToRead, (char*)buffer);
 
@@ -234,10 +237,10 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
 		Logger::Debug(__FUNCTION__);
-		if (file == NULL || buffer == NULL || uBytesToWrite == NULL || puBytesWritten == NULL)
+		if (!Handles::IsValid(file) || buffer == NULL || uBytesToWrite == NULL || puBytesWritten == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -248,7 +251,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->rw)
 			return PSM_ERROR_ACCESS_DENIED;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		*puBytesWritten = psmSandbox->WriteFile(handle, uBytesToWrite, (char*)buffer);
 
@@ -257,10 +260,10 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmFileSeek(uint64_t file, int32_t nOffset, ScePssFileSeekType_t seekType) {
 		Logger::Debug(__FUNCTION__);
-		if (file == NULL || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
+		if (!Handles::IsValid(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if(!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -268,31 +271,31 @@ namespace Sce::Pss::Core::Io {
 		if (handle->directory)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		return psmSandbox->Seek(handle, nOffset, seekType);
 	}
 
 	int ICall::PsmFileFlush(uint64_t file) {
 		Logger::Debug(__FUNCTION__);
-		if (file == NULL)
+		if (!Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmHandle* handle = (PsmHandle*)file;
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		return psmSandbox->FlushFile(handle);
 	}
 	
 	int ICall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
 		Logger::Debug(__FUNCTION__);
-		if (puSize == NULL || file == NULL)
+		if (puSize == NULL || !Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		*puSize = psmSandbox->GetSize(handle);
 
 		return PSM_ERROR_NO_ERROR;
@@ -300,10 +303,10 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
 		Logger::Debug(__FUNCTION__);
-		if (file == NULL)
+		if (!Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmHandle* handle = (PsmHandle*)file;
+		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
 
 		if(!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -314,7 +317,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->rw)
 			return PSM_ERROR_ACCESS_DENIED;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		int errorcode = psmSandbox->ChangeSize(handle, uSize);
 
 		return errorcode;
@@ -324,7 +327,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszOldName == NULL || pszNewName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string srcRelativePath = std::string(pszOldName);
 		std::string srcAbsolutePath = psmSandbox->AbsolutePath(srcRelativePath);
@@ -340,7 +343,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
@@ -355,7 +358,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == NULL || pCreationTime == NULL || pLastAccessTime == NULL || pLastWriteTime == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);
@@ -363,7 +366,6 @@ namespace Sce::Pss::Core::Io {
 		time_t creationTime = FILETIME_TO_UNIX(*pCreationTime);
 		time_t lastAccessTime = FILETIME_TO_UNIX(*pLastAccessTime);
 		time_t lastWriteTime = FILETIME_TO_UNIX(*pLastWriteTime);
-
 
 		return psmSandbox->SetFileTimes(absolutePath, creationTime, lastAccessTime, lastWriteTime);
 	}
@@ -376,7 +378,7 @@ namespace Sce::Pss::Core::Io {
 
 		memset(pFileInfo, 0, sizeof(ScePssFileInformation_t));
 
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = psmSandbox->AbsolutePath(relativePath);

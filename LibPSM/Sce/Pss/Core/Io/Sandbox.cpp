@@ -1,15 +1,13 @@
+#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <Sce/Pss/Core/Io/Path.hpp>
-#include <Util/StringUtils.hpp>
 #include <filesystem>
 #include <sys/stat.h>
 #include <mono/mono.h>
 
-#include <LibSnowPME.hpp>
-#include <LibPSM.hpp>
+#include <LibShared.hpp>
 
-using namespace SnowPME::Util;
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Io {
 
@@ -40,7 +38,7 @@ namespace Sce::Pss::Core::Io {
 	
 	// Some functions require handling via filepath,
 	// in these cases, the fstream needs to be created again
-	void Sandbox::reopen(PsmHandle* handle) {
+	void Sandbox::reopen(PsmFileDescriptor* handle) {
 		if (handle->opened && !handle->directory && handle->fileFd != NULL) {
 			// Close the file
 			if(handle->fileFd->is_open())
@@ -65,7 +63,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : Sandbox::filesystems) {
-			if (StringUtils::ToLower(absPath).starts_with(StringUtils::ToLower(filesystem->SandboxPath()))) {
+			if (Shared::String::Util::ToLower(absPath).starts_with(Shared::String::Util::ToLower(filesystem->SandboxPath()))) {
 				return filesystem;
 			}
 		}
@@ -73,7 +71,7 @@ namespace Sce::Pss::Core::Io {
 		throw std::exception("FileSystem not found ?? ??");
 	}
 
-	size_t Sandbox::ReadFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
+	size_t Sandbox::ReadFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
 		if (!handle->encrypted) {
 			handle->fileFd->read(buffer, numbBytes);
 			size_t bytesRead = (size_t)handle->fileFd->gcount();
@@ -84,7 +82,7 @@ namespace Sce::Pss::Core::Io {
 		throw std::exception("Encryption not yet implemented. ?? ??");
 	}
 
-	int Sandbox::ReadDirectory(PsmHandle* handle, ScePssFileInformation_t* fileInfo) {
+	int Sandbox::ReadDirectory(PsmFileDescriptor* handle, ScePssFileInformation_t* fileInfo) {
 
 		memset(fileInfo, 0, sizeof(ScePssFileInformation_t));
 
@@ -100,7 +98,7 @@ namespace Sce::Pss::Core::Io {
 				if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
 					return this->ReadDirectory(handle, fileInfo);
 
-				std::string filename = Path::GetFilename(filesystem->SandboxPath());
+				std::string filename = Shared::String::Path::GetFilename(filesystem->SandboxPath());
 
 				ScePssFileInformation_t psmPathInformation = this->Stat(filesystem->SandboxPath(), filename);
 				memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
@@ -162,7 +160,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : this->filesystems) {
-			if (StringUtils::ToLower(absPath) == StringUtils::ToLower(filesystem->SandboxPath())) {
+			if (Shared::String::Util::ToLower(absPath) == Shared::String::Util::ToLower(filesystem->SandboxPath())) {
 				return true;
 			}
 		}
@@ -217,7 +215,7 @@ namespace Sce::Pss::Core::Io {
 		return false;
 	}
 
-	void Sandbox::CloseDirectory(PsmHandle* handle) {
+	void Sandbox::CloseDirectory(PsmFileDescriptor* handle) {
 		if (handle != NULL) {
 			if (handle->opened && handle->directoryFd != NULL) {
 				delete handle->directoryFd;
@@ -227,7 +225,7 @@ namespace Sce::Pss::Core::Io {
 		}
 	}
 
-	int Sandbox::ChangeSize(PsmHandle* handle, size_t newSize) {
+	int Sandbox::ChangeSize(PsmFileDescriptor* handle, size_t newSize) {
 		if (!handle->encrypted && handle->rw) { // Workaround fstream stupidity.
 			// close becuase you cant resize the file while its open
 			handle->fileFd->close();
@@ -243,7 +241,7 @@ namespace Sce::Pss::Core::Io {
 		return PSM_ERROR_ACCESS_DENIED;
 	}
 
-	void Sandbox::CloseFile(PsmHandle* handle) {
+	void Sandbox::CloseFile(PsmFileDescriptor* handle) {
 		if (handle != NULL) {
 			if (handle->opened && handle->fileFd != NULL) {
 				handle->fileFd->close();
@@ -254,7 +252,7 @@ namespace Sce::Pss::Core::Io {
 		}
 	}
 
-	size_t Sandbox::GetSize(PsmHandle* handle) {
+	size_t Sandbox::GetSize(PsmFileDescriptor* handle) {
 		if (!handle->encrypted && !handle->directory) {
 			size_t fileSize = (size_t)std::filesystem::file_size(handle->realPath);
 			return fileSize;
@@ -262,13 +260,13 @@ namespace Sce::Pss::Core::Io {
 		throw std::exception("Encryption not implemented");
 	}
 
-	PsmHandle* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
+	PsmFileDescriptor* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		std::string realPath = this->LocateRealPath(absPath);
 
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
-		PsmHandle* handle = new PsmHandle();
+		PsmFileDescriptor* handle = new PsmFileDescriptor();
 
 		// Are we trying to open a file for writing?
 		bool openRw = (((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) || ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0));
@@ -360,7 +358,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_FILE_NOT_FOUND;
 
 		// Crate the directory if it does not exist.
-		std::string parentDirectory = Path::UpDirectory(sandboxDstPath);
+		std::string parentDirectory = Shared::String::Path::UpDirectory(sandboxDstPath);
 		if (!this->PathExist(parentDirectory))
 			this->CreateDirectory(parentDirectory);
 
@@ -376,8 +374,8 @@ namespace Sce::Pss::Core::Io {
 			const int totalReadAtOnce = 0x80000;
 			char* buffer = new char[totalReadAtOnce];
 
-			PsmHandle* srcHandle = this->OpenFile(absSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE));
-			PsmHandle* dstHandle = this->OpenFile(absDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE));
+			PsmFileDescriptor* srcHandle = this->OpenFile(absSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE));
+			PsmFileDescriptor* dstHandle = this->OpenFile(absDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE));
 			this->ChangeSize(dstHandle, 0);
 				
 			int totalRead = 0;
@@ -456,7 +454,7 @@ namespace Sce::Pss::Core::Io {
 		return PlatformSpecific::ChangeFileTimes(realPath, CreationTime, LastAccessTime, LastWriteTime);
 	}
 
-	int Sandbox::FlushFile(PsmHandle* handle) {
+	int Sandbox::FlushFile(PsmFileDescriptor* handle) {
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -473,7 +471,7 @@ namespace Sce::Pss::Core::Io {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	size_t Sandbox::WriteFile(PsmHandle* handle, size_t numbBytes, char* buffer) {
+	size_t Sandbox::WriteFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
 		if (!handle->encrypted && handle->rw) {
 
 			// Write buffer to file
@@ -576,7 +574,7 @@ namespace Sce::Pss::Core::Io {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int Sandbox::Seek(PsmHandle* handle, uint32_t offset, ScePssFileSeekType_t seekType) {
+	int Sandbox::Seek(PsmFileDescriptor* handle, uint32_t offset, ScePssFileSeekType_t seekType) {
 		if (!handle->encrypted) {
 
 			// Translate seek command to native one.
@@ -610,13 +608,13 @@ namespace Sce::Pss::Core::Io {
 		throw new std::exception("encryption not implemented!");
 	}
 
-	PsmHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {
+	PsmFileDescriptor* Sandbox::OpenDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		std::string realPath = this->LocateRealPath(absPath);
 		FileSystem* filesystem = this->findFilesystem(absPath);
 
-		// Create a new PsmHandle 
-		PsmHandle* handle = new PsmHandle();
+		// Create a new PsmFileDescriptor 
+		PsmFileDescriptor* handle = new PsmFileDescriptor();
 
 		// Fail if its a file or it doesnt exist.
 		if (this->IsFile(absPath) || !this->PathExist(absPath)) {
@@ -669,7 +667,7 @@ namespace Sce::Pss::Core::Io {
 
 		// Swap slahses to the format used by the current Operating System,
 		std::string outPath = fsRealPath.string();
-		outPath = Path::ChangeSlashesToNativeStyle(outPath);
+		outPath = Shared::String::Path::ChangeSlashesToNativeStyle(outPath);
 
 		return outPath;
 	}
@@ -687,7 +685,7 @@ namespace Sce::Pss::Core::Io {
 			startDir = "";
 
 		// Split path by the / seperator
-		std::vector<std::string> pathComponents = StringUtils::Split(Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
+		std::vector<std::string> pathComponents = Shared::String::Util::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
 
 		// if you think about it, file paths are essentially. just First-In-First-Out much like The Stack,
 
@@ -705,7 +703,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		std::string absolutePath = startDir + StringUtils::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
+		std::string absolutePath = startDir + Shared::String::Util::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
 		return absolutePath;
 	}
 

@@ -6,9 +6,11 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Mono/Util.hpp>
 
-#include <LibSnowPME.hpp>
-using namespace SnowPME::Debug;
+
+#include <LibShared.hpp>
+using namespace Shared::Debug;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Threading;
@@ -47,15 +49,15 @@ namespace Sce::PlayStation::Core::Graphics {
 			VertexBuffer* buffer = (VertexBuffer*)Handles::GetHandle(handle);
 			if (buffer == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
+			MonoType* type = Sce::Pss::Core::Mono::Util::MonoArrayElementsType(vertices);
 			
-			if (!MonoUtil::MonoTypeIsValueType(type)) {
+			if (!Sce::Pss::Core::Mono::Util::MonoTypeIsValueType(type)) {
 				Logger::Error("Vertex data need to be ValueType");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
 			void* verticesBuffer = (void*)mono_array_addr_with_size(vertices, 1, 0);
-			size_t arrayLen = MonoUtil::MonoArrayLength(vertices);
+			size_t arrayLen = Sce::Pss::Core::Mono::Util::MonoArrayLength(vertices);
 
 			// if count < 0, set the count to the vertex count
 			if (count < 0) {

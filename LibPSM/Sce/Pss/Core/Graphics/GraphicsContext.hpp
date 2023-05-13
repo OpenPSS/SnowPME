@@ -16,10 +16,9 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
 
-#include <LibSnowPME.hpp>
+#include <LibShared.hpp>
 #include <mono/mono.h>
 
-using namespace SnowPME::Util;
 using namespace Sce::PlayStation::Core::Imaging;
 using namespace Sce::PlayStation::Core::Graphics;
 
@@ -53,7 +52,6 @@ namespace Sce::Pss::Core::Graphics {
 		PixelFormat DepthFormat();
 		MultiSampleMode MSampleMode();
 		GraphicsCapsState* CapsState();
-		Window* MainWindow();
 		std::string Extensions();
 		std::string Renderer();
 

@@ -8,12 +8,12 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Mono/Util.hpp>
 
 #include <iostream>
 #include <string>
-#include <LibSnowPME.hpp>
-using namespace SnowPME::Debug;
-using namespace SnowPME::Util;
+#include <LibShared.hpp>
+using namespace Shared::Debug;
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
@@ -84,8 +84,8 @@ namespace Sce::PlayStation::Core::Graphics {
 	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			size_t fnameSz = MonoUtil::MonoArrayLength(vpFileName);
-			size_t fimgSz = MonoUtil::MonoArrayLength(fpFileImage);
+			size_t fnameSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(vpFileName);
+			size_t fimgSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(fpFileImage);
 			std::byte* fnameBuf = NULL;
 			std::byte* fimgBuf = NULL;
 
@@ -140,7 +140,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::GetUniformCount(int handle, int* result){
+	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
@@ -156,7 +156,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
-	int PsmShaderProgram::GetAttributeCount(int handle, int* result){
+	int PsmShaderProgram::GetAttributeCount(int handle, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
@@ -172,7 +172,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
-	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result){
+	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

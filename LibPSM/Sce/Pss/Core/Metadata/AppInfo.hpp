@@ -1,11 +1,11 @@
-#ifndef SNOW_PME_APPINFO_H
-#define SNOW_PME_APPINFO_H 1
+#ifndef LIB_PSM_APPINFO_H
+#define LIB_PSM_APPINFO_H 1
 #include <map>
 #include <string>
 #include <vector>
 #include <LibCXML.hpp>
 using namespace LibCXML;
-namespace SnowPME::Metadata {
+namespace Sce::Pss::Core::Metadata {
 
 	typedef struct LocaleInfo {
 		std::string Locale;

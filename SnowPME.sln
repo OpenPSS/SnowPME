@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibSnowPME", "LibSnowPME\Li
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibGLAD", "LibGLAD\LibGLAD.vcxproj", "{2E0FD7F1-B765-4D62-86CF-80AC31828CEA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibShared", "LibShared\LibShared.vcxproj", "{B9B46670-BE77-4DD2-9448-7EDE013F055E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -75,6 +77,14 @@ Global
 		{2E0FD7F1-B765-4D62-86CF-80AC31828CEA}.Release|x64.Build.0 = Release|x64
 		{2E0FD7F1-B765-4D62-86CF-80AC31828CEA}.Release|x86.ActiveCfg = Release|Win32
 		{2E0FD7F1-B765-4D62-86CF-80AC31828CEA}.Release|x86.Build.0 = Release|Win32
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Debug|x64.ActiveCfg = Debug|x64
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Debug|x64.Build.0 = Debug|x64
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Debug|x86.ActiveCfg = Debug|Win32
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Debug|x86.Build.0 = Debug|Win32
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Release|x64.ActiveCfg = Release|x64
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Release|x64.Build.0 = Release|x64
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Release|x86.ActiveCfg = Release|Win32
+		{B9B46670-BE77-4DD2-9448-7EDE013F055E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

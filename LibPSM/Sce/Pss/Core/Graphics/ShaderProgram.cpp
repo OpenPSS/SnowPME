@@ -1,11 +1,11 @@
-#include <LibSnowPME.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 
 #include <Sce/PlayStation/Core/Error.hpp>
+#include <LibShared.hpp>
 #include <glad/glad.h>
 
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
 using namespace Sce::Pss::Core;
 
 namespace Sce::Pss::Core::Graphics {

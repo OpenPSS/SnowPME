@@ -37,12 +37,18 @@
 
 // Sce::Pss
 
+#include <Sce/Pss/Core/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
+#include <Sce/Pss/Core/Application.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
+
 
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <Sce/Pss/Core/Io/Path.hpp>
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
+
+#include <Sce/Pss/Core/Mono/Resources.hpp>
+#include <Sce/Pss/Core/Mono/Security.hpp>
+#include <Sce/Pss/Core/Mono/Util.hpp>
 
 #endif

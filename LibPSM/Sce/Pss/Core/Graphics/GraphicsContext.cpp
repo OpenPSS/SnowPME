@@ -4,12 +4,13 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
-#include <LibSnowPME.hpp>
+#include <glad/glad.h>
+#include <LibShared.hpp>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
 	static GraphicsContext* activeGraphicsContext = NULL;
@@ -43,9 +44,9 @@ namespace Sce::Pss::Core::Graphics {
 
 
 		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
-		if ((update & 0xFFFF0000) != 0)
+		if (((unsigned int)update & 0xFFFF0000) != 0)
 		{
-			if ((update & GraphicsUpdate::ShaderProgram) != 0) {
+			if (((unsigned int)update & (unsigned int)GraphicsUpdate::ShaderProgram) != 0) {
 				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
 				if (graphObj != this->currentShader) {
 					if (this->currentShader != NULL) {
@@ -59,7 +60,7 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			if ((update & GraphicsUpdate::FrameBuffer) != 0) {
+			if (((unsigned int)update & (unsigned int)GraphicsUpdate::FrameBuffer) != 0) {
 				if (Handles::IsValid(handles[1])) {
 					GraphicsObject* graphObj = (GraphicsObject*)Handles::GetHandle(handles[1]);
 					if (graphObj != this->currentFrameBuffer) {
@@ -81,24 +82,24 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == 0)
+			if (((unsigned int)update & ((unsigned int)GraphicsUpdate::VertexBuffer0 | (unsigned int)GraphicsUpdate::VertexBufferN)) == 0)
 			{
 
-				if ((update & (GraphicsUpdate::Texture | GraphicsUpdate::TextureN)) != 0) {
+				if (((unsigned int)update & ((unsigned int)GraphicsUpdate::Texture | (unsigned int)GraphicsUpdate::TextureN)) != 0) {
 
-					if (((update & (GraphicsUpdate::TextureN)) == 0)) {
-						update = (GraphicsUpdate)(update | GraphicsUpdate::Enable);
+					if ((((unsigned int)update & ((unsigned int)GraphicsUpdate::TextureN)) == 0)) {
+						update = (GraphicsUpdate)((unsigned int)update | (unsigned int)GraphicsUpdate::Enable);
 					}
 
-					if (((update & (GraphicsUpdate::TextureN)) != 0)) {
-						update = (GraphicsUpdate)(update | GraphicsUpdate::DepthRange);
+					if ((((unsigned int)update & ((unsigned int)GraphicsUpdate::TextureN)) != 0)) {
+						update = (GraphicsUpdate)((unsigned int)update | (unsigned int)GraphicsUpdate::DepthRange);
 					}
 
 				}
 
 			}
 
-			int flg = (update & GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
+			int flg = ((unsigned int)update & (unsigned int)GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
 		}
 
 		
@@ -106,9 +107,6 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	Window* GraphicsContext::MainWindow() {
-		return AppGlobals::PsmMainWindow();
-	}
 	std::string GraphicsContext::Extensions() {
 		return this->extensions;
 	}
@@ -149,9 +147,9 @@ namespace Sce::Pss::Core::Graphics {
 
 			// Set width/height
 			if (width == 0)
-				this->width = Config::ScreenWidth(0);
+				this->width = Shared::Config::ScreenWidth(0);
 			if (height == 0)
-				this->height = Config::ScreenHeight(0);
+				this->height = Shared::Config::ScreenHeight(0);
 
 			// set depth formats and stuff
 			int redBits = 0;
@@ -218,7 +216,7 @@ namespace Sce::Pss::Core::Graphics {
 			else
 				this->extensions = std::string(glExtensions);
 
-			std::vector<std::string> extensionList = StringUtils::Split(this->extensions, " ");
+			std::vector<std::string> extensionList = Shared::String::Util::Split(this->extensions, " ");
 
 			Logger::Info("GL Vendor: " + std::string((char*)glGetString(GL_VENDOR)));
 			Logger::Info("GL Renderer: " + std::string((char*)glGetString(GL_RENDERER)));

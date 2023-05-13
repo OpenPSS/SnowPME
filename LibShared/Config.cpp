@@ -1,7 +1,9 @@
-#include <Util/Config.hpp>
-#include <LibPSM.hpp>
-using namespace Sce::Pss::Core::Io;
-namespace SnowPME::Util
+#include <Config.hpp>
+#include <String/Path.hpp>
+
+using namespace Shared::String;
+
+namespace Shared
 {
 	static int screenWidth = 960;
 	static int screenHeight = 544;

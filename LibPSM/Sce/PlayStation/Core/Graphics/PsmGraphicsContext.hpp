@@ -16,11 +16,8 @@
 #include <Sce/PlayStation/Core/Graphics/MultiSampleMode.hpp>
 #include <Sce/PlayStation/Core/Imaging/ImageSize.hpp>
 
-#include <LibSnowPME.hpp>
+#include <LibShared.hpp>
 #include <mono/mono.h>
-
-using namespace SnowPME::Util;
-using namespace Sce::PlayStation::Core::Imaging;
 
 namespace Sce::PlayStation::Core::Graphics {
 

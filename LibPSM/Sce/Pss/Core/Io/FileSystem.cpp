@@ -1,11 +1,7 @@
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
-#include <Sce/Pss/Core/Io/Path.hpp>
 
 #include <vector>
 #include <filesystem>
-
-#include <LibSnowPME.hpp>
-using namespace SnowPME::Util;
 
 namespace Sce::Pss::Core::Io {
 	 

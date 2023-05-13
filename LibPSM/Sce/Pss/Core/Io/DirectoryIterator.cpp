@@ -1,23 +1,22 @@
 #include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
-#include <Sce/Pss/Core/Io/Path.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
+#include <Sce/Pss/Core/Application.hpp>
+#include <Sce/PlayStation/Core/Error.hpp>
 
-#include <Util/AppGlobals.hpp>
 #include <Debug/Logger.hpp>
 
 #include <vector>
 #include <string>
 #include <filesystem>
 
-#include <LibPSM.hpp>
-#include <LibSnowPME.hpp>
+#include <LibShared.hpp>
 
-using namespace SnowPME::Util;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::Io {
 
 	DirectoryIterator::DirectoryIterator(std::string relativePath, bool recursive) {
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 		this->folderStack = std::vector<StackItem*>();
 		
 		this->startFolderSandboxPath = psmSandbox->AbsolutePath(relativePath);
@@ -33,6 +32,7 @@ namespace Sce::Pss::Core::Io {
 		this->folderStack.push_back(item);
 		this->recursive = recursive;
 	}
+
 	DirectoryIterator::~DirectoryIterator() {
 		for (StackItem* item : this->folderStack) {
 			delete item->iterator;
@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int DirectoryIterator::Next(ScePssFileInformation_t* pathInfo) {
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		int depth = this->folderStack.size() - 1;
 		StackItem* item = this->folderStack.at(depth);

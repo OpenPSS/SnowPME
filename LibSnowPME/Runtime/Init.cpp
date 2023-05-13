@@ -1,14 +1,7 @@
 #include <Runtime/Init.hpp>
-#include <Runtime/Resources.hpp>
-#include <Runtime/Security.hpp>
-#include <Util/AppGlobals.hpp>
-
-#include <Util/PlatformSpecific.hpp>
-#include <Util/Config.hpp>
 #include <Debug/Logger.hpp>
 
-#include <Metadata/AppInfo.hpp>
-
+#include <LibShared.hpp>
 #include <LibPSM.hpp>
 #include <LibCXML.hpp>
 
@@ -17,13 +10,14 @@
 #include <filesystem>
 #include <string>
 
-using namespace SnowPME::Util;
-using namespace SnowPME::Metadata;
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
+using namespace LibCXML;
 
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Threading;
-using namespace LibCXML;
+using namespace Sce::Pss::Core::Metadata;
 
 namespace SnowPME::Runtime {
 
@@ -36,10 +30,10 @@ namespace SnowPME::Runtime {
 	void Init::LoadApplication(std::string gameFolder) {
 		// Set app globals.
 
-		AppGlobals::SetPsmSandbox(new Sandbox(gameFolder));
-		Sandbox* psmSandbox = AppGlobals::PsmSandbox();
+		Application::SetPsmSandbox(new Sandbox(gameFolder));
+		Sandbox* psmSandbox = Application::PsmSandbox();
 		Thread::SetMainThread(PlatformSpecific::CurrentThreadId());
-		AppGlobals::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+		Application::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
@@ -52,7 +46,7 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		AppInfo* appInfo = AppGlobals::PsmAppInfo();
+		AppInfo* appInfo = Application::PsmAppInfo();
 		int heapSizeLimit = appInfo->ManagedHeapSize() * 0x400;
 		int resourceSizeLimit = appInfo->ResourceHeapSize() * 0x400;
 
@@ -67,7 +61,7 @@ namespace SnowPME::Runtime {
 
 
 		// Lockdown mono if security is enabled
-		if (!Config::SecurityCritical) {
+		if (!Shared::Config::SecurityCritical) {
 			mono_security_enable_core_clr();
 			mono_security_set_core_clr_platform_callback(Security::IsSecurityCriticalExempt);
 		}
@@ -77,7 +71,7 @@ namespace SnowPME::Runtime {
 		mono_config_parse(NULL);
 
 		// Set runtime install location
-		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
+		mono_set_dirs(Shared::Config::RuntimeLibPath.c_str(), Shared::Config::RuntimeConfigPath.c_str());
 		
 		// Create a domain in which this application will run under.
 		psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
@@ -110,9 +104,9 @@ namespace SnowPME::Runtime {
 
 
 		// Load essential dlls
-		msCoreLib = mono_domain_assembly_open(psmDomain, Config::MscorlibPath.c_str());
-		systemLib = mono_domain_assembly_open(psmDomain, Config::SystemLibPath.c_str());
-		psmCoreLib = mono_domain_assembly_open(psmDomain, Config::PsmCoreLibPath.c_str());
+		msCoreLib = mono_domain_assembly_open(psmDomain, Shared::Config::MscorlibPath.c_str());
+		systemLib = mono_domain_assembly_open(psmDomain, Shared::Config::SystemLibPath.c_str());
+		psmCoreLib = mono_domain_assembly_open(psmDomain, Shared::Config::PsmCoreLibPath.c_str());
 
 		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
 		MonoImage* systemImage = mono_assembly_get_image(systemLib);

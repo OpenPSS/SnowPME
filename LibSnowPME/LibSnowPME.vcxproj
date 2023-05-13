@@ -19,35 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="Graphics\Gui.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
-    <ClInclude Include="Util\Crypto.hpp" />
-    <ClInclude Include="Util\MonoUtil.hpp" />
-    <ClInclude Include="Util\PlatformSpecific.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
-    <ClInclude Include="Metadata\AppInfo.hpp" />
-    <ClInclude Include="Util\AppGlobals.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
-    <ClInclude Include="Runtime\Resources.hpp" />
-    <ClInclude Include="Runtime\Security.hpp" />
-    <ClInclude Include="Util\Config.hpp" />
-    <ClInclude Include="Util\StringUtils.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="Graphics\Gui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
-    <ClCompile Include="Util\Crypto.cpp" />
-    <ClCompile Include="Util\MonoUtil.cpp" />
-    <ClCompile Include="Util\PlatformSpecific.cpp" />
-    <ClCompile Include="Metadata\AppInfo.cpp" />
-    <ClCompile Include="Util\AppGlobals.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
-    <ClCompile Include="Runtime\Resources.cpp" />
-    <ClCompile Include="Runtime\Security.cpp" />
-    <ClCompile Include="Util\Config.cpp" />
-    <ClCompile Include="Util\StringUtils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -129,7 +109,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -150,7 +130,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\include;$(SolutionDir)LibPSM;$(SolutionDir)LibCXML;$(SolutionDir)LibGLAD;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>

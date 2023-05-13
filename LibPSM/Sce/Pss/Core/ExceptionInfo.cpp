@@ -1,7 +1,7 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-#include <LibSnowPME.hpp>
+#include <LibShared.hpp>
 
-using namespace SnowPME::Debug;
+using namespace Shared::Debug;
 namespace Sce::Pss::Core {
 	static std::vector<std::string> messages;
 

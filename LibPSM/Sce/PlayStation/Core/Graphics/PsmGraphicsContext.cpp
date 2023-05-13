@@ -1,7 +1,4 @@
 #include <Sce/PlayStation/Core/Graphics/PsmGraphicsContext.hpp>
-#include <mono/mono.h>
-#include <LibSnowPME.hpp>
-#include <glad/glad.h>
 
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
@@ -11,12 +8,15 @@
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 
+#include <mono/mono.h>
+#include <LibShared.hpp>
+#include <glad/glad.h>
+
+using namespace Shared::Debug;
+
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Threading;
-
-using namespace SnowPME::Debug;
-using namespace SnowPME::Util;
 
 namespace Sce::PlayStation::Core::Graphics {
 
@@ -95,8 +95,8 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
-			*height = Config::ScreenHeight(0);
-			*width = Config::ScreenWidth(0);
+			*height = Shared::Config::ScreenHeight(0);
+			*width = Shared::Config::ScreenWidth(0);
 			Logger::Debug("width: " + std::to_string(*width) + " height: " + std::to_string(*height));
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -109,15 +109,15 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
-			int numScreens = Config::ScreenTotal();
+			int numScreens = Shared::Config::ScreenTotal();
 			Logger::Debug("numScreens: " + std::to_string(numScreens));
 			if (sizes) {
 				uintptr_t arraySize = mono_array_length(sizes);
 				ImageSize* imgsizes = (ImageSize*)mono_array_addr_with_size(sizes, 0, 1);
 				for (uint32_t i = 0; i < arraySize; i++) {
 
-					int height = Config::ScreenHeight(i);
-					int width = Config::ScreenWidth(i);
+					int height = Shared::Config::ScreenHeight(i);
+					int width = Shared::Config::ScreenWidth(i);
 					Logger::Debug("width(" + std::to_string(i) + ") : " + std::to_string(width) + " height(" + std::to_string(i) + ") : " + std::to_string(height));
 
 					imgsizes[i].Height = height;

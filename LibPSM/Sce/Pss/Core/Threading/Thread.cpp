@@ -1,7 +1,6 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <LibSnowPME.hpp>
+#include <Sce/Pss/Core/PlatformSpecific.hpp>
 
-using namespace SnowPME::Util;
 namespace Sce::Pss::Core::Threading {
 
 	static PsmThreadId mainThreadId;

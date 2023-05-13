@@ -1,6 +1,5 @@
 #include <LibSnowPME.hpp>
 
-using namespace SnowPME::Util;
 using namespace SnowPME::Graphics;
 
 namespace SnowPME {
@@ -8,7 +7,6 @@ namespace SnowPME {
 	
 	public:
 		Program() {
-			Config::ReadConfig("psm.config");
 			Gui::Init();
 		}
 	};

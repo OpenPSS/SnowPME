@@ -1,9 +1,10 @@
-#include "PsmGraphicsContext.hpp"
-#include "PsmFrameBuffer.hpp"
-#include "TextureCubeFace.hpp"
-#include "../Error.hpp"
-#include <LibSnowPME.hpp>
-using namespace SnowPME::Debug;
+#include <Sce/PlayStation/Core/Graphics/PsmGraphicsContext.hpp>
+#include <Sce/PlayStation/Core/Graphics/PsmFrameBuffer.hpp>
+#include <Sce/PlayStation/Core/Graphics/TextureCubeFace.hpp>
+#include <Sce/PlayStation/Core/Error.hpp>
+
+#include <LibShared.hpp>
+using namespace Shared::Debug;
 
 namespace Sce::PlayStation::Core::Graphics {
 	int PsmFrameBuffer::Create(int *result){

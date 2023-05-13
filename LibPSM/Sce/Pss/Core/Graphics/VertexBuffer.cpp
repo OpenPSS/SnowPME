@@ -6,6 +6,8 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/PlayStation/Core/Vector4.hpp>
 
+#include <glad/glad.h>
+
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 

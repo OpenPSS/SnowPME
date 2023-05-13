@@ -1,11 +1,10 @@
-#ifndef SNOW_PME_RUNTIME_SECURITY_H
-#define SNOW_PME_RUNTIME_SECURITY_H 1
+#ifndef LIB_PSM_SECURITY_H
+#define LIB_PSM_SECURITY_H 1
 
 #include <string>
 #include <iostream>
 
-
-namespace SnowPME::Runtime
+namespace Sce::Pss::Core::Mono
 {
 	class Security {
 	public:
