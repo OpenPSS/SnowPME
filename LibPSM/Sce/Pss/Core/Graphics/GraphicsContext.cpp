@@ -2,6 +2,8 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Graphics/OpenGL.hpp>
+
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
 #include <glad/glad.h>
@@ -50,12 +52,12 @@ namespace Sce::Pss::Core::Graphics {
 
 			if ((update & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
-				if (graphObj != this->currentShader) {
-					if (this->currentShader != NULL) {
-						GraphicsObject::Release(this->currentShader);
+				if (graphObj != this->currentProgram) {
+					if (this->currentProgram != NULL) {
+						GraphicsObject::Release(this->currentProgram);
 					}
 
-					this->currentShader = graphObj;
+					this->currentProgram = graphObj;
 
 					if (graphObj != NULL)
 						graphObj->Update = true;
@@ -100,6 +102,8 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
+
+			Logger::Error("Not yet done with GraphicsUpdate::VertexBuffer.");
 		}
 
 		this->NotifyUpdate(gupdate);
@@ -109,6 +113,15 @@ namespace Sce::Pss::Core::Graphics {
 
 	void GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
 		Logger::Debug(__FUNCTION__);
+
+		if ((notifyFlag & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
+			ShaderProgram* curProgram = this->currentProgram;
+			OpenGL::SetShaderProgram(curProgram);
+			notifyFlag = notifyFlag | GraphicsUpdate::VertexBuffer;
+		}
+		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
+			Logger::Error("Not yet done with GraphicsUpdate::VertexBuffer.");
+		}
 	}
 
 	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {

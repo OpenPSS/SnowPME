@@ -151,6 +151,10 @@ namespace Sce::Pss::Core::Graphics {
 		delete this->attributes;
 	}
 
+	int ShaderProgram::Program() {
+		return this->program;
+	}
+
 	int ShaderProgram::UniformCount() {
 		return this->Uniforms()->size();
 	}
