@@ -4,11 +4,15 @@
 #include <Sce/Pss/Core/Mono/Util.hpp>
 #include <Sce/Pss/Core/Services/UniqueId.hpp>
 
+#include <LibShared.hpp>
+
 #include <mono/mono.h>
+using namespace Shared::Debug;
 
 namespace Sce::PlayStation::Core::Services {
 	int AccountInformation::GetUniqueID(MonoArray* id) {
-		
+		Logger::Debug(__FUNCTION__);
+
 		if (id == NULL)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		

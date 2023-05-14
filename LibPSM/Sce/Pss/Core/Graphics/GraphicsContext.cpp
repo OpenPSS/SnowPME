@@ -44,9 +44,10 @@ namespace Sce::Pss::Core::Graphics {
 
 
 		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
-		if (((unsigned int)update & 0xFFFF0000) != 0)
+		if ((update & 0xFFFF0000) != GraphicsUpdate::None)
 		{
-			if (((unsigned int)update & (unsigned int)GraphicsUpdate::ShaderProgram) != 0) {
+
+			if ((update & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
 				if (graphObj != this->currentShader) {
 					if (this->currentShader != NULL) {
@@ -60,7 +61,7 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			if (((unsigned int)update & (unsigned int)GraphicsUpdate::FrameBuffer) != 0) {
+			if ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
 				if (Handles::IsValid(handles[1])) {
 					GraphicsObject* graphObj = (GraphicsObject*)Handles::GetHandle(handles[1]);
 					if (graphObj != this->currentFrameBuffer) {
@@ -82,24 +83,24 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			if (((unsigned int)update & ((unsigned int)GraphicsUpdate::VertexBuffer0 | (unsigned int)GraphicsUpdate::VertexBufferN)) == 0)
+			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == GraphicsUpdate::None)
 			{
 
-				if (((unsigned int)update & ((unsigned int)GraphicsUpdate::Texture | (unsigned int)GraphicsUpdate::TextureN)) != 0) {
+				if ((update & (GraphicsUpdate::Texture | GraphicsUpdate::TextureN)) != GraphicsUpdate::None) {
 
-					if ((((unsigned int)update & ((unsigned int)GraphicsUpdate::TextureN)) == 0)) {
-						update = (GraphicsUpdate)((unsigned int)update | (unsigned int)GraphicsUpdate::Enable);
+					if (((update & (GraphicsUpdate::TextureN)) == GraphicsUpdate::None)) {
+						update = (update | GraphicsUpdate::Enable);
 					}
 
-					if ((((unsigned int)update & ((unsigned int)GraphicsUpdate::TextureN)) != 0)) {
-						update = (GraphicsUpdate)((unsigned int)update | (unsigned int)GraphicsUpdate::DepthRange);
+					if (((update & (GraphicsUpdate::TextureN)) != GraphicsUpdate::None)) {
+						update = (update | GraphicsUpdate::DepthRange);
 					}
 
 				}
 
 			}
 
-			int flg = ((unsigned int)update & (unsigned int)GraphicsUpdate::FrameBuffer) != 0 ? 4 : 1;
+			int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
 		}
 
 		

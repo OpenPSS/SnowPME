@@ -3,6 +3,8 @@
 
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <LibShared.hpp>
+using namespace Shared::Debug;
+
 namespace Sce::Pss::Core::Services {
 	
 	int UniqueId::getUniqueIDWindows(std::byte* id) {

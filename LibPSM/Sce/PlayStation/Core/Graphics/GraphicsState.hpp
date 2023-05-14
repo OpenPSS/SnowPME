@@ -17,7 +17,7 @@ using namespace Sce::PlayStation::Core;
 
 namespace Sce::PlayStation::Core::Graphics {
 	typedef struct GraphicsState {
-		EnableMode Enable; /* EnableMode */
+		EnableMode Enable; 
 		ImageRect Scissor;
 		ImageRect Viewport;
 		Vector2 DepthRange;
