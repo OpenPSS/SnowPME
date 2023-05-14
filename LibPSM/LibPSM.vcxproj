@@ -37,6 +37,7 @@
     <ClCompile Include="Sce\PlayStation\Core\Environment\SystemParameters.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Environment\TextInputDialog.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Error.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\GraphicsUpdate.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmFrameBuffer.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmGraphicsContext.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmPixelBuffer.cpp" />

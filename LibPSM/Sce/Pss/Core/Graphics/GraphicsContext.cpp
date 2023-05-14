@@ -44,6 +44,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
+		GraphicsUpdate gupdate = update;
 		if ((update & 0xFFFF0000) != GraphicsUpdate::None)
 		{
 
@@ -60,7 +61,6 @@ namespace Sce::Pss::Core::Graphics {
 						graphObj->Update = true;
 				}
 			}
-
 			if ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
 				if (Handles::IsValid(handles[1])) {
 					GraphicsObject* graphObj = (GraphicsObject*)Handles::GetHandle(handles[1]);
@@ -82,7 +82,6 @@ namespace Sce::Pss::Core::Graphics {
 					this->currentFrameBuffer = NULL;
 				}
 			}
-
 			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == GraphicsUpdate::None)
 			{
 
@@ -103,9 +102,43 @@ namespace Sce::Pss::Core::Graphics {
 			int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
 		}
 
-		
-
+		this->NotifyUpdate(gupdate);
+		this->CheckUpdate(state);
 		return PSM_ERROR_NO_ERROR;
+	}
+
+	void GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
+		Logger::Debug(__FUNCTION__);
+	}
+
+	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
+		Logger::Debug(__FUNCTION__);
+	}
+
+	void GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
+		Logger::Debug(__FUNCTION__);
+	}
+
+
+	void GraphicsContext::CheckUpdate(GraphicsState* state) {
+		GraphicsUpdate notifyFlag = this->updateNotifyFlag;
+		if (this->updateNotifyFlag != GraphicsUpdate::None) {
+			this->updateNotifyFlag = GraphicsUpdate::None;
+
+			if ((notifyFlag & 0xFFFF0000) != GraphicsUpdate::None)
+				this->UpdateHandles(notifyFlag);
+			
+			if (notifyFlag != GraphicsUpdate::None)
+				this->UpdateState(notifyFlag, state);
+
+			if (Shared::Config::ScreenTotal() >= 2)
+				this->UpdateMultiScreen(notifyFlag, state, 0);
+		}
+	}
+
+	GraphicsUpdate GraphicsContext::NotifyUpdate(GraphicsUpdate updateFlag) {
+		this->updateNotifyFlag = this->updateNotifyFlag | updateFlag;
+		return updateFlag;
 	}
 
 	std::string GraphicsContext::Extensions() {

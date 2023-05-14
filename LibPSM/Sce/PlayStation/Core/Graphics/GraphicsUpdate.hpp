@@ -29,15 +29,13 @@ namespace Sce::PlayStation::Core::Graphics {
 		TextureN = 0x80000000
 	};
 
-	GraphicsUpdate operator&(GraphicsUpdate l, GraphicsUpdate r) { return (GraphicsUpdate)((unsigned int)l & (unsigned int)r); };
-	GraphicsUpdate operator&(GraphicsUpdate l, unsigned int r) { return (GraphicsUpdate)((unsigned int)l & (unsigned int)r); };
-	GraphicsUpdate operator&(unsigned int l, GraphicsUpdate r) { return (GraphicsUpdate)((unsigned int)l & (unsigned int)r); };
+	GraphicsUpdate operator&(GraphicsUpdate l, GraphicsUpdate r);
+	GraphicsUpdate operator&(GraphicsUpdate l, unsigned int r);
+	GraphicsUpdate operator&(unsigned int l, GraphicsUpdate r);
 
-	GraphicsUpdate operator|(GraphicsUpdate l, GraphicsUpdate r) { return (GraphicsUpdate)((unsigned int)l | (unsigned int)r); };
-	GraphicsUpdate operator|(unsigned int l, GraphicsUpdate r) { return (GraphicsUpdate)((unsigned int)l | (unsigned int)r); };
-	GraphicsUpdate operator|(GraphicsUpdate l, unsigned int r) { return (GraphicsUpdate)((unsigned int)l | (unsigned int)r); };
-
-
+	GraphicsUpdate operator|(GraphicsUpdate l, GraphicsUpdate r);
+	GraphicsUpdate operator|(unsigned int l, GraphicsUpdate r);
+	GraphicsUpdate operator|(GraphicsUpdate l, unsigned int r);
 }
 
 #endif

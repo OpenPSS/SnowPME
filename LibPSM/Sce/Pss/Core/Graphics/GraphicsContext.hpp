@@ -39,6 +39,9 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::string extensions;
 		std::string renderer;
+
+		GraphicsUpdate updateNotifyFlag;
+
 		int boundArrayBuffer;
 
 	public:
@@ -54,6 +57,13 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsCapsState* CapsState();
 		std::string Extensions();
 		std::string Renderer();
+
+		// actual graphics handling ..
+		GraphicsUpdate NotifyUpdate(GraphicsUpdate updateFlag);
+		void CheckUpdate(GraphicsState* state);
+		void UpdateHandles(GraphicsUpdate notifyFlag);
+		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
+		void UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
 
 		uint32_t BoundArrayBuffer();
 		uint32_t BindArrayBuffer(uint32_t buffer);
