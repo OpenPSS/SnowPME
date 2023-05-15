@@ -19,14 +19,12 @@ namespace Sce::Pss::Core::Graphics {
 
 	class ShaderProgram : public GraphicsObject {
 	private:
-		int program;
 		std::vector<ProgramUniform>* uniforms;
 		std::vector<ProgramAttribute>* attributes;
 		std::string vertexSourceCode;
 		std::string fragmentSourceCode;
 		int compileShader(int type, char* source);
 	public:
-		int Program();
 		int UniformCount();
 		int AttributeCount();
 		std::vector<ProgramUniform>* Uniforms();

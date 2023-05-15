@@ -11,9 +11,14 @@ namespace Sce::Pss::Core {
 	}
 
 	bool Handles::IsValid(PsmHandle handle) {
+		if (!wasInit)
+			init();
+
 		if (handle > MAX_HANDLES)
 			return false;
 		else if (handle < 0)
+			return false;
+		else if (addresses[handle] == NULL)
 			return false;
 		else
 			return true;
@@ -23,7 +28,7 @@ namespace Sce::Pss::Core {
 		if (!wasInit)
 			init();
 
-		for (PsmHandle i = 0; i < MAX_HANDLES; i++) {
+		for (PsmHandle i = 1; i < MAX_HANDLES; i++) {
 			if (addresses[i] == NULL)
 			{
 				addresses[i] = address;

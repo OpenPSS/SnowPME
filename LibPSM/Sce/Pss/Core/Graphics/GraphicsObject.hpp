@@ -9,11 +9,13 @@ namespace Sce::Pss::Core::Graphics {
 	class GraphicsObject : public Errorable {
 	private:
 		PsmHandle handle;
+	protected:
+		uint32_t glReference;
 	public:
 		bool Update = false;
 		static void Release(GraphicsObject* object);
 
-
+		uint32_t GlReference();
 		PsmHandle Handle();
 		GraphicsObject();
 		~GraphicsObject();

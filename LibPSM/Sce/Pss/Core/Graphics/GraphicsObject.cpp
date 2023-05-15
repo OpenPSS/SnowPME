@@ -4,6 +4,7 @@
 namespace Sce::Pss::Core::Graphics {
 
 	GraphicsObject::GraphicsObject() {
+		this->glReference = NULL;
 		this->handle = Handles::CreateHandle((uintptr_t)this);
 	}
 	GraphicsObject::~GraphicsObject() {
@@ -13,6 +14,10 @@ namespace Sce::Pss::Core::Graphics {
 
 	PsmHandle GraphicsObject::Handle() {
 		return this->handle;
+	}
+
+	uint32_t GraphicsObject::GlReference() {
+		return this->glReference;
 	}
 
 	void GraphicsObject::Release(GraphicsObject* object)

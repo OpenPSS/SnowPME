@@ -1,5 +1,6 @@
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
+#include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
@@ -532,9 +533,6 @@ namespace Sce::Pss::Core::Graphics {
 	int VertexBuffer::Option() {
 		return this->option;
 	}
-	uint32_t VertexBuffer::Buffer() {
-		return this->buffer;
-	}
 	size_t VertexBuffer::Size() {
 		return this->size;
 	}
@@ -810,7 +808,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			uint32_t glBuf = 0;
 			glGenBuffers(1, &glBuf);
-			this->buffer = glBuf;
+			this->glReference = glBuf;
 
 			size_t sz = 0;
 
@@ -836,9 +834,10 @@ namespace Sce::Pss::Core::Graphics {
 
 			// Allocate array buffer in opengl.
 
-			graphicsContext->BindArrayBuffer(this->Buffer());
+			OpenGL::SetVertexBuffer(this);
 			glBufferData(GL_ARRAY_BUFFER, sz, 0, GL_STATIC_DRAW);
-			graphicsContext->BindArrayBuffer(0);
+			OpenGL::SetVertexBuffer(NULL);
+
 			if (glGetError() == GL_OUT_OF_MEMORY) {
 				this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 				return;

@@ -51,6 +51,7 @@ namespace Sce::Pss::Core::Graphics {
 		{
 
 			if ((update & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
+				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
 				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
 				if (graphObj != this->currentProgram) {
 					if (this->currentProgram != NULL) {
@@ -59,13 +60,15 @@ namespace Sce::Pss::Core::Graphics {
 
 					this->currentProgram = graphObj;
 
-					if (graphObj != NULL)
+					if (graphObj != NULL) {
 						graphObj->Update = true;
+					}
 				}
 			}
 			if ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
+				Logger::Debug("update & GraphicsUpdate::FrameBuffer");
 				if (Handles::IsValid(handles[1])) {
-					GraphicsObject* graphObj = (GraphicsObject*)Handles::GetHandle(handles[1]);
+					FrameBuffer* graphObj = (FrameBuffer*)Handles::GetHandle(handles[1]);
 					if (graphObj != this->currentFrameBuffer) {
 						if (this->currentFrameBuffer != NULL) {
 							GraphicsObject::Release(this->currentFrameBuffer);
@@ -73,8 +76,9 @@ namespace Sce::Pss::Core::Graphics {
 
 						this->currentFrameBuffer = graphObj;
 
-						if (graphObj != NULL)
+						if (graphObj != NULL) {
 							graphObj->Update = true;
+						}
 					}
 				}
 				else {
@@ -86,6 +90,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == GraphicsUpdate::None)
 			{
+				Logger::Debug("update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)");
 
 				if ((update & (GraphicsUpdate::Texture | GraphicsUpdate::TextureN)) != GraphicsUpdate::None) {
 
@@ -103,7 +108,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
 
-			Logger::Error("Not yet done with GraphicsUpdate::VertexBuffer.");
+			Logger::Error("GraphicsUpdate::VertexBuffer. is not fully implemented yet.");
 		}
 
 		this->NotifyUpdate(gupdate);
@@ -115,13 +120,34 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 
 		if ((notifyFlag & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
+			Logger::Debug("notifyFlag & GraphicsUpdate::ShaderProgram");
 			ShaderProgram* curProgram = this->currentProgram;
 			OpenGL::SetShaderProgram(curProgram);
+			
+			if (curProgram != NULL)
+				curProgram->Update = false;
+
 			notifyFlag = notifyFlag | GraphicsUpdate::VertexBuffer;
 		}
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
-			Logger::Error("Not yet done with GraphicsUpdate::VertexBuffer.");
+			Logger::Debug("notifyFlag & GraphicsUpdate::VertexBuffer");
+			//VertexBuffer* curVertex = this->currentVertex;
+
+			Logger::Error("GraphicsUpdate::VertexBuffer is not fully implemented yet.");
 		}
+		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
+			Logger::Debug("notifyFlag & GraphicsUpdate::Texture");
+			Logger::Error("GraphicsUpdate::Texture is not fully implemented yet.");
+		}
+		if ((notifyFlag & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
+			Logger::Debug("notifyFlag & GraphicsUpdate::FrameBuffer");
+			FrameBuffer* curFrameBuffer = this->currentFrameBuffer;
+			OpenGL::SetFrameBuffer(curFrameBuffer);
+
+			if(curFrameBuffer != NULL)
+				curFrameBuffer->Update = false;
+		}
+
 	}
 
 	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
@@ -161,17 +187,6 @@ namespace Sce::Pss::Core::Graphics {
 		return this->renderer;
 	}
 
-
-	uint32_t GraphicsContext::BoundArrayBuffer() {
-		return this->boundArrayBuffer;
-	}
-
-	uint32_t GraphicsContext::BindArrayBuffer(uint32_t buffer) {
-		this->boundArrayBuffer = buffer;
-		glBindBuffer(GL_ARRAY_BUFFER, this->BoundArrayBuffer());
-		return this->BoundArrayBuffer();
-	}
-
 	GraphicsContext::~GraphicsContext() {
 		delete this->capsState;
 		activeGraphicsContext = NULL;
@@ -183,7 +198,6 @@ namespace Sce::Pss::Core::Graphics {
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return;
 		}
-
 		if (Thread::IsMainThread()) {
 			this->width = width;
 			this->height = height;
@@ -356,6 +370,11 @@ namespace Sce::Pss::Core::Graphics {
 			this->capsState->Extension = (gext & 0x3A9B8);
 
 			activeGraphicsContext = this;
+
+			this->currentProgram = nullptr;
+			this->currentFrameBuffer = nullptr;
+			this->currentVertexBuffer = nullptr;
+			this->currentTextureBuffer = nullptr;
 
 		}
 		else {

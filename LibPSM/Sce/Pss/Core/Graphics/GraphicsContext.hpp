@@ -14,6 +14,10 @@
 
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
+#include <Sce/Pss/Core/Graphics/FrameBuffer.hpp>
+#include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
+#include <Sce/Pss/Core/Graphics/Texture.hpp>
+
 #include <Sce/Pss/Core/Errorable.hpp>
 
 #include <LibShared.hpp>
@@ -25,8 +29,11 @@ using namespace Sce::PlayStation::Core::Graphics;
 namespace Sce::Pss::Core::Graphics {
 	class GraphicsContext : public GraphicsObject {
 	private:
-		ShaderProgram* currentShader = NULL;
-		GraphicsObject* currentFrameBuffer = NULL;
+		ShaderProgram* currentProgram;
+		FrameBuffer* currentFrameBuffer;
+		VertexBuffer* currentVertexBuffer;
+		Texture* currentTextureBuffer;
+
 		int numShaderUpdates = 0;
 
 		int width = 0;
@@ -64,9 +71,6 @@ namespace Sce::Pss::Core::Graphics {
 		void UpdateHandles(GraphicsUpdate notifyFlag);
 		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
 		void UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
-
-		uint32_t BoundArrayBuffer();
-		uint32_t BindArrayBuffer(uint32_t buffer);
 
 		static GraphicsContext* GetGraphicsContext();
 	};

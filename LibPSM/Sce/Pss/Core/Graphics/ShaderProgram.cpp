@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 		this->uniforms = new std::vector<ProgramUniform>();
 		this->attributes = new std::vector<ProgramAttribute>();
 
-		this->program = glCreateProgram();
+		this->glReference = glCreateProgram();
 		
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
@@ -67,24 +67,24 @@ namespace Sce::Pss::Core::Graphics {
 			return;
 		}
 
-		glAttachShader(program, compileFragmentShader);
-		glAttachShader(program, compileVertexShader);
+		glAttachShader(glReference, compileFragmentShader);
+		glAttachShader(glReference, compileVertexShader);
 
-		glLinkProgram(program);
+		glLinkProgram(glReference);
 
 		glDeleteShader(compileFragmentShader);
 		glDeleteShader(compileVertexShader);
 
 		int status = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, &status);
+		glGetProgramiv(glReference, GL_LINK_STATUS, &status);
 
 		if (status == GL_FALSE) {
 			char log[0x1000];
 			memset(log, 0, sizeof(log));
 
 			int sz = 0;
-			glGetProgramInfoLog(program, 0xFFF, &sz, log);
-			glDeleteProgram(program);
+			glGetProgramInfoLog(glReference, 0xFFF, &sz, log);
+			glDeleteProgram(glReference);
 			
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			ExceptionInfo::AddMessage("Compile failed; " + std::string(log));
@@ -95,7 +95,7 @@ namespace Sce::Pss::Core::Graphics {
 		int uniformCount = 0;
 		int attributeCount = 0;
 
-		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniformCount);
+		glGetProgramiv(glReference, GL_ACTIVE_UNIFORMS, &uniformCount);
 
 		for (int i = 0; i < uniformCount; i++) {
 			ProgramUniform uniform = ProgramUniform();
@@ -104,8 +104,8 @@ namespace Sce::Pss::Core::Graphics {
 			char name[0x100];
 
 
-			glGetActiveUniform(program, i, sizeof(name), &nameLen, &uniform.Size, &uniform.Type, name);
-			uniform.Location = glGetUniformLocation(program, name);
+			glGetActiveUniform(glReference, i, sizeof(name), &nameLen, &uniform.Size, &uniform.Type, name);
+			uniform.Location = glGetUniformLocation(glReference, name);
 			uniform.Index = i;
 			uniform.Name = std::string(name, nameLen);
 
@@ -119,7 +119,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->Uniforms()->push_back(uniform);
 		}
 
-		glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+		glGetProgramiv(glReference, GL_ACTIVE_ATTRIBUTES, &attributeCount);
 
 
 		for (int i = 0; i < attributeCount; i++) {
@@ -129,8 +129,8 @@ namespace Sce::Pss::Core::Graphics {
 			char name[0x100];
 
 
-			glGetActiveAttrib(program, i, sizeof(name), &nameLen, &attribute.Size, &attribute.Type, name);
-			attribute.Location = glGetAttribLocation(program, name);
+			glGetActiveAttrib(glReference, i, sizeof(name), &nameLen, &attribute.Size, &attribute.Type, name);
+			attribute.Location = glGetAttribLocation(glReference, name);
 			attribute.Index = i;
 			attribute.Name = std::string(name, nameLen);
 
@@ -149,10 +149,6 @@ namespace Sce::Pss::Core::Graphics {
 	ShaderProgram::~ShaderProgram() {
 		delete this->uniforms;
 		delete this->attributes;
-	}
-
-	int ShaderProgram::Program() {
-		return this->program;
 	}
 
 	int ShaderProgram::UniformCount() {

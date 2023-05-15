@@ -57,10 +57,12 @@
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\OpenGL.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Handles.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
@@ -184,10 +186,12 @@
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\FrameBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\OpenGL.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\Texture.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Handles.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />

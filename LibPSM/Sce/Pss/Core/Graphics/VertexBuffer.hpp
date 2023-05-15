@@ -22,7 +22,6 @@ namespace Sce::Pss::Core::Graphics {
 		int indexCount = 0;
 		int instDivisor = 0;
 		int option = 0;
-		uint32_t buffer = 0;
 		size_t size = 0;
 		std::vector<VertexFormat>* vertexFormats = NULL;
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
@@ -42,7 +41,6 @@ namespace Sce::Pss::Core::Graphics {
 		int InstDivisor();
 		int StreamCount();
 		int Option();
-		uint32_t Buffer();
 		size_t Size();
 		std::vector<VertexFormat>* VertexFormats();
 	};
