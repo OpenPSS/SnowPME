@@ -53,12 +53,12 @@ namespace Sce::Pss::Core::Graphics {
 			if ((update & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
 				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
-				if (graphObj != this->currentProgram) {
+				if (graphObj != this->currentProgram) { // Check if another program is being used already
 					if (this->currentProgram != NULL) {
-						GraphicsObject::Release(this->currentProgram);
+						GraphicsObject::Release(this->currentProgram); // release it 
 					}
-
-					this->currentProgram = graphObj;
+					
+					this->currentProgram = graphObj; // set the current program to this program;
 
 					if (graphObj != NULL) {
 						graphObj->Update = true;
