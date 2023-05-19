@@ -4,8 +4,8 @@ using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Metadata;
 
 namespace Sce::Pss::Core {
-	static Sandbox* psmSandbox;
-	static AppInfo* psmAppInfo;
+	static Sandbox* psmSandbox = nullptr;
+	static AppInfo* psmAppInfo = nullptr;
 
 	AppInfo* Application::PsmAppInfo() {
 		return psmAppInfo;

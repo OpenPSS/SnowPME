@@ -29,10 +29,11 @@ using namespace Sce::PlayStation::Core::Graphics;
 namespace Sce::Pss::Core::Graphics {
 	class GraphicsContext : public GraphicsObject {
 	private:
+
 		ShaderProgram* currentProgram;
 		FrameBuffer* currentFrameBuffer;
-		VertexBuffer* currentVertexBuffer;
 		Texture* currentTextureBuffer;
+		VertexBuffer* currentVertexBuffers[4];
 
 		int numShaderUpdates = 0;
 
@@ -48,6 +49,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::string renderer;
 
 		GraphicsUpdate updateNotifyFlag;
+		GraphicsUpdate updateNotifyDataFlag;
 
 		int boundArrayBuffer;
 
@@ -67,6 +69,8 @@ namespace Sce::Pss::Core::Graphics {
 
 		// actual graphics handling ..
 		GraphicsUpdate NotifyUpdate(GraphicsUpdate updateFlag);
+		GraphicsUpdate NotifyUpdateData(GraphicsUpdate updateDataFlag);
+
 		void CheckUpdate(GraphicsState* state);
 		void UpdateHandles(GraphicsUpdate notifyFlag);
 		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);

@@ -15,7 +15,7 @@ using namespace Sce::Pss::Core::Threading;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
-	static GraphicsContext* activeGraphicsContext = NULL;
+	static GraphicsContext* activeGraphicsContext = nullptr;
 
 	GraphicsContext* GraphicsContext::GetGraphicsContext() {
 		return activeGraphicsContext;
@@ -88,25 +88,38 @@ namespace Sce::Pss::Core::Graphics {
 					this->currentFrameBuffer = NULL;
 				}
 			}
-			if ((update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)) == GraphicsUpdate::None)
-			{
-				Logger::Debug("update & (GraphicsUpdate::VertexBuffer0 | GraphicsUpdate::VertexBufferN)");
+			if ((update & GraphicsUpdate::VertexBuffer) == GraphicsUpdate::None) {
+				int i = 8;
+				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
+				
+				while (1) {
+					PsmHandle vhandle = i - 4;
+					
+					VertexBuffer* workingVertexBuffer = (VertexBuffer*)Handles::GetHandle(vhandle);
+					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
+					
+					if (Handles::IsValid(vhandle)) {
+						workingVertexBuffer->Update = true;
+					}
+					if (workingVertexBuffer == currentVertexBuffer || Handles::IsValid(vhandle)) {
 
-				if ((update & (GraphicsUpdate::Texture | GraphicsUpdate::TextureN)) != GraphicsUpdate::None) {
-
-					if (((update & (GraphicsUpdate::TextureN)) == GraphicsUpdate::None)) {
-						update = (update | GraphicsUpdate::Enable);
+						this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 					}
 
-					if (((update & (GraphicsUpdate::TextureN)) != GraphicsUpdate::None)) {
-						update = (update | GraphicsUpdate::DepthRange);
+					if (currentVertexBuffer != nullptr) {
+						currentVertexBuffer->Update = true;
+						Logger::Info("Theres supposed to be some call on currentVertexBuffer here, but i have not added it yet.");
 					}
+
 
 				}
 
+
 			}
 
-			int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
+
+
+			//int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
 
 			Logger::Error("GraphicsUpdate::VertexBuffer. is not fully implemented yet.");
 		}
@@ -173,6 +186,11 @@ namespace Sce::Pss::Core::Graphics {
 			if (Shared::Config::ScreenTotal() >= 2)
 				this->UpdateMultiScreen(notifyFlag, state, 0);
 		}
+	}
+
+	GraphicsUpdate GraphicsContext::NotifyUpdateData(GraphicsUpdate updateDataFlag) {
+		this->updateNotifyDataFlag = this->updateNotifyDataFlag | updateDataFlag;
+		return updateNotifyDataFlag;
 	}
 
 	GraphicsUpdate GraphicsContext::NotifyUpdate(GraphicsUpdate updateFlag) {
@@ -371,11 +389,15 @@ namespace Sce::Pss::Core::Graphics {
 
 			activeGraphicsContext = this;
 
+			// set internal state to nulls
+			this->updateNotifyDataFlag = GraphicsUpdate::None;
+			this->updateNotifyFlag = GraphicsUpdate::None;
+
 			this->currentProgram = nullptr;
 			this->currentFrameBuffer = nullptr;
-			this->currentVertexBuffer = nullptr;
 			this->currentTextureBuffer = nullptr;
-
+			
+			std::memset(this->currentVertexBuffers, 0, sizeof(GraphicsContext::currentVertexBuffers));
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
