@@ -13,6 +13,9 @@ namespace Sce::Pss::Core {
 
 		static Sce::Pss::Core::Io::Sandbox* PsmSandbox();
 		static void SetPsmSandbox(Sce::Pss::Core::Io::Sandbox* Sandbox);
+
+		static void PsmSwapBuffers();
+		static void SetPsmSwapBuffersCallback(void (*cb)(void));
 	};
 }
 #endif

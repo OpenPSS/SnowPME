@@ -9,8 +9,10 @@ namespace SnowPME::Graphics {
 	private:
 		GLFWwindow* window;
 		std::string openGlVersion;
+		static void swapBuffersCallback();
 	public:
 		Window(int height, int width, std::string title);
+		void SwapBuffers();
 		bool ShouldClose();
 		~Window();
 	};

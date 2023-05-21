@@ -3,7 +3,7 @@
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
-
+#include <Sce/Pss/Core/Application.hpp>
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
 #include <glad/glad.h>
@@ -267,6 +267,9 @@ namespace Sce::Pss::Core::Graphics {
 
 	int GraphicsContext::SwapBuffers() {
 		
+		glFlush();
+		Application::PsmSwapBuffers();
+
 		Logger::Error("SwapBuffers not yet implemented.");
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}

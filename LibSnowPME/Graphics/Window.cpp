@@ -4,9 +4,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <LibPSM.hpp>
+
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
+	static Window* mainWindow;
+
 	Window::Window(int height, int width, std::string title) {
 		if (!glfwInit()) {
 			Logger::Error("Failed to initalize GLFW.");
@@ -37,8 +41,14 @@ namespace SnowPME::Graphics {
 		glViewport(0, 0, framebufferWidth, framebufferHeight);
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
+		mainWindow = this;
+
+		Sce::Pss::Core::Application::SetPsmSwapBuffersCallback(Window::swapBuffersCallback);
 	}
 
+	void Window::SwapBuffers() {
+		glfwSwapBuffers(this->window);
+	}
 	bool Window::ShouldClose() {
 		return glfwWindowShouldClose(this->window);
 	}
@@ -46,4 +56,9 @@ namespace SnowPME::Graphics {
 	Window::~Window() {
 		glfwTerminate();
 	}
+
+	void Window::swapBuffersCallback(void) {
+		mainWindow->SwapBuffers();
+	}
+
 }

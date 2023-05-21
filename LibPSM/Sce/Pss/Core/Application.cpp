@@ -6,6 +6,8 @@ using namespace Sce::Pss::Core::Metadata;
 namespace Sce::Pss::Core {
 	static Sandbox* psmSandbox = nullptr;
 	static AppInfo* psmAppInfo = nullptr;
+	static void (*swapBuffers)(void) = nullptr;
+
 
 	AppInfo* Application::PsmAppInfo() {
 		return psmAppInfo;
@@ -20,4 +22,13 @@ namespace Sce::Pss::Core {
 	void Application::SetPsmSandbox(Sandbox* sandbox) {
 		psmSandbox = sandbox;
 	}
+
+	void Application::PsmSwapBuffers() {
+		if(swapBuffers != nullptr)
+			swapBuffers();
+	}
+	void Application::SetPsmSwapBuffersCallback(void (*cb)(void)) {
+		swapBuffers = cb;
+	}
+
 }
