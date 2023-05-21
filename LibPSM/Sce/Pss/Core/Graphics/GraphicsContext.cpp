@@ -21,6 +21,10 @@ namespace Sce::Pss::Core::Graphics {
 		return activeGraphicsContext;
 	}
 
+	int GraphicsContext::ActiveStateChanged(bool state) {
+		return PSM_ERROR_NOT_IMPLEMENTED;
+	}
+
 	int GraphicsContext::Height() {
 		return this->height;
 	}
@@ -28,7 +32,6 @@ namespace Sce::Pss::Core::Graphics {
 	int GraphicsContext::Width() {
 		return this->width;
 	}
-
 	PixelFormat GraphicsContext::ColorFormat() {
 		return this->colorFormat;
 	}
@@ -42,129 +45,395 @@ namespace Sce::Pss::Core::Graphics {
 		return this->capsState;
 	}
 
+	int GraphicsContext::setCurrentObject(ShaderProgram* shaderProgram) {
+		int result = PSM_ERROR_NO_ERROR;
+
+		if (shaderProgram != this->currentProgram) {
+			// check if the current program is set 
+			if (this->currentProgram != nullptr) {
+				// get and clear the update flag
+				bool activeFlag = this->currentProgram->Active;
+				// clear the active flag
+				this->currentProgram->Active = false;
+				if (activeFlag) { // if the update flag was set, call the active state changed.
+					result = this->currentProgram->ActiveStateChanged(true);
+				}
+			}
+
+			// update the current program
+			this->currentProgram = shaderProgram;
+			if (shaderProgram != nullptr) {
+				shaderProgram->Active = true;
+			}
+
+		}
+
+		return result;
+	}
+	int GraphicsContext::setCurrentObject(FrameBuffer* frameBuffer) {
+		int result = PSM_ERROR_NO_ERROR;
+
+		if (frameBuffer != this->currentFrameBuffer) {
+			// check if the current frame buffer is set 
+			if (this->currentFrameBuffer != nullptr) {
+				// get and clear the update flag
+				bool activeFlag = this->currentFrameBuffer->Active;
+				// clear the active flag
+				this->currentFrameBuffer->Active = false;
+				if (activeFlag) { // if the update flag was set, call the active state changed.
+					result = this->currentFrameBuffer->ActiveStateChanged(true);
+				}
+			}
+
+			// update the current frame buffer
+			this->currentFrameBuffer = frameBuffer;
+			if (frameBuffer != nullptr) {
+				frameBuffer->Active = true;
+			}
+
+		}
+
+		return result;
+	}
+	
 	int GraphicsContext::Update(GraphicsUpdate update, GraphicsState* state, int* handles) {
 
 
 		//check if update is not VertexBuffer, Texture, VertexBuffer0, VertexBufferN, Texture0, or TextureN
-		GraphicsUpdate gupdate = update;
+
 		if ((update & 0xFFFF0000) != GraphicsUpdate::None)
 		{
-
+			// check update is a ShaderProgram
 			if ((update & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
-				ShaderProgram* graphObj = (ShaderProgram*)Handles::GetHandle(handles[0]);
-				if (graphObj != this->currentProgram) { // Check if another program is being used already
-					if (this->currentProgram != NULL) {
-						GraphicsObject::Release(this->currentProgram); // release it 
-					}
-					
-					this->currentProgram = graphObj; // set the current program to this program;
 
-					if (graphObj != NULL) {
-						graphObj->Update = true;
-					}
-				}
+				// Resolve the handle for the new shader program
+				ShaderProgram* workingShaderProgram = (ShaderProgram*)Handles::GetHandle(handles[GraphicsContext::shaderProgramHandleOffset]);
+				
+				// Set this shader program as the currently active shader program.
+				setCurrentObject(workingShaderProgram);
 			}
+
+			// check update is a FrameBuffer
 			if ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
 				Logger::Debug("update & GraphicsUpdate::FrameBuffer");
-				if (Handles::IsValid(handles[1])) {
-					FrameBuffer* graphObj = (FrameBuffer*)Handles::GetHandle(handles[1]);
-					if (graphObj != this->currentFrameBuffer) {
-						if (this->currentFrameBuffer != NULL) {
-							GraphicsObject::Release(this->currentFrameBuffer);
-						}
 
-						this->currentFrameBuffer = graphObj;
+				PsmHandle fbHandle = handles[GraphicsContext::frameBufferHandleOffset];
+				// Check this handle is valid ..
+				if (fbHandle != Handles::NoHandle) {
+					// Resolve the handle for the new shader program
+					FrameBuffer* workingFrameBuffer = (FrameBuffer*)Handles::GetHandle(fbHandle);
 
-						if (graphObj != NULL) {
-							graphObj->Update = true;
-						}
-					}
+					// Set this frame buffer as the currently active frame buffer.
+					setCurrentObject(workingFrameBuffer);
 				}
 				else {
-					if (this->currentFrameBuffer != NULL) {
-						GraphicsObject::Release(this->currentFrameBuffer);
+					// Check the current frame buffer is set
+					if (this->currentFrameBuffer != nullptr) {
+						// get the active flag
+						bool activeFlag = this->currentFrameBuffer->Active;
+						// clear the active flag
+						this->currentFrameBuffer->Active = false;
+						// if the flag was set, call ActiveStateChanged
+						if (activeFlag) {
+							this->currentFrameBuffer->ActiveStateChanged(true);
+						}
+
+						// unset the current framebuffer.
+						this->currentFrameBuffer = nullptr;
 					}
-					this->currentFrameBuffer = NULL;
 				}
 			}
-			if ((update & GraphicsUpdate::VertexBuffer) == GraphicsUpdate::None) {
-				int i = 8;
+
+			// check update is GraphicsUpdate::VertexBuffer
+			if ((update & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
+				Logger::Debug("update & GraphicsUpdate::VertexBuffer");
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
-				
-				while (1) {
-					PsmHandle vhandle = i - 4;
-					
-					VertexBuffer* workingVertexBuffer = (VertexBuffer*)Handles::GetHandle(vhandle);
+				for (int i = 0; i < count; i++) {
+					VertexBuffer* workingVertexBuffer = (VertexBuffer*)Handles::GetHandle(handles[GraphicsContext::vertexBufferHandleOffset + i]);
 					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
-					
-					if (Handles::IsValid(vhandle)) {
-						workingVertexBuffer->Update = true;
+
+					if (currentVertexBuffer == workingVertexBuffer) {
+						if (workingVertexBuffer != nullptr /* && workingVertexBuffer->SomethingElse != NULL */) {
+							this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
+						}
 					}
-					if (workingVertexBuffer == currentVertexBuffer || Handles::IsValid(vhandle)) {
+					else {
+						if (currentVertexBuffer != nullptr) {
+							bool activeFlg = currentVertexBuffer->Active;
+							currentVertexBuffer->Active = false;
+							if (activeFlg) {
+								currentVertexBuffer->ActiveStateChanged(true);
+							}
+						}
 
-						this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
+						this->currentVertexBuffers[i] = workingVertexBuffer;
+
+						if (workingVertexBuffer != nullptr) {
+							workingVertexBuffer->Active = true;
+							if (true /*workingVertexBuffer->SomethingElse != NULL */) {
+								this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
+							}
+						}
 					}
-
-					if (currentVertexBuffer != nullptr) {
-						currentVertexBuffer->Update = true;
-						Logger::Info("Theres supposed to be some call on currentVertexBuffer here, but i have not added it yet.");
-					}
-
-
 				}
+			}
+		
+			// check update is GraphicsUpdate::Texture
+			if ((update & GraphicsUpdate::Texture) != GraphicsUpdate::None)
+			{
+				Logger::Debug("update & GraphicsUpdate::Texture");
 
 
+				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
+				Logger::Error("update & GraphicsUpdate::Texture is not implemented");
+				return PSM_ERROR_NOT_IMPLEMENTED;
 			}
 
-
-
-			//int flg = ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) ? 4 : 1;
-
-			Logger::Error("GraphicsUpdate::VertexBuffer. is not fully implemented yet.");
 		}
 
-		this->NotifyUpdate(gupdate);
+		this->NotifyUpdate(update);
 		this->CheckUpdate(state);
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	void GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
 		Logger::Debug(__FUNCTION__);
-
+		// check notifyFlag is ShaderProgram .
 		if ((notifyFlag & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::ShaderProgram");
-			ShaderProgram* curProgram = this->currentProgram;
-			OpenGL::SetShaderProgram(curProgram);
-			
-			if (curProgram != NULL)
-				curProgram->Update = false;
 
+			// bind the current program in openGL
+			OpenGL::SetShaderProgram(this->currentProgram);
+
+			// set the vertexBuffer notify flag.
 			notifyFlag = notifyFlag | GraphicsUpdate::VertexBuffer;
 		}
+
+		// check notifyFlag is VertexBuffer
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::VertexBuffer");
-			//VertexBuffer* curVertex = this->currentVertex;
 
-			Logger::Error("GraphicsUpdate::VertexBuffer is not fully implemented yet.");
+			Logger::Error("notifyFlag VertexBuffer part is not yet implemented;");
+			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+			return;
 		}
+
+		// check notifyFlag is Texture
 		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::Texture");
-			Logger::Error("GraphicsUpdate::Texture is not fully implemented yet.");
+
+			Logger::Error("notifyFlag Texture part is not yet implemented;");
+			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+			return;
 		}
+
+		// check notifyFlag is FrameBuffer
 		if ((notifyFlag & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::FrameBuffer");
-			FrameBuffer* curFrameBuffer = this->currentFrameBuffer;
-			OpenGL::SetFrameBuffer(curFrameBuffer);
 
-			if(curFrameBuffer != NULL)
-				curFrameBuffer->Update = false;
+			// bind the framebuffer
+			OpenGL::SetFrameBuffer(this->currentFrameBuffer);
+			
+			// check currentFrameBuffer and currentProgram. 
+			bool hasNoFrameBuffer = (this->currentFrameBuffer == nullptr /* || activeFrameBuffer->unk12 */);
+			bool hasNoShader = this->currentProgram == nullptr;
+			
+			// set hasNoFrameBuffer and HasShaderOrNoFrameBuffer flags
+			this->hasNoFrameBuffer = hasNoFrameBuffer;
+			this->hasShaderOrNoFrameBuffer = !hasNoShader && hasNoFrameBuffer;
+
 		}
+	}
 
+	int GraphicsContext::Clear(ClearMask mask) {
+		if (this->hasNoFrameBuffer) {
+			int glMask = 0;
+			if ((mask & ClearMask::Color) != ClearMask::None)
+				glMask |= GL_COLOR_BUFFER_BIT;
+			if ((mask & ClearMask::Depth) != ClearMask::None)
+				glMask |= GL_DEPTH_BUFFER_BIT;
+			if ((mask & ClearMask::Stencil) != ClearMask::None)
+				glMask |= GL_STENCIL_BUFFER_BIT;
+
+			glClear(glMask);
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			ExceptionInfo::AddMessage("Frame buffer is not available");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+	}
+
+	int GraphicsContext::SwapBuffers() {
+		
+		Logger::Error("SwapBuffers not yet implemented.");
+		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 
 	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
 		Logger::Debug(__FUNCTION__);
+
+		// check notify flag is Scissor, Viewport, Depthrange, ClearColor, ClearDepth, or ClearStencil
+		if ((notifyFlag & 
+			(GraphicsUpdate::Scissor |
+			GraphicsUpdate::Viewport |
+			GraphicsUpdate::DepthRange |
+			GraphicsUpdate::ClearColor |
+			GraphicsUpdate::ClearDepth |
+			GraphicsUpdate::ClearStencil)) != GraphicsUpdate::None) {
+
+			if ((notifyFlag & GraphicsUpdate::Scissor) != GraphicsUpdate::None) {
+				Logger::Error("Scissor not yet implemented.");
+				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				return;
+
+			}
+
+			if ((notifyFlag & GraphicsUpdate::Viewport) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::Viewport");
+
+				// Set OpenGL viewport,
+				// if the width or height is less than 0, then the height/width is set to 0.
+
+				glViewport(
+					state->Viewport.X,
+					state->Viewport.Y,
+					state->Viewport.Width < 0 ? 0 : state->Viewport.Width,
+					state->Viewport.Height < 0 ? 0 : state->Viewport.Height);
+
+
+			}
+
+			if ((notifyFlag & GraphicsUpdate::DepthRange) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::DepthRange");
+				// Set OpenGL Depth Range
+				
+				glDepthRangef(state->DepthRange.X, state->DepthRange.Y);
+
+			}
+
+			if ((notifyFlag & GraphicsUpdate::ClearColor) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::ClearColor");
+				// Set OpenGL Clear Color
+
+				glClearColor(state->ClearColor.X, state->ClearColor.Y, state->ClearColor.Z, state->ClearColor.W);
+			}
+
+			if ((notifyFlag & GraphicsUpdate::ClearDepth) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::ClearDepth");
+				// Set OpenGL Clear Depth
+
+				glClearDepthf(state->ClearDepth);
+			}
+
+			if ((notifyFlag & GraphicsUpdate::ClearStencil) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::ClearStencil");
+				// Set OpenGL Clear Stencil
+
+				glClearStencil(state->ClearStencil);
+			}
+
+		}
+			
+		if ((notifyFlag & 0xE000) != GraphicsUpdate::None) { // TODO: work out what 0xE000 is.
+			if ((notifyFlag & GraphicsUpdate::ColorMask) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::ColorMask");
+
+				glColorMask(
+					(state->ColorMask & ColorMask::R) != ColorMask::None,
+					(state->ColorMask & ColorMask::G) != ColorMask::None,
+					(state->ColorMask & ColorMask::B) != ColorMask::None,
+					(state->ColorMask & ColorMask::A) != ColorMask::None);
+
+			}
+
+			if ((notifyFlag & GraphicsUpdate::LineWidth) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::LineWidth");
+
+				float lnAdd = state->LineWidth + 0.5;
+				float lnFloor = std::floor(lnAdd);
+				float lnBase = 1.0;
+				if (lnFloor >= 1.0)
+				{
+					lnBase = lnFloor;
+					if (lnFloor > 8.0)
+						lnBase = 8.0;
+				}
+				glLineWidth(lnBase);
+			}
+		}
+		
+		if ((notifyFlag & (
+			GraphicsUpdate::CullFace |
+			GraphicsUpdate::BlendFunc |
+			GraphicsUpdate::DepthFunc |
+			GraphicsUpdate::PolygonOffset |
+			GraphicsUpdate::StencilFunc |
+			GraphicsUpdate::StencilOp)) != GraphicsUpdate::None) {
+
+
+			if ((notifyFlag & GraphicsUpdate::CullFace) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::CullFace");
+				glCullFace(this->glCullModes[state->CullFace.bits & 3]);
+				glFrontFace(this->glCullFrontFaceModes[(state->CullFace.bits >> 8) & 1]);
+
+				Logger::Error("CullFace is not fully implemented yet.");
+				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				return;
+			}
+
+			if ((notifyFlag & GraphicsUpdate::BlendFunc) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::BlendFunc");
+				glBlendEquationSeparate(
+					this->glBlendModes[state->BlendFuncRgb.bits & 3],
+					this->glBlendModes[state->BlendFuncAlpha.bits & 3]);
+				glBlendFuncSeparate(
+					this->glBlendSFactor[(state->BlendFuncRgb.bits >> 8) & 0xF],
+					this->glBlendDFactor[(state->BlendFuncRgb.bits & 0x0000FFFF) & 0xF],
+					this->glBlendSFactor[(state->BlendFuncAlpha.bits >> 8) & 0xF],
+					this->glBlendDFactor[(state->BlendFuncAlpha.bits & 0x0000FFFF) & 0xF]);
+			}
+
+			if ((notifyFlag & GraphicsUpdate::DepthFunc) != GraphicsUpdate::None)
+			{
+				Logger::Debug("notifyFlag & GraphicsUpdate::DepthFunc");
+
+				Logger::Error("DepthFunc is not fully implemented yet.");
+				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				return;
+			}
+			if ((notifyFlag & GraphicsUpdate::PolygonOffset) != GraphicsUpdate::None) {
+				Logger::Debug("notifyFlag & GraphicsUpdate::PolygonOffset");
+				glPolygonOffset(state->PolygonOffset.Factor, state->PolygonOffset.Units);
+			}
+			if ((notifyFlag & GraphicsUpdate::StencilFunc) != GraphicsUpdate::None)
+			{
+				Logger::Debug("notifyFlag & GraphicsUpdate::StencilFunc");
+
+				Logger::Error("StencilFunc is not fully implemented yet.");
+				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				return;
+
+			}
+			if ((notifyFlag & GraphicsUpdate::StencilOp) != GraphicsUpdate::None)
+			{
+				Logger::Debug("notifyFlag & GraphicsUpdate::StencilOp");
+
+				Logger::Error("StencilOp is not fully implemented yet.");
+				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				return;
+			}
+
+		}
+
+		if ((notifyFlag & GraphicsUpdate::Enable) != GraphicsUpdate::None) {
+			Logger::Debug("notifyFlag & GraphicsUpdate::Enable");
+
+			Logger::Error("Enable is not fully implemented yet.");
+			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+			return;
+		}
 	}
 
 	void GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
@@ -385,19 +654,15 @@ namespace Sce::Pss::Core::Graphics {
 			if (this->capsState->MaxAliasedPointSize > 128.0)
 				this->capsState->MaxAliasedPointSize = 128.0;
 
-			this->capsState->Extension = (gext & 0x3A9B8);
+			this->capsState->Extension = (gext & 0x3A9B8); //todo: find why 0x3a9b8
 
 			activeGraphicsContext = this;
 
 			// set internal state to nulls
-			this->updateNotifyDataFlag = GraphicsUpdate::None;
-			this->updateNotifyFlag = GraphicsUpdate::None;
 
-			this->currentProgram = nullptr;
-			this->currentFrameBuffer = nullptr;
-			this->currentTextureBuffer = nullptr;
-			
-			std::memset(this->currentVertexBuffers, 0, sizeof(GraphicsContext::currentVertexBuffers));
+			std::memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
+			std::memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
+
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");

@@ -47,7 +47,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			GraphicsContext* ctx = GraphicsContext::GetGraphicsContext();
-			if (ctx == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			int* handlesList = NULL;
 
@@ -56,7 +56,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			}
 
 
-			ctx->Update(update, state, handlesList);
+			return ctx->Update(update, state, handlesList);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
@@ -64,12 +64,33 @@ namespace Sce::PlayStation::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::SwapBuffers(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Thread::IsMainThread()) {
+			GraphicsContext* ctx = GraphicsContext::GetGraphicsContext();
+			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
+
+			ctx->SwapBuffers();
+			// someotherfunction();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::Clear(int handle, ClearMask mask) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Thread::IsMainThread()) {
+			GraphicsContext* ctx = GraphicsContext::GetGraphicsContext();
+			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
+
+			return ctx->Clear(mask);
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::DrawArrays(int handle, DrawMode mode, int first, int count, int repeat){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

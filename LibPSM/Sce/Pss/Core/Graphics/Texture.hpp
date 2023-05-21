@@ -7,10 +7,10 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 		
 	public:
-		uint32_t GlTextureType();
-
 		Texture();
 		~Texture();
+		uint32_t GlTextureType();
+		int ActiveStateChanged(bool state);
 	};
 }
 

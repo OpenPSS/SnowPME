@@ -6,11 +6,12 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/PlayStation/Core/Vector4.hpp>
-
+#include <LibShared.hpp>
 #include <glad/glad.h>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -543,6 +544,11 @@ namespace Sce::Pss::Core::Graphics {
 
 	std::vector<VertexFormat>* VertexBuffer::VertexFormats() {
 		return this->vertexFormats;
+	}
+
+	int VertexBuffer::ActiveStateChanged(bool state) {
+		Logger::Debug(__FUNCTION__);
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	bool VertexBuffer::translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale) {

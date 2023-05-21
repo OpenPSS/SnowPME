@@ -4,14 +4,23 @@
 
 namespace Sce::PlayStation::Core::Graphics {
 	enum class ColorMask : uint8_t {
-		None = 0,
-		R = 1,
-		G = 2,
-		B = 4,
-		A = 8,
-		Rgb = 7,
-		Rgba = 15
+		None = 0x0,
+		R = 0x1,
+		G = 0x2,
+		B = 0x4,
+		A = 0x8,
+		Rgb = 0x7,
+		Rgba = 0xF,
 	};
+
+
+	ColorMask operator&(ColorMask l, ColorMask r);
+	ColorMask operator&(ColorMask l, uint8_t r);
+	ColorMask operator&(uint8_t l, ColorMask r);
+
+	ColorMask operator|(ColorMask l, ColorMask r);
+	ColorMask operator|(uint8_t l, ColorMask r);
+	ColorMask operator|(ColorMask l, uint8_t r);
 }
 
 #endif

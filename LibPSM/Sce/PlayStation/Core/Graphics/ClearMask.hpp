@@ -10,6 +10,17 @@ namespace Sce::PlayStation::Core::Graphics {
 		Stencil = 4,
 		All = 7
 	};
+
+
+
+	ClearMask operator&(ClearMask l, ClearMask r);
+	ClearMask operator&(ClearMask l, unsigned int r);
+	ClearMask operator&(unsigned int l, ClearMask r);
+
+	ClearMask operator|(ClearMask l, ClearMask r);
+	ClearMask operator|(unsigned int l, ClearMask r);
+	ClearMask operator|(ClearMask l, unsigned int r);
+
 }
 
 #endif

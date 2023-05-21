@@ -12,7 +12,8 @@ namespace Sce::Pss::Core::Graphics {
 	protected:
 		uint32_t glReference;
 	public:
-		bool Update = false;
+		virtual int ActiveStateChanged(bool state) = NULL;
+		bool Active = false;
 		static void Release(GraphicsObject* object);
 
 		uint32_t GlReference();

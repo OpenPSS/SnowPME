@@ -22,42 +22,67 @@
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
+#include <glad/glad.h>
 
 using namespace Sce::PlayStation::Core::Imaging;
 using namespace Sce::PlayStation::Core::Graphics;
 
 namespace Sce::Pss::Core::Graphics {
+	
 	class GraphicsContext : public GraphicsObject {
 	private:
+		const int shaderProgramHandleOffset = 0;
+		const int frameBufferHandleOffset = 1;
+		const int vertexBufferHandleOffset = 4;
+		const int textureHandleOffset = 8;
 
-		ShaderProgram* currentProgram;
-		FrameBuffer* currentFrameBuffer;
-		Texture* currentTextureBuffer;
+		const int glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
+		const int glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
+		const int glBlendModes[4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
+		
+		const int glBlendSFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
+										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE,
+										GL_ZERO, GL_ZERO, GL_ZERO };
+
+		const int glBlendDFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
+										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_ZERO, GL_ZERO,
+										GL_ZERO, GL_ZERO, GL_ZERO };
+
+		ShaderProgram* currentProgram = nullptr;
+		FrameBuffer* currentFrameBuffer = nullptr;
 		VertexBuffer* currentVertexBuffers[4];
+		Texture* currentTextures[4];
 
-		int numShaderUpdates = 0;
-
-		int width = 0;
-		int height = 0;
+		int width;
+		int height;
 		PixelFormat colorFormat;
 		PixelFormat depthFormat;
 		MultiSampleMode multiSampleMode;
 		GraphicsCapsState* capsState;
 
+		bool hasNoFrameBuffer = false;
+		bool hasShaderOrNoFrameBuffer = false;
 
 		std::string extensions;
 		std::string renderer;
 
-		GraphicsUpdate updateNotifyFlag;
-		GraphicsUpdate updateNotifyDataFlag;
+		GraphicsUpdate updateNotifyFlag = GraphicsUpdate::None;
+		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
 
-		int boundArrayBuffer;
+		int setCurrentObject(ShaderProgram* program);
+		int setCurrentObject(FrameBuffer* frameBuffer);
 
 	public:
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
 		~GraphicsContext();
+		int ActiveStateChanged(bool state);
 
 		int Update(GraphicsUpdate update, GraphicsState* state, int* handles);
+		int Clear(ClearMask mask);
+		int SwapBuffers();
+
 		int Width();
 		int Height();
 		PixelFormat ColorFormat();
@@ -70,6 +95,7 @@ namespace Sce::Pss::Core::Graphics {
 		// actual graphics handling ..
 		GraphicsUpdate NotifyUpdate(GraphicsUpdate updateFlag);
 		GraphicsUpdate NotifyUpdateData(GraphicsUpdate updateDataFlag);
+
 
 		void CheckUpdate(GraphicsState* state);
 		void UpdateHandles(GraphicsUpdate notifyFlag);

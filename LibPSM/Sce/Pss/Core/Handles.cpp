@@ -1,8 +1,7 @@
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/PlayStation/Core/Error.hpp>
-#include <map>
 namespace Sce::Pss::Core {
-	static uintptr_t addresses[MAX_HANDLES];
+	static uintptr_t addresses[Handles::MaxHandle];
 	static bool wasInit = false;
 
 	void Handles::init() {
@@ -14,9 +13,11 @@ namespace Sce::Pss::Core {
 		if (!wasInit)
 			init();
 
-		if (handle > MAX_HANDLES)
+		if (handle > Handles::MaxHandle)
 			return false;
-		else if (handle < 0)
+		else if (handle < Handles::MinHandle)
+			return false;
+		else if (handle == Handles::NoHandle)
 			return false;
 		else if (addresses[handle] == NULL)
 			return false;
@@ -28,7 +29,7 @@ namespace Sce::Pss::Core {
 		if (!wasInit)
 			init();
 
-		for (PsmHandle i = 1; i < MAX_HANDLES; i++) {
+		for (PsmHandle i = Handles::MinHandle; i < Handles::MaxHandle; i++) {
 			if (addresses[i] == NULL)
 			{
 				addresses[i] = address;

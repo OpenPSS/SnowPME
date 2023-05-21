@@ -35,6 +35,7 @@ namespace Sce::Pss::Core::Graphics {
 		static int GetFormatVectorSize(VertexFormat format);
 		static bool GetFormatElementNormalize(VertexFormat format);
 		static int GetFormatElementSize(VertexFormat format);
+		int ActiveStateChanged(bool state);
 		int VertexCount();
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		int IndexCount();

@@ -3,6 +3,8 @@
 
 namespace Sce::Pss::Core::Graphics {
 
+//	DefineAbstract(void GraphicsObject::ActiveStateChanged(int state));
+
 	GraphicsObject::GraphicsObject() {
 		this->glReference = NULL;
 		this->handle = Handles::CreateHandle((uintptr_t)this);
@@ -22,6 +24,6 @@ namespace Sce::Pss::Core::Graphics {
 
 	void GraphicsObject::Release(GraphicsObject* object)
 	{
-		object->Update = false;
+		object->Active = false;
 	}
 }

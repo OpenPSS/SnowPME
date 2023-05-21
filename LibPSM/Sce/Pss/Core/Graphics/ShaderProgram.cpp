@@ -38,6 +38,11 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
+	int ShaderProgram::ActiveStateChanged(bool state) {
+		Logger::Debug(__FUNCTION__);
+		return PSM_ERROR_NO_ERROR;
+	}
+
 	ShaderProgram::ShaderProgram(std::string vertexSrc, std::string fragmentSrc) {
 		this->uniforms = new std::vector<ProgramUniform>();
 		this->attributes = new std::vector<ProgramAttribute>();

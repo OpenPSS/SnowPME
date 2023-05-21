@@ -8,11 +8,6 @@ namespace Sce::PlayStation::Core::Imaging {
 		int Y;
 		int Width;
 		int Height;
-
-		int Left;
-		int Top;
-		int Right;
-		int Bottom;
 	} ImageRect;
 }
 

@@ -37,6 +37,8 @@
     <ClCompile Include="Sce\PlayStation\Core\Environment\SystemParameters.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Environment\TextInputDialog.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Error.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\ClearMask.cpp" />
+    <ClCompile Include="Sce\PlayStation\Core\Graphics\ColorMask.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\GraphicsUpdate.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmFrameBuffer.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Graphics\PsmGraphicsContext.cpp" />
@@ -182,6 +184,7 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector2.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Abstract.hpp" />
     <ClInclude Include="Sce\Pss\Core\Application.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />

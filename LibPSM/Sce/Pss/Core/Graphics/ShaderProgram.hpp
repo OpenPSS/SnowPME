@@ -25,6 +25,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::string fragmentSourceCode;
 		int compileShader(int type, char* source);
 	public:
+		int ActiveStateChanged(bool state);
 		int UniformCount();
 		int AttributeCount();
 		std::vector<ProgramUniform>* Uniforms();
