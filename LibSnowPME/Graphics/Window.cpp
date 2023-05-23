@@ -43,22 +43,27 @@ namespace SnowPME::Graphics {
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
 		mainWindow = this;
 
-		Sce::Pss::Core::Application::SetPsmSwapBuffersCallback(Window::swapBuffersCallback);
+	}
+	double Window::GetTime() {
+		return glfwGetTime();
+	}
+
+	void Window::PollEvents() {
+		glfwPollEvents();
 	}
 
 	void Window::SwapBuffers() {
 		glfwSwapBuffers(this->window);
+
+		this->PollEvents();
 	}
+	
 	bool Window::ShouldClose() {
 		return glfwWindowShouldClose(this->window);
 	}
 
 	Window::~Window() {
 		glfwTerminate();
-	}
-
-	void Window::swapBuffersCallback(void) {
-		mainWindow->SwapBuffers();
 	}
 
 }

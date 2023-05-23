@@ -8,7 +8,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		Scissor = 0x2,
 		Viewport = 0x4,
 		DepthRange = 0x8,
-		ClearColor = 0x10,
+		ClearColor = 0x10, 
 		ClearDepth = 0x20,
 		ClearStencil = 0x40,
 		CullFace = 0x80,

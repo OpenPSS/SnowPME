@@ -2,6 +2,7 @@
 #define LIB_PSM_GRAPHICSOBJECT_H 1
 #include <string>
 #include <vector>
+
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
 

@@ -7,13 +7,6 @@
 #endif
 
 namespace Sce::Pss::Core {
-    uint64_t PlatformSpecific::CurrentThreadId() {
-#ifdef _WIN32
-        return (uint64_t)GetCurrentThreadId();
-#else
-        return PSM_ERROR_NOT_SUPPORTED;
-#endif
-    }
 
     int PlatformSpecific::ChangeFileAttributes(std::string RealFilePath, uint32_t attribute) {
 #ifdef _WIN32

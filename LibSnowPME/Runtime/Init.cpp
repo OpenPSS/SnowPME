@@ -9,35 +9,43 @@
 
 #include <filesystem>
 #include <string>
+#include <Graphics/Callback.hpp>
 
 using namespace Shared::Debug;
 using namespace LibCXML;
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Mono;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::Metadata;
 
 namespace SnowPME::Runtime {
 
-	static std::string appExe = "";
-	static MonoDomain* psmDomain;
-	static MonoAssembly* psmCoreLib;
-	static MonoAssembly* msCoreLib;
-	static MonoAssembly* systemLib;
+	std::string       Init::appExe = "";
+	MonoDomain*       Init::psmDomain = nullptr;
+	MonoAssembly*     Init::psmCoreLib = nullptr;
+	MonoAssembly*     Init::msCoreLib = nullptr;
+	MonoAssembly*     Init::systemLib = nullptr;
+
+	int Init::InitCallbacks(Graphics::Window* oglWindow) {
+		Graphics::Callback::Init(oglWindow);
+
+		Sce::Pss::Core::Graphics::WindowSystemCallbacks::Init(
+			Graphics::Callback::SwapBuffers,
+			Graphics::Callback::GetTime);
+
+		return PSM_ERROR_NO_ERROR;
+	}
 
 	void Init::LoadApplication(std::string gameFolder) {
 		// Set app globals.
 
-		Application::SetPsmSandbox(new Sandbox(gameFolder));
-		Sandbox* psmSandbox = Application::PsmSandbox();
-		Thread::SetMainThread(PlatformSpecific::CurrentThreadId());
-		Application::SetPsmAppInfo(new AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+		Sce::Pss::Core::Application::SetPsmSandbox(new Sce::Pss::Core::Io::Sandbox(gameFolder));
+		Sce::Pss::Core::Io::Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
+		Sce::Pss::Core::Threading::Thread::SetMainThread(Sce::Pss::Core::Threading::Thread::CurrentThreadId());
+		Sce::Pss::Core::Application::SetPsmAppInfo(new Sce::Pss::Core::Metadata::AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
 	}
+	
 
 	void Init::StartApplication() {
 		Init::launchExe(appExe);
@@ -46,9 +54,12 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		AppInfo* appInfo = Application::PsmAppInfo();
+		Sce::Pss::Core::Metadata::AppInfo* appInfo = Sce::Pss::Core::Application::PsmAppInfo();
 		int heapSizeLimit = appInfo->ManagedHeapSize() * 0x400;
 		int resourceSizeLimit = appInfo->ResourceHeapSize() * 0x400;
+
+		Graphics::Window* window = new Graphics::Window(Shared::Config::ScreenHeight(0), Shared::Config::ScreenWidth(0), "- SnowPME - ");
+		Init::InitCallbacks(window);
 
 		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
 			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
@@ -63,7 +74,7 @@ namespace SnowPME::Runtime {
 		// Lockdown mono if security is enabled
 		if (!Shared::Config::SecurityCritical) {
 			mono_security_enable_core_clr();
-			mono_security_set_core_clr_platform_callback(Security::IsSecurityCriticalExempt);
+			mono_security_set_core_clr_platform_callback(Sce::Pss::Core::Mono::Security::IsSecurityCriticalExempt);
 		}
 
 				
@@ -78,26 +89,26 @@ namespace SnowPME::Runtime {
 
 		// PSM Icalls
 		pss_io_icall_install_functions(
-			ICall::PsmClose,
-			ICall::PsmDirectoryCreate,
-			ICall::PsmDirectoryRemove,
-			ICall::PsmDirectoryOpen,
-			ICall::PsmDirectoryRead,
-			ICall::PsmDirectoryGetWorking,
-			ICall::PsmDirectorySetWorking,
-			ICall::PsmFileOpen,
-			ICall::PsmFileDelete,
-			ICall::PsmFileGetInformation,
-			ICall::PsmFileRead,
-			ICall::PsmFileWrite,
-			ICall::PsmFileSeek,
-			ICall::PsmFileFlush,
-			ICall::PsmFileGetSize,
-			ICall::PsmFileTruncate,
-			ICall::PsmFileCopy,
-			ICall::PsmFileSetAttributes,
-			ICall::PsmFileSetTimes,
-			ICall::PsmFileGetPathInformation); 
+			Sce::Pss::Core::Io::ICall::PsmClose,
+			Sce::Pss::Core::Io::ICall::PsmDirectoryCreate,
+			Sce::Pss::Core::Io::ICall::PsmDirectoryRemove,
+			Sce::Pss::Core::Io::ICall::PsmDirectoryOpen,
+			Sce::Pss::Core::Io::ICall::PsmDirectoryRead,
+			Sce::Pss::Core::Io::ICall::PsmDirectoryGetWorking,
+			Sce::Pss::Core::Io::ICall::PsmDirectorySetWorking,
+			Sce::Pss::Core::Io::ICall::PsmFileOpen,
+			Sce::Pss::Core::Io::ICall::PsmFileDelete,
+			Sce::Pss::Core::Io::ICall::PsmFileGetInformation,
+			Sce::Pss::Core::Io::ICall::PsmFileRead,
+			Sce::Pss::Core::Io::ICall::PsmFileWrite,
+			Sce::Pss::Core::Io::ICall::PsmFileSeek,
+			Sce::Pss::Core::Io::ICall::PsmFileFlush,
+			Sce::Pss::Core::Io::ICall::PsmFileGetSize,
+			Sce::Pss::Core::Io::ICall::PsmFileTruncate,
+			Sce::Pss::Core::Io::ICall::PsmFileCopy,
+			Sce::Pss::Core::Io::ICall::PsmFileSetAttributes,
+			Sce::Pss::Core::Io::ICall::PsmFileSetTimes,
+			Sce::Pss::Core::Io::ICall::PsmFileGetPathInformation); 
 
 		// Add all PSM Exclusive functions.
 		Init::addFunctions();
@@ -118,7 +129,7 @@ namespace SnowPME::Runtime {
 		mono_runtime_invoke(psmSetToConsoleMethod, NULL, NULL, NULL);
 
 		// This is automatically called when a resource limit is reached
-		mono_runtime_resource_set_callback(Resources::ResourceLimitReachedCallback);
+		mono_runtime_resource_set_callback(Sce::Pss::Core::Mono::Resources::ResourceLimitReachedCallback);
 
 		// Set up resource limits for PSM Games... 
 		mono_runtime_resource_limit(MONO_RESOURCE_JIT_CODE, 0x1000000, 0x1000000);
@@ -127,7 +138,7 @@ namespace SnowPME::Runtime {
 		mono_gc_set_heap_size_limit(heapSizeLimit, heapSizeLimit);
 		mono_thread_set_max_threads(16);
 		mono_threadpool_set_max_threads(8,8);
-		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
+		mono_thread_set_threads_exhausted_callback(Sce::Pss::Core::Mono::Resources::ThreadsExhaustedCallback);
 
 		return PSM_ERROR_NO_ERROR;
 	}

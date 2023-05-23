@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\Callback.hpp" />
     <ClInclude Include="Graphics\Gui.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\Callback.cpp" />
     <ClCompile Include="Graphics\Gui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />

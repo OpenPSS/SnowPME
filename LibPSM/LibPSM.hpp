@@ -51,4 +51,7 @@
 #include <Sce/Pss/Core/Mono/Security.hpp>
 #include <Sce/Pss/Core/Mono/Util.hpp>
 
+#include <Sce/Pss/Core/Graphics/WindowSystemCallbacks.hpp>
+
+
 #endif

@@ -192,6 +192,12 @@
     <ClCompile Include="Sce\PlayStation\Core\Graphics\ClearMask.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\PlayStation\Core\Audio\Bgm.hpp">
@@ -575,7 +581,10 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\Texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Abstract.hpp">
+    <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

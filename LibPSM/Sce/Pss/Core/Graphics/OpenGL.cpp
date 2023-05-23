@@ -1,11 +1,13 @@
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 namespace Sce::Pss::Core::Graphics {
-	ShaderProgram* OpenGL::activeShaderProgram = NULL;
-	VertexBuffer* OpenGL::activeVertexBuffer = NULL;
-	FrameBuffer* OpenGL::activeFrameBuffer = NULL;
-	Texture* OpenGL::activeTexture = NULL;
+
+	ShaderProgram* OpenGL::activeShaderProgram = nullptr;
+	VertexBuffer* OpenGL::activeVertexBuffer = nullptr;
+	FrameBuffer* OpenGL::activeFrameBuffer = nullptr;
+	Texture* OpenGL::activeTexture = nullptr;
+
+
 
 	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
 		OpenGL::activeShaderProgram = shaderProgram;

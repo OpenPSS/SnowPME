@@ -18,6 +18,8 @@
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 
+#include <Sce/Pss/Core/Timing/DeltaTime.hpp>
+
 #include <Sce/Pss/Core/Errorable.hpp>
 
 #include <LibShared.hpp>
@@ -26,6 +28,7 @@
 
 using namespace Sce::PlayStation::Core::Imaging;
 using namespace Sce::PlayStation::Core::Graphics;
+using namespace Sce::Pss::Core::Timing;
 
 namespace Sce::Pss::Core::Graphics {
 	
@@ -55,21 +58,26 @@ namespace Sce::Pss::Core::Graphics {
 		VertexBuffer* currentVertexBuffers[4];
 		Texture* currentTextures[4];
 
-		int width;
-		int height;
+		short frameCount = 0;
+		int numScreens = 0;
+		int width = 960;
+		int height = 544;
+		bool hasNoFrameBuffer = false;
+		bool hasShaderOrNoFrameBuffer = false;
+		bool frameInProgress = false;
+
+		GraphicsUpdate updateNotifyFlag = GraphicsUpdate::None;
+		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
+
 		PixelFormat colorFormat;
 		PixelFormat depthFormat;
 		MultiSampleMode multiSampleMode;
 		GraphicsCapsState* capsState;
 
-		bool hasNoFrameBuffer = false;
-		bool hasShaderOrNoFrameBuffer = false;
+		std::string extensions = "";
+		std::string renderer = "";
+		DeltaTime* minFrameDelta = nullptr;
 
-		std::string extensions;
-		std::string renderer;
-
-		GraphicsUpdate updateNotifyFlag = GraphicsUpdate::None;
-		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
 
 		int setCurrentObject(ShaderProgram* program);
 		int setCurrentObject(FrameBuffer* frameBuffer);
@@ -78,6 +86,9 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
 		~GraphicsContext();
 		int ActiveStateChanged(bool state);
+		
+		int EndFrame();
+		int BeginFrame();
 
 		int Update(GraphicsUpdate update, GraphicsState* state, int* handles);
 		int Clear(ClearMask mask);

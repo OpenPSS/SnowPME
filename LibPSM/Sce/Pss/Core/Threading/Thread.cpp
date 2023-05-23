@@ -1,20 +1,31 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/PlatformSpecific.hpp>
 
-namespace Sce::Pss::Core::Threading {
+#include <chrono>
+#include <thread>
 
-	static PsmThreadId mainThreadId;
+namespace Sce::Pss::Core::Threading {
+	uint64_t Thread::mainThreadId = NULL;
+
+	uint64_t Thread::CurrentThreadId() {
+		return std::hash<std::thread::id>{}(std::this_thread::get_id());
+	}
 
 	bool Thread::IsMainThread() {
-		if (mainThreadId == PlatformSpecific::CurrentThreadId()) {
+		if (mainThreadId == Thread::CurrentThreadId()) {
 			return true;
 		}
 		else {
 			return false;
 		}
 	}
+	
+	void Thread::Sleep(double time) {
+		uint64_t microseconds = (uint64_t)(time * 1000000.0);
+		std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
+	}
 
-	void Thread::SetMainThread(PsmThreadId threadId) {
+	void Thread::SetMainThread(uint64_t threadId) {
 		mainThreadId = threadId;
 	}
 

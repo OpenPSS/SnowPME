@@ -3,7 +3,9 @@
 #include <Sce/Pss/Core/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
+#include <Sce/Pss/Core/Graphics/WindowSystemCallbacks.hpp>
 #include <Sce/Pss/Core/Application.hpp>
+
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
 #include <glad/glad.h>
@@ -264,14 +266,60 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
+	
+	int GraphicsContext::EndFrame() {
+		if (Threading::Thread::IsMainThread() /* && !endframe_related_ns && endframe_related_0 && endframe_related */) {
+			if (this->frameInProgress) {
+				this->frameInProgress = false;
+			}
+		}
+		else {
+			return PSM_ERROR_ERROR;
+		}
+	}
+
+	int GraphicsContext::BeginFrame() {
+		if (Threading::Thread::IsMainThread() /* || endframe_related_ns || startframe_related || !endframe_related_0 || !endframe_related */) {
+			if (this->frameInProgress) {
+				this->frameInProgress = false;
+			}
+		}
+		else {
+			return PSM_ERROR_ERROR;
+		}
+	}
 
 	int GraphicsContext::SwapBuffers() {
 		
+		// end the current frame ..
+		this->EndFrame();
+		// swap buffers ..
 		glFlush();
-		Application::PsmSwapBuffers();
+		WindowSystemCallbacks::SwapBuffers();
+		// begin a new frame
+		this->BeginFrame();
+		
+		// increment the frame counter
+		this->frameCount++;
 
-		Logger::Error("SwapBuffers not yet implemented.");
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		if (this->numScreens >= 2) {
+			glDisable(GL_SCISSOR_TEST);
+			glClearColor(0.0, 0.0, 0.0, 0.0);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glEnable(GL_SCISSOR_TEST);
+			this->NotifyUpdate(GraphicsUpdate::ClearColor | GraphicsUpdate::Scissor | GraphicsUpdate::Enable);
+			// this->mscreen_something |= 1;
+		}
+
+		double deltaTime = minFrameDelta->CalculateDelta();
+		if (deltaTime < minFrameDelta->MinDelta()) {
+			double maxSleepTime = (1 / 16);
+			deltaTime -= maxSleepTime;
+			Thread::Sleep(deltaTime);
+			minFrameDelta->CalculateDelta();
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
@@ -455,7 +503,7 @@ namespace Sce::Pss::Core::Graphics {
 			if (notifyFlag != GraphicsUpdate::None)
 				this->UpdateState(notifyFlag, state);
 
-			if (Shared::Config::ScreenTotal() >= 2)
+			if (this->numScreens >= 2)
 				this->UpdateMultiScreen(notifyFlag, state, 0);
 		}
 	}
@@ -479,6 +527,8 @@ namespace Sce::Pss::Core::Graphics {
 
 	GraphicsContext::~GraphicsContext() {
 		delete this->capsState;
+		delete this->minFrameDelta;
+
 		activeGraphicsContext = NULL;
 	}
 
@@ -665,6 +715,8 @@ namespace Sce::Pss::Core::Graphics {
 
 			std::memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
 			std::memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
+
+			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 
 		}
 		else {
