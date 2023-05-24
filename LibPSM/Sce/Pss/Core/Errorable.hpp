@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_ERRORABLE_H
-#define LIB_PSM_ERRORABLE_H 1
+#ifndef LIB_PSS_ERRORABLE_H
+#define LIB_PSS_ERRORABLE_H 1
 #include <vector>
 #include <string>
 #include <Sce/PlayStation/Core/Error.hpp>

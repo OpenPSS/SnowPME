@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_CGX_H
-#define LIB_PSM_CGX_H 1
+#ifndef LIB_PSS_CGX_H
+#define LIB_PSS_CGX_H 1
 #include <string>
 #include <Sce/Pss/Core/Errorable.hpp>
 

@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_APPINFO_H
-#define LIB_PSM_APPINFO_H 1
+#ifndef LIB_PSS_APPINFO_H
+#define LIB_PSS_APPINFO_H 1
 #include <map>
 #include <string>
 #include <vector>

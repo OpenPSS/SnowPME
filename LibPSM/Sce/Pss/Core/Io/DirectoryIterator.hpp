@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_DIRECTORY_ITERATOR_H
-#define LIB_PSM_DIRECTORY_ITERATOR_H 1
+#ifndef LIB_PSS_DIRECTORY_ITERATOR_H
+#define LIB_PSS_DIRECTORY_ITERATOR_H 1
 #include <vector>
 #include <string>
 #include <filesystem>

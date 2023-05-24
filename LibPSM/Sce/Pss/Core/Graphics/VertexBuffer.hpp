@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_VERTEXBUFFER_H
-#define LIB_PSM_VERTEXBUFFER_H 1
+#ifndef LIB_PSS_VERTEXBUFFER_H
+#define LIB_PSS_VERTEXBUFFER_H 1
 #include <cstdint>
 #include <vector>
 #include <Sce/PlayStation/Core/Vector4.hpp>

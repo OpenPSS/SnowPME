@@ -11,6 +11,28 @@ namespace SnowPME::Graphics {
 		Callback::isInitalized = true;
 	}
 
+	void Callback::PollEvents() {
+		if (!Callback::isInitalized) {
+			throw new std::exception("GraphicsCallback is not initalized!");
+		}
+		Callback::mainWindow->PollEvents();
+	}
+
+	bool Callback::WasClosed() {
+		if (!Callback::isInitalized) {
+			throw new std::exception("GraphicsCallback is not initalized!");
+		}
+		return Callback::mainWindow->ShouldClose();
+	}
+
+	bool Callback::WasMinimized() {
+		if (!Callback::isInitalized) {
+			throw new std::exception("GraphicsCallback is not initalized!");
+		}
+		return Callback::mainWindow->IsMinimized();
+	}
+
+
 	void Callback::SwapBuffers() {
 		if (!Callback::isInitalized) {
 			throw new std::exception("GraphicsCallback is not initalized!");

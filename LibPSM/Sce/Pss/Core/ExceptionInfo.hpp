@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_EXCEPTIONINFO_H
-#define LIB_PSM_EXCEPTIONINFO_H 1
+#ifndef LIB_PSS_EXCEPTIONINFO_H
+#define LIB_PSS_EXCEPTIONINFO_H 1
 #include <vector>
 #include <string>
 

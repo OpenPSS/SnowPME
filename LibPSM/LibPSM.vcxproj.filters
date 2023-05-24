@@ -198,6 +198,9 @@
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Environment\SystemEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\PlayStation\Core\Audio\Bgm.hpp">
@@ -585,6 +588,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\PlayStation\Core\Environment\InternalData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Environment\SystemEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

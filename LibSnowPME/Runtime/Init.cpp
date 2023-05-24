@@ -23,12 +23,15 @@ namespace SnowPME::Runtime {
 	MonoAssembly*     Init::msCoreLib = nullptr;
 	MonoAssembly*     Init::systemLib = nullptr;
 
-	int Init::InitCallbacks(Graphics::Window* oglWindow) {
+	int Init::initCallbacks(Graphics::Window* oglWindow) {
 		Graphics::Callback::Init(oglWindow);
 
 		Sce::Pss::Core::Graphics::WindowSystemCallbacks::Init(
 			Graphics::Callback::SwapBuffers,
-			Graphics::Callback::GetTime);
+			Graphics::Callback::GetTime,
+			Graphics::Callback::PollEvents,
+			Graphics::Callback::WasClosed,
+			Graphics::Callback::WasMinimized);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -59,7 +62,7 @@ namespace SnowPME::Runtime {
 		int resourceSizeLimit = appInfo->ResourceHeapSize() * 0x400;
 
 		Graphics::Window* window = new Graphics::Window(Shared::Config::ScreenHeight(0), Shared::Config::ScreenWidth(0), "- SnowPME - ");
-		Init::InitCallbacks(window);
+		Init::initCallbacks(window);
 
 		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
 			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");

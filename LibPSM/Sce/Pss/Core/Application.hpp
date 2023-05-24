@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_APPGLOBAL_H
-#define LIB_PSM_APPGLOBAL_H 1
+#ifndef LIB_PSS_APPGLOBAL_H
+#define LIB_PSS_APPGLOBAL_H 1
 
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>

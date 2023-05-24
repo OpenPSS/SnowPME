@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_GRAPHICSCONTEXT_H
-#define LIB_PSM_GRAPHICSCONTEXT_H 1
+#ifndef LIB_PSS_GRAPHICSCONTEXT_H
+#define LIB_PSS_GRAPHICSCONTEXT_H 1
 
 #include <Sce/PlayStation/Core/Graphics/DrawMode.hpp>
 #include <Sce/PlayStation/Core/Graphics/PixelFormat.hpp>

@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_RESOURCES_H
-#define LIB_PSM_RESOURCES_H 1
+#ifndef LIB_PSS_RESOURCES_H
+#define LIB_PSS_RESOURCES_H 1
 
 #include <string>
 #include <iostream>

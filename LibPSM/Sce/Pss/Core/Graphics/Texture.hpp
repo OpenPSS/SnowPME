@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_TEXTURE_H
-#define LIB_PSM_TEXTURE_H 1
+#ifndef LIB_PSS_TEXTURE_H
+#define LIB_PSS_TEXTURE_H 1
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {

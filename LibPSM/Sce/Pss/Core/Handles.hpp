@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_HANDLES_H
-#define LIB_PSM_HANDLES_H 1
+#ifndef LIB_PSS_HANDLES_H
+#define LIB_PSS_HANDLES_H 1
 #include <cstdint>
 
 namespace Sce::Pss::Core {

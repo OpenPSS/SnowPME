@@ -9,7 +9,6 @@
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
-	static Window* mainWindow;
 
 	Window::Window(int height, int width, std::string title) {
 		if (!glfwInit()) {
@@ -41,21 +40,21 @@ namespace SnowPME::Graphics {
 		glViewport(0, 0, framebufferWidth, framebufferHeight);
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
-		mainWindow = this;
-
-	}
-	double Window::GetTime() {
-		return glfwGetTime();
 	}
 
 	void Window::PollEvents() {
 		glfwPollEvents();
 	}
+	double Window::GetTime() {
+		return glfwGetTime();
+	}
+
+	bool Window::IsMinimized() {
+		return glfwGetWindowAttrib(window, GLFW_ICONIFIED);
+	}
 
 	void Window::SwapBuffers() {
 		glfwSwapBuffers(this->window);
-
-		this->PollEvents();
 	}
 	
 	bool Window::ShouldClose() {

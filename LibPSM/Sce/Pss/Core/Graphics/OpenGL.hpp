@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_OPENGL
-#define LIB_PSM_OPENGL 1
+#ifndef LIB_PSS_OPENGL
+#define LIB_PSS_OPENGL 1
 
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>

@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_SHADERPROGRAM_H
-#define LIB_PSM_SHADERPROGRAM_H 1
+#ifndef LIB_PSS_SHADERPROGRAM_H
+#define LIB_PSS_SHADERPROGRAM_H 1
 #include <string>
 #include <vector>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>

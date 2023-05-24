@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_SANDBOX_H
-#define LIB_PSM_SANDBOX_H 1
+#ifndef LIB_PSS_SANDBOX_H
+#define LIB_PSS_SANDBOX_H 1
 #include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
 #include <vector>

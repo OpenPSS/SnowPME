@@ -11,6 +11,9 @@ namespace SnowPME::Graphics {
 		static void Init(Window* oglWindow);
 		static void SwapBuffers();
 		static double GetTime();
+		static void PollEvents();
+		static bool WasMinimized();
+		static bool WasClosed();
 	};
 
 

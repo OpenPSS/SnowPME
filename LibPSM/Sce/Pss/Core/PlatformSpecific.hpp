@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_PLATFORM_SPECIFIC_H
-#define LIB_PSM_PLATFORM_SPECIFIC_H 1
+#ifndef LIB_PSS_PLATFORM_SPECIFIC_H
+#define LIB_PSS_PLATFORM_SPECIFIC_H 1
 #include <cstdint>
 #include <string>
 

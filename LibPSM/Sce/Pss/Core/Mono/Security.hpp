@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_SECURITY_H
-#define LIB_PSM_SECURITY_H 1
+#ifndef LIB_PSS_SECURITY_H
+#define LIB_PSS_SECURITY_H 1
 
 #include <string>
 #include <iostream>

@@ -42,7 +42,6 @@
 #include <Sce/Pss/Core/Application.hpp>
 #include <Sce/Pss/Core/Handles.hpp>
 
-
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
@@ -50,6 +49,7 @@
 #include <Sce/Pss/Core/Mono/Resources.hpp>
 #include <Sce/Pss/Core/Mono/Security.hpp>
 #include <Sce/Pss/Core/Mono/Util.hpp>
+#include <Sce/Pss/Core/Timing/DeltaTime.hpp>
 
 #include <Sce/Pss/Core/Graphics/WindowSystemCallbacks.hpp>
 

@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_DELTATIME_H
-#define LIB_PSM_DELTATIME_H 1
+#ifndef LIB_PSS_DELTATIME_H
+#define LIB_PSS_DELTATIME_H 1
 
 namespace Sce::Pss::Core::Timing {
 	class DeltaTime{

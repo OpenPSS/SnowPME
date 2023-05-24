@@ -56,6 +56,7 @@
     <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
     <ClCompile Include="Sce\Pss\Core\Application.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\SystemEvent.cpp" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogResult.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogState.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Environment\CommonDialogType.hpp" />
+    <ClInclude Include="Sce\PlayStation\Core\Environment\InternalData.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Environment\Log.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Environment\NetworkInformation.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Environment\PersistentMemory.hpp" />
@@ -187,6 +189,7 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
     <ClInclude Include="Sce\Pss\Core\Application.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\SystemEvent.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />

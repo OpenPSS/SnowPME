@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_THREAD_H
-#define LIB_PSM_THREAD_H 1
+#ifndef LIB_PSS_THREAD_H
+#define LIB_PSS_THREAD_H 1
 #include <vector>
 
 namespace Sce::Pss::Core::Threading {

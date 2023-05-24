@@ -1,5 +1,5 @@
-#ifndef LIB_PSM_ICALL_H
-#define LIB_PSM_ICALL_H 1
+#ifndef LIB_PSS_ICALL_H
+#define LIB_PSS_ICALL_H 1
 
 #include <mono/mono.h>
 #include <cstdint>

@@ -17,9 +17,9 @@ namespace SnowPME::Runtime
 		static void addFunctions();
 		static void launchExe(std::string runExe);
 		static int initMono(std::string executablePath);
-		
+		static int initCallbacks(Graphics::Window* oglWindow);
+
 	public:
-		static int InitCallbacks(Graphics::Window* oglWindow);
 		static void LoadApplication(std::string gameFolder);
 		static void StartApplication();
 	};

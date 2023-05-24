@@ -10,6 +10,7 @@
 
 namespace Sce::PlayStation::Core::Environment {
 	class Log {
+	private:
 	public:
 		static int WriteNative(MonoString* text);
 		static int GetNeedsRedirection();
