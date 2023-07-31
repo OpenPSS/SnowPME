@@ -27,26 +27,6 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 
-	int GraphicsContext::Height() {
-		return this->height;
-	}
-
-	int GraphicsContext::Width() {
-		return this->width;
-	}
-	PixelFormat GraphicsContext::ColorFormat() {
-		return this->colorFormat;
-	}
-	PixelFormat GraphicsContext::DepthFormat() {
-		return this->depthFormat;
-	}
-	MultiSampleMode GraphicsContext::MSampleMode() {
-		return this->multiSampleMode;
-	}
-	GraphicsCapsState* GraphicsContext::CapsState() {
-		return this->capsState;
-	}
-
 	int GraphicsContext::setCurrentObject(ShaderProgram* shaderProgram) {
 		int result = PSM_ERROR_NO_ERROR;
 
@@ -156,7 +136,7 @@ namespace Sce::Pss::Core::Graphics {
 					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
 
 					if (currentVertexBuffer == workingVertexBuffer) {
-						if (workingVertexBuffer != nullptr /* && workingVertexBuffer->SomethingElse != NULL */) {
+						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
 							this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 						}
 					}
@@ -173,7 +153,7 @@ namespace Sce::Pss::Core::Graphics {
 
 						if (workingVertexBuffer != nullptr) {
 							workingVertexBuffer->Active = true;
-							if (true /*workingVertexBuffer->SomethingElse != NULL */) {
+							if (workingVertexBuffer->unk21) {
 								this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 							}
 						}
@@ -185,8 +165,6 @@ namespace Sce::Pss::Core::Graphics {
 			if ((update & GraphicsUpdate::Texture) != GraphicsUpdate::None)
 			{
 				Logger::Debug("update & GraphicsUpdate::Texture");
-
-
 				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
 				Logger::Error("update & GraphicsUpdate::Texture is not implemented");
 				return PSM_ERROR_NOT_IMPLEMENTED;
@@ -237,19 +215,14 @@ namespace Sce::Pss::Core::Graphics {
 			// bind the framebuffer
 			OpenGL::SetFrameBuffer(this->currentFrameBuffer);
 			
-			// check currentFrameBuffer and currentProgram. 
-			bool hasNoFrameBuffer = (this->currentFrameBuffer == nullptr /* || activeFrameBuffer->unk12 */);
-			bool hasNoShader = this->currentProgram == nullptr;
-			
 			// set hasNoFrameBuffer and HasShaderOrNoFrameBuffer flags
-			this->hasNoFrameBuffer = hasNoFrameBuffer;
-			this->hasShaderOrNoFrameBuffer = !hasNoShader && hasNoFrameBuffer;
-
+			this->hasFrameBuffer = (!this->currentFrameBuffer  || this->currentFrameBuffer->unk12 );
+			this->hasShaderOrNoFrameBuffer = (this->currentProgram == nullptr && this->hasFrameBuffer);
 		}
 	}
 
 	int GraphicsContext::Clear(ClearMask mask) {
-		if (this->hasNoFrameBuffer) {
+		if (this->hasFrameBuffer) {
 			int glMask = 0;
 			if ((mask & ClearMask::Color) != ClearMask::None)
 				glMask |= GL_COLOR_BUFFER_BIT;
@@ -335,10 +308,8 @@ namespace Sce::Pss::Core::Graphics {
 			GraphicsUpdate::ClearStencil)) != GraphicsUpdate::None) {
 
 			if ((notifyFlag & GraphicsUpdate::Scissor) != GraphicsUpdate::None) {
-				Logger::Error("Scissor not yet implemented.");
-				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-				return;
-
+				Logger::Debug("notifyFlag & GraphicsUpdate::Scissor");
+				glScissor(state->Scissor.X, state->Scissor.Y, state->Scissor.Width, state->Scissor.Y);
 			}
 
 			if ((notifyFlag & GraphicsUpdate::Viewport) != GraphicsUpdate::None) {
@@ -429,9 +400,10 @@ namespace Sce::Pss::Core::Graphics {
 				glCullFace(this->glCullModes[state->CullFace.bits & 3]);
 				glFrontFace(this->glCullFrontFaceModes[(state->CullFace.bits >> 8) & 1]);
 
-				Logger::Error("CullFace is not fully implemented yet.");
-				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-				return;
+				if (state->CullFace.bits & 0xFF)
+					this->cullFaceBits |=  2;
+				else
+					this->cullFaceBits |= 0xFFFFFFFD;
 			}
 
 			if ((notifyFlag & GraphicsUpdate::BlendFunc) != GraphicsUpdate::None) {
@@ -449,10 +421,8 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::DepthFunc) != GraphicsUpdate::None)
 			{
 				Logger::Debug("notifyFlag & GraphicsUpdate::DepthFunc");
-
-				Logger::Error("DepthFunc is not fully implemented yet.");
-				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-				return;
+				glDepthFunc(glDepthFuncs[state->DepthFunc.bits & 7]);
+				glDepthMask((state->DepthFunc.bits >> 8) & 0xFF);
 			}
 			if ((notifyFlag & GraphicsUpdate::PolygonOffset) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::PolygonOffset");
@@ -461,18 +431,39 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::StencilFunc) != GraphicsUpdate::None)
 			{
 				Logger::Debug("notifyFlag & GraphicsUpdate::StencilFunc");
+				
+				glStencilFuncSeparate(GL_FRONT, 
+									glDepthFuncs[state->StencilFuncFront.bits & 7],
+									(state->StencilFuncFront.bits >> 8) & 0xFF,
+									(state->StencilFuncFront.bits >> 16) & 0xFF
+				);
 
-				Logger::Error("StencilFunc is not fully implemented yet.");
-				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-				return;
+				glStencilFuncSeparate(GL_BACK,
+									glDepthFuncs[state->StencilFuncBack.bits & 7],
+									(state->StencilFuncBack.bits >> 8) & 0xFF,
+									(state->StencilFuncBack.bits >> 16) & 0xFF
+				);
+
+				glStencilMaskSeparate(GL_FRONT, (state->StencilFuncFront.bits >> 24) & 0xFF);
+				glStencilMaskSeparate(GL_BACK, (state->StencilFuncBack.bits >> 24) & 0xFF);
 
 			}
 			if ((notifyFlag & GraphicsUpdate::StencilOp) != GraphicsUpdate::None)
 			{
 				Logger::Debug("notifyFlag & GraphicsUpdate::StencilOp");
 
-				Logger::Error("StencilOp is not fully implemented yet.");
-				this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
+				glStencilOpSeparate(
+					GL_FRONT,
+					glStencilOps[state->StencilOpFront.bits & 7],
+					glStencilOps[(state->StencilOpFront.bits >> 8) & 7],
+					glStencilOps[((state->StencilOpFront.bits >> 16) & 0xFFFF) & 7]
+				);
+				glStencilOpSeparate(
+					GL_BACK,
+					glStencilOps[state->StencilOpBack.bits & 7],
+					glStencilOps[(state->StencilOpBack.bits >> 8) & 7],
+					glStencilOps[((state->StencilOpBack.bits >> 16) & 0xFFFF) & 7]
+				);
 				return;
 			}
 
@@ -518,15 +509,9 @@ namespace Sce::Pss::Core::Graphics {
 		return updateFlag;
 	}
 
-	std::string GraphicsContext::Extensions() {
-		return this->extensions;
-	}
-	std::string GraphicsContext::Renderer() {
-		return this->renderer;
-	}
 
 	GraphicsContext::~GraphicsContext() {
-		delete this->capsState;
+		delete this->CapsState;
 		delete this->minFrameDelta;
 
 		activeGraphicsContext = NULL;
@@ -539,18 +524,18 @@ namespace Sce::Pss::Core::Graphics {
 			return;
 		}
 		if (Thread::IsMainThread()) {
-			this->width = width;
-			this->height = height;
-			this->colorFormat = colorFormat;
-			this->depthFormat = depthFormat;
-			this->multiSampleMode = multiSampleMode;
-			this->capsState = new GraphicsCapsState();
+			this->Width = width;
+			this->Height = height;
+			this->ColorFormat = colorFormat;
+			this->DepthFormat = depthFormat;
+			this->SampleMode = multiSampleMode;
+			this->CapsState = new GraphicsCapsState();
 
 			// Set width/height
 			if (width == 0)
-				this->width = Shared::Config::ScreenWidth(0);
+				this->Width = Shared::Config::ScreenWidth(0);
 			if (height == 0)
-				this->height = Shared::Config::ScreenHeight(0);
+				this->Height = Shared::Config::ScreenHeight(0);
 
 			// set depth formats and stuff
 			int redBits = 0;
@@ -570,61 +555,61 @@ namespace Sce::Pss::Core::Graphics {
 			glGetIntegerv(GL_SAMPLES, &glSamples);
 
 			if (depthFormat == PixelFormat::None) {
-				this->depthFormat = PixelFormat::None;
+				this->DepthFormat = PixelFormat::None;
 
 				if (depthBits >= 16)
-					this->depthFormat = (stencilBits >= 8) ? PixelFormat::Depth16Stencil8 : PixelFormat::Depth16;
+					this->DepthFormat = (stencilBits >= 8) ? PixelFormat::Depth16Stencil8 : PixelFormat::Depth16;
 				if (depthBits >= 24)
-					this->depthFormat = (stencilBits >= 8) ? PixelFormat::Depth24Stencil8 : PixelFormat::Depth24;
+					this->DepthFormat = (stencilBits >= 8) ? PixelFormat::Depth24Stencil8 : PixelFormat::Depth24;
 			}
 
 			if (colorFormat == PixelFormat::None) {
-				this->colorFormat = PixelFormat::Rgb565;
+				this->ColorFormat = PixelFormat::Rgb565;
 				if (redBits >= 8 && greenBits >= 8 && blueBits >= 8 && alphaBits >= 8)
-					this->colorFormat = PixelFormat::Rgba;
+					this->ColorFormat = PixelFormat::Rgba;
 			}
 
 			if (multiSampleMode == MultiSampleMode::None) {
-				this->multiSampleMode = MultiSampleMode::None;
+				this->SampleMode = MultiSampleMode::None;
 				if (glSamples >= 2)
-					this->multiSampleMode = MultiSampleMode::Msaa2x;
+					this->SampleMode = MultiSampleMode::Msaa2x;
 				if (glSamples >= 4)
-					this->multiSampleMode = MultiSampleMode::Msaa4x;
+					this->SampleMode = MultiSampleMode::Msaa4x;
 			}
 
 			// Populate CapsState
 
-			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &this->capsState->MaxViewportWidth);
-			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->capsState->MaxTextureSize);
-			glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &this->capsState->MaxCubeMapTextureSize);
-			glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &this->capsState->MaxRenderbufferSize);
-			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &this->capsState->MaxVertexUniformVectors);
-			glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &this->capsState->MaxFragmentUniformVectors);
-			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &this->capsState->MaxVertexAttribs);
-			glGetIntegerv(GL_MAX_VARYING_VECTORS, &this->capsState->MaxVaryingVectors);
-			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->capsState->MaxCombinedTextureImageUnits);
-			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &this->capsState->MaxTextureImageUnits);
-			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &this->capsState->MaxVertexTextureImageUnits);
+			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &this->CapsState->MaxViewportWidth);
+			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->CapsState->MaxTextureSize);
+			glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &this->CapsState->MaxCubeMapTextureSize);
+			glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &this->CapsState->MaxRenderbufferSize);
+			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &this->CapsState->MaxVertexUniformVectors);
+			glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &this->CapsState->MaxFragmentUniformVectors);
+			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &this->CapsState->MaxVertexAttribs);
+			glGetIntegerv(GL_MAX_VARYING_VECTORS, &this->CapsState->MaxVaryingVectors);
+			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxCombinedTextureImageUnits);
+			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxTextureImageUnits);
+			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxVertexTextureImageUnits);
 
-			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &this->capsState->MaxTextureMaxAnisotropy);
-			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &this->capsState->MinAliasedLineWidth);
-			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &this->capsState->MinAliasedPointSize);
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &this->CapsState->MaxTextureMaxAnisotropy);
+			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &this->CapsState->MinAliasedLineWidth);
+			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &this->CapsState->MinAliasedPointSize);
 
 			char* glExtensions = (char*)glGetString(GL_EXTENSIONS);
 
 			if(glExtensions == NULL)
-				this->extensions = std::string();
+				this->Extensions = std::string();
 			else
-				this->extensions = std::string(glExtensions);
+				this->Extensions = std::string(glExtensions);
 
-			std::vector<std::string> extensionList = Shared::String::Util::Split(this->extensions, " ");
+			std::vector<std::string> extensionList = Shared::String::Util::Split(this->Extensions, " ");
 
 			Logger::Info("GL Vendor: " + std::string((char*)glGetString(GL_VENDOR)));
 			Logger::Info("GL Renderer: " + std::string((char*)glGetString(GL_RENDERER)));
 			Logger::Info("GL Version: " + std::string((char*)glGetString(GL_VERSION)));
 			Logger::Info("GL Shader Language Version: " + std::string((char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
-			this->renderer = std::string((char*)glGetString(GL_RENDERER));
+			this->Renderer = std::string((char*)glGetString(GL_RENDERER));
 
 			unsigned int gext = GraphicsExtension::None;
 			for (std::string extension : extensionList) {
@@ -681,33 +666,42 @@ namespace Sce::Pss::Core::Graphics {
 					gext |= GraphicsExtension::InstancedArrays;
 
 			}
-			if (this->capsState->MaxTextureSize > 0x800)
-				this->capsState->MaxTextureSize = 0x800;
-			if (this->capsState->MaxCubeMapTextureSize > 0x800)
-				this->capsState->MaxCubeMapTextureSize = 0x800;
-			if (this->capsState->MaxRenderbufferSize > 0x800)
-				this->capsState->MaxRenderbufferSize = 0x800;
-			if (this->capsState->MaxVertexUniformVectors > 0x80)
-				this->capsState->MaxVertexUniformVectors = 0x80;
-			if (this->capsState->MaxFragmentUniformVectors > 0x40)
-				this->capsState->MaxFragmentUniformVectors = 0x40;
-			if (this->capsState->MaxVertexAttribs > 0x8)
-				this->capsState->MaxVertexAttribs = 0x8;
-			if (this->capsState->MaxVaryingVectors > 0x8)
-				this->capsState->MaxVaryingVectors = 0x8;
-			if (this->capsState->MaxCombinedTextureImageUnits > 0x8)
-				this->capsState->MaxCombinedTextureImageUnits = 0x8;
-			if (this->capsState->MaxTextureImageUnits > 0x8)
-				this->capsState->MaxTextureImageUnits = 0x8;
-			if (this->capsState->MaxVertexTextureImageUnits > 0x0)
-				this->capsState->MaxVertexTextureImageUnits = 0x0;
+			if (this->CapsState->MaxTextureSize > 0x800)
+				this->CapsState->MaxTextureSize = 0x800;
+			if (this->CapsState->MaxCubeMapTextureSize > 0x800)
+				this->CapsState->MaxCubeMapTextureSize = 0x800;
+			if (this->CapsState->MaxRenderbufferSize > 0x800)
+				this->CapsState->MaxRenderbufferSize = 0x800;
+			if (this->CapsState->MaxVertexUniformVectors > 0x80)
+				this->CapsState->MaxVertexUniformVectors = 0x80;
+			if (this->CapsState->MaxFragmentUniformVectors > 0x40)
+				this->CapsState->MaxFragmentUniformVectors = 0x40;
+			if (this->CapsState->MaxVertexAttribs > 0x8)
+				this->CapsState->MaxVertexAttribs = 0x8;
+			if (this->CapsState->MaxVaryingVectors > 0x8)
+				this->CapsState->MaxVaryingVectors = 0x8;
+			if (this->CapsState->MaxCombinedTextureImageUnits > 0x8)
+				this->CapsState->MaxCombinedTextureImageUnits = 0x8;
+			if (this->CapsState->MaxTextureImageUnits > 0x8)
+				this->CapsState->MaxTextureImageUnits = 0x8;
+			if (this->CapsState->MaxVertexTextureImageUnits > 0x0)
+				this->CapsState->MaxVertexTextureImageUnits = 0x0;
 
-			if (this->capsState->MaxAliasedLineWidth > 8.0)
-				this->capsState->MaxAliasedLineWidth = 8.0;
-			if (this->capsState->MaxAliasedPointSize > 128.0)
-				this->capsState->MaxAliasedPointSize = 128.0;
+			if (this->CapsState->MaxAliasedLineWidth > 8.0)
+				this->CapsState->MaxAliasedLineWidth = 8.0;
+			if (this->CapsState->MaxAliasedPointSize > 128.0)
+				this->CapsState->MaxAliasedPointSize = 128.0;
 
-			this->capsState->Extension = (gext & 0x3A9B8); //todo: find why 0x3a9b8
+			this->CapsState->Extension = (gext & (GraphicsExtension::TextureFilterAnisotropic |
+													GraphicsExtension::Rgb8Rgba8 | 
+													GraphicsExtension::Depth24 | 
+													GraphicsExtension::PackedDepthStencil | 
+													GraphicsExtension::VertexHalfFloat | 
+													GraphicsExtension::TextureHalfFloat | 
+													GraphicsExtension::TextureHalfFloatLinear | 
+													GraphicsExtension::TextureNPot2DMipMap | 
+													GraphicsExtension::DrawInstanced | 
+													GraphicsExtension::InstancedArrays));
 
 			activeGraphicsContext = this;
 

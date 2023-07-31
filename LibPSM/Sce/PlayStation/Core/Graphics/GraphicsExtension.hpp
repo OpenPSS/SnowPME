@@ -2,28 +2,27 @@
 #define LIB_PSM_GRAPHICSEXTENSION_H
 
 namespace Sce::PlayStation::Core::Graphics {
-	enum GraphicsExtension : unsigned int {
-		None = 0,
-		DepthTexture = 1,
-		Texture3D = 2,
-		TextureNpot = 4,
-		TextureFilterAnisotropic = 8,
-		Rgb8Rgba8 = 16,
-		Depth24 = 32,
-		Depth32 = 64,
-		PackedDepthStencil = 128,
-		VertexHalfFloat = 256,
-		Vertex1010102 = 512,
-		TextureFloat = 1024,
-		TextureHalfFloat = 2048,
-		TextureFloatLinear = 4096,
-		TextureHalfFloatLinear = 8192,
-		Texture2101010Rev = 16384,
-		TextureNPot2DMipMap = 32768,
-		DrawInstanced = 65536,
-		InstancedArrays = 131072
-
-	};
+    enum GraphicsExtension : unsigned int {
+        None = 0x0,
+        DepthTexture = 0x1,
+        Texture3D = 0x2,
+        TextureNpot = 0x4,
+        TextureFilterAnisotropic = 0x8,
+        Rgb8Rgba8 = 0x10,
+        Depth24 = 0x20,
+        Depth32 = 0x40,
+        PackedDepthStencil = 0x80,
+        VertexHalfFloat = 0x100,
+        Vertex1010102 = 0x200,
+        TextureFloat = 0x400,
+        TextureHalfFloat = 0x800,
+        TextureFloatLinear = 0x1000,
+        TextureHalfFloatLinear = 0x2000,
+        Texture2101010Rev = 0x4000,
+        TextureNPot2DMipMap = 0x8000,
+        DrawInstanced = 0x10000,
+        InstancedArrays = 0x20000
+    };
 }
 
 #endif

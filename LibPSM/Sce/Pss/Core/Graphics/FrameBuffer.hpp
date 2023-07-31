@@ -6,6 +6,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	class FrameBuffer : public GraphicsObject {
 	public:
+		bool unk12 = 0;
 		int ActiveStateChanged(bool state);
 		FrameBuffer();
 		~FrameBuffer();

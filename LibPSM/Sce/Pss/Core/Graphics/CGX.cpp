@@ -8,17 +8,60 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
 
+	bool CGX::headerIsValid() {
+		if (this->cgxBuf == nullptr) {
+			return true;
+		}
+		if (this->header.headerSize < 64)
+			return false;
+
+		if (this->header.unk5 < this->header.headerSize)
+			return false;
+		
+		if (this->header.unk6 < this->header.unk5)
+			return false;
+		
+		if (this->header.unk7 < this->header.unk6)
+			return false;
+
+		if (this->header.totalSize < this->header.unk7 || this->cgxSz < this->header.totalSize)
+			return false;
+		
+		if (this->header.unk1 > 0x400)
+			return false;
+		
+		if (this->header.unk2 > 0x400)
+			return false;
+
+		if (this->header.unk4 > 0x400)
+			return false;
+
+		if ((this->header.unk0 & 3) != 0)
+			return false;
+
+		if (this->header.unk0)
+		{
+			if (this->header.unk0 < this->header.headerSize || this->header.unk0 + 16 * this->header.unk1 > this->header.unk5)
+				return false;
+		}
+		else if (this->header.unk1)
+		{
+			return false;
+		}
+
+		// TODO: implement the rest of the checks
+	}
+
 	CGX::CGX(std::byte* cgx, size_t cgxSz) {
 		
-		if (cgx == NULL) {
-			ExceptionInfo::AddMessage("CGX was null");
+		if (cgx == nullptr) {
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 			return;
 		}
 		if (cgxSz < sizeof(CGXHeader) ||
 			cgxSz > CGX_MAX_LEN) {
 
-			ExceptionInfo::AddMessage("CGX was null");
+			ExceptionInfo::AddMessage("Unsupported shader file");
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 			return;
 		}
@@ -42,6 +85,13 @@ namespace Sce::Pss::Core::Graphics {
 			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 			return;
 		}
+
+		if (!this->headerIsValid()) {
+			ExceptionInfo::AddMessage("Corrupted shader file");
+			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
+			return;
+		}
+
 		CGXVarientTableEntry* varientTable = (CGXVarientTableEntry*)(this->cgxBuf + this->header.varientTablePtr);
 
 		this->vertexVarientTableEntry = varientTable[0];

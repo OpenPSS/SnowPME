@@ -159,11 +159,11 @@ namespace Sce::PlayStation::Core::Graphics {
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
 
-			*width = GraphicsContext::GetGraphicsContext()->Width();
-			*height = GraphicsContext::GetGraphicsContext()->Height();
-			*(uint32_t*)colorFormat = (uint32_t)GraphicsContext::GetGraphicsContext()->ColorFormat();
-			*(uint32_t*)depthFormat = (uint32_t)GraphicsContext::GetGraphicsContext()->DepthFormat();
-			*(uint32_t*)multiSampleMode = (uint32_t)GraphicsContext::GetGraphicsContext()->MSampleMode();
+			*width = GraphicsContext::GetGraphicsContext()->Width;
+			*height = GraphicsContext::GetGraphicsContext()->Height;
+			*(uint32_t*)colorFormat = (uint32_t)GraphicsContext::GetGraphicsContext()->ColorFormat;
+			*(uint32_t*)depthFormat = (uint32_t)GraphicsContext::GetGraphicsContext()->DepthFormat;
+			*(uint32_t*)multiSampleMode = (uint32_t)GraphicsContext::GetGraphicsContext()->SampleMode;
 
 			Logger::Debug("width/height/colorFormat/depthFormat/multiSampleMode " + std::to_string(*width) + " " + std::to_string(*height) + " " + std::to_string((uint32_t)*colorFormat) + " " + std::to_string((uint32_t)*depthFormat) + " " + std::to_string((uint32_t)*multiSampleMode));
 
@@ -178,7 +178,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (Thread::IsMainThread()) {
-			memcpy(caps, GraphicsContext::GetGraphicsContext()->CapsState(), sizeof(GraphicsCapsState));
+			memcpy(caps, GraphicsContext::GetGraphicsContext()->CapsState, sizeof(GraphicsCapsState));
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {

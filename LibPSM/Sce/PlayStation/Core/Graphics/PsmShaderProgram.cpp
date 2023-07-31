@@ -29,49 +29,10 @@ namespace Sce::PlayStation::Core::Graphics {
 			char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
 			char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
 
-			char* useFilename = NULL;
-			
-			if (vertexProgramFileName != NULL)
-				useFilename = vertexProgramFileName;
-			if (fragmentProgramFileName != NULL)
-				useFilename = fragmentProgramFileName;
-
-			if(vertexProgramFileName == NULL && fragmentProgramFileName == NULL)
-				return PSM_ERROR_COMMON_ARGUMENT_NULL;
-
-			if(useFilename == NULL)
-				return PSM_ERROR_COMMON_ARGUMENT_NULL;
-
-			uint64_t file;
-			uint32_t totalRead;
-			int res = ICall::PsmFileOpen(useFilename, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
-
-			if (res != PSM_ERROR_NO_ERROR)
-				return res;
-
-			uint32_t cgxSz;
-			ICall::PsmFileGetSize(file, &cgxSz);
-			std::byte* cgx = new std::byte[cgxSz];
-
-
-			ICall::PsmFileRead(file, cgx, cgxSz, &totalRead);
-			ICall::PsmClose(file);
-
-
-			std::string fragmentShader;
-			std::string vertexShader;
-
-			CGX* cgxObj = new CGX(cgx, cgxSz);
-			fragmentShader = cgxObj->FragmentShader("GLSL");
-			vertexShader = cgxObj->VertexShader("GLSL");
-			ReturnErrorable(cgxObj);
-
-			ShaderProgram* shdrPrg = new ShaderProgram(vertexShader, fragmentShader);
+			ShaderProgram* shdrPrg = new ShaderProgram(vertexProgramFileName, fragmentProgramFileName);
 			ReturnErrorable(shdrPrg);
 
 			*result = shdrPrg->Handle();
-
-			delete[] cgx;
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -81,47 +42,23 @@ namespace Sce::PlayStation::Core::Graphics {
 		}
 
 	}
-	int PsmShaderProgram::FromImage(MonoArray* vpFileName, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
+	int PsmShaderProgram::FromImage(MonoArray* vpFileImage, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			size_t fnameSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(vpFileName);
-			size_t fimgSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(fpFileImage);
-			std::byte* fnameBuf = NULL;
-			std::byte* fimgBuf = NULL;
+			size_t vertexShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(vpFileImage);
+			size_t fragmentShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(fpFileImage);
+			std::byte* vertexShaderBuf = nullptr;
+			std::byte* fragmentShaderBuf = nullptr;
 
-			if(vpFileName != NULL)
-				fnameBuf = (std::byte*)mono_array_addr_with_size(vpFileName, 1, 0);
-			if(fpFileImage != NULL)
-				fimgBuf = (std::byte*)mono_array_addr_with_size(fpFileImage, 1, 0);
-			
+			if(vpFileImage != nullptr)
+				vertexShaderBuf = (std::byte*)mono_array_addr_with_size(vpFileImage, 1, 0);
+			if(fpFileImage != nullptr)
+				fragmentShaderBuf = (std::byte*)mono_array_addr_with_size(fpFileImage, 1, 0);
 
-			std::byte* cgx;
-			size_t cgxSz;
-
-			if (fimgBuf != NULL) {
-				cgx = fimgBuf;
-				cgxSz = fimgSz;
-			}
-			else if (fnameBuf != NULL) {
-				cgx = fnameBuf;
-				cgxSz = fnameSz;
-			}
-			else {
-				return PSM_ERROR_COMMON_ARGUMENT_NULL;
-			}
-
-			std::string fragmentShader;
-			std::string vertexShader;
-
-			CGX* cgxObj = new CGX(cgx, cgxSz);
-			fragmentShader = cgxObj->FragmentShader("GLSL");
-			vertexShader = cgxObj->VertexShader("GLSL");
-			ReturnErrorable(cgxObj);
-
-			ShaderProgram* shdrPrg = new ShaderProgram(vertexShader, fragmentShader);
+			ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
 			ReturnErrorable(shdrPrg);
 
-			*result = Handles::CreateHandle((uintptr_t)shdrPrg);
+			*result = shdrPrg->Handle();
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
@@ -285,51 +222,11 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::SetUniformValueMatrix4(int handle, int index, int, Matrix4* value, ShaderUniformType type) {
+	int PsmShaderProgram::SetUniformValue(int handle, int index, int offset, void* value, ShaderUniformType type) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmShaderProgram::SetUniformValueVector4(int handle, int index, int, Vector4* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValueVector3(int handle, int index, int, Vector3* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValueVector2(int handle, int index, int, Vector2* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValueFloat(int handle, int index, int, float* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValueInt(int handle, int index, int, int* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Matrix4(int handle, int index, Matrix4* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Vector4(int handle, int index, Vector4* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Vector3(int handle, int index, Vector3* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Vector2(int handle, int index, Vector2* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Float(int handle, int index, float* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int PsmShaderProgram::SetUniformValue2Int(int handle, int index, int* value, ShaderUniformType type, int to, int from, int count) {
+	int PsmShaderProgram::SetUniformValue2(int handle, int index, void* value, ShaderUniformType type, int to, int from, int count) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

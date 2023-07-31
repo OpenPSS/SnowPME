@@ -26,10 +26,21 @@ namespace Sce::Pss::Core::Graphics {
 		char cgVer[CGX_MAGIC_LEN];
 		char glesVer[CGX_MAGIC_LEN];
 		uint32_t flags;
-		char unk0[8];
+		int unk0;
+		int unk1;
 		uint32_t varientTablePtr;
-		char unk1[0x24];
-		//char hash[0x10];
+
+		int unk2;
+		int unk3;
+		int unk4;
+		int headerSize;
+		int unk5;
+		int unk6;
+		int unk7;
+		int totalSize;
+		int unk9;
+
+		char hash[0x10];
 	} CGXHeader;
 
 	class CGX : public Errorable{
@@ -46,6 +57,8 @@ namespace Sce::Pss::Core::Graphics {
 		CGXVarientTableEntry vertexVarientTableEntry;
 		CGXVarient* fragmentVarients;
 		CGXVarient* vertexVarients;
+
+		bool headerIsValid();
 	public:
 		CGX(std::byte* cgx, size_t cgxSz);
 		~CGX();

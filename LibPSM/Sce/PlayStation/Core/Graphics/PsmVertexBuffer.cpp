@@ -61,17 +61,17 @@ namespace Sce::PlayStation::Core::Graphics {
 
 			// if count < 0, set the count to the vertex count
 			if (count < 0) {
-				count = buffer->VertexCount();
+				count = buffer->VertexCount;
 			}
 
 			// Check the stream number is valid
-			if (stream < 0 || stream >= buffer->StreamCount()) {
+			if (stream < 0 || stream >= buffer->VertexFormats.size()) {
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
 
 			// Check the size is what is expected.
-			int formatSize = buffer->GetFormatVectorSize((*buffer->VertexFormats())[stream]);
-			if (arrayLen != buffer->VertexCount() * formatSize) {
+			int formatSize = buffer->GetFormatVectorSize(buffer->VertexFormats.at(stream));
+			if (arrayLen != buffer->VertexCount * formatSize) {
 				Logger::Error("Vertex array has wrong size");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}

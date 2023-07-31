@@ -1,12 +1,14 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
+#include <Sce/Pss/Core/Graphics/CGX.hpp>
+#include <Sce/Pss/Core/Io/ICall.hpp>
 
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
 
 using namespace Shared::Debug;
-using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Graphics {
 	
@@ -38,38 +40,49 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ShaderProgram::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
-		return PSM_ERROR_NO_ERROR;
-	}
+	int ShaderProgram::LoadProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz) {
+		std::string fragmentSrc;
+		std::string vertexSrc;
 
-	ShaderProgram::ShaderProgram(std::string vertexSrc, std::string fragmentSrc) {
-		this->uniforms = new std::vector<ProgramUniform>();
-		this->attributes = new std::vector<ProgramAttribute>();
+		if (vertexShaderBuf != nullptr) {
+			CGX* cgx = new CGX(vertexShaderBuf, vertexShaderSz);
+			ReturnErrorable(cgx);
+			fragmentSrc = cgx->FragmentShader("GLSL");
+			vertexSrc = cgx->VertexShader("GLSL");
+			delete cgx;
+		}
+		if (fragmentShaderBuf != nullptr) {
+			CGX* cgx = new CGX(fragmentShaderBuf, fragmentShaderSz);
+			ReturnErrorable(cgx);
+			fragmentSrc = cgx->FragmentShader("GLSL");
+			vertexSrc = cgx->VertexShader("GLSL");
+			delete cgx;
+		}
+
+		this->uniforms = std::vector<ProgramUniform>();
+		this->attributes = std::vector<ProgramAttribute>();
 
 		this->glReference = glCreateProgram();
-		
+
+
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
 		// i dont know why.
 		fragmentSrc = "#version 150\r\n" + fragmentSrc;
 		vertexSrc = "#version 150\r\n" + vertexSrc;
-		
-		this->vertexSourceCode = vertexSrc;
-		this->fragmentSourceCode = fragmentSrc;
 
 		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			return;
+			return 0;
 		}
 
 		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)vertexSrc.c_str());
 		if (compileVertexShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			return;
+			return 0;
 		}
 
 		glAttachShader(glReference, compileFragmentShader);
@@ -90,10 +103,10 @@ namespace Sce::Pss::Core::Graphics {
 			int sz = 0;
 			glGetProgramInfoLog(glReference, 0xFFF, &sz, log);
 			glDeleteProgram(glReference);
-			
+
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			ExceptionInfo::AddMessage("Compile failed; " + std::string(log));
-			return;
+			return 0;
 		}
 
 
@@ -147,13 +160,88 @@ namespace Sce::Pss::Core::Graphics {
 
 			this->Attributes()->push_back(attribute);
 		}
+		
+		return this->glReference;
+	}
 
+	int ShaderProgram::ActiveStateChanged(bool state) {
+		Logger::Debug(__FUNCTION__);
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	std::byte* ShaderProgram::LoadFile(char* shaderPath, int* shaderLen) {
+
+		uint64_t file;
+		uint32_t totalRead;
+		ICall::PsmFileOpen(shaderPath, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
+
+		uint32_t cgxSz;
+		ICall::PsmFileGetSize(file, &cgxSz);
+		this->cgxData = new std::byte[cgxSz];
+
+		ICall::PsmFileRead(file, this->cgxData, cgxSz, &totalRead);
+		ICall::PsmClose(file);
+
+		*shaderLen = cgxSz;
+		return this->cgxData;
+
+	}
+
+	std::byte* ShaderProgram::CopyFile(std::byte* shaderSrc, int shaderLen) {
+		this->cgxData = new std::byte[shaderLen];
+		std::memcpy(this->cgxData, shaderSrc, shaderLen);
+		return this->cgxData;
+	}
+
+
+	ShaderProgram::ShaderProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz) {
+		if (vertexShaderBuf != nullptr) {
+			this->vertexCgx = this->CopyFile(vertexShaderBuf, vertexShaderSz);
+		}
+		else {
+			this->vertexCgx = nullptr;
+		}
+
+		if (fragmentShaderBuf != nullptr) {
+			this->fragmentCgx = this->CopyFile(fragmentShaderBuf, fragmentShaderSz);
+		}
+		else {
+			this->fragmentCgx = nullptr;
+		}
+
+		this->vertexCgxLen = vertexShaderSz;
+		this->fragmentCgxLen = fragmentShaderSz;
+
+		this->glReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
+
+	}
+
+	ShaderProgram::ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath) {
+		if (vertexShaderPath != nullptr) {
+			this->vertexCgx = this->LoadFile(vertexShaderPath, &this->vertexCgxLen);
+		}
+		else {
+			this->vertexCgx = nullptr;
+		}
+
+		if (fragmentShaderPath != nullptr) {
+			this->fragmentCgx = this->LoadFile(fragmentShaderPath, &this->fragmentCgxLen);
+		}
+		else {
+			this->fragmentCgx = nullptr;
+		}
+
+		this->glReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 
 	}
 
 	ShaderProgram::~ShaderProgram() {
-		delete this->uniforms;
-		delete this->attributes;
+		if(this->cgxData != nullptr)
+			delete this->cgxData;
+		if(this->vertexCgx != nullptr)
+			delete this->vertexCgx;
+		if(this->fragmentCgx != nullptr)
+			delete this->fragmentCgx;
 	}
 
 	int ShaderProgram::UniformCount() {
@@ -165,11 +253,11 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	std::vector<ProgramUniform>* ShaderProgram::Uniforms() {
-		return this->uniforms;
+		return &this->uniforms;
 	}
 
 	std::vector<ProgramAttribute>* ShaderProgram::Attributes() {
-		return this->attributes;
+		return &this->attributes;
 	}
 
 }

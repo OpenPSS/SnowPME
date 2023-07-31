@@ -39,6 +39,8 @@ namespace Sce::Pss::Core::Graphics {
 		const int vertexBufferHandleOffset = 4;
 		const int textureHandleOffset = 8;
 
+		const int glStencilOps[8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT, GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP };
+		const int glDepthFuncs[8] = { GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_NOTEQUAL, GL_LESS, GL_GREATER, GL_LEQUAL, GL_GEQUAL };
 		const int glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
 		const int glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
 		const int glBlendModes[4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
@@ -57,25 +59,18 @@ namespace Sce::Pss::Core::Graphics {
 		FrameBuffer* currentFrameBuffer = nullptr;
 		VertexBuffer* currentVertexBuffers[4];
 		Texture* currentTextures[4];
+		
+		int cullFaceBits = 0;
 
 		short frameCount = 0;
 		int numScreens = 0;
-		int width = 960;
-		int height = 544;
-		bool hasNoFrameBuffer = false;
+		bool hasFrameBuffer = false;
 		bool hasShaderOrNoFrameBuffer = false;
 		bool frameInProgress = false;
 
 		GraphicsUpdate updateNotifyFlag = GraphicsUpdate::None;
 		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
 
-		PixelFormat colorFormat;
-		PixelFormat depthFormat;
-		MultiSampleMode multiSampleMode;
-		GraphicsCapsState* capsState;
-
-		std::string extensions = "";
-		std::string renderer = "";
 		DeltaTime* minFrameDelta = nullptr;
 
 
@@ -94,14 +89,16 @@ namespace Sce::Pss::Core::Graphics {
 		int Clear(ClearMask mask);
 		int SwapBuffers();
 
-		int Width();
-		int Height();
-		PixelFormat ColorFormat();
-		PixelFormat DepthFormat();
-		MultiSampleMode MSampleMode();
-		GraphicsCapsState* CapsState();
-		std::string Extensions();
-		std::string Renderer();
+		int Width = 960;
+		int Height = 544;
+
+		PixelFormat ColorFormat;
+		PixelFormat DepthFormat;
+		MultiSampleMode SampleMode;
+		GraphicsCapsState* CapsState;
+
+		std::string Extensions = "";
+		std::string Renderer = "";
 
 		// actual graphics handling ..
 		GraphicsUpdate NotifyUpdate(GraphicsUpdate updateFlag);

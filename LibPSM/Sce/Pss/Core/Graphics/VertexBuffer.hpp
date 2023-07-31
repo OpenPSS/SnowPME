@@ -18,12 +18,6 @@ namespace Sce::Pss::Core::Graphics {
 
 	class VertexBuffer : public GraphicsObject {
 	private:
-		int vertexCount = 0;
-		int indexCount = 0;
-		int instDivisor = 0;
-		int option = 0;
-		size_t size = 0;
-		std::vector<VertexFormat>* vertexFormats = NULL;
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
 	public:
 		VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen);
@@ -36,14 +30,15 @@ namespace Sce::Pss::Core::Graphics {
 		static bool GetFormatElementNormalize(VertexFormat format);
 		static int GetFormatElementSize(VertexFormat format);
 		int ActiveStateChanged(bool state);
-		int VertexCount();
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
-		int IndexCount();
-		int InstDivisor();
-		int StreamCount();
-		int Option();
-		size_t Size();
-		std::vector<VertexFormat>* VertexFormats();
+		
+		std::vector<VertexFormat> VertexFormats;
+		int VertexCount = 0;
+		int IndexCount = 0;
+		int InstDivisor = 0;
+		int Option = 0;
+		size_t Size = 0;
+		bool unk21 = true;
 	};
 
 }

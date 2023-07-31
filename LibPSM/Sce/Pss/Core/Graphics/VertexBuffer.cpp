@@ -518,34 +518,8 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	VertexBuffer::~VertexBuffer() {
-		if (this->vertexFormats != NULL) {
-			delete this->vertexFormats;
-		}
-	}
-	int VertexBuffer::VertexCount() {
-		return this->vertexCount;
-	}
-	int VertexBuffer::IndexCount() {
-		return this->indexCount;
-	}
-	int VertexBuffer::InstDivisor() {
-		return this->instDivisor;
-	}
-	int VertexBuffer::Option() {
-		return this->option;
-	}
-	size_t VertexBuffer::Size() {
-		return this->size;
-	}
 
-	int VertexBuffer::StreamCount() {
-		return (int)VertexFormats()->size();
 	}
-
-	std::vector<VertexFormat>* VertexBuffer::VertexFormats() {
-		return this->vertexFormats;
-	}
-
 	int VertexBuffer::ActiveStateChanged(bool state) {
 		Logger::Debug(__FUNCTION__);
 		return PSM_ERROR_NO_ERROR;
@@ -721,7 +695,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// is selected stream actually in the stream set?
-		if (stream < 0 || stream >= this->StreamCount())
+		if (stream < 0 || stream >= this->VertexFormats.size())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		// is the format valid?
@@ -729,7 +703,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_ARGUMENT;
 
 		// Get format for this specific stream
-		VertexFormat streamCurrentFormat = VertexFormats()->at(stream);
+		VertexFormat streamCurrentFormat = VertexFormats.at(stream);
 		// normalize scale/trans ..
 		translationScaleNormalize(streamCurrentFormat, &format, &trans, &scale);
 		
@@ -743,7 +717,7 @@ namespace Sce::Pss::Core::Graphics {
 			stride = formatVectorSize;
 
 		// check the from/to is within the range of the vertex array
-		if (to < 0 || from < 0 || count < 0 || offset < 0 || count + to > this->VertexCount() || stride < formatVectorSize) {
+		if (to < 0 || from < 0 || count < 0 || offset < 0 || count + to > this->VertexCount || stride < formatVectorSize) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 		// check vertex array is big enough
@@ -768,16 +742,16 @@ namespace Sce::Pss::Core::Graphics {
 				this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 				return;
 			}
-			this->vertexFormats = new std::vector<VertexFormat>();
+			this->VertexFormats = std::vector<VertexFormat>();
 
 			// Get graphics context
 			GraphicsContext* graphicsContext = GraphicsContext::GetGraphicsContext();
 
 			// Store state passed to parameters
-			this->vertexCount = vertexCount;
-			this->instDivisor = instDivisor;
-			this->option = option;
-			this->indexCount = indexCount;
+			this->VertexCount = vertexCount;
+			this->InstDivisor = instDivisor;
+			this->Option = option;
+			this->IndexCount = indexCount;
 
 
 			// Check arguments are valid
@@ -803,7 +777,7 @@ namespace Sce::Pss::Core::Graphics {
 				return;
 			}
 
-			int extensions = graphicsContext->CapsState()->Extension;
+			int extensions = graphicsContext->CapsState->Extension;
 			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
 				ExceptionInfo::AddMessage("Unsupported extension on this device");
 				this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
@@ -831,12 +805,12 @@ namespace Sce::Pss::Core::Graphics {
 				if (versionFormatSz < 0)
 					sz += versionFormatSz;
 
-				this->VertexFormats()->push_back(format);
+				this->VertexFormats.push_back(format);
 			}
 
-			sz *= this->VertexCount();
+			sz *= this->VertexCount;
 
-			this->size = sz;
+			this->Size = sz;
 
 			// Allocate array buffer in opengl.
 
