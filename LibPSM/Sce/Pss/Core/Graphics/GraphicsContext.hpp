@@ -17,9 +17,7 @@
 #include <Sce/Pss/Core/Graphics/FrameBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
-
 #include <Sce/Pss/Core/Timing/DeltaTime.hpp>
-
 #include <Sce/Pss/Core/Errorable.hpp>
 
 #include <LibShared.hpp>
@@ -38,28 +36,32 @@ namespace Sce::Pss::Core::Graphics {
 		const int frameBufferHandleOffset = 1;
 		const int vertexBufferHandleOffset = 4;
 		const int textureHandleOffset = 8;
-
-		const int glStencilOps[8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT, GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP };
-		const int glDepthFuncs[8] = { GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_NOTEQUAL, GL_LESS, GL_GREATER, GL_LEQUAL, GL_GEQUAL };
-		const int glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
-		const int glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
-		const int glBlendModes[4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
+		const GLenum glEnableModes[7] = { GL_SCISSOR_TEST, GL_CULL_FACE, GL_BLEND, GL_DEPTH_TEST,
+										  GL_POLYGON_OFFSET_FILL, GL_STENCIL_TEST, GL_DITHER };
+		const GLenum glStencilOps[8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT,
+									  GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP };
+		const GLenum glDepthFuncs[8] = { GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_NOTEQUAL, GL_LESS,
+									  GL_GREATER, GL_LEQUAL, GL_GEQUAL };
+		const GLenum glBlendModes[4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
 		
-		const int glBlendSFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+		const GLenum glBlendSFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
 										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
 										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE,
 										GL_ZERO, GL_ZERO, GL_ZERO };
 
-		const int glBlendDFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+		const GLenum glBlendDFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
 										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
 										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_ZERO, GL_ZERO,
 										GL_ZERO, GL_ZERO, GL_ZERO };
+		const GLenum glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
+		const GLenum glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
 
 		ShaderProgram* currentProgram = nullptr;
 		FrameBuffer* currentFrameBuffer = nullptr;
 		VertexBuffer* currentVertexBuffers[4];
 		Texture* currentTextures[4];
-		
+		EnableMode currentEnableModes = EnableMode::None;
+
 		int cullFaceBits = 0;
 
 		short frameCount = 0;

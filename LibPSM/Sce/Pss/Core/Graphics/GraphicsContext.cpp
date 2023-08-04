@@ -464,17 +464,37 @@ namespace Sce::Pss::Core::Graphics {
 					glStencilOps[(state->StencilOpBack.bits >> 8) & 7],
 					glStencilOps[((state->StencilOpBack.bits >> 16) & 0xFFFF) & 7]
 				);
-				return;
 			}
 
 		}
 
 		if ((notifyFlag & GraphicsUpdate::Enable) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::Enable");
+			EnableMode enableModeToggleFlags = (state->Enable & this->cullFaceBits);
+			EnableMode enableModeBitlist = (enableModeToggleFlags ^ this->currentEnableModes) & EnableMode::All;
+			
+			if (this->currentEnableModes == (EnableMode)0xFF) {
+				enableModeBitlist = EnableMode::All;
+			}
 
-			Logger::Error("Enable is not fully implemented yet.");
-			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-			return;
+			this->currentEnableModes = enableModeToggleFlags;
+			
+
+			for (int i = 0; enableModeBitlist != EnableMode::None; i++) {
+				// if there is an enable mode set
+				if ((enableModeBitlist & 1) != EnableMode::None) {
+					// check if should be enabled or disabled
+					if ((enableModeToggleFlags & 1) != EnableMode::None) {
+						glEnable(this->glEnableModes[i]);
+					}
+					else {
+						glDisable(this->glEnableModes[i]);
+					}
+				}
+
+				enableModeToggleFlags = enableModeToggleFlags >> 1;
+				enableModeBitlist = enableModeBitlist >> 1;
+			};
 		}
 	}
 

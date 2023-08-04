@@ -1,6 +1,7 @@
 #ifndef LIB_PSM_CLEARMASK_H
 #define LIB_PSM_CLEARMASK_H
 #include <string>
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
 
 namespace Sce::PlayStation::Core::Graphics {
 	enum class ClearMask : unsigned int {
@@ -11,13 +12,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		All = 7
 	};
 
-	ClearMask operator&(ClearMask l, ClearMask r);
-	ClearMask operator&(ClearMask l, unsigned int r);
-	ClearMask operator&(unsigned int l, ClearMask r);
-
-	ClearMask operator|(ClearMask l, ClearMask r);
-	ClearMask operator|(unsigned int l, ClearMask r);
-	ClearMask operator|(ClearMask l, unsigned int r);
+	DefineBitwiseOperators(ClearMask, unsigned int);
 
 }
 

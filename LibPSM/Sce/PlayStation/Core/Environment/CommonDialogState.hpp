@@ -7,6 +7,7 @@ namespace Sce::PlayStation::Core::Environment {
 		Running = 1,
 		Finished = 2
 	};
+
 }
 
 #endif

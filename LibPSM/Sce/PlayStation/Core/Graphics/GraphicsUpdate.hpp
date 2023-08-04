@@ -1,5 +1,6 @@
 #ifndef LIB_PSM_GRAPHICSUPDATE_H
 #define LIB_PSM_GRAPHICSUPDATE_H
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
 
 namespace Sce::PlayStation::Core::Graphics {
 	enum class GraphicsUpdate : unsigned int {
@@ -29,13 +30,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		TextureN = 2147483648
 	};
 
-	GraphicsUpdate operator&(GraphicsUpdate l, GraphicsUpdate r);
-	GraphicsUpdate operator&(GraphicsUpdate l, unsigned int r);
-	GraphicsUpdate operator&(unsigned int l, GraphicsUpdate r);
-
-	GraphicsUpdate operator|(GraphicsUpdate l, GraphicsUpdate r);
-	GraphicsUpdate operator|(unsigned int l, GraphicsUpdate r);
-	GraphicsUpdate operator|(GraphicsUpdate l, unsigned int r);
+	DefineBitwiseOperators(GraphicsUpdate, unsigned int);
 }
 
 #endif

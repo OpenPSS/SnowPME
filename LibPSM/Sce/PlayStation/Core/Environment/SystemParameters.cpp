@@ -1,4 +1,4 @@
-#include "SystemParameters.hpp"
+#include <Sce/PlayStation/Core/Environment/SystemParameters.hpp>
 
 namespace Sce::PlayStation::Core::Environment {
 	int SystemParameters::GetInt(ParameterKey key, int *value){
@@ -9,7 +9,7 @@ namespace Sce::PlayStation::Core::Environment {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int SystemParameters::GetString(ParameterKey key, std::string *value){
+	int SystemParameters::GetString(ParameterKey key, MonoString** value){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

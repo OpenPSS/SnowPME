@@ -183,15 +183,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\PlayStation\Core\Graphics\GraphicsUpdate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sce\PlayStation\Core\Graphics\ColorMask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sce\PlayStation\Core\Graphics\ClearMask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -606,6 +597,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgramOption.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\PlayStation\Core\Environment\ParameterKey.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\PlayStation\Core\Environment\ActionType.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\PlayStation\Core\Environment\Action.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

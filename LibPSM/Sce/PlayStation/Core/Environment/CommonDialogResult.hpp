@@ -8,6 +8,7 @@ namespace Sce::PlayStation::Core::Environment {
 		Aborted = 2,
 		Error = 3
 	};
+
 }
 
 #endif
