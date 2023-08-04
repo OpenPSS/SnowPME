@@ -1,6 +1,8 @@
 #include <Sce/PlayStation/Core/Environment/Log.hpp>
 #include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Mono/Util.hpp>
 #include <LibShared.hpp>
+using namespace Sce::Pss::Core;
 using namespace Shared::Debug;
 namespace Sce::PlayStation::Core::Environment {
 	int Log::WriteNative(MonoString* text){
@@ -10,9 +12,11 @@ namespace Sce::PlayStation::Core::Environment {
 			Logger::Error("\"text\" was a nullptr.");
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		}
-		char* str = mono_string_to_utf8(text);
-		Logger::Game(std::string(str));
-		mono_free(str);
+
+		std::string msg;
+		Mono::Util::MonoStringToStdString(text, msg);
+		Logger::Game(msg);
+
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Log::GetNeedsRedirection(){

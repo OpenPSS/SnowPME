@@ -18,8 +18,4 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	uint32_t Texture::GlTextureType() {
-		return GL_TEXTURE_2D;
-	}
-
 }

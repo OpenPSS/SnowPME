@@ -3,23 +3,13 @@
 
 namespace Sce::Pss::Core::Graphics {
 
-//	DefineAbstract(void GraphicsObject::ActiveStateChanged(int state));
-
 	GraphicsObject::GraphicsObject() {
-		this->glReference = NULL;
-		this->handle = Handles::CreateHandle((uintptr_t)this);
+		this->GLReference = NULL;
+		this->Handle = Handles::CreateHandle((uintptr_t)this);
 	}
 	GraphicsObject::~GraphicsObject() {
-		Handles::DeleteHandle(this->Handle());
-		this->handle = NULL;
-	}
-
-	PsmHandle GraphicsObject::Handle() {
-		return this->handle;
-	}
-
-	uint32_t GraphicsObject::GlReference() {
-		return this->glReference;
+		Handles::DeleteHandle(this->Handle);
+		this->Handle = NULL;
 	}
 
 	void GraphicsObject::Release(GraphicsObject* object)

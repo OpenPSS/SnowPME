@@ -786,9 +786,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			while (glGetError()) {};
 
-			uint32_t glBuf = 0;
-			glGenBuffers(1, &glBuf);
-			this->glReference = glBuf;
+			glGenBuffers(1, &this->GLReference);
 
 			size_t sz = 0;
 

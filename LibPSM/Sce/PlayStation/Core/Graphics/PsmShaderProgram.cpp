@@ -32,7 +32,13 @@ namespace Sce::PlayStation::Core::Graphics {
 			ShaderProgram* shdrPrg = new ShaderProgram(vertexProgramFileName, fragmentProgramFileName);
 			ReturnErrorable(shdrPrg);
 
-			*result = shdrPrg->Handle();
+			*result = shdrPrg->Handle;
+	
+			if(vertexProgramFileName != nullptr)
+				mono_free(vertexProgramFileName);
+
+			if (fragmentProgramFileName != nullptr)
+				mono_free(fragmentProgramFileName);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -58,7 +64,7 @@ namespace Sce::PlayStation::Core::Graphics {
 			ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
 			ReturnErrorable(shdrPrg);
 
-			*result = shdrPrg->Handle();
+			*result = shdrPrg->Handle;
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
@@ -68,7 +74,6 @@ namespace Sce::PlayStation::Core::Graphics {
 
 	}
 	
-
 	int PsmShaderProgram::Delete(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
@@ -130,11 +135,11 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
 
-			char* str = mono_string_to_utf8(name);
-			std::string uniformName(str);
+			std::string uniformName;
+			Mono::Util::MonoStringToStdString(name, uniformName);
 
 			bool found = false;
-			for (ProgramUniform uniform : *prog->Uniforms())
+			for (ProgramUniform uniform : prog->Uniforms)
 			{
 				if (uniform.Name == uniformName) {
 					Logger::Debug("Setting uniform binding of " + uniformName + " to " + std::to_string(index));
@@ -142,8 +147,6 @@ namespace Sce::PlayStation::Core::Graphics {
 					found = true;
 				}
 			}
-
-			mono_free(str);
 
 			if (!found) {
 				Logger::Error("No uniform with name " + uniformName + " was found.");
@@ -171,11 +174,11 @@ namespace Sce::PlayStation::Core::Graphics {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
 
-			char* str = mono_string_to_utf8(name);
-			std::string attributeName(str);
+			std::string attributeName;
+			Mono::Util::MonoStringToStdString(name, attributeName);
 
 			bool found = false;
-			for (ProgramAttribute attribute : *prog->Attributes())
+			for (ProgramAttribute attribute : prog->Attributes)
 			{
 				if (attribute.Name == attributeName) {
 					Logger::Debug("Setting attribute binding of " + attributeName + " to " + std::to_string(index));
@@ -183,8 +186,6 @@ namespace Sce::PlayStation::Core::Graphics {
 					found = true;
 				}
 			}
-			
-			mono_free(str);
 
 			if (!found) {
 				Logger::Error("No attribute with name " + attributeName + " was found.");

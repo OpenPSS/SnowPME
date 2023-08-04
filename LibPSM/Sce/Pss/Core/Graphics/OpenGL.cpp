@@ -7,16 +7,13 @@ namespace Sce::Pss::Core::Graphics {
 	FrameBuffer* OpenGL::activeFrameBuffer = nullptr;
 	Texture* OpenGL::activeTexture = nullptr;
 
-
-
 	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
 		OpenGL::activeShaderProgram = shaderProgram;
 		if (shaderProgram == NULL) {
-			glUseProgram(0);
+			glUseProgram(NULL);
 		}
 		else {
-			int oglProgram = shaderProgram->GlReference();
-			glUseProgram(oglProgram);
+			glUseProgram(shaderProgram->GLReference);
 		}
 	}
 
@@ -26,8 +23,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindBuffer(GL_ARRAY_BUFFER, NULL);
 		}
 		else {
-			int oglBuffer = vertexBuffer->GlReference();
-			glBindBuffer(GL_ARRAY_BUFFER, oglBuffer);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GLReference);
 		}
 	}
 
@@ -37,8 +33,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindBuffer(GL_FRAMEBUFFER, NULL);
 		}
 		else {
-			int oglBuffer = frameBuffer->GlReference();
-			glBindBuffer(GL_FRAMEBUFFER, oglBuffer);
+			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLReference);
 		}
 	}
 
@@ -48,9 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindTexture(GL_TEXTURE_2D, NULL);
 		}
 		else {
-			int oglBuffer = texture->GlReference();
-			int oglTextureType = texture->GlTextureType();
-			glBindTexture(oglTextureType, oglBuffer);
+			glBindTexture(texture->GlTextureType(), texture->GLReference);
 		}
 	}
 

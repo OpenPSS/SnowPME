@@ -195,6 +195,12 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\PlayStation\Core\Audio\Bgm.hpp">
@@ -609,6 +615,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\PlayStation\Core\Environment\Action.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\Texture2D.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureCube.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

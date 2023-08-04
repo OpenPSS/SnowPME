@@ -16,8 +16,6 @@ namespace Sce::Pss::Core::Graphics {
 		int vertexCgxLen;
 		int fragmentCgxLen;
 
-		std::vector<ProgramUniform> uniforms;
-		std::vector<ProgramAttribute> attributes;
 		int compileShader(int type, char* source);
 
 		ShaderProgramOption* programOptions;
@@ -26,10 +24,10 @@ namespace Sce::Pss::Core::Graphics {
 		int UniformCount();
 		int AttributeCount();
 
-		std::vector<ProgramUniform>* Uniforms();
-		std::vector<ProgramAttribute>* Attributes();
+		std::vector<ProgramUniform> Uniforms = std::vector<ProgramUniform>();
+		std::vector<ProgramAttribute> Attributes = std::vector<ProgramAttribute>();
 
-		std::byte* LoadFile(char* shaderPath, int* shaderLen);
+		std::byte* LoadFile(char* shaderPath, int& shaderLen);
 		std::byte* CopyFile(std::byte* shaderSrc, int shaderLen);
 		int LoadProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz);
 

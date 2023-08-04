@@ -43,6 +43,16 @@ namespace Sce::Pss::Core::Mono {
 				return 1;
 		}
 	}
+	std::string* Util::MonoStringToStdString(MonoString* mstr, std::string& string) {
+		if (!mstr)
+			return &string;
+		char* str = mono_string_to_utf8(mstr);
+		if (str != nullptr) {
+			string = std::string(str);
+			mono_free(str);
+		}
+		return &string;
+	}
 
 	MonoType* Util::MonoArrayElementsType(MonoArray* ar) {
 		if (ar == NULL)

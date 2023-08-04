@@ -17,7 +17,7 @@ namespace Sce::PlayStation::Core::Graphics {
 	class PsmTexture {
 	public:
 		static int FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int *result);
-		static int FromImage(PixelBufferType type, std::byte* fileImage, bool mipmap, PixelFormat format, int *result);
+		static int FromImage(PixelBufferType type, MonoArray* fileImage, bool mipmap, PixelFormat format, int *result);
 		static int SetFilter(int handle, TextureFilter *filter);
 		static int SetWrap(int handle, TextureWrap *filter);
 		static int SetMaxAnisotropy(int handle, float anisotropy);

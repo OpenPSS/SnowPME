@@ -59,6 +59,8 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp" />
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
@@ -199,6 +201,8 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\ProgramAttribute.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ProgramUniform.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgramOption.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\Texture2D.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureCube.hpp" />
     <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp" />
