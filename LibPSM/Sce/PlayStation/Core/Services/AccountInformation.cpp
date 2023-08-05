@@ -8,6 +8,8 @@
 
 #include <mono/mono.h>
 using namespace Shared::Debug;
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Services;
 
 namespace Sce::PlayStation::Core::Services {
 	int AccountInformation::GetUniqueID(MonoArray* id) {
@@ -16,12 +18,12 @@ namespace Sce::PlayStation::Core::Services {
 		if (id == NULL)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		
-		std::byte* idBuffer = (std::byte*)mono_array_addr_with_size(id, 1, 0);
-		int idLen = Sce::Pss::Core::Mono::Util::MonoArrayLength(id);
+		uint8_t* idBuffer = (uint8_t*)mono_array_addr_with_size(id, 1, 0);
+		int idLen = Mono::Util::MonoArrayLength(id);
 
 		if (idLen != 0x10)
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 
-		return Sce::Pss::Core::Services::UniqueId::GetUniqueIDForEmulatedPlatform(idBuffer);
+		return UniqueId::GetUniqueIDForEmulatedPlatform(idBuffer);
 	}
 }

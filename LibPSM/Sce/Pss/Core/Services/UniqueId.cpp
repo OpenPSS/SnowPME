@@ -1,14 +1,18 @@
 #include <Sce/Pss/Core/Services/UniqueId.hpp>
 #include <Sce/Pss/Core/PlatformSpecific.hpp>
 
+#include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
+#include <Sce/Pss/Core/Crypto/Keys.hpp>
+
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <LibShared.hpp>
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Services {
 	
-	int UniqueId::getUniqueIDWindows(std::byte* id) {
-		std::string username = PlatformSpecific::Username();
+	int UniqueId::getUniqueIDWindows(uint8_t* id) {
+		std::string username = Shared::Config::Username;
+
 		size_t length = username.length();
 		
 		if (length > 0x10)
@@ -18,19 +22,29 @@ namespace Sce::Pss::Core::Services {
 
 		return PSM_ERROR_NO_ERROR;
 	}
-	int UniqueId::getUniqueIDAndroid(std::byte* id) {
-		return PSM_ERROR_NOT_IMPLEMENTED;
+	int UniqueId::getUniqueIDAndroid(uint8_t* id) {
+		return UniqueId::getUniqueIDVita(id);
 	}
-	int UniqueId::getUniqueIDVita(std::byte* id) {
-		return PSM_ERROR_NOT_IMPLEMENTED;
-	}
-	int UniqueId::GetUniqueIDForEmulatedPlatform(std::byte* id) {
-		Shared::RuntimeImplementation impl = Shared::Config::GetRuntimeImplementation();
+	int UniqueId::getUniqueIDVita(uint8_t* id) {
+		uint8_t outhmac[0x20];
+		uint64_t accountId = Shared::Config::AccountId;
 		
-		// clear id
-		memset(id, 0x00, 0x10);
+		Crypto::CryptoLibrary::HmacSha256(Crypto::Keys::HashAccountIdHmac256, outhmac, (uint8_t*)&accountId, sizeof(uint64_t));
+		
+		uint64_t hashid[2];
+		hashid[0] = accountId;
+		hashid[1] = ((uint64_t*)outhmac)[0];
 
-		switch (impl) {
+		Crypto::CryptoLibrary::Aes128CbcEncrypt(Crypto::Keys::HashAccountIdAes128, Crypto::Keys::NullIv, (uint8_t*)hashid, 0x10);
+		std::memcpy(id, hashid, 0x10);
+
+		return PSM_ERROR_NO_ERROR;
+	}
+	int UniqueId::GetUniqueIDForEmulatedPlatform(uint8_t* id) {		
+		// clear id
+		std::memset(id, 0x00, 0x10);
+
+		switch (Shared::Config::TargetImplementation) {
 		case Shared::RuntimeImplementation::PSVita:
 			return getUniqueIDVita(id);
 		case Shared::RuntimeImplementation::Android:

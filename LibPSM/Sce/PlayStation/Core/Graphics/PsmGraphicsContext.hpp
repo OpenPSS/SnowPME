@@ -31,7 +31,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		static int DrawArrays(int handle, DrawMode mode, int first, int count, int repeat);
 		static int DrawArrays2(int handle, Primitive* primitives, int first, int count);
 		static int DrawArraysInstanced(int handle, DrawMode mode, int first, int count, int instFirst, int instCount);
-		static int ReadPixels(int handle, std::byte* pixels, PixelFormat format, int sx, int sy, int sw, int sh);
+		static int ReadPixels(int handle, uint8_t* pixels, PixelFormat format, int sx, int sy, int sw, int sh);
 		static int ReadPixels2(int handle, int texture, int level, TextureCubeFace cubeFace, int dx, int dy, int sx, int sy, int sw, int sh);
 		static int GetMaxScreenSize(int *width, int *height);
 		static int GetScreenSizes(MonoArray* sizes, int *result);

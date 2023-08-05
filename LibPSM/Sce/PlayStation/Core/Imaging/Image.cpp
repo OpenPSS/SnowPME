@@ -5,7 +5,7 @@ namespace Sce::PlayStation::Core::Imaging {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int Image::NewFromFileImage(std::byte* fileImage, int* handle) {
+	int Image::NewFromFileImage(uint8_t* fileImage, int* handle) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
@@ -13,7 +13,7 @@ namespace Sce::PlayStation::Core::Imaging {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int Image::NewFromModeSizeBuffer(ImageMode mode, ImageSize* size, std::byte* buffer, int* handle) {
+	int Image::NewFromModeSizeBuffer(ImageMode mode, ImageSize* size, uint8_t* buffer, int* handle) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
@@ -37,7 +37,7 @@ namespace Sce::PlayStation::Core::Imaging {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int Image::GetPixelData(int handle, std::byte* buffer, uint32_t bufferSize) {
+	int Image::GetPixelData(int handle, uint8_t* buffer, uint32_t bufferSize) {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

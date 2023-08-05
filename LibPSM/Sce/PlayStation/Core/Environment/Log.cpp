@@ -23,9 +23,7 @@ namespace Sce::PlayStation::Core::Environment {
 		Logger::Debug(__FUNCTION__);
 
 		// This was set based on what was being implemented,
-
-		Shared::RuntimeImplementation runtimeImplementation = Shared::Config::GetRuntimeImplementation();
-		switch (runtimeImplementation) {
+		switch (Shared::Config::TargetImplementation) {
 		case Shared::RuntimeImplementation::Windows:
 			Logger::Debug("Redirection Needed: false");
 			return false;

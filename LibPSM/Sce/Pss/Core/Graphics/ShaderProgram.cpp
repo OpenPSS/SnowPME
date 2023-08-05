@@ -40,7 +40,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ShaderProgram::LoadProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz) {
+	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
 		std::string fragmentSrc;
 		std::string vertexSrc;
 
@@ -165,7 +165,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	std::byte* ShaderProgram::LoadFile(char* shaderPath, int& shaderLen) {
+	uint8_t* ShaderProgram::LoadFile(char* shaderPath, int& shaderLen) {
 
 		uint64_t file;
 		uint32_t totalRead;
@@ -173,7 +173,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		uint32_t cgxSz;
 		ICall::PsmFileGetSize(file, &cgxSz);
-		this->cgxData = new std::byte[cgxSz];
+		this->cgxData = new uint8_t[cgxSz];
 
 		ICall::PsmFileRead(file, this->cgxData, cgxSz, &totalRead);
 		ICall::PsmClose(file);
@@ -183,14 +183,14 @@ namespace Sce::Pss::Core::Graphics {
 
 	}
 
-	std::byte* ShaderProgram::CopyFile(std::byte* shaderSrc, int shaderLen) {
-		this->cgxData = new std::byte[shaderLen];
+	uint8_t* ShaderProgram::CopyFile(uint8_t* shaderSrc, int shaderLen) {
+		this->cgxData = new uint8_t[shaderLen];
 		std::memcpy(this->cgxData, shaderSrc, shaderLen);
 		return this->cgxData;
 	}
 
 
-	ShaderProgram::ShaderProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz) {
+	ShaderProgram::ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
 		if (vertexShaderBuf != nullptr) {
 			this->vertexCgx = this->CopyFile(vertexShaderBuf, vertexShaderSz);
 		}

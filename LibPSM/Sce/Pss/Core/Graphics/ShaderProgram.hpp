@@ -10,9 +10,9 @@ namespace Sce::Pss::Core::Graphics {
 
 	class ShaderProgram : public GraphicsObject {
 	private:
-		std::byte* cgxData = nullptr;
-		std::byte* vertexCgx = nullptr;
-		std::byte* fragmentCgx = nullptr;
+		uint8_t* cgxData = nullptr;
+		uint8_t* vertexCgx = nullptr;
+		uint8_t* fragmentCgx = nullptr;
 		int vertexCgxLen;
 		int fragmentCgxLen;
 
@@ -27,12 +27,12 @@ namespace Sce::Pss::Core::Graphics {
 		std::vector<ProgramUniform> Uniforms = std::vector<ProgramUniform>();
 		std::vector<ProgramAttribute> Attributes = std::vector<ProgramAttribute>();
 
-		std::byte* LoadFile(char* shaderPath, int& shaderLen);
-		std::byte* CopyFile(std::byte* shaderSrc, int shaderLen);
-		int LoadProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz);
+		uint8_t* LoadFile(char* shaderPath, int& shaderLen);
+		uint8_t* CopyFile(uint8_t* shaderSrc, int shaderLen);
+		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 
 		ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath);
-		ShaderProgram(std::byte* vertexShaderBuf, int vertexShaderSz, std::byte* fragmentShaderBuf, int fragmentShaderSz);
+		ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 		~ShaderProgram();
 	};
 }

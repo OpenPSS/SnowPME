@@ -65,7 +65,7 @@ namespace Sce::PlayStation::Core::Device {
 		std::cout << "Sce::PlayStation::Core::Device::StopNative(int) Unimplemented.";
 		return 0;
 	}
-	int Camera::ReadNative(int handle, std::byte* frameBuffer, int bufferSize, long * frameCount){
+	int Camera::ReadNative(int handle, uint8_t* frameBuffer, int bufferSize, long * frameCount){
 		std::cout << "Sce::PlayStation::Core::Device::ReadNative(int, byte*, int, long *) Unimplemented.";
 		return 0;
 	}

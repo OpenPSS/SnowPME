@@ -7,7 +7,7 @@
 namespace Sce::Pss::Core::Io {
 	class FileSystem {
 	private:
-		std::byte gamekey[0x20];
+		uint8_t gamekey[0x20];
 		bool hasEdata;
 		bool rw;
 		bool emulated;

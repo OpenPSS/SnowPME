@@ -1,11 +1,11 @@
 #include "PersistentMemory.hpp"
 
 namespace Sce::PlayStation::Core::Environment {
-	int PersistentMemory::WriteNative(std::byte* fileImage){
+	int PersistentMemory::WriteNative(uint8_t* fileImage){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PersistentMemory::ReadNative(std::byte* fileImage){
+	int PersistentMemory::ReadNative(uint8_t* fileImage){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

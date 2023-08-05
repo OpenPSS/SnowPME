@@ -26,22 +26,6 @@ namespace Sce::Pss::Core {
 #endif
     }
 
-    std::string PlatformSpecific::Username() {
-#ifdef _WIN32
-
-        char name[0x1000];
-        DWORD size = sizeof(name);
-
-        memset(name, 0, size);
-        GetUserNameA(name, &size);
-
-        return std::string(name);
-
-#else
-        return PSM_ERROR_NOT_SUPPORTED;
-#endif
-    }
-
 	int PlatformSpecific::ChangeFileTimes(std::string RealFilePath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime) {
 #ifdef _WIN32
         FILETIME creationTime; 

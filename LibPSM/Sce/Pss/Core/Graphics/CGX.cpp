@@ -52,7 +52,7 @@ namespace Sce::Pss::Core::Graphics {
 		// TODO: implement the rest of the checks
 	}
 
-	CGX::CGX(std::byte* cgx, size_t cgxSz) {
+	CGX::CGX(uint8_t* cgx, size_t cgxSz) {
 		
 		if (cgx == nullptr) {
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);

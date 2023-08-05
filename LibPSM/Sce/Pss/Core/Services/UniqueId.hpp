@@ -6,11 +6,11 @@
 namespace Sce::Pss::Core::Services {
 	class UniqueId {
 	private:
-		static int getUniqueIDWindows(std::byte* id);
-		static int getUniqueIDAndroid(std::byte* id);
-		static int getUniqueIDVita(std::byte* id);
+		static int getUniqueIDWindows(uint8_t* id);
+		static int getUniqueIDAndroid(uint8_t* id);
+		static int getUniqueIDVita(uint8_t* id);
 	public:
-		static int GetUniqueIDForEmulatedPlatform(std::byte* id);
+		static int GetUniqueIDForEmulatedPlatform(uint8_t* id);
 	};
 }
 

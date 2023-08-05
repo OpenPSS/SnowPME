@@ -53,13 +53,13 @@ namespace Sce::PlayStation::Core::Graphics {
 		if (Thread::IsMainThread()) {
 			size_t vertexShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(vpFileImage);
 			size_t fragmentShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(fpFileImage);
-			std::byte* vertexShaderBuf = nullptr;
-			std::byte* fragmentShaderBuf = nullptr;
+			uint8_t* vertexShaderBuf = nullptr;
+			uint8_t* fragmentShaderBuf = nullptr;
 
 			if(vpFileImage != nullptr)
-				vertexShaderBuf = (std::byte*)mono_array_addr_with_size(vpFileImage, 1, 0);
+				vertexShaderBuf = (uint8_t*)mono_array_addr_with_size(vpFileImage, 1, 0);
 			if(fpFileImage != nullptr)
-				fragmentShaderBuf = (std::byte*)mono_array_addr_with_size(fpFileImage, 1, 0);
+				fragmentShaderBuf = (uint8_t*)mono_array_addr_with_size(fpFileImage, 1, 0);
 
 			ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
 			ReturnErrorable(shdrPrg);

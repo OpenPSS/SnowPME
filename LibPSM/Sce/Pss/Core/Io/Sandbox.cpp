@@ -605,7 +605,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_NO_ERROR;
 
 		}
-		throw new std::exception("encryption not implemented!");
+		throw std::exception("encryption not implemented!");
 	}
 
 	PsmFileDescriptor* Sandbox::OpenDirectory(std::string sandboxedPath) {

@@ -104,7 +104,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int PsmGraphicsContext::ReadPixels(int handle, std::byte* pixels, PixelFormat format, int sx, int sy, int sw, int sh){
+	int PsmGraphicsContext::ReadPixels(int handle, uint8_t* pixels, PixelFormat format, int sx, int sy, int sw, int sh){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
@@ -130,7 +130,7 @@ namespace Sce::PlayStation::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
-			int numScreens = Shared::Config::ScreenTotal();
+			int numScreens = Shared::Config::ScreenTotal;
 			Logger::Debug("numScreens: " + std::to_string(numScreens));
 			if (sizes) {
 				uintptr_t arraySize = mono_array_length(sizes);

@@ -45,7 +45,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	class CGX : public Errorable{
 	private:
-		std::byte* cgxBuf;
+		uint8_t* cgxBuf;
 		size_t cgxSz;
 
 		std::string magic;
@@ -60,7 +60,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		bool headerIsValid();
 	public:
-		CGX(std::byte* cgx, size_t cgxSz);
+		CGX(uint8_t* cgx, size_t cgxSz);
 		~CGX();
 		std::string FragmentShader(std::string shaderLanguage);
 		std::string VertexShader(std::string shaderLanguage);

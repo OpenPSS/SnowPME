@@ -26,11 +26,13 @@ namespace Shared
 
 		static std::string RuntimeConfigPath; // Path to etc folder.
 		
-		static RuntimeImplementation GetRuntimeImplementation();
+		static int ScreenTotal; // How many screens? 
+		static std::string Username; // Username
+		static uint64_t AccountId; // Account Name
+		static RuntimeImplementation TargetImplementation; // What version of psm runtime are we emulating?
 
 		static int ScreenWidth(int idx);
 		static int ScreenHeight(int idx);
-		static int ScreenTotal();
 
 		static int ReadConfig(std::string configFile);
 	};

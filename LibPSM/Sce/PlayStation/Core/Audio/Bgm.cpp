@@ -5,7 +5,7 @@ namespace Sce::PlayStation::Core::Audio {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int Bgm::NewFromFileImage(std::byte* fileImage, int * handle){
+	int Bgm::NewFromFileImage(uint8_t* fileImage, int * handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}

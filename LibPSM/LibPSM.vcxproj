@@ -53,6 +53,10 @@
     <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
     <ClCompile Include="Sce\Pss\Core\Application.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha256.c" />
     <ClCompile Include="Sce\Pss\Core\Environment\SystemEvent.cpp" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
@@ -193,6 +197,11 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
     <ClInclude Include="Sce\Pss\Core\Application.hpp" />
     <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\aes.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\CryptoLibrary.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha256.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\SystemEvent.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
