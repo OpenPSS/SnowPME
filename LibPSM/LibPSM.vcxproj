@@ -52,7 +52,6 @@
     <ClCompile Include="Sce\PlayStation\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\PlayStation\Core\Services\NetworkRequest.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Application.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.c" />
@@ -65,6 +64,7 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Memory\HeapAllocator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
@@ -73,7 +73,7 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Handles.cpp" />
+    <ClCompile Include="Sce\Pss\Core\System\Handles.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\ICall.cpp" />
@@ -195,7 +195,6 @@
     <ClInclude Include="Sce\PlayStation\Core\Vector2.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector3.hpp" />
     <ClInclude Include="Sce\PlayStation\Core\Vector4.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Application.hpp" />
     <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\aes.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\CryptoLibrary.hpp" />
@@ -212,6 +211,7 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgramOption.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\Texture2D.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\TextureCube.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Memory\HeapAllocator.hpp" />
     <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp" />
@@ -220,7 +220,7 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\Texture.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\WindowSystemCallbacks.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Handles.hpp" />
+    <ClInclude Include="Sce\Pss\Core\System\Handles.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\ICall.hpp" />

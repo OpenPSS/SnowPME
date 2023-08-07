@@ -25,6 +25,9 @@ namespace Sce::Pss::Core::Threading {
 		std::this_thread::sleep_for(std::chrono::microseconds(microseconds));
 	}
 
+	void Thread::SetMainThread() {
+		mainThreadId = Thread::CurrentThreadId();
+	}
 	void Thread::SetMainThread(uint64_t threadId) {
 		mainThreadId = threadId;
 	}

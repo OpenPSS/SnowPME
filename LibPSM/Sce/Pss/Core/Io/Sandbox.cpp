@@ -11,8 +11,13 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Io {
 
+	Sandbox* Sandbox::ApplicationSandbox = nullptr;
 
 	Sandbox::Sandbox(std::string gameFolder) {
+		if (Sandbox::ApplicationSandbox != nullptr) {
+			delete Sandbox::ApplicationSandbox;
+		}
+
 		std::filesystem::path gamePath = std::filesystem::path(gameFolder);
 		std::filesystem::path applicationPath = std::filesystem::path(gameFolder).append("Application");
 		std::filesystem::path documentsPath = std::filesystem::path(gameFolder).append("Documents");
@@ -26,6 +31,7 @@ namespace Sce::Pss::Core::Io {
 
 		this->currentWorkingDirectory = "/";
 
+		Sandbox::ApplicationSandbox = this;
 	}
 	Sandbox::~Sandbox() {
 		// Iterate over all fileystems

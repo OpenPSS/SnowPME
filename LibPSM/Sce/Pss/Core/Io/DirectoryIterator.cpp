@@ -1,8 +1,7 @@
 #include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <Sce/Pss/Core/Application.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/PlayStation/Core/Error.hpp>
-
 #include <Debug/Logger.hpp>
 
 #include <vector>
@@ -10,21 +9,21 @@
 #include <filesystem>
 
 #include <LibShared.hpp>
-
+using namespace Sce::Pss::Core::System;
 using namespace Shared::String;
 
 namespace Sce::Pss::Core::Io {
 
 	DirectoryIterator::DirectoryIterator(std::string relativePath, bool recursive) {
-		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
+		
 		this->folderStack = std::vector<StackItem*>();
 		
-		this->startFolderSandboxPath = psmSandbox->AbsolutePath(relativePath);
+		this->startFolderSandboxPath = Sandbox::ApplicationSandbox->AbsolutePath(relativePath);
 
 		StackItem* item = new StackItem();
 		item->positionInFolder = 0;
 		item->sandboxPath = this->startFolderSandboxPath;
-		item->realPath = psmSandbox->LocateRealPath(item->sandboxPath);
+		item->realPath = Sandbox::ApplicationSandbox->LocateRealPath(item->sandboxPath);
 		item->relativePath = "";
 		item->iterator = new std::filesystem::directory_iterator(item->realPath);
 
@@ -42,7 +41,6 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int DirectoryIterator::Next(ScePssFileInformation_t* pathInfo) {
-		Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
 
 		int depth = this->folderStack.size() - 1;
 		StackItem* item = this->folderStack.at(depth);
@@ -52,7 +50,7 @@ namespace Sce::Pss::Core::Io {
 		ScePssFileInformation_t psmPathInformation;
 
 		if (this->iterPos == 0) {
-			psmPathInformation = psmSandbox->Stat(item->sandboxPath, Path::Combine(item->relativePath, "."));
+			psmPathInformation = Sandbox::ApplicationSandbox->Stat(item->sandboxPath, Path::Combine(item->relativePath, "."));
 		}
 		else if(this->iterPos == 1) {
 
@@ -60,7 +58,7 @@ namespace Sce::Pss::Core::Io {
 			if (depth > 0)
 				prevStackItem = this->folderStack.at(depth - 1);
 
-			psmPathInformation = psmSandbox->Stat(prevStackItem->sandboxPath, Path::Combine(item->relativePath, ".."));
+			psmPathInformation = Sandbox::ApplicationSandbox->Stat(prevStackItem->sandboxPath, Path::Combine(item->relativePath, ".."));
 		}
 		else {
 			if (iterator._At_end()) {
@@ -82,17 +80,17 @@ namespace Sce::Pss::Core::Io {
 			std::string sandboxAbsPath = Path::Combine(item->sandboxPath, filename);
 			std::string sandboxRelativePath = Path::Combine(item->relativePath, filename);
 
-			psmPathInformation = psmSandbox->Stat(sandboxAbsPath, sandboxRelativePath);
+			psmPathInformation = Sandbox::ApplicationSandbox->Stat(sandboxAbsPath, sandboxRelativePath);
 
 			iterator++;
 
-			if (psmSandbox->IsDirectory(sandboxAbsPath) && this->recursive) {
+			if (Sandbox::ApplicationSandbox->IsDirectory(sandboxAbsPath) && this->recursive) {
 				// Push to the stack, and set current directory to the new one.
 
 				StackItem* nitem = new StackItem();
 				nitem->sandboxPath = sandboxAbsPath;
 				nitem->relativePath = sandboxRelativePath;
-				nitem->realPath = psmSandbox->LocateRealPath(sandboxAbsPath);
+				nitem->realPath = Sandbox::ApplicationSandbox->LocateRealPath(sandboxAbsPath);
 
 				nitem->iterator = new std::filesystem::directory_iterator(nitem->realPath);
 				nitem->positionInFolder = 0;
@@ -101,7 +99,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		memcpy(pathInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
+		std::memcpy(pathInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
 		item->positionInFolder++;
 		this->iterPos++;
 		return PSM_ERROR_NO_ERROR;

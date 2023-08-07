@@ -4,7 +4,7 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Mono/Util.hpp>
 
@@ -13,6 +13,7 @@
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Threading;
 
 namespace Sce::PlayStation::Core::Graphics {

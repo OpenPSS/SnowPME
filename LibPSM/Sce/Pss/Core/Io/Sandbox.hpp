@@ -32,6 +32,7 @@ namespace Sce::Pss::Core::Io {
 		FileSystem* findFilesystem(std::string sandboxedPath);
 		void reopen(PsmFileDescriptor* handle);
 	public:
+		static Sandbox* ApplicationSandbox;
 		Sandbox(std::string gameFolder);
 		~Sandbox();
 		ScePssFileInformation_t Stat(std::string sandboxedPath, std::string setName);

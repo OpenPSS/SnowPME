@@ -10,7 +10,6 @@ namespace Sce::Pss::Core::Graphics {
 
 	class ShaderProgram : public GraphicsObject {
 	private:
-		uint8_t* cgxData = nullptr;
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
 		int vertexCgxLen;
@@ -27,7 +26,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::vector<ProgramUniform> Uniforms = std::vector<ProgramUniform>();
 		std::vector<ProgramAttribute> Attributes = std::vector<ProgramAttribute>();
 
-		uint8_t* LoadFile(char* shaderPath, int& shaderLen);
+		uint8_t* LoadFile(char* shaderPath, int* shaderLen);
 		uint8_t* CopyFile(uint8_t* shaderSrc, int shaderLen);
 		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 

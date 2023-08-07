@@ -5,7 +5,7 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
-#include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 
 #include <mono/mono.h>
@@ -17,6 +17,7 @@ using namespace Shared::Debug;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::System;
 
 namespace Sce::PlayStation::Core::Graphics {
 

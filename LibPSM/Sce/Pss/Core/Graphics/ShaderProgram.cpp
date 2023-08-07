@@ -2,6 +2,7 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <LibShared.hpp>
@@ -9,6 +10,7 @@
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Graphics {
 	
@@ -41,19 +43,20 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
-		std::string fragmentSrc;
-		std::string vertexSrc;
+		std::string fragmentSrc = "";
+		std::string vertexSrc = "";
 
 		if (vertexShaderBuf != nullptr) {
 			CGX* cgx = new CGX(vertexShaderBuf, vertexShaderSz);
-			ReturnErrorable(cgx);
+			PassErrorable(cgx);
 			fragmentSrc = cgx->FragmentShader("GLSL");
 			vertexSrc = cgx->VertexShader("GLSL");
 			delete cgx;
 		}
+
 		if (fragmentShaderBuf != nullptr) {
 			CGX* cgx = new CGX(fragmentShaderBuf, fragmentShaderSz);
-			ReturnErrorable(cgx);
+			PassErrorable(cgx);
 			fragmentSrc = cgx->FragmentShader("GLSL");
 			vertexSrc = cgx->VertexShader("GLSL");
 			delete cgx;
@@ -165,28 +168,60 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	uint8_t* ShaderProgram::LoadFile(char* shaderPath, int& shaderLen) {
+	uint8_t* ShaderProgram::LoadFile(char* shaderPath, int* shaderLen) {
 
-		uint64_t file;
-		uint32_t totalRead;
-		ICall::PsmFileOpen(shaderPath, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
+		if (shaderLen != nullptr)
+			*shaderLen = 0;
 
-		uint32_t cgxSz;
-		ICall::PsmFileGetSize(file, &cgxSz);
-		this->cgxData = new uint8_t[cgxSz];
+		if (shaderPath != nullptr) {
+			uint64_t file;
+			ICall::PsmFileOpen(shaderPath, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
+			if (file) {
+				uint32_t cgxLen = 0;
+				ICall::PsmFileGetSize(file, &cgxLen);
 
-		ICall::PsmFileRead(file, this->cgxData, cgxSz, &totalRead);
-		ICall::PsmClose(file);
+				HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+				uint8_t* cgxData = resourceHeap->sce_psm_malloc(cgxLen);
 
-		shaderLen = cgxSz;
-		return this->cgxData;
+				if (cgxData != nullptr) {
+					uint32_t totalRead;
+					ICall::PsmFileRead(file, cgxData, cgxLen, &totalRead);
+					ICall::PsmClose(file);
+					
+					if (shaderLen != nullptr)
+						*shaderLen = cgxLen;
 
+					return cgxData;
+				}
+				else {
+					ICall::PsmClose(file);
+					this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+					return nullptr;
+				}
+			}
+			else {
+				this->SetError(PSM_ERROR_COMMON_FILE_NOT_FOUND);
+				return nullptr;
+			}
+
+		}
+		else {
+			shaderLen = 0;
+			return nullptr;
+		}
 	}
 
 	uint8_t* ShaderProgram::CopyFile(uint8_t* shaderSrc, int shaderLen) {
-		this->cgxData = new uint8_t[shaderLen];
-		std::memcpy(this->cgxData, shaderSrc, shaderLen);
-		return this->cgxData;
+		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+		uint8_t* cgxData = resourceHeap->sce_psm_malloc(shaderLen);
+		if (cgxData != nullptr) {
+			std::memcpy(cgxData, shaderSrc, shaderLen);
+			return cgxData;
+		}
+		else {
+			this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+			return nullptr;
+		}
 	}
 
 
@@ -214,14 +249,14 @@ namespace Sce::Pss::Core::Graphics {
 
 	ShaderProgram::ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath) {
 		if (vertexShaderPath != nullptr) {
-			this->vertexCgx = this->LoadFile(vertexShaderPath, this->vertexCgxLen);
+			this->vertexCgx = this->LoadFile(vertexShaderPath, &this->vertexCgxLen);
 		}
 		else {
 			this->vertexCgx = nullptr;
 		}
 
 		if (fragmentShaderPath != nullptr) {
-			this->fragmentCgx = this->LoadFile(fragmentShaderPath, this->fragmentCgxLen);
+			this->fragmentCgx = this->LoadFile(fragmentShaderPath, &this->fragmentCgxLen);
 		}
 		else {
 			this->fragmentCgx = nullptr;
@@ -232,12 +267,13 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	ShaderProgram::~ShaderProgram() {
-		if(this->cgxData != nullptr)
-			delete this->cgxData;
+		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+
 		if(this->vertexCgx != nullptr)
-			delete this->vertexCgx;
+			resourceHeap->sce_psm_free(this->vertexCgx);
+		
 		if(this->fragmentCgx != nullptr)
-			delete this->fragmentCgx;
+			resourceHeap->sce_psm_free(this->fragmentCgx);
 	}
 
 	int ShaderProgram::UniformCount() {

@@ -1,11 +1,9 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Graphics/WindowSystemCallbacks.hpp>
-#include <Sce/Pss/Core/Application.hpp>
-
 #include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
 
 #include <glad/glad.h>
@@ -13,6 +11,7 @@
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::System;
 
 using namespace Shared::Debug;
 

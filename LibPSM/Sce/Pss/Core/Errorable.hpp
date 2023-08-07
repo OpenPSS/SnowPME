@@ -10,6 +10,14 @@ namespace Sce::Pss::Core {
 			int error = x->GetError(); \
 			delete x; \
 			return error; \
+		}
+
+	#define PassErrorable(x) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			this->SetError(error); \
+			delete x; \
+			return PSM_ERROR_NO_ERROR; \
 		} 
 
 	class Errorable {

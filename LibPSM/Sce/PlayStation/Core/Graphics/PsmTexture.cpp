@@ -32,8 +32,7 @@ namespace Sce::PlayStation::Core::Graphics {
 				Logger::Debug("type is PixelBufferType::Texture2D");
 				tex = new Texture2D(filename, mipmap, format);
 			}
-
-			if (type == PixelBufferType::TextureCube) {
+			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
 				tex = new TextureCube(filename, mipmap, format);
 			}

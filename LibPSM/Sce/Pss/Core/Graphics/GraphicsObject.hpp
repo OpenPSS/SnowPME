@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <Sce/Pss/Core/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
 
 namespace Sce::Pss::Core::Graphics {
@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Graphics {
 		bool Active = false;
 		static void Release(GraphicsObject* object);
 
-		PsmHandle Handle;
+		System::PsmHandle Handle;
 		uint32_t GLReference;
 
 		GraphicsObject();

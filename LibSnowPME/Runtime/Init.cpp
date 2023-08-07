@@ -13,7 +13,11 @@
 
 using namespace Shared::Debug;
 using namespace LibCXML;
-
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::Metadata;
+using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::Memory;
 
 namespace SnowPME::Runtime {
 
@@ -37,13 +41,13 @@ namespace SnowPME::Runtime {
 	}
 
 	void Init::LoadApplication(std::string gameFolder) {
-		// Set app globals.
 
-		Sce::Pss::Core::Application::SetPsmSandbox(new Sce::Pss::Core::Io::Sandbox(gameFolder));
-		Sce::Pss::Core::Io::Sandbox* psmSandbox = Sce::Pss::Core::Application::PsmSandbox();
-		Sce::Pss::Core::Threading::Thread::SetMainThread(Sce::Pss::Core::Threading::Thread::CurrentThreadId());
-		Sce::Pss::Core::Application::SetPsmAppInfo(new Sce::Pss::Core::Metadata::AppInfo(new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA")));
+		Sandbox* psmSandbox = new Sandbox(gameFolder);
+		CXMLElement* elem = new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA");
+		AppInfo* psmAppInfo = new AppInfo(elem);
 
+		Thread::SetMainThread();
+		HeapAllocator::CreateResourceHeapAllocator(psmAppInfo->ResourceHeapSize);
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
@@ -57,9 +61,8 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		Sce::Pss::Core::Metadata::AppInfo* appInfo = Sce::Pss::Core::Application::PsmAppInfo();
-		int heapSizeLimit = appInfo->ManagedHeapSize() * 0x400;
-		int resourceSizeLimit = appInfo->ResourceHeapSize() * 0x400;
+		int heapSizeLimit = AppInfo::ApplicationInfo->ManagedHeapSize * 0x400;
+		int resourceSizeLimit = AppInfo::ApplicationInfo->ResourceHeapSize * 0x400;
 
 		Graphics::Window* window = new Graphics::Window(Shared::Config::ScreenHeight(0), Shared::Config::ScreenWidth(0), "- SnowPME - ");
 		Init::initCallbacks(window);

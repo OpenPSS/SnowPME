@@ -8,6 +8,7 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 	public:
 		virtual GLenum GlTextureType() = NULL;
+		std::string Filename;
 		int ActiveStateChanged(bool state);
 
 		Texture();

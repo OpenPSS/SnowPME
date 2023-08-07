@@ -9,6 +9,7 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 
 	public:
+		
 		TextureCube(std::string fileName, bool mipmap, Sce::PlayStation::Core::Graphics::PixelFormat format);
 		~TextureCube();
 		GLenum GlTextureType();

@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <LibCXML.hpp>
-using namespace LibCXML;
 namespace Sce::Pss::Core::Metadata {
 
 	typedef struct LocaleInfo {
@@ -28,78 +27,81 @@ namespace Sce::Pss::Core::Metadata {
 
 	class AppInfo {
 	private:
-		CXMLElement* element;
+		LibCXML::CXMLElement* element;
 
-		// <application>
-		std::string defaultLocale;
-		std::string targetSdkVerison;
-		std::string projectName;
-		std::string appVersion;
-		std::string targetRuntimeVersion;
 		
+
+	public:
+		static AppInfo* ApplicationInfo;
+		AppInfo(LibCXML::CXMLElement* elem);
+		~AppInfo();
+		// <application>
+		std::string DefaultLocale;
+		std::string TargetSdkVerison;
+		std::string ProjectName;
+		std::string AppVersion;
+		std::string TargetRuntimeVersion;
+
 		// <app_xml_format>
-		std::string sdkType;
-		std::string altVersion;
+		std::string SdkType;
+		std::string AltVersion;
 
 		// <name>
-		std::vector<LocaleInfo> names;
+		std::vector<LocaleInfo> Names;
 
 		// <short_name>
-		std::vector<LocaleInfo> shortNames;
+		std::vector<LocaleInfo> ShortNames;
 
 		// <parental_control>
-		int lockLevel = 0;
+		int LockLevel = 0;
 
 		// <rating_list>
-		bool hasOnlineFeatures = false;
-		int highestAgeLimit = 0;
+		bool HasOnlineFeatures = false;
+		int HighestAgeLimit = 0;
 
-		bool personalInfo = false;
-		bool userLocation = false;
-		bool exchangeContent = false; 
-		bool chat = false;
+		bool PersonalInfo = false;
+		bool UserLocation = false;
+		bool ExchangeContent = false;
+		bool Chat = false;
 
-		std::vector<RatingInfo> ratingList;
+		std::vector<RatingInfo> RatingList;
 
 		// <images>
-		LibCXML::CXMLStream* splash854x480 = NULL;
-		LibCXML::CXMLStream* icon128x128 = NULL;
-		LibCXML::CXMLStream* icon512x512 = NULL;
-		LibCXML::CXMLStream* icon256x256 = NULL;
+		LibCXML::CXMLStream* Splash854x480 = NULL;
+		LibCXML::CXMLStream* Icon128x128 = NULL;
+		LibCXML::CXMLStream* Icon512x512 = NULL;
+		LibCXML::CXMLStream* Icon256x256 = NULL;
 
 		// <genre_list>
-		std::vector<std::string> genreList;
-		
+		std::vector<std::string> GenreList;
+
 		// <developer>
-		std::vector<std::string> developerList;
-		std::string website;
-		
+		std::vector<std::string> DeveloperList;
+		std::string Website;
+
 		// <copyright> 
-		LibCXML::CXMLStream* copyrightText = NULL;
-		std::string author;
+		LibCXML::CXMLStream* CopyrightText = NULL;
+		std::string Author;
 
 		// <purchase>
 		// <product_list>
-		std::vector<ProductInfo> productList;
+		std::vector<ProductInfo> ProductList;
 
 		// <runtime_config>
-		int managedHeapSize = 0;
-		int resourceHeapSize = 0;
-		std::string maxScreenSize;
-		std::string maxCaptureResolution;
+		int ManagedHeapSize = 0x2000000;
+		int ResourceHeapSize = 0x4000000;
+
+		std::string MaxScreenSize;
+		std::string MaxCaptureResolution = "800x600";
 
 		// <feature_list>
-		std::vector<std::string> featureList;
+		// feature_flag = 0x0x10101011;
+
+		std::vector<std::string> FeatureList;
 
 		// <unity>
-		std::string runtimeVersion;
-		std::string unityApplicationVer;
-
-	public:
-		AppInfo(CXMLElement* elem);
-		~AppInfo();
-		int ManagedHeapSize();
-		int ResourceHeapSize();
+		std::string RuntimeVersion;
+		std::string UnityApplicationVer;
 	};
 }
 
