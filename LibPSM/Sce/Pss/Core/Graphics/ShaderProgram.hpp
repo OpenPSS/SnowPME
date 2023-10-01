@@ -7,7 +7,6 @@
 
 namespace Sce::Pss::Core::Graphics {
 
-
 	class ShaderProgram : public GraphicsObject {
 	private:
 		uint8_t* vertexCgx = nullptr;

@@ -2,15 +2,17 @@
 #define SNOW_PME_WINDOW_H 1
 #include <string>
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <sdl/SDL.h>
 #include <thread>
 #include <string>
 
 namespace SnowPME::Graphics {
 	class Window {
 	private:
-		GLFWwindow* window = nullptr;
+		SDL_Window* window = nullptr;
+		SDL_GLContext glCtx = nullptr;
 		std::string openGlVersion;
+		void onResized();
 	public:
 		Window(int height, int width, std::string title);
 		void SwapBuffers();

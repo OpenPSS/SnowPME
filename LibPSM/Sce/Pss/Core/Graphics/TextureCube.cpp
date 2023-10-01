@@ -6,7 +6,7 @@ using namespace Sce::PlayStation::Core::Graphics;
 
 namespace Sce::Pss::Core::Graphics {
 
-	TextureCube::TextureCube(std::string fileName, bool mipmap, PixelFormat format) {
+	TextureCube::TextureCube(std::string* fileName, bool mipmap, PixelFormat format) {
 		Logger::Debug(__FUNCTION__);
 		Logger::Error("TextureCube not done yet");
 	}

@@ -2,7 +2,7 @@
 
 #include <LibShared.hpp>
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <sdl/SDL.h>
 
 #include <LibPSM.hpp>
 
@@ -11,58 +11,66 @@ using namespace Shared::Debug;
 namespace SnowPME::Graphics {
 
 	Window::Window(int height, int width, std::string title) {
-		if (!glfwInit()) {
-			Logger::Error("Failed to initalize GLFW.");
-			throw new std::exception("Failed to initalize GLFW.");
-		}
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
+			Logger::Error("Failed to initalize SDL2.");
+			throw std::exception("Failed to initalize SDL2.");
+		};
+		
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-		this->window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+		this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
+		
 		if (this->window == NULL) {
-			Logger::Error("Failed to create GLFW window.");
-			throw new std::exception("Failed to create GLFW window.");
+			Logger::Error("Failed to create SDL window.");
+			throw new std::exception("Failed to create SDL window.");
 		}
 
-		glfwMakeContextCurrent(this->window);
+		this->glCtx = SDL_GL_CreateContext(this->window);
 
-		if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) {
+		if (!gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress)) {
 			Logger::Error("Failed to initalize GL.");
 			throw new std::exception("Failed to initalize GL.");
 		}
 
-		int framebufferWidth = 0;
-		int framebufferHeight = 0;
-		glfwGetFramebufferSize(this->window, &framebufferWidth, &framebufferHeight);
-		glViewport(0, 0, framebufferWidth, framebufferHeight);
+		onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
 	}
+	
+	void Window::onResized() {
+		int windowWidth = 0;
+		int windowHeight = 0;
+		SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
+		glViewport(0, 0, windowWidth, windowHeight);
+	}
 
 	void Window::PollEvents() {
-		glfwPollEvents();
+		SDL_Event event;
+		SDL_PollEvent(&event);
+
 	}
 	double Window::GetTime() {
-		return glfwGetTime();
+		return (double)SDL_GetTicks();
 	}
 
 	bool Window::IsMinimized() {
-		return glfwGetWindowAttrib(window, GLFW_ICONIFIED);
+		return false; //glfwGetWindowAttrib(window, GLFW_ICONIFIED);
 	}
 
 	void Window::SwapBuffers() {
-		glfwSwapBuffers(this->window);
+		SDL_GL_SwapWindow(this->window);
 	}
 	
 	bool Window::ShouldClose() {
-		return glfwWindowShouldClose(this->window);
+		return false; //glfwWindowShouldClose(this->window);
 	}
 
 	Window::~Window() {
-		glfwTerminate();
+		if(this->glCtx != nullptr) SDL_GL_DeleteContext(this->glCtx);
+		if(this->window != nullptr)	SDL_DestroyWindow(this->window);
+		SDL_Quit();
 	}
 
 }

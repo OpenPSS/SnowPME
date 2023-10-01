@@ -30,11 +30,11 @@ namespace Sce::PlayStation::Core::Graphics {
 			Texture* tex = nullptr;
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
-				tex = new Texture2D(filename, mipmap, format);
+				tex = new Texture2D(&filename, mipmap, format);
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				tex = new TextureCube(filename, mipmap, format);
+				tex = new TextureCube(&filename, mipmap, format);
 			}
 			
 			return PSM_ERROR_NO_ERROR;

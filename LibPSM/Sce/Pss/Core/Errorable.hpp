@@ -26,7 +26,7 @@ namespace Sce::Pss::Core {
 	public:
 		Errorable();
 		~Errorable();
-		void SetError(uint32_t errorCode);
+		uint32_t SetError(uint32_t errorCode);
 		uint32_t GetError();
 	};
 }

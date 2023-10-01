@@ -8,8 +8,9 @@ namespace Sce::Pss::Core {
 
 	}
 
-	void Errorable::SetError(uint32_t error) {
+	uint32_t Errorable::SetError(uint32_t error) {
 		this->lastError = error;
+		return error;
 	}
 	uint32_t Errorable::GetError() {
 		return this->lastError;
