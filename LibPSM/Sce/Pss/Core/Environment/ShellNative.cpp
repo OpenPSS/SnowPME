@@ -29,14 +29,28 @@ namespace Sce::Pss::Core::Environment {
 			return PSM_ERROR_COMMON_ARGUMENT;
 		}
 	}
+	int ShellNative::executeBrowserWindows(std::string url) {
+		if (Graphics::WindowSystemCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
+			return PlatformSpecific::OpenWebsite(url);
+
+		return PSM_ERROR_NO_ERROR;
+
+	}
+
+	int ShellNative::executeBrowserVita(std::string url) {
+		return PlatformSpecific::OpenWebsite(url);
+	}
 
 	int ShellNative::ExecuteBrowser() {
 		std::string url = this->paramater0.substr(0, 2048);
+		switch (Shared::Config::TargetImplementation) {
+			case Shared::RuntimeImplementation::Windows:
+				return this->executeBrowserWindows(url);
+			case Shared::RuntimeImplementation::PSVita:
+			case Shared::RuntimeImplementation::Android:
+				return this->executeBrowserVita(url);
+		}
 
-		if (Graphics::WindowSystemCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
-			PlatformSpecific::OpenWebsite(url);
-
-		return PSM_ERROR_NO_ERROR;
 	}
 
 }

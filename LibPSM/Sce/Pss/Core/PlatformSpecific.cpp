@@ -1,6 +1,7 @@
 #include <Sce/PlayStation/Core/Error.hpp>
 #include <Sce/Pss/Core/PlatformSpecific.hpp>
 #include <mono/mono.h>
+#include <LibShared.hpp>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -50,8 +51,41 @@ namespace Sce::Pss::Core {
 		return PSM_ERROR_NOT_SUPPORTED;
 #endif
 	}
+    std::string PlatformSpecific::escapeShellArgument(std::string arg) {
+#ifdef _WIN32
+        arg = Shared::String::Util::Replace(arg, "^", "^^");
+        arg = Shared::String::Util::Replace(arg, "<", "^<");
+        arg = Shared::String::Util::Replace(arg, ">", "^>");
+        arg = Shared::String::Util::Replace(arg, "&", "^&");
+        arg = Shared::String::Util::Replace(arg, "\"", "^\"");
+#else
+        arg = Shared::String::Util::Replace(arg, "^", "\\^");
+        arg = Shared::String::Util::Replace(arg, "<", "\\<");
+        arg = Shared::String::Util::Replace(arg, ">", "\\>");
+        arg = Shared::String::Util::Replace(arg, "&", "\\&");
+        arg = Shared::String::Util::Replace(arg, ";", "\\;");
+        arg = Shared::String::Util::Replace(arg, "\"", "\\\"");
+#endif
 
+        return arg;
+    }
     int PlatformSpecific::OpenWebsite(std::string url) {
+        // add http:// or https:// to the start of the URL if its not there
+        // this prevents passing i.e "calc.exe"
+        if (!url.starts_with("https://") && !url.starts_with("http://")) 
+            url = "http://" + url;
+        
+        // escape URL (turn space into %20, newline into %0D and %0A)
+        url = Shared::String::Util::Replace(url, " ",  "%20");
+        url = Shared::String::Util::Replace(url, "\r", "%0D");
+        url = Shared::String::Util::Replace(url, "\n", "%0A");
+
+        // because this is passed as an argument to a shell command ..
+        // we must strip unsafe values from the shell command
+        url = PlatformSpecific::escapeShellArgument(url);
+
+        // generate the command to start the browser
+        // this is dependant on platform
 #ifdef _WIN32
         std::string command = "start /B " + url;
 #elif __APPLE__
@@ -61,6 +95,8 @@ namespace Sce::Pss::Core {
 #else
         return PSM_ERROR_NOT_SUPPORTED;
 #endif
+        
+        // execute the command 
         return system(command.c_str()) != 0 ? PSM_ERROR_ERROR : PSM_ERROR_NO_ERROR;
     }
 }
