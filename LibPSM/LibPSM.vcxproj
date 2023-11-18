@@ -56,6 +56,7 @@
     <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha256.c" />
+    <ClCompile Include="Sce\Pss\Core\Environment\ShellNative.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\SystemEvent.cpp" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha256.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\ShellNative.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\SystemEvent.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />

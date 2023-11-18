@@ -13,21 +13,28 @@ namespace SnowPME::Graphics {
 
 	void Callback::PollEvents() {
 		if (!Callback::isInitalized) {
-			throw new std::exception("GraphicsCallback is not initalized!");
+			throw std::exception("GraphicsCallback is not initalized!");
 		}
 		Callback::mainWindow->PollEvents();
 	}
 
 	bool Callback::WasClosed() {
 		if (!Callback::isInitalized) {
-			throw new std::exception("GraphicsCallback is not initalized!");
+			throw std::exception("GraphicsCallback is not initalized!");
 		}
 		return Callback::mainWindow->ShouldClose();
 	}
 
+	bool Callback::YesNoMessageBox(const char* message, const char* caption) {
+		if (!Callback::isInitalized) {
+			throw std::exception("GraphicsCallback is not initalized!");
+		}
+		return Callback::mainWindow->MessageBox(message, caption);
+	}
+
 	bool Callback::WasMinimized() {
 		if (!Callback::isInitalized) {
-			throw new std::exception("GraphicsCallback is not initalized!");
+			throw std::exception("GraphicsCallback is not initalized!");
 		}
 		return Callback::mainWindow->IsMinimized();
 	}
@@ -35,14 +42,14 @@ namespace SnowPME::Graphics {
 
 	void Callback::SwapBuffers() {
 		if (!Callback::isInitalized) {
-			throw new std::exception("GraphicsCallback is not initalized!");
+			throw std::exception("GraphicsCallback is not initalized!");
 		}
 		Callback::mainWindow->SwapBuffers();
 	}
 
 	double Callback::GetTime() {
 		if (!Callback::isInitalized) {
-			throw new std::exception("GraphicsCallback is not initalized!");
+			throw std::exception("GraphicsCallback is not initalized!");
 		}
 		return Callback::mainWindow->GetTime();
 	}

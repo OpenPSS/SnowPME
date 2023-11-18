@@ -35,7 +35,8 @@ namespace SnowPME::Runtime {
 			Graphics::Callback::GetTime,
 			Graphics::Callback::PollEvents,
 			Graphics::Callback::WasClosed,
-			Graphics::Callback::WasMinimized);
+			Graphics::Callback::WasMinimized,
+			Graphics::Callback::YesNoMessageBox);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -43,7 +44,12 @@ namespace SnowPME::Runtime {
 	void Init::LoadApplication(std::string gameFolder) {
 
 		Sandbox* psmSandbox = new Sandbox(gameFolder);
-		CXMLElement* elem = new CXMLElement(psmSandbox->LocateRealPath("/Application/app.info"), "PSMA");
+
+		std::string appInfoPath = "/Application/app.info";
+		CXMLElement* elem = !psmSandbox->PathExist(appInfoPath) 
+							? nullptr
+							: new CXMLElement(psmSandbox->LocateRealPath(appInfoPath),
+							"PSMA");
 		AppInfo* psmAppInfo = new AppInfo(elem);
 
 		Thread::SetMainThread();
@@ -61,8 +67,8 @@ namespace SnowPME::Runtime {
 	int Init::initMono(std::string executablePath) {
 		appExe = executablePath;
 
-		int heapSizeLimit = AppInfo::ApplicationInfo->ManagedHeapSize * 0x400;
-		int resourceSizeLimit = AppInfo::ApplicationInfo->ResourceHeapSize * 0x400;
+		int heapSizeLimit = AppInfo::CurrentApplication->ManagedHeapSize * 0x400;
+		int resourceSizeLimit = AppInfo::CurrentApplication->ResourceHeapSize * 0x400;
 
 		Graphics::Window* window = new Graphics::Window(Shared::Config::ScreenHeight(0), Shared::Config::ScreenWidth(0), "- SnowPME - ");
 		Init::initCallbacks(window);

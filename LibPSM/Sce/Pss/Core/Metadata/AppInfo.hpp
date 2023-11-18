@@ -5,7 +5,7 @@
 #include <vector>
 #include <LibCXML.hpp>
 namespace Sce::Pss::Core::Metadata {
-
+	
 	typedef struct LocaleInfo {
 		std::string Locale;
 		std::string Name;
@@ -29,10 +29,8 @@ namespace Sce::Pss::Core::Metadata {
 	private:
 		LibCXML::CXMLElement* element;
 
-		
-
 	public:
-		static AppInfo* ApplicationInfo;
+		static AppInfo* CurrentApplication;
 		AppInfo(LibCXML::CXMLElement* elem);
 		~AppInfo();
 		// <application>
@@ -67,10 +65,10 @@ namespace Sce::Pss::Core::Metadata {
 		std::vector<RatingInfo> RatingList;
 
 		// <images>
-		LibCXML::CXMLStream* Splash854x480 = NULL;
-		LibCXML::CXMLStream* Icon128x128 = NULL;
-		LibCXML::CXMLStream* Icon512x512 = NULL;
-		LibCXML::CXMLStream* Icon256x256 = NULL;
+		LibCXML::CXMLStream* Splash854x480 = nullptr;
+		LibCXML::CXMLStream* Icon128x128 = nullptr;
+		LibCXML::CXMLStream* Icon512x512 = nullptr;
+		LibCXML::CXMLStream* Icon256x256 = nullptr;
 
 		// <genre_list>
 		std::vector<std::string> GenreList;
@@ -80,7 +78,7 @@ namespace Sce::Pss::Core::Metadata {
 		std::string Website;
 
 		// <copyright> 
-		LibCXML::CXMLStream* CopyrightText = NULL;
+		LibCXML::CXMLStream* CopyrightText = nullptr;
 		std::string Author;
 
 		// <purchase>

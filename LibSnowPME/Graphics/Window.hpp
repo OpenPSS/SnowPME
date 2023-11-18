@@ -20,6 +20,7 @@ namespace SnowPME::Graphics {
 		void PollEvents();
 		bool IsMinimized();
 		bool ShouldClose();
+		bool MessageBox(const char* message, const char* caption);
 		~Window();
 	};
 }

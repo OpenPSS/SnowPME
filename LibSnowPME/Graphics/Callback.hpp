@@ -14,6 +14,7 @@ namespace SnowPME::Graphics {
 		static void PollEvents();
 		static bool WasMinimized();
 		static bool WasClosed();
+		static bool YesNoMessageBox(const char* message, const char* caption);
 	};
 
 

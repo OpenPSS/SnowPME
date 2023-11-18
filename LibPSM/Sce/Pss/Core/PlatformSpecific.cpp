@@ -50,4 +50,17 @@ namespace Sce::Pss::Core {
 		return PSM_ERROR_NOT_SUPPORTED;
 #endif
 	}
+
+    int PlatformSpecific::OpenWebsite(std::string url) {
+#ifdef _WIN32
+        std::string command = "start /B " + url;
+#elif __APPLE__
+        std::string command = "open " + url;
+#elif __linux__
+        std::string command = "xdg-open " + url;
+#else
+        return PSM_ERROR_NOT_SUPPORTED;
+#endif
+        return system(command.c_str()) != 0 ? PSM_ERROR_ERROR : PSM_ERROR_NO_ERROR;
+    }
 }
