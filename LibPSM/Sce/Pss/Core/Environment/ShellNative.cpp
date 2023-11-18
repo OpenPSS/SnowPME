@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Environment {
 	int ShellNative::ExecuteBrowser() {
 		std::string url = this->paramater0.substr(0, 2048);
 
-		if (Graphics::WindowSystemCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "SnowPME"))
+		if (Graphics::WindowSystemCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
 			PlatformSpecific::OpenWebsite(url);
 
 		return PSM_ERROR_NO_ERROR;
