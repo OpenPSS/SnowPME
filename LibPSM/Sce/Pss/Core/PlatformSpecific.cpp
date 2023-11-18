@@ -52,20 +52,20 @@ namespace Sce::Pss::Core {
 #endif
 	}
     std::string PlatformSpecific::escapeShellArgument(std::string arg) {
+        // list of all special shell characters
+        std::string specialCharacters = "^&<>|()=;,\"";
+
 #ifdef _WIN32
-        arg = Shared::String::Util::Replace(arg, "^", "^^");
-        arg = Shared::String::Util::Replace(arg, "<", "^<");
-        arg = Shared::String::Util::Replace(arg, ">", "^>");
-        arg = Shared::String::Util::Replace(arg, "&", "^&");
-        arg = Shared::String::Util::Replace(arg, "\"", "^\"");
+        std::string escapeSeq = "^";
 #else
-        arg = Shared::String::Util::Replace(arg, "^", "\\^");
-        arg = Shared::String::Util::Replace(arg, "<", "\\<");
-        arg = Shared::String::Util::Replace(arg, ">", "\\>");
-        arg = Shared::String::Util::Replace(arg, "&", "\\&");
-        arg = Shared::String::Util::Replace(arg, ";", "\\;");
-        arg = Shared::String::Util::Replace(arg, "\"", "\\\"");
+        std::string escapeSeq = "\\";
 #endif
+
+        // loop over all special shell characters and replace them with escaped version
+        for (int i = 0; i < specialCharacters.length(); i++) {
+            std::string specialCharacter = std::string(1, specialCharacters.at(i));
+            arg = Shared::String::Util::Replace(arg, specialCharacter, escapeSeq + specialCharacter);
+        }
 
         return arg;
     }
