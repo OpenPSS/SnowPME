@@ -53,7 +53,7 @@ namespace Sce::Pss::Core {
 	}
     std::string PlatformSpecific::escapeShellArgument(std::string arg) {
         // list of all special shell characters
-        std::string specialCharacters = "^&<>|()=;,\"";
+        std::string specialCharacters = "^&<>|()=;,%\"";
 
 #ifdef _WIN32
         std::string escapeSeq = "^";
