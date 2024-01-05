@@ -14,15 +14,25 @@ namespace SnowPME::Callback {
 			throw std::exception("failed to Mix_OpenAudio.");
 		}
 
-		if (Mix_AllocateChannels(5)) {
+		if (Mix_AllocateChannels(4) < 0) {
 			throw std::exception("failed to Mix_AllocateChannels.");
 		}
 
-		AudioImpl::isInitalized = true;
+		AudioImpl::Impl::isInitalized = true;
 	}
+
 	void* AudioImpl::OpenMP3(uint8_t* data, size_t dataSz) {
-		AudioImpl::ErrorOnNotInit();
-		return nullptr;
+		AudioImpl::Impl::ErrorOnNotInit();
+
+		SDL_RWops* rw = SDL_RWFromMem(data, dataSz);
+		Mix_Music* mus = Mix_LoadMUS_RW(rw, true);
+
+		return (void*)mus;
+	}
+
+	void AudioImpl::CloseMP3(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		Mix_FreeMusic((Mix_Music*)bgmObject);
 	}
 
 }

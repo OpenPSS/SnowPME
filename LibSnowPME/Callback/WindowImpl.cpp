@@ -7,38 +7,38 @@ namespace SnowPME::Callback {
 
 	void WindowImpl::Init(Window* window) {
 		WindowImpl::mainWindow = window;
-		WindowImpl::isInitalized = true;
+		WindowImpl::Impl::isInitalized = true;
 	}
 
 	void WindowImpl::PollEvents() {
 
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		WindowImpl::mainWindow->PollEvents();
 	}
 
 	bool WindowImpl::WasClosed() {
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		return WindowImpl::mainWindow->ShouldClose();
 	}
 
 	bool WindowImpl::YesNoMessageBox(const char* message, const char* caption) {
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		return WindowImpl::mainWindow->MessageBox(message, caption);
 	}
 
 	bool WindowImpl::WasMinimized() {
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		return WindowImpl::mainWindow->IsMinimized();
 	}
 
 
 	void WindowImpl::SwapBuffers() {
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		WindowImpl::mainWindow->SwapBuffers();
 	}
 
 	double WindowImpl::GetTime() {
-		WindowImpl::ErrorOnNotInit();
+		WindowImpl::Impl::ErrorOnNotInit();
 		return WindowImpl::mainWindow->GetTime();
 	}
 

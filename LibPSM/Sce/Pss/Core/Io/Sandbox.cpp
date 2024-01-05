@@ -1,6 +1,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
+#include <errno.h>
 #include <filesystem>
 #include <sys/stat.h>
 #include <mono/mono.h>
@@ -333,6 +334,25 @@ namespace Sce::Pss::Core::Io {
 
 		std::fstream* str = new std::fstream();
 		str->open(realPath, openmode);
+
+		if (str->fail()) {
+			Logger::Error("Failed to open: \"" + absPath + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
+			switch (errno) {
+			case EPERM:
+				handle->failReason = PSM_ERROR_ACCESS_DENIED;
+				break;
+			case ENOENT:
+				handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
+				break;
+			case EEXIST:
+				handle->failReason = PSM_ERROR_ALREADY_EXISTS;
+				break;
+			default:
+				handle->failReason = PSM_ERROR_COMMON_IO;
+				break;
+			}
+			return handle;
+		}
 
 		handle->failReason = PSM_ERROR_NO_ERROR;
 		handle->opened = true;

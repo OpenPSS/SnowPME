@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
+#include <LibShared.hpp>
 #include <mono/mono.h>
 #include <iostream>
 
@@ -11,6 +12,7 @@ using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Callback;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Audio {
 	bool Bgm::isMp3() {
@@ -21,23 +23,48 @@ namespace Sce::Pss::Core::Audio {
 		}
 		return false;
 	}
+	Bgm::~Bgm() {
+		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		if(this->audioData != nullptr)
+			allocator->sce_psm_free(this->audioData);
+
+		if (this->bgmObject != nullptr)
+			AudioCallbacks::CloseMP3(this->bgmObject);
+
+	}
+	Bgm::Bgm(uint8_t* data, int dataSz) {
+		// set audioData and size 
+		this->audioData = data;
+		this->audioSz = dataSz;
+
+		if (this->isMp3()) { // check data is an MP3 file
+			this->bgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
+		}
+		else {
+			this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);
+		}
+	}
 
 	Bgm::Bgm(std::string filename) {
 		uint64_t file = NULL;
+		// Open the file specified
 		if (ICall::PsmFileOpen((char*)filename.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ, &file) == PSM_ERROR_NO_ERROR) {
+			// get total file sie..
 			ICall::PsmFileGetSize(file, &this->audioSz);
 			
+			// allocate enough space in memory for this audio file
 			HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
 			this->audioData = allocator->sce_psm_malloc(this->audioSz);
 
 			if (this->audioData != nullptr) {
+				// read the audio file into memory
 				uint32_t bytesRead = 0;
 				ICall::PsmFileRead(file, this->audioData, this->audioSz, &bytesRead);
 				ICall::PsmClose(file);
 
 				if (this->audioSz == bytesRead) {
-					if (!this->isMp3()) {
-						this->bgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz);
+					if (!this->isMp3()) { // ensure file is an mp3
+						this->bgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
 					}
 					else {
 						this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);
@@ -59,6 +86,8 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int Bgm::NewFromFilename(MonoString* filename, int * handle){
+		Logger::Debug(__FUNCTION__);
+
 		if (filename == nullptr || handle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -77,13 +106,38 @@ namespace Sce::Pss::Core::Audio {
 
 		return PSM_ERROR_NO_ERROR;
 	}
-	int Bgm::NewFromFileImage(uint8_t* fileImage, int * handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+
+	int Bgm::NewFromFileImage(MonoArray* fileImage, int * handle) {
+		Logger::Debug(__FUNCTION__);
+
+		if (fileImage == nullptr || handle == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		char* fImage = mono_array_addr_with_size(fileImage, 1, 0);
+		int fSz = mono_array_length(fileImage);
+
+		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		uint8_t* musicData = allocator->sce_psm_malloc(fSz);
+		if (musicData != nullptr) {
+			memcpy(musicData, fImage, fSz);
+			Bgm* bgm = new Bgm(musicData, fSz);
+			ReturnErrorable(bgm);
+			*handle = Handles::CreateHandle((uintptr_t)bgm);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			return PSM_ERROR_OUT_OF_MEMORY;
+		}
 	}
+
 	int Bgm::ReleaseNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		
+		Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+		delete bgm;
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Bgm::CreatePlayerNative(int handle, int * playerHandle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

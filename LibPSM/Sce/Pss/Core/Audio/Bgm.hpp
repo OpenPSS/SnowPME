@@ -16,8 +16,10 @@ namespace Sce::Pss::Core::Audio {
 		bool isMp3();
 	public:
 		Bgm(std::string filename);
+		Bgm(uint8_t* data, int dataSz);
+		~Bgm();
 		static int NewFromFilename(MonoString* filename, int* handle);
-		static int NewFromFileImage(uint8_t* fileImage, int* handle);
+		static int NewFromFileImage(MonoArray* fileImage, int* handle);
 		static int ReleaseNative(int handle);
 		static int CreatePlayerNative(int handle, int* playerHandle);
 	};

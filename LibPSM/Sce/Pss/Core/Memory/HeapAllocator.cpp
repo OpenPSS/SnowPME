@@ -30,12 +30,13 @@ namespace Sce::Pss::Core::Memory {
 	uint8_t* HeapAllocator::sce_psm_malloc(int sz) {
 		this->allocMutex.lock();
 
-		if (this->UsedSpace + sz > this->TotalHeapSize) {
+		/*if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
 			this->allocMutex.unlock();
 
 			return nullptr;
-		}
+		}*/
+
 		// allocate a vector of uint8_t, of the given size
 		std::vector<uint8_t>* vec = new std::vector<uint8_t>(sz);
 
