@@ -2,7 +2,7 @@
 #define LIB_PSS_ERRORABLE_H 1
 #include <vector>
 #include <string>
-#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core {
 	#define ReturnErrorable(x) \

@@ -1,11 +1,11 @@
-#include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-#include <Sce/PlayStation/Core/Vector4.hpp>
+#include <Sce/Pss/Core/Vector4.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
 

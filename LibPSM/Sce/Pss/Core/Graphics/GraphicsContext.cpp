@@ -3,8 +3,8 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
-#include <Sce/Pss/Core/Graphics/WindowSystemCallbacks.hpp>
-#include <Sce/PlayStation/Core/Graphics/GraphicsExtension.hpp>
+#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
@@ -12,7 +12,7 @@
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::System;
-
+using namespace Sce::Pss::Core::Callback;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
@@ -244,6 +244,7 @@ namespace Sce::Pss::Core::Graphics {
 			if (this->frameInProgress) {
 				this->frameInProgress = false;
 			}
+			return PSM_ERROR_NO_ERROR;
 		}
 		else {
 			return PSM_ERROR_ERROR;
@@ -267,7 +268,7 @@ namespace Sce::Pss::Core::Graphics {
 		this->EndFrame();
 		// swap buffers ..
 		glFlush();
-		WindowSystemCallbacks::SwapBuffers();
+		WindowCallbacks::SwapBuffers();
 		// begin a new frame
 		this->BeginFrame();
 		
@@ -621,7 +622,7 @@ namespace Sce::Pss::Core::Graphics {
 			else
 				this->Extensions = std::string(glExtensions);
 
-			std::vector<std::string> extensionList = Shared::String::Util::Split(this->Extensions, " ");
+			std::vector<std::string> extensionList = Shared::String::StringUtil::Split(this->Extensions, " ");
 
 			Logger::Info("GL Vendor: " + std::string((char*)glGetString(GL_VENDOR)));
 			Logger::Info("GL Renderer: " + std::string((char*)glGetString(GL_RENDERER)));

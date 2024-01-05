@@ -1,15 +1,15 @@
-#include <String/Util.hpp>
+#include <String/StringUtil.hpp>
 #include <String/Path.hpp>
 #include <vector>
 
 namespace Shared::String {
 	std::string Path::ChangeSlashesToPsmStyle(std::string path) {
-		return Shared::String::Util::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
+		return StringUtil::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
 	}
 
 	std::string Path::ChangeSlashesToNativeStyle(std::string path) {
 #ifdef _WIN32
-		return Shared::String::Util::Replace(path, PSM_PATH_SEPERATOR, WINDOWS_PATH_SEPERATOR); // Replace all / with \.
+		return StringUtil::Replace(path, PSM_PATH_SEPERATOR, WINDOWS_PATH_SEPERATOR); // Replace all / with \.
 #else
 		return ChangeSlashesToPsmStyle(path); // *NIX and PSM use the same style.
 #endif

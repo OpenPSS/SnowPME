@@ -4,7 +4,7 @@
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 
-#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
 

@@ -18,7 +18,7 @@
     <ClCompile Include="Debug\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="String\Util.cpp">
+    <ClCompile Include="String\StringUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp">
@@ -32,7 +32,7 @@
     <ClInclude Include="Debug\Logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="String\Util.hpp">
+    <ClInclude Include="String\StringUtil.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LibShared.hpp">

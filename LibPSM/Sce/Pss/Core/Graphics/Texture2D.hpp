@@ -9,9 +9,9 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 
 	public:
-		Texture2D(std::string* fileName, bool mipmap, Sce::PlayStation::Core::Graphics::PixelFormat format);
+		Texture2D(std::string* fileName, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		~Texture2D();
-		int LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, Sce::PlayStation::Core::Graphics::PixelFormat format);
+		int LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		GLenum GlTextureType();
 		int ActiveStateChanged(bool state);
 	};

@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <LibShared.hpp>
 using namespace Shared::Debug;
-using namespace Sce::PlayStation::Core::Graphics;
+using namespace Sce::Pss::Core::Graphics;
 
 namespace Sce::Pss::Core::Graphics {
 

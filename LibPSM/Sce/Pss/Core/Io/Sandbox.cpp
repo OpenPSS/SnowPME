@@ -1,5 +1,5 @@
-#include <Sce/PlayStation/Core/Error.hpp>
-#include <Sce/Pss/Core/PlatformSpecific.hpp>
+#include <Sce/Pss/Core/Error.hpp>
+#include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <filesystem>
 #include <sys/stat.h>
@@ -8,6 +8,7 @@
 #include <LibShared.hpp>
 
 using namespace Shared::Debug;
+using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Io {
 
@@ -69,7 +70,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : Sandbox::filesystems) {
-			if (Shared::String::Util::ToLower(absPath).starts_with(Shared::String::Util::ToLower(filesystem->SandboxPath()))) {
+			if (Shared::String::StringUtil::ToLower(absPath).starts_with(Shared::String::StringUtil::ToLower(filesystem->SandboxPath()))) {
 				return filesystem;
 			}
 		}
@@ -166,7 +167,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : this->filesystems) {
-			if (Shared::String::Util::ToLower(absPath) == Shared::String::Util::ToLower(filesystem->SandboxPath())) {
+			if (Shared::String::StringUtil::ToLower(absPath) == Shared::String::StringUtil::ToLower(filesystem->SandboxPath())) {
 				return true;
 			}
 		}
@@ -691,7 +692,7 @@ namespace Sce::Pss::Core::Io {
 			startDir = "";
 
 		// Split path by the / seperator
-		std::vector<std::string> pathComponents = Shared::String::Util::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
+		std::vector<std::string> pathComponents = Shared::String::StringUtil::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
 
 		// if you think about it, file paths are essentially. just First-In-First-Out much like The Stack,
 
@@ -709,7 +710,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		std::string absolutePath = startDir + Shared::String::Util::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
+		std::string absolutePath = startDir + Shared::String::StringUtil::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
 		return absolutePath;
 	}
 

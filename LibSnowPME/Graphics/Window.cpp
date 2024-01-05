@@ -11,7 +11,7 @@ using namespace Shared::Debug;
 namespace SnowPME::Graphics {
 
 	Window::Window(int height, int width, std::string title) {
-		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
+		if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
 			Logger::Error("Failed to initalize SDL2.");
 			throw std::exception("Failed to initalize SDL2.");
 		};

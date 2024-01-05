@@ -22,14 +22,14 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="String\Path.cpp" />
-    <ClCompile Include="String\Util.cpp" />
+    <ClCompile Include="String\StringUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
     <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="LibShared.hpp" />
     <ClInclude Include="String\Path.hpp" />
-    <ClInclude Include="String\Util.hpp" />
+    <ClInclude Include="String\StringUtil.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

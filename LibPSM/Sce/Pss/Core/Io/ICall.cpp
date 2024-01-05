@@ -1,7 +1,7 @@
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/Pss/Core/PlatformSpecific.hpp>
+#include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #include <Debug/Logger.hpp>
 #include <LibPSM.hpp>

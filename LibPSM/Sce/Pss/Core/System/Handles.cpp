@@ -1,5 +1,5 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 namespace Sce::Pss::Core::System {
 	static uintptr_t addresses[Handles::MaxHandle];
 	static bool wasInit = false;

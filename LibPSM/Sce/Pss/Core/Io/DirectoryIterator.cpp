@@ -1,7 +1,7 @@
 #include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 #include <Debug/Logger.hpp>
 
 #include <vector>

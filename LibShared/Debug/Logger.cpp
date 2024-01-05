@@ -1,16 +1,16 @@
 #include <Debug/Logger.hpp>
-#include <String/Util.hpp>
+#include <String/StringUtil.hpp>
 #include <iostream>
 #include <vector>
 
 namespace Shared::Debug
 {
 	void Logger::logMultiline(std::string channel, std::string msg) {
-		std::string fixedStr = String::Util::Replace(msg, "\r", "");
-		std::vector<std::string> lines = String::Util::Split(fixedStr, "\n");
+		std::string fixedStr = String::StringUtil::Replace(msg, "\r", "");
+		std::vector<std::string> lines = String::StringUtil::Split(fixedStr, "\n");
 
 		for (std::string line : lines) {
-			line = String::Util::Replace(line, "\n", "");
+			line = String::StringUtil::Replace(line, "\n", "");
 			if (channel != "ERROR" && channel != "WARN")
 				std::cout << "[" << channel << "] " << line << std::endl;
 			else

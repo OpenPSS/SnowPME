@@ -1,16 +1,16 @@
 #ifndef LIB_PSS_GRAPHICSCONTEXT_H
 #define LIB_PSS_GRAPHICSCONTEXT_H 1
 
-#include <Sce/PlayStation/Core/Graphics/DrawMode.hpp>
-#include <Sce/PlayStation/Core/Graphics/PixelFormat.hpp>
-#include <Sce/PlayStation/Core/Graphics/GraphicsUpdate.hpp>
-#include <Sce/PlayStation/Core/Graphics/ClearMask.hpp>
-#include <Sce/PlayStation/Core/Graphics/TextureCubeFace.hpp>
-#include <Sce/PlayStation/Core/Graphics/GraphicsState.hpp>
-#include <Sce/PlayStation/Core/Graphics/Primitive.hpp>
-#include <Sce/PlayStation/Core/Graphics/GraphicsCapsState.hpp>
-#include <Sce/PlayStation/Core/Graphics/MultiSampleMode.hpp>
-#include <Sce/PlayStation/Core/Imaging/ImageSize.hpp>
+#include <Sce/Pss/Core/Graphics/DrawMode.hpp>
+#include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsUpdate.hpp>
+#include <Sce/Pss/Core/Graphics/ClearMask.hpp>
+#include <Sce/Pss/Core/Graphics/TextureCubeFace.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsState.hpp>
+#include <Sce/Pss/Core/Graphics/Primitive.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsCapsState.hpp>
+#include <Sce/Pss/Core/Graphics/MultiSampleMode.hpp>
+#include <Sce/Pss/Core/Imaging/ImageSize.hpp>
 
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
@@ -24,8 +24,8 @@
 #include <mono/mono.h>
 #include <glad/glad.h>
 
-using namespace Sce::PlayStation::Core::Imaging;
-using namespace Sce::PlayStation::Core::Graphics;
+using namespace Sce::Pss::Core::Imaging;
+using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Timing;
 
 namespace Sce::Pss::Core::Graphics {

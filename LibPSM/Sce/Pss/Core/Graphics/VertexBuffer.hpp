@@ -2,13 +2,13 @@
 #define LIB_PSS_VERTEXBUFFER_H 1
 #include <cstdint>
 #include <vector>
-#include <Sce/PlayStation/Core/Vector4.hpp>
-#include <Sce/PlayStation/Core/Graphics/ElementType.hpp>
-#include <Sce/PlayStation/Core/Graphics/VertexFormat.hpp>
+#include <Sce/Pss/Core/Vector4.hpp>
+#include <Sce/Pss/Core/Graphics/ElementType.hpp>
+#include <Sce/Pss/Core/Graphics/VertexFormat.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
-using namespace Sce::PlayStation::Core::Graphics;
-using namespace Sce::PlayStation::Core;
+using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core;
 
 namespace Sce::Pss::Core::Graphics {
 

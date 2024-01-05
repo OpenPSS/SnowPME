@@ -1,10 +1,10 @@
 #include <Sce/Pss/Core/Services/UniqueId.hpp>
-#include <Sce/Pss/Core/PlatformSpecific.hpp>
+#include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
 #include <Sce/Pss/Core/Crypto/Keys.hpp>
 
-#include <Sce/PlayStation/Core/Error.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 using namespace Shared::Debug;
 

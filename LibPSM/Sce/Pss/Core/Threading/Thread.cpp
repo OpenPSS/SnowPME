@@ -1,5 +1,5 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <Sce/Pss/Core/PlatformSpecific.hpp>
+#include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #include <chrono>
 #include <thread>
