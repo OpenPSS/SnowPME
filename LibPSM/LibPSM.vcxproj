@@ -66,7 +66,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Memory\HeapAllocator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
@@ -217,7 +216,6 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgramOption.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\Texture2D.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\TextureCube.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.hpp" />
     <ClInclude Include="Sce\Pss\Core\Memory\HeapAllocator.hpp" />
     <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />

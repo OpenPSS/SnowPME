@@ -186,9 +186,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\PixelBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -609,9 +606,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Bool.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp">
