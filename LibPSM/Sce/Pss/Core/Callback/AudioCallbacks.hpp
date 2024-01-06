@@ -8,11 +8,14 @@ namespace Sce::Pss::Core::Callback {
 		static bool isInitalized;
 		static void* (*openMp3)(uint8_t* data, size_t dataSz);
 		static void  (*closeMp3)(void* bgmObject);
+		static void  (*playMp3)(void* bgmObject);
 	public:
 		static void Init(void* (*openMp3)(uint8_t*, size_t),
-						 void  (*closeMp3)(void* bgmObject));
+						 void  (*closeMp3)(void* bgmObject),
+						 void  (*playMp3)(void* bgmObject));
 		static void* OpenMP3(uint8_t* data, size_t dataSz);
 		static void CloseMP3(void* bgmObject);
+		static void PlayMP3(void* bgmObject);
 	};
 
 }

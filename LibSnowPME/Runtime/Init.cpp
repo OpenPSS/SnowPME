@@ -42,7 +42,8 @@ namespace SnowPME::Runtime {
 		Callback::AudioImpl::Init();
 		Sce::Pss::Core::Callback::AudioCallbacks::Init(
 			Callback::AudioImpl::OpenMP3,
-			Callback::AudioImpl::CloseMP3);
+			Callback::AudioImpl::CloseMP3,
+			Callback::AudioImpl::PlayMP3);
 
 		return PSM_ERROR_NO_ERROR;
 	}

@@ -9,6 +9,7 @@ namespace SnowPME::Callback {
 		static void Init();
 		static void* OpenMP3(uint8_t* data, size_t dataSz);
 		static void CloseMP3(void* bgmObject);
+		static void PlayMP3(void* bgmObject);
 	};
 
 }

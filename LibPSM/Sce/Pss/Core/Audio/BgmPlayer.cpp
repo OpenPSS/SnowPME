@@ -1,4 +1,11 @@
 #include <Sce/Pss/Core/Audio/BgmPlayer.hpp>
+#include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
+#include <LibShared.hpp>
+
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Callback;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Audio {
 
@@ -6,16 +13,21 @@ namespace Sce::Pss::Core::Audio {
 		this->audioBgm = bgm;
 	}
 	BgmPlayer::~BgmPlayer() {
-		delete this->audioBgm;
 	}
 
 	int BgmPlayer::ReleaseNative(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
-	int BgmPlayer::PlayNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int BgmPlayer::PlayNative(int handle) {
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			AudioCallbacks::PlayMP3(player->audioBgm->NativeBgmObject);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::StopNative(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;

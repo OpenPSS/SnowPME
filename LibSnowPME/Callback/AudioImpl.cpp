@@ -21,6 +21,7 @@ namespace SnowPME::Callback {
 		AudioImpl::Impl::isInitalized = true;
 	}
 
+
 	void* AudioImpl::OpenMP3(uint8_t* data, size_t dataSz) {
 		AudioImpl::Impl::ErrorOnNotInit();
 
@@ -34,5 +35,12 @@ namespace SnowPME::Callback {
 		AudioImpl::Impl::ErrorOnNotInit();
 		Mix_FreeMusic((Mix_Music*)bgmObject);
 	}
+
+	void AudioImpl::PlayMP3(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		Mix_PlayMusic((Mix_Music*)bgmObject, 0);
+	}
+
+
 
 }

@@ -25,18 +25,13 @@ namespace Sce::Pss::Core::Audio {
 		return false;
 	}
 
-	BgmPlayer* CreatePlayer(int handle, int* playerHandle) {
-
-		return nullptr;
-	}
-
 	Bgm::~Bgm() {
 		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
 		if(this->audioData != nullptr)
 			allocator->sce_psm_free(this->audioData);
 
-		if (this->bgmObject != nullptr)
-			AudioCallbacks::CloseMP3(this->bgmObject);
+		if (this->NativeBgmObject != nullptr)
+			AudioCallbacks::CloseMP3(this->NativeBgmObject);
 
 	}
 	Bgm::Bgm(uint8_t* data, int dataSz) {
@@ -45,7 +40,7 @@ namespace Sce::Pss::Core::Audio {
 		this->audioSz = dataSz;
 
 		if (this->isMp3()) { // check data is an MP3 file
-			this->bgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
+			this->NativeBgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
 		}
 		else {
 			this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);
@@ -71,7 +66,7 @@ namespace Sce::Pss::Core::Audio {
 
 				if (this->audioSz == bytesRead) {
 					if (!this->isMp3()) { // ensure file is an mp3
-						this->bgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
+						this->NativeBgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
 					}
 					else {
 						this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);

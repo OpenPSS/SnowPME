@@ -11,10 +11,9 @@ namespace Sce::Pss::Core::Audio {
 		uint8_t* audioData = nullptr;
 		uint32_t audioSz = 0;
 
-		void* bgmObject = nullptr;
-
 		bool isMp3();
 	public:
+		void* NativeBgmObject = nullptr;
 		Bgm(std::string filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();

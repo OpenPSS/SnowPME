@@ -5,7 +5,12 @@
 #include <vector>
 #include <LibCXML.hpp>
 namespace Sce::Pss::Core::Metadata {
-	
+	#define READATTRIBUTE(TYPE, VALUE, SET) { \
+		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<LibCXML::CXMLAttribute<TYPE>*>(VALUE); \
+		if (attribute != nullptr) { \
+			SET = attribute->AttributeValue(); \
+		} \
+	}
 	typedef struct LocaleInfo {
 		std::string Locale;
 		std::string Name;

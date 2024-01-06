@@ -6,13 +6,6 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Metadata {
 
-	#define READATTRIBUTE(TYPE, VALUE, SET) { \
-		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<LibCXML::CXMLAttribute<TYPE>*>(VALUE); \
-		if (attribute != nullptr) { \
-			SET = attribute->AttributeValue(); \
-		} \
-	}
-
 	AppInfo* AppInfo::CurrentApplication = nullptr;
 
 	AppInfo::~AppInfo() {
