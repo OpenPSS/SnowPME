@@ -1,13 +1,13 @@
 #ifndef LIB_PSS_BGM_H
 #define LIB_PSS_BGM_H 1
-#include <Sce/Pss/Core/Errorable.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/Errorable.hpp>
 #include <string>
 #include <iostream>
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Audio {
-	class Bgm : public PsmObject{
+	class Bgm : public PsmObject {
 		uint8_t* audioData = nullptr;
 		uint32_t audioSz = 0;
 

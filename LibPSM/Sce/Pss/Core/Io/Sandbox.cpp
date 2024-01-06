@@ -303,33 +303,42 @@ namespace Sce::Pss::Core::Io {
 		// Calculate mode
 
 		std::fstream::ios_base::openmode openmode = 0;
-		openmode |= std::ios::_Nocreate;
-		openmode |= std::ios::trunc;
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0)
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {
 			openmode |= std::ios::in;
+		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0)
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) {
 			openmode |= std::ios::out;
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_BINARY) != 0)
+			openmode |= std::ios::_Nocreate;
+			openmode |= std::ios::trunc;
+		}
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_BINARY) != 0) {
 			openmode |= std::ios::binary;
+		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0)
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0) {
 			openmode &= std::ios::binary;
+		}
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0) {
+			openmode |= std::ios::ate;
+		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0)
-			openmode |= std::ios::app;
-
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0)
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
 			openmode |= std::ios::_Noreplace;
+		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0)
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) {
 			openmode &= ~std::ios::_Nocreate;
+		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0)
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0) {
 			openmode &= ~std::ios::trunc;
-
+		}
+	
 		handle->iflags = openmode;
 
 		std::fstream* str = new std::fstream();

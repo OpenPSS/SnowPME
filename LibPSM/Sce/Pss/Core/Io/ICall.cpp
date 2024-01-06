@@ -18,16 +18,16 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(handle))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileDescriptor* psmHandle = (PsmFileDescriptor*)Handles::GetHandle(handle);
+		PsmFileDescriptor* fd = (PsmFileDescriptor*)Handles::GetHandle(handle);
 	
-		if (!psmHandle->opened)
+		if (!fd->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		if (psmHandle->directory) {
-			Sandbox::ApplicationSandbox->CloseDirectory(psmHandle);
+		if (fd->directory) {
+			Sandbox::ApplicationSandbox->CloseDirectory(fd);
 		}
 		else {
-			Sandbox::ApplicationSandbox->CloseFile(psmHandle);
+			Sandbox::ApplicationSandbox->CloseFile(fd);
 		}
 
 		Handles::DeleteHandle(handle);

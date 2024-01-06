@@ -99,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 			if ((update & GraphicsUpdate::FrameBuffer) != GraphicsUpdate::None) {
 				Logger::Debug("update & GraphicsUpdate::FrameBuffer");
 
-				PsmHandle fbHandle = handles[GraphicsContext::frameBufferHandleOffset];
+				int fbHandle = handles[GraphicsContext::frameBufferHandleOffset];
 				// Check this handle is valid ..
 				if (fbHandle != Handles::NoHandle) {
 					// Resolve the handle for the new shader program
@@ -260,6 +260,7 @@ namespace Sce::Pss::Core::Graphics {
 		else {
 			return PSM_ERROR_ERROR;
 		}
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int GraphicsContext::SwapBuffers() {

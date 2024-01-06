@@ -1,15 +1,19 @@
 #ifndef LIB_PSS_BGMPLAYER_H
 #define LIB_PSS_BGMPLAYER_H 1
-#include <cstdint>
 
 #include <string>
 #include <iostream>
+#include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Audio/BgmStatus.hpp>
-
+#include <Sce/Pss/Core/Audio/Bgm.hpp>
 
 namespace Sce::Pss::Core::Audio {
-	class BgmPlayer {
+	class BgmPlayer : public PsmObject {
+	private:
+		Bgm* audioBgm = nullptr;
 	public:
+		BgmPlayer(Bgm* bgm);
+		~BgmPlayer();
 		static int ReleaseNative(int handle);
 		static int PlayNative(int handle);
 		static int StopNative(int handle);

@@ -1,6 +1,14 @@
 #include <Sce/Pss/Core/Audio/BgmPlayer.hpp>
 
 namespace Sce::Pss::Core::Audio {
+
+	BgmPlayer::BgmPlayer(Bgm* bgm) {
+		this->audioBgm = bgm;
+	}
+	BgmPlayer::~BgmPlayer() {
+		delete this->audioBgm;
+	}
+
 	int BgmPlayer::ReleaseNative(int handle){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;

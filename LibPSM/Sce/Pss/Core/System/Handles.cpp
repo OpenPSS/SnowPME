@@ -9,7 +9,7 @@ namespace Sce::Pss::Core::System {
 		wasInit = true;
 	}
 
-	bool Handles::IsValid(PsmHandle handle) {
+	bool Handles::IsValid(int handle) {
 		if (!wasInit)
 			init();
 
@@ -25,11 +25,11 @@ namespace Sce::Pss::Core::System {
 			return true;
 	}
 
-	PsmHandle Handles::CreateHandle(uintptr_t address) {
+	int Handles::CreateHandle(uintptr_t address) {
 		if (!wasInit)
 			init();
 
-		for (PsmHandle i = Handles::MinHandle; i < Handles::MaxHandle; i++) {
+		for (int i = Handles::MinHandle; i < Handles::MaxHandle; i++) {
 			if (addresses[i] == NULL)
 			{
 				addresses[i] = address;
@@ -40,7 +40,7 @@ namespace Sce::Pss::Core::System {
 		return PSM_ERROR_BUFFER_FULL;
 	}
 
-	uintptr_t Handles::GetHandle(PsmHandle handle) {
+	uintptr_t Handles::GetHandle(int handle) {
 		if (!wasInit)
 			init();
 
@@ -50,7 +50,7 @@ namespace Sce::Pss::Core::System {
 			return addresses[handle];
 	}
 
-	void Handles::DeleteHandle(PsmHandle handle) {
+	void Handles::DeleteHandle(int handle) {
 		if (!wasInit)
 			init();
 

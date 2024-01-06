@@ -1,4 +1,5 @@
 #include <Sce/Pss/Core/Audio/Bgm.hpp>
+#include <Sce/Pss/Core/Audio/BgmPlayer.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
@@ -23,6 +24,12 @@ namespace Sce::Pss::Core::Audio {
 		}
 		return false;
 	}
+
+	BgmPlayer* CreatePlayer(int handle, int* playerHandle) {
+
+		return nullptr;
+	}
+
 	Bgm::~Bgm() {
 		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
 		if(this->audioData != nullptr)
@@ -102,12 +109,12 @@ namespace Sce::Pss::Core::Audio {
 
 		Bgm* bgm = new Bgm(audioFileName);
 		ReturnErrorable(bgm);
-		*handle = Handles::CreateHandle((uintptr_t)bgm);
+		*handle = bgm->Handle;
 
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int Bgm::NewFromFileImage(MonoArray* fileImage, int * handle) {
+	int Bgm::NewFromFileImage(MonoArray* fileImage, int* handle) {
 		Logger::Debug(__FUNCTION__);
 
 		if (fileImage == nullptr || handle == nullptr)
@@ -122,7 +129,7 @@ namespace Sce::Pss::Core::Audio {
 			memcpy(musicData, fImage, fSz);
 			Bgm* bgm = new Bgm(musicData, fSz);
 			ReturnErrorable(bgm);
-			*handle = Handles::CreateHandle((uintptr_t)bgm);
+			*handle = bgm->Handle;
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -131,16 +138,36 @@ namespace Sce::Pss::Core::Audio {
 		}
 	}
 
-	int Bgm::ReleaseNative(int handle){
+	int Bgm::ReleaseNative(int handle) {
 		Logger::Debug(__FUNCTION__);
 		
-		Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
-		delete bgm;
+		if (Handles::IsValid(handle)) {
+			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			delete bgm;
+		}
 
 		return PSM_ERROR_NO_ERROR;
 	}
-	int Bgm::CreatePlayerNative(int handle, int * playerHandle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int Bgm::CreatePlayerNative(int handle, int* playerHandle) {
+		Logger::Debug(__FUNCTION__);
+		if (playerHandle == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			BgmPlayer* player = new BgmPlayer(bgm);
+
+			if (Handles::IsValid(player->Handle)) {
+				*playerHandle = player->Handle;
+			}
+			else {
+				return PSM_ERROR_COMMON_INVALID_OPERATION;
+			}
+		}
+		else {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 }
