@@ -7,8 +7,6 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Callback {
 
-	bool WindowCallbacks::isInitalized = false;
-
 	void   (*WindowCallbacks::swapBufferCallback)(void) = nullptr;
 	double (*WindowCallbacks::getTimeCallback)(void) = nullptr;
 	void   (*WindowCallbacks::pollEventsCallback)(void) = nullptr;
@@ -34,58 +32,34 @@ namespace Sce::Pss::Core::Callback {
 	}
 
 	int WindowCallbacks::SwapBuffers() {
-		if (WindowCallbacks::isInitalized) {
-			swapBufferCallback();
-			return PSM_ERROR_NO_ERROR;
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		swapBufferCallback();
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	double WindowCallbacks::GetTime() {
-		if (WindowCallbacks::isInitalized) {
-			return getTimeCallback();
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		return getTimeCallback();
 	}
 
 	void WindowCallbacks::PollEvents() {
-		if (WindowCallbacks::isInitalized) {
-			pollEventsCallback();
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		pollEventsCallback();
 	}
 
 	bool WindowCallbacks::IsClosed() {
-		if (WindowCallbacks::isInitalized) {
-			return wasClosedCallback();
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		return wasClosedCallback();
 	}
 
 	bool WindowCallbacks::IsMinimized() {
-		if (WindowCallbacks::isInitalized) {
-			return wasMinimizedCallback();
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		return wasMinimizedCallback();
 	}
 
 	bool WindowCallbacks::YesNoDialog(std::string message, std::string caption) {
-		if (WindowCallbacks::isInitalized) {
-			return showYesNoDialogCallback(message.c_str(), caption.c_str());
-		}
-		else {
-			throw std::exception("WindowCallbacks is not initalized,");
-		}
+		errorOnNotInitalized();
+		return showYesNoDialogCallback(message.c_str(), caption.c_str());
 	}
 
 

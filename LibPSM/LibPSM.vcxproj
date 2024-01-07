@@ -24,6 +24,7 @@
     <ClCompile Include="Sce\Pss\Core\Audio\Sound.cpp" />
     <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Callback\Callbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Camera.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="Sce\Pss\Core\Audio\SoundPlayer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Callback\Callbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\Camera.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\CameraFacing.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\CameraImageFormat.hpp" />

@@ -1,11 +1,11 @@
 #ifndef LIB_PSS_WINDOWCALLBACKS_H
 #define LIB_PSS_WINDOWCALLBACKS_H 1
+#include <Sce/Pss/Core/Callback/Callbacks.hpp>
 #include <string>
 
 namespace Sce::Pss::Core::Callback {
-	class WindowCallbacks {
+	class WindowCallbacks : public Callbacks{
 	private:
-		static bool isInitalized;
 		static void (*swapBufferCallback)(void);
 		static double (*getTimeCallback)(void);
 		static void (*pollEventsCallback)(void);

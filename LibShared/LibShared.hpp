@@ -4,6 +4,7 @@
 #include <Debug/Logger.hpp>
 #include <String/StringUtil.hpp>
 #include <String/Path.hpp>
+#include <Threading/ThreadSafeCounter.hpp>
 #include <Config.hpp>
 
 #endif

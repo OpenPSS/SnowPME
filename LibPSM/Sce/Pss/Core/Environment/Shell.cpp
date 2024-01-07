@@ -52,6 +52,8 @@ namespace Sce::Pss::Core::Environment {
 		case Shared::RuntimeImplementation::PSVita:
 		case Shared::RuntimeImplementation::Android:
 			return this->executeBrowserVita(url);
+		default:
+			return PSM_ERROR_NOT_IMPLEMENTED;
 		}
 
 	}

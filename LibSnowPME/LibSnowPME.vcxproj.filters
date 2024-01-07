@@ -36,6 +36,9 @@
     <ClInclude Include="Callback\Impl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Callback\AudioObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Runtime\Init.cpp">

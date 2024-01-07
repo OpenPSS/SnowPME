@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Callback\AudioImpl.hpp" />
+    <ClInclude Include="Callback\AudioObject.hpp" />
     <ClInclude Include="Callback\Impl.hpp" />
     <ClInclude Include="Callback\WindowImpl.hpp" />
     <ClInclude Include="Graphics\Gui.hpp" />

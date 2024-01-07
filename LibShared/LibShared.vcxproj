@@ -23,6 +23,7 @@
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="String\Path.cpp" />
     <ClCompile Include="String\StringUtil.cpp" />
+    <ClCompile Include="Threading\ThreadSafeCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
@@ -30,6 +31,7 @@
     <ClInclude Include="LibShared.hpp" />
     <ClInclude Include="String\Path.hpp" />
     <ClInclude Include="String\StringUtil.hpp" />
+    <ClInclude Include="Threading\ThreadSafeCounter.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

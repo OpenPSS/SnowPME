@@ -23,7 +23,9 @@ namespace Sce::Pss::Core::Audio {
 		Logger::Debug(__FUNCTION__);
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
-			AudioCallbacks::PlayMP3(player->audioBgm->NativeBgmObject);
+			if (!AudioCallbacks::PlayMP3(player->audioBgm->NativeBgmObject, player->loop)) {
+				return PSM_ERROR_AUDIO_SYSTEM;
+			}
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -38,12 +40,26 @@ namespace Sce::Pss::Core::Audio {
 		return 0;
 	}
 	int BgmPlayer::PauseNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			AudioCallbacks::PauseMP3(player->audioBgm->NativeBgmObject);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
 	}
 	int BgmPlayer::ResumeNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			AudioCallbacks::ResumeMP3(player->audioBgm->NativeBgmObject);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
 	}
 	int BgmPlayer::SetVolumeNative(int handle, float volume){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
@@ -54,12 +70,30 @@ namespace Sce::Pss::Core::Audio {
 		return 0;
 	}
 	int BgmPlayer::GetLoopNative(int handle, bool *pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (pan == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			
+			*pan = player->loop;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetLoopNative(int handle, bool pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+
+			player->loop = pan;
+			AudioCallbacks::SetLoop(player->audioBgm->NativeBgmObject, player->loop);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetPlaybackRateNative(int handle, float *rate){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
