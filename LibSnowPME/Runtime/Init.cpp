@@ -46,6 +46,10 @@ namespace SnowPME::Runtime {
 			Callback::AudioImpl::PlayMP3,
 			Callback::AudioImpl::PauseMP3,
 			Callback::AudioImpl::ResumeMP3,
+			Callback::AudioImpl::StopMP3,
+			Callback::AudioImpl::IsMP3Paused,
+			Callback::AudioImpl::IsMP3Playing,
+			Callback::AudioImpl::IsMP3Stopped,
 			Callback::AudioImpl::SetLoop);
 
 		return PSM_ERROR_NO_ERROR;

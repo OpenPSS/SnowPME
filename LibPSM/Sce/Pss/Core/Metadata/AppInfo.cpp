@@ -129,7 +129,7 @@ namespace Sce::Pss::Core::Metadata {
 				else if (element->ElementName() == "camera") {
 					READATTRIBUTE(std::string, "max_capture_resolution", this->MaxCaptureResolution);
 				}
-				if (element->ElementName() == "feature") {
+				else if (element->ElementName() == "feature") {
 					std::string featureName;
 					READATTRIBUTE(std::string, "value", featureName);
 					this->FeatureList.push_back(featureName);

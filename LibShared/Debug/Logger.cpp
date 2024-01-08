@@ -11,6 +11,9 @@ namespace Shared::Debug
 
 		for (std::string line : lines) {
 			line = String::StringUtil::Replace(line, "\n", "");
+
+			if (line.empty()) continue;
+
 			if (channel != "ERROR" && channel != "WARN")
 				std::cout << "[" << channel << "] " << line << std::endl;
 			else

@@ -23,7 +23,7 @@ namespace SnowPME::Callback {
 			throw std::exception("failed to Mix_AllocateChannels.");
 		}
 
-		memset(AudioImpl::ChannelsUsed, false, AudioImpl::TotalChannels);
+		std::memset(AudioImpl::ChannelsUsed, false, AudioImpl::TotalChannels);
 
 		AudioImpl::Impl::isInitalized = true;
 	}
@@ -45,7 +45,7 @@ namespace SnowPME::Callback {
 		Mix_Chunk* mus = Mix_LoadWAV_RW(rw, true);
 
 		AudioObject* audioObject = new AudioObject();
-		audioObject->channeNumber = AudioImpl::NoChannel;
+		audioObject->channelNumber = AudioImpl::NoChannel;
 		audioObject->audioObject = mus;
 
 		return (void*)audioObject;
@@ -58,7 +58,8 @@ namespace SnowPME::Callback {
 		AudioObject* audioObject = (AudioObject*)bgmObject;
 
 		Mix_FreeChunk(audioObject->audioObject);
-		AudioImpl::ChannelsUsed[audioObject->channeNumber] = false;
+		AudioImpl::ChannelsUsed[audioObject->channelNumber] = false;
+		audioObject->channelNumber = AudioImpl::NoChannel;
 
 		delete audioObject;
 	}
@@ -73,7 +74,7 @@ namespace SnowPME::Callback {
 		AudioObject* audioObject = (AudioObject*)bgmObject;
 		
 		if (Mix_PlayChannel(useChannel, audioObject->audioObject, loop) >= 0) {
-			audioObject->channeNumber = useChannel;
+			audioObject->channelNumber = useChannel;
 			AudioImpl::ChannelsUsed[useChannel] = true;
 
 			return true;
@@ -87,18 +88,30 @@ namespace SnowPME::Callback {
 
 		AudioObject* audioObject = (AudioObject*)bgmObject;
 
-		if (!Mix_Paused(audioObject->channeNumber))
-			Mix_Pause(audioObject->channeNumber);
+		if (AudioImpl::IsMP3Playing(audioObject)) {
+			Mix_Pause(audioObject->channelNumber);
+		}
 	}
 
 	void AudioImpl::ResumeMP3(void* bgmObject) {
 		AudioImpl::Impl::ErrorOnNotInit();
 		if (bgmObject == nullptr) return;
-		
+
 		AudioObject* audioObject = (AudioObject*)bgmObject;
 
-		if (Mix_Paused(audioObject->channeNumber))
-			Mix_Resume(audioObject->channeNumber);
+		if (AudioImpl::IsMP3Paused(audioObject)) {
+			Mix_Resume(audioObject->channelNumber);
+		}
+	}
+
+	void AudioImpl::StopMP3(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		if (bgmObject == nullptr) return;
+
+		AudioObject* audioObject = (AudioObject*)bgmObject;
+		Mix_HaltChannel(audioObject->channelNumber);
+		AudioImpl::ChannelsUsed[audioObject->channelNumber] = false;
+		audioObject->channelNumber = AudioImpl::NoChannel;
 	}
 
 	void AudioImpl::SetLoop(void* bgmObject, bool loop) {
@@ -107,12 +120,41 @@ namespace SnowPME::Callback {
 
 		AudioObject* audioObject = (AudioObject*)bgmObject;
 		// TODO: work out how to set it to loop while its playing already
-		
+
+
 		throw std::exception("Not implemented.");
-
-
 	}
 
+	bool AudioImpl::IsMP3Paused(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		if (bgmObject == nullptr) return false;
 
+		AudioObject* audioObject = (AudioObject*)bgmObject;
+
+		if (audioObject->channelNumber != AudioImpl::NoChannel)
+			return Mix_Paused(audioObject->channelNumber);
+		else
+			return false;
+
+	}
+	bool AudioImpl::IsMP3Playing(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		if (bgmObject == nullptr) return false;
+
+		AudioObject* audioObject = (AudioObject*)bgmObject;
+
+		if (audioObject->channelNumber != AudioImpl::NoChannel)
+			return Mix_Playing(audioObject->channelNumber);
+		else
+			return false;
+	}
+	bool AudioImpl::IsMP3Stopped(void* bgmObject) {
+		AudioImpl::Impl::ErrorOnNotInit();
+		if (bgmObject == nullptr) return false;
+
+		AudioObject* audioObject = (AudioObject*)bgmObject;
+		return (audioObject->channelNumber == AudioImpl::NoChannel);
+
+	}
 
 }

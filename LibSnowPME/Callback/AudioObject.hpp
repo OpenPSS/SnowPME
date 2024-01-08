@@ -3,7 +3,7 @@
 #include <sdl/SDL_mixer.h>
 namespace SnowPME::Callback {
 	typedef struct AudioObject{
-		int channeNumber = NULL;
+		int channelNumber = NULL;
 		Mix_Chunk* audioObject = nullptr;
 	} AudioObject;
 }

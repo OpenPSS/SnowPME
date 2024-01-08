@@ -16,8 +16,12 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::ReleaseNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			delete player;
+		}
+		return PSM_ERROR_NO_ERROR;
 	}
 	int BgmPlayer::PlayNative(int handle) {
 		Logger::Debug(__FUNCTION__);
@@ -32,12 +36,29 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::StopNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			AudioCallbacks::StopMP3(player->audioBgm->NativeBgmObject);
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetStatusNative(int handle, BgmStatus *status){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = (BgmPlayer*)Handles::GetHandle(handle);
+			if(AudioCallbacks::IsMP3Paused(player->audioBgm->NativeBgmObject))
+				*status = BgmStatus::Paused;
+			else if (AudioCallbacks::IsMP3Playing(player->audioBgm->NativeBgmObject))
+				*status = BgmStatus::Playing;
+			else if (AudioCallbacks::IsMP3Stopped(player->audioBgm->NativeBgmObject))
+				*status = BgmStatus::Stopped;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::PauseNative(int handle){
 		Logger::Debug(__FUNCTION__);
