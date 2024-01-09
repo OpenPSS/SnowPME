@@ -7,12 +7,10 @@
 namespace Sce::Pss::Core::Io {
 	class FileSystem {
 	private:
-		uint8_t gamekey[0x20];
-		bool hasEdata;
-		bool rw;
-		bool emulated;
-		std::string pathOnDisk;
-		std::string sandboxPath;
+		bool rw = false;
+		bool emulated = false;
+		std::string pathOnDisk = "";
+		std::string sandboxPath = "";
 	public:
 		FileSystem(std::string filesystemPath, std::string sandboxPathName, bool rewritable, bool emulated);
 		~FileSystem();

@@ -13,9 +13,6 @@ namespace Sce::Pss::Core::Io {
 		std::filesystem::create_directories(std::filesystem::path(pathOnDisk));
 
 		this->emulated = emulated;
-
-		// TODO: Implement encryption
-		this->hasEdata = false;
 	}
 	FileSystem::~FileSystem() {
 
@@ -28,7 +25,7 @@ namespace Sce::Pss::Core::Io {
 		return this->pathOnDisk;
 	}
 	bool FileSystem::IsEncrypted() {
-		return this->hasEdata;
+		return false;
 	}
 	bool FileSystem::IsRewitable() {
 		

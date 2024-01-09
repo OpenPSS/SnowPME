@@ -2,7 +2,7 @@
 #define LIB_PSS_ICALL_H 1
 
 #include <mono/mono.h>
-#include <cstdint>
+#include <iostream>
 
 namespace Sce::Pss::Core::Io {
 

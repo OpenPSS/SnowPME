@@ -18,6 +18,16 @@ namespace Sce::Pss::Core::Crypto {
 	void CryptoLibrary::HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], std::vector<uint8_t> in) {
 		hmac_sha256(key, SHA256_HASH_SIZE, in.data(), in.size(), out, SHA256_HASH_SIZE);
 	}
+
+	void CryptoLibrary::Aes128CbcDecrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize) {
+		if (datasize % AES_BLOCKLEN != 0)
+			throw std::exception("data is not aligned to block size.");
+
+		struct AES_ctx ctx;
+		AES_init_ctx_iv(&ctx, key, iv);
+		AES_CBC_decrypt_buffer(&ctx, data, datasize);
+	}
+
 	void CryptoLibrary::Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize) {
 		if (datasize % AES_BLOCKLEN != 0)
 			throw std::exception("data is not aligned to block size.");

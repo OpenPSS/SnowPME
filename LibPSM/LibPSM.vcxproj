@@ -50,6 +50,8 @@
     <ClCompile Include="Sce\Pss\Core\Input\GamePad.cpp" />
     <ClCompile Include="Sce\Pss\Core\Input\Motion.cpp" />
     <ClCompile Include="Sce\Pss\Core\Input\Touch.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
@@ -190,6 +192,10 @@
     <ClInclude Include="Sce\Pss\Core\Input\Touch.hpp" />
     <ClInclude Include="Sce\Pss\Core\Input\TouchData.hpp" />
     <ClInclude Include="Sce\Pss\Core\Input\TouchStatus.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataHeader.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrm.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrmLicense.hpp" />
     <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />

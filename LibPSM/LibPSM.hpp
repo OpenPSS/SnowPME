@@ -47,6 +47,7 @@
 #include <Sce/Pss/Core/Mono/Util.hpp>
 #include <Sce/Pss/Core/Timing/DeltaTime.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
+#include <Sce/Pss/Core/Edata/EdataStream.hpp>
 
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
