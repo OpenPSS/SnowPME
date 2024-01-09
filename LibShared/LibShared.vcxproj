@@ -29,6 +29,7 @@
     <ClInclude Include="Config.hpp" />
     <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="LibShared.hpp" />
+    <ClInclude Include="RuntimeImplementation.hpp" />
     <ClInclude Include="String\Path.hpp" />
     <ClInclude Include="String\StringUtil.hpp" />
     <ClInclude Include="Threading\ThreadSafeCounter.hpp" />

@@ -50,5 +50,8 @@
     <ClInclude Include="Threading\ThreadSafeCounter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RuntimeImplementation.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

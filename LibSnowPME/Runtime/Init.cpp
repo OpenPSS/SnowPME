@@ -13,6 +13,8 @@
 #include <Callback/AudioImpl.hpp>
 
 using namespace Shared::Debug;
+using namespace Shared;
+
 using namespace LibCXML;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Io;
@@ -67,7 +69,6 @@ namespace SnowPME::Runtime {
 		AppInfo* psmAppInfo = new AppInfo(elem);
 
 		Thread::SetMainThread();
-		HeapAllocator::CreateResourceHeapAllocator(psmAppInfo->ResourceHeapSize);
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
@@ -84,8 +85,10 @@ namespace SnowPME::Runtime {
 		int heapSizeLimit = AppInfo::CurrentApplication->ManagedHeapSize * 0x400;
 		int resourceSizeLimit = AppInfo::CurrentApplication->ResourceHeapSize * 0x400;
 
-		Graphics::Window* window = new Graphics::Window(Shared::Config::ScreenHeight(0), Shared::Config::ScreenWidth(0), "- SnowPME - ");
+		Graphics::Window* window = new Graphics::Window(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
 		Init::initCallbacks(window);
+
+		HeapAllocator::CreateResourceHeapAllocator(resourceSizeLimit);
 
 		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
 			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
@@ -108,7 +111,7 @@ namespace SnowPME::Runtime {
 		mono_config_parse(NULL);
 
 		// Set runtime install location
-		mono_set_dirs(Shared::Config::RuntimeLibPath.c_str(), Shared::Config::RuntimeConfigPath.c_str());
+		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
 		
 		// Create a domain in which this application will run under.
 		psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
@@ -141,9 +144,13 @@ namespace SnowPME::Runtime {
 
 
 		// Load essential dlls
-		msCoreLib = mono_domain_assembly_open(psmDomain, Shared::Config::MscorlibPath.c_str());
-		systemLib = mono_domain_assembly_open(psmDomain, Shared::Config::SystemLibPath.c_str());
-		psmCoreLib = mono_domain_assembly_open(psmDomain, Shared::Config::PsmCoreLibPath.c_str());
+		std::string msCorLibPath = Config::MscorlibPath();
+		std::string systemLibPath = Config::SystemLibPath();
+		std::string psmCoreLibPath = Config::PsmCoreLibPath();
+
+		msCoreLib = mono_domain_assembly_open(psmDomain, msCorLibPath.c_str());
+		systemLib = mono_domain_assembly_open(psmDomain, systemLibPath.c_str());
+		psmCoreLib = mono_domain_assembly_open(psmDomain, psmCoreLibPath.c_str());
 
 		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
 		MonoImage* systemImage = mono_assembly_get_image(systemLib);
