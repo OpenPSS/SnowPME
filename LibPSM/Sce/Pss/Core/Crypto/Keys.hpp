@@ -1,6 +1,6 @@
 #ifndef LIB_PSS_KEYS_H 
 #define LIB_PSS_KEYS_H
-#include <string>
+#include <iostream>
 
 namespace Sce::Pss::Core::Crypto::Keys {
 		// used for calculating Sce::Pss::Core::Services::AccountInformation::GetUniqueID on PSVita and Android.

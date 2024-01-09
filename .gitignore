@@ -22,6 +22,10 @@ External/lib/*/LibShared.idb
 External/lib/*/LibShared.lib
 External/lib/*/LibShared.pdb
 
+External/lib/*/LibMonoBridge.idb
+External/lib/*/LibMonoBridge.lib
+External/lib/*/LibMonoBridge.pdb
+
 
 *.aps
 *.obj

@@ -1,6 +1,7 @@
 #ifndef SHARED_LOGGER_H
 #define SHARED_LOGGER_H 1
 #include <string>
+
 namespace Shared::Debug
 {
 	class Logger {
