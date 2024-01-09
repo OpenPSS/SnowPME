@@ -19,6 +19,13 @@ namespace Sce::Pss::Core {
 			delete x; \
 			return PSM_ERROR_NO_ERROR; \
 		} 
+	
+#define ReturnErrorableAsBool(x) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			delete x; \
+			return false; \
+		}
 
 	class Errorable {
 	private:

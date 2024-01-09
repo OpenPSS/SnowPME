@@ -11,25 +11,35 @@ namespace Sce::Pss::Core::Edata {
 
 	class EdataStream : public PsmObject {
 	private:
-		static const int BlockSize = 0x8000;
-		static const int SignatureBlockSize = 0x80000;
-		static const int SignatureSize = 0x400;
+		static const int PsseBlockSize = 0x8000;
+		static const int PsseSignatureBlockSize = 0x80000;
+		static const int PsseSignatureSize = 0x400;
 
 		std::fstream* osHandle = nullptr;
-		bool edataStream = false;
+		bool encryptedFile = false;
 		bool psmDeveloperAssistant = false;
 		char gameKey[0x10];
-		char currentBlock[BlockSize];
 		EdataHeader header;
-		
 		char fileIv[0x10];
 
+		std::vector<std::byte> currentBlock = std::vector<std::byte>();
 
-		uint64_t position = 0;		
-		size_t filesize = 0x00;
+		uint32_t blockPosition = 0;
+		uint64_t position = 0;
+		
+		uint64_t block = 0;
+		uint64_t totalFileSize = 0;
+		size_t totalBlocks = 0;
+
+		int bytesLeftInBlock();
+		size_t getRemainLength(size_t length, size_t totalRead);
+
+		void decryptBlock(uint64_t blockNo);
+		void rollIv(uint64_t blockNo, char blockIv[0x10]);
 	public:
 		EdataStream(std::string file, char gameKey[0x10]);
 		~EdataStream();
+		uint64_t Filesize();
 		int Read(char* buffer, size_t length);
 		int Seek(int position, ScePssFileSeekType_t pos);
 		void Close();

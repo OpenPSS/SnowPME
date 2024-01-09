@@ -17,7 +17,7 @@ int pss_crypto_open(PssCryptoContext* context, const char* path) {
 	Logger::Debug(__FUNCTION__);
 	Logger::Debug("Opening file: " + std::string(path));
 	
-	/*
+	
 	ScePsmDrmLicense licenseBuf;
 	std::ifstream license = std::ifstream("Test/License/FAKE.RIF", std::ios::binary | std::ios::in);
 	if (license.fail()) throw std::exception("didnt work");
@@ -29,27 +29,17 @@ int pss_crypto_open(PssCryptoContext* context, const char* path) {
 
 
 	if (context != nullptr) {
+		memset(context, 0, sizeof(PssCryptoContext));
 		EdataStream* stream = new EdataStream(std::string(path), gameKey);
+		ReturnErrorableAsBool(stream);
 
-	}*/
+		context->handle = stream->Handle;
+		context->size = stream->Filesize();
+		context->type = SCE_PSS_FILE_FLAG_READONLY;
+		context->valid = true;
 
-	if (context != nullptr) {
-		std::fstream* str = new std::fstream(path, std::ios::in | std::ios::binary);
-		memset(context, 0x00, sizeof(PssCryptoContext));
-
-		if (!str->fail()) {
-			context->handle = Handles::CreateHandle((uintptr_t)str);
-			context->size = std::filesystem::file_size(path);
-			context->type = SCE_PSS_FILE_FLAG_ENCRYPTED;
-			context->valid = true;
-
-			return true;
-		}
-		Logger::Debug("Failed to open file.");
-		context->valid = false;
-		return false;
+		return true;
 	}
-
 	return false;
 }
 
@@ -57,10 +47,10 @@ char* pss_crypto_read(PssCryptoContext* context) {
 	Logger::Debug(__FUNCTION__);
 	if (context != nullptr) {
 		if (Handles::IsValid(context->handle)) {
-			std::fstream* str = (std::fstream*)Handles::GetHandle(context->handle);
+			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
 
 			char* data = new char[context->size];
-			str->read(data, context->size);
+			str->Read(data, context->size);
 			return data;
 		}
 		return nullptr;
@@ -72,10 +62,9 @@ int pss_crypto_fread(PssCryptoContext* context, char* buffer, int bytes) {
 	Logger::Debug(__FUNCTION__);
 	if (context != nullptr) {
 		if (Handles::IsValid(context->handle)) {
-			std::fstream* str = (std::fstream*)Handles::GetHandle(context->handle);
+			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
 
-			str->read(buffer, bytes);
-			return (int)str->gcount();
+			return str->Read(buffer, bytes);
 		}
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
@@ -86,9 +75,7 @@ void pss_crypto_close(PssCryptoContext* context) {
 	Logger::Debug(__FUNCTION__);
 	if (context != nullptr) {
 		if (Handles::IsValid(context->handle)) {
-			std::fstream* str = (std::fstream*)Handles::GetHandle(context->handle);
-			str->close();
-			Handles::DeleteHandle(context->handle);
+			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
 			context->handle = Handles::NoHandle;
 			context->valid = false;
 			delete str;

@@ -5,6 +5,7 @@
 namespace Sce::Pss::Core::Crypto {
 	class CryptoLibrary {
 	public:
+		static const int AesBlockSize = 0x10;
 		static void HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], uint8_t* in, size_t insize);
 		static void HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], std::vector<uint8_t> in);
 		static void Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize);

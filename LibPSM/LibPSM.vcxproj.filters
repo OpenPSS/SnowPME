@@ -228,6 +228,9 @@
     <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -687,6 +690,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Edata\PsmDrmLicense.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
