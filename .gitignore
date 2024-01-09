@@ -18,6 +18,11 @@ External/lib/*/LibSnowPME.idb
 External/lib/*/LibSnowPME.lib
 External/lib/*/LibSnowPME.pdb
 
+External/lib/*/LibShared.idb
+External/lib/*/LibShared.lib
+External/lib/*/LibShared.pdb
 
 
+*.aps
+*.obj
 *.user

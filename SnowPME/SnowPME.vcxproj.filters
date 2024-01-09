@@ -101,5 +101,24 @@
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp">
       <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SnowPME.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -170,6 +170,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SnowPME.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icon.ico" />
+    <Image Include="resources\icon.png" />
+    <Image Include="resources\logo.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

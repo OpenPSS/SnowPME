@@ -1,4 +1,4 @@
-![SnowPME Logo](https://raw.githubusercontent.com/KuromeSan/SnowPME/master/Logo.png)
+![SnowPME Logo](https://raw.githubusercontent.com/KuromeSan/SnowPME/master/SnowPME/resources/logo.png)
 
 An experimental PlayStation Mobile Emulator for Windows !
 

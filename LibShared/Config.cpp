@@ -1,10 +1,13 @@
 #include <Config.hpp>
 #include <String/Path.hpp>
+#include <fstream>
+#include <string>
 
 using namespace Shared::String;
 
 namespace Shared
 {
+	static const std::string SEPERATOR = ":";
 	static int screenWidth = 960;
 	static int screenHeight = 544;
 	std::string RuntimeFolder = "Runtime";
@@ -34,7 +37,14 @@ namespace Shared
 	}
 
 	int Config::ReadConfig(std::string configFile) {
-		// TODO Actually read the file
+		std::ifstream cfgStream = std::ifstream(configFile);
+		
+		std::string ln;
+		while (std::getline(cfgStream, ln)) {
+
+
+		}
+
 		return 0;
 	}
 }
