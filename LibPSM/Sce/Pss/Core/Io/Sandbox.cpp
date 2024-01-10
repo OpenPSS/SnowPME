@@ -1,7 +1,8 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <errno.h>
+#include <Sce/Pss/Core/Edata/EdataStream.hpp>
+
 #include <filesystem>
 #include <sys/stat.h>
 #include <mono/mono.h>
@@ -10,6 +11,7 @@
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Edata;
 
 namespace Sce::Pss::Core::Io {
 
@@ -47,21 +49,19 @@ namespace Sce::Pss::Core::Io {
 	// Some functions require handling via filepath,
 	// in these cases, the fstream needs to be created again
 	void Sandbox::reopen(PsmFileDescriptor* handle) {
-		if (handle->opened && !handle->directory && handle->fileFd != NULL) {
+		if (handle->opened && !handle->directory && handle->edataStream != NULL) {
 			// Close the file
-			if(handle->fileFd->is_open())
-				handle->fileFd->close();
-			delete handle->fileFd;
+			size_t oldPos = handle->edataStream->Tell();
+			char* titleKey = handle->edataStream->TitleKey;
+
+			if(handle->edataStream != nullptr)
+				delete handle->edataStream;
 
 			// Open the file again
-			std::fstream* str = new std::fstream();
-			str->open(handle->realPath, handle->iflags);
+			handle->edataStream = new EdataStream(handle->realPath, handle->iflags, titleKey);
 
 			// Seek to where we were.
-			str->seekg(handle->seekPos, std::ios::beg);
-			
-			// Overwrite the fstream.
-			handle->fileFd = str;
+			handle->edataStream->Seek(oldPos, SCE_PSS_FILE_SEEK_TYPE_BEGIN);
 		}
 	}
 
@@ -80,14 +80,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	size_t Sandbox::ReadFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
-		if (!handle->encrypted) {
-			handle->fileFd->read(buffer, numbBytes);
-			size_t bytesRead = (size_t)handle->fileFd->gcount();
-			handle->seekPos += bytesRead;
-			return bytesRead;
-		}
-
-		throw std::exception("Encryption not yet implemented. ?? ??");
+		return handle->edataStream->Read(buffer, numbBytes);
 	}
 
 	int Sandbox::ReadDirectory(PsmFileDescriptor* handle, ScePssFileInformation_t* fileInfo) {
@@ -95,13 +88,13 @@ namespace Sce::Pss::Core::Io {
 		memset(fileInfo, 0, sizeof(ScePssFileInformation_t));
 
 		if (handle->emulated) { // handle "/" emulated directory, display all sandboxed paths
-			if (handle->seekPos >= this->filesystems.size()) {
+			if (handle->emulatedFilePosition >= this->filesystems.size()) {
 				return PSM_ERROR_PATH_NOT_FOUND;
 			}
 			else {
 
-				FileSystem* filesystem = this->filesystems[handle->seekPos];
-				handle->seekPos++;
+				FileSystem* filesystem = this->filesystems[handle->emulatedFilePosition];
+				handle->emulatedFilePosition++;
 
 				if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
 					return this->ReadDirectory(handle, fileInfo);
@@ -124,7 +117,6 @@ namespace Sce::Pss::Core::Io {
 			if (error != PSM_ERROR_NO_ERROR)
 				return error;
 
-			handle->seekPos++;
 			return PSM_ERROR_NO_ERROR;
 		}
 	}
@@ -234,9 +226,10 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int Sandbox::ChangeSize(PsmFileDescriptor* handle, size_t newSize) {
-		if (!handle->encrypted && handle->rw) { // Workaround fstream stupidity.
+		if (!handle->encrypted && handle->rw) { // Check the file is writable.
+
 			// close becuase you cant resize the file while its open
-			handle->fileFd->close();
+			handle->edataStream->Close();
 
 			// Resize the file to new size ...
 			std::filesystem::resize_file(std::filesystem::path(handle->realPath), newSize);
@@ -251,9 +244,8 @@ namespace Sce::Pss::Core::Io {
 
 	void Sandbox::CloseFile(PsmFileDescriptor* handle) {
 		if (handle != NULL) {
-			if (handle->opened && handle->fileFd != NULL) {
-				handle->fileFd->close();
-				delete handle->fileFd;
+			if (handle->opened && handle->edataStream != NULL) {
+				delete handle->edataStream;
 			}
 			handle->opened = false;
 			delete handle;
@@ -261,11 +253,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	size_t Sandbox::GetSize(PsmFileDescriptor* handle) {
-		if (!handle->encrypted && !handle->directory) {
-			size_t fileSize = (size_t)std::filesystem::file_size(handle->realPath);
-			return fileSize;
-		}
-		throw std::exception("Encryption not implemented");
+		return handle->edataStream->Filesize();
 	}
 
 	PsmFileDescriptor* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
@@ -341,33 +329,16 @@ namespace Sce::Pss::Core::Io {
 	
 		handle->iflags = openmode;
 
-		std::fstream* str = new std::fstream();
-		str->open(realPath, openmode);
-
-		if (str->fail()) {
-			Logger::Error("Failed to open: \"" + absPath + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
-			switch (errno) {
-			case EPERM:
-				handle->failReason = PSM_ERROR_ACCESS_DENIED;
-				break;
-			case ENOENT:
-				handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
-				break;
-			case EEXIST:
-				handle->failReason = PSM_ERROR_ALREADY_EXISTS;
-				break;
-			default:
-				handle->failReason = PSM_ERROR_COMMON_IO;
-				break;
-			}
-			return handle;
+		EdataStream* str = new EdataStream(realPath, openmode, nullptr);
+		if (str->GetError() == PSM_ERROR_NO_ERROR) {
+			handle->failReason = PSM_ERROR_NO_ERROR;
+			handle->opened = true;
+			handle->edataStream = str;
 		}
-
-		handle->failReason = PSM_ERROR_NO_ERROR;
-		handle->opened = true;
-		handle->fileFd = str;
-
-		Logger::Debug("FileOpen: " + absPath);
+		else {
+			handle->failReason = str->GetError();
+			delete str;
+		}
 
 		return handle;
 	}
@@ -500,28 +471,18 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->rw || handle->encrypted || handle->emulated)
 			return PSM_ERROR_ACCESS_DENIED;
 
-		if (handle->fileFd == NULL)
+		if (handle->edataStream == NULL)
 			return PSM_ERROR_INVALID_HANDLE;
 
-		handle->fileFd->flush();
+		handle->edataStream->Flush();
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	size_t Sandbox::WriteFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
 		if (!handle->encrypted && handle->rw) {
-
-			// Write buffer to file
-			handle->fileFd->write(buffer, numbBytes);
-
-			// fstream provides no way of knowing how many bytes were actually written
-			// So just pray and hope;
-
-			// Update the seek position by how many bytes written
-			handle->seekPos += numbBytes;
-
-			return numbBytes;
+			return handle->edataStream->Write(buffer, numbBytes);
 		}
-		throw std::exception("Tried to write to encrypted file?");
+		return PSM_ERROR_WRITE_FAILED;
 	}
 
 	int Sandbox::DeleteDirectory(std::string sandboxedPath) {
@@ -611,37 +572,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int Sandbox::Seek(PsmFileDescriptor* handle, uint32_t offset, ScePssFileSeekType_t seekType) {
-		if (!handle->encrypted) {
-
-			// Translate seek command to native one.
-			size_t totalFileSz = this->GetSize(handle);
-			switch (seekType) {
-			case SCE_PSS_FILE_SEEK_TYPE_BEGIN:
-				handle->seekPos = offset;
-				handle->fileFd->seekg(offset, std::ios::beg);
-				break;
-			case SCE_PSS_FILE_SEEK_TYPE_CURRENT:
-				handle->seekPos += offset;
-				handle->fileFd->seekg(offset, std::ios::cur);
-				break;
-			case SCE_PSS_FILE_SEEK_TYPE_END:
-				handle->seekPos = totalFileSz - offset;
-				handle->fileFd->seekg(offset, std::ios::end);
-				break;
-			default:
-				return PSM_ERROR_ERROR;
-			}
-
-			if (handle->seekPos > totalFileSz)
-				handle->seekPos = totalFileSz;
-
-			if (handle->seekPos < 0)
-				handle->seekPos = 0;
-
-			return PSM_ERROR_NO_ERROR;
-
-		}
-		throw std::exception("encryption not implemented!");
+		return handle->edataStream->Seek(offset, seekType);
 	}
 
 	PsmFileDescriptor* Sandbox::OpenDirectory(std::string sandboxedPath) {
@@ -672,14 +603,15 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->emulated)
 			handle->directoryFd = new DirectoryIterator(absPath, false);
 		else
-			handle->directoryFd = NULL;
+			handle->directoryFd = nullptr;
 		
-		handle->fileFd = NULL;
+		handle->edataStream = nullptr;
 
 		// Set fail reason to no error, and return
 		handle->failReason = PSM_ERROR_NO_ERROR;
 		return handle;
 	}
+
 	std::string Sandbox::LocateRealPath(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		

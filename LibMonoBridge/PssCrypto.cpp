@@ -30,7 +30,7 @@ int pss_crypto_open(PssCryptoContext* context, const char* path) {
 
 	if (context != nullptr) {
 		memset(context, 0, sizeof(PssCryptoContext));
-		EdataStream* stream = new EdataStream(std::string(path), gameKey);
+		EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, gameKey);
 		ReturnErrorableAsBool(stream);
 
 		context->handle = stream->Handle;

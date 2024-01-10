@@ -1,14 +1,5 @@
 #include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
-
-extern "C" {
-#define CBC 1
-#define CTR 1
-#define ECB 1
-
-#include "Algorithms/aes.h"
-#include "Algorithms/hmac_sha256.h"
-#include "Algorithms/sha256.h"
-}
+#include <Sce/Pss/Core/Crypto/Algorithms/Algorithms.hpp>
 
 namespace Sce::Pss::Core::Crypto {
 	void CryptoLibrary::HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], uint8_t* in, size_t insize) {
@@ -18,6 +9,16 @@ namespace Sce::Pss::Core::Crypto {
 	void CryptoLibrary::HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], std::vector<uint8_t> in) {
 		hmac_sha256(key, SHA256_HASH_SIZE, in.data(), in.size(), out, SHA256_HASH_SIZE);
 	}
+	
+	void CryptoLibrary::Md5Sum(uint8_t* data, const size_t datasize, uint8_t md5[0x10]) {
+		MD5Context context;
+		md5Init(&context);
+		md5Update(&context, data, datasize);
+		md5Finalize(&context);
+		
+		memcpy(md5, context.digest, CryptoLibrary::Md5HashSize);
+	}
+
 
 	void CryptoLibrary::Aes128CbcDecrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize) {
 		if (datasize % AES_BLOCKLEN != 0)

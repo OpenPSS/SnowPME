@@ -4,26 +4,21 @@
 #include <string>
 #include <filesystem>
 #include <mono/mono.h>
-namespace Sce::Pss::Core::Io {
-	typedef struct StackItem {
-		std::filesystem::directory_iterator* iterator = NULL;
-		int positionInFolder = 0;
+#include <Sce/Pss/Core/Io/StackItem.hpp>
 
-		std::string sandboxPath;
-		std::string realPath;
-		std::string relativePath = "";
-	} StackItem;
+namespace Sce::Pss::Core::Io {
 
 	class DirectoryIterator {
 	private:
-		std::vector<StackItem*> folderStack;
-		std::string startFolderSandboxPath;
-		int iterPos;
-		bool recursive;
+		std::vector<StackItem> folderStack = std::vector<StackItem>();
+		std::string startFolderSandboxPath = "";
+		size_t iterPos = 0;
+		bool recursive = false;
 	public:
 		DirectoryIterator(std::string sandboxedFolder, bool recursive);
 		~DirectoryIterator();
 		int Next(ScePssFileInformation_t* pathInfo);
+		size_t Tell();
 	};
 }
 #endif

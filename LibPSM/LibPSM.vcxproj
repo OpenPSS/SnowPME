@@ -26,6 +26,7 @@
     <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Callback\Callbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Md5Hash.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Camera.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
@@ -102,7 +103,9 @@
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\Callbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Md5Hash.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\Camera.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\CameraFacing.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\CameraImageFormat.hpp" />
@@ -198,6 +201,8 @@
     <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp" />
     <ClInclude Include="Sce\Pss\Core\Edata\PsmDrm.hpp" />
     <ClInclude Include="Sce\Pss\Core\Edata\PsmDrmLicense.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\PsmFileDescriptor.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
