@@ -23,7 +23,6 @@
     <ClInclude Include="Callback\AudioObject.hpp" />
     <ClInclude Include="Callback\Impl.hpp" />
     <ClInclude Include="Callback\WindowImpl.hpp" />
-    <ClInclude Include="Graphics\Gui.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
     <ClInclude Include="LibSnowPME.hpp" />
     <ClInclude Include="Runtime\Init.hpp" />
@@ -32,7 +31,6 @@
     <ClCompile Include="Callback\AudioImpl.cpp" />
     <ClCompile Include="Callback\Impl.cpp" />
     <ClCompile Include="Callback\WindowImpl.cpp" />
-    <ClCompile Include="Graphics\Gui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />
   </ItemGroup>

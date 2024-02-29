@@ -9,6 +9,7 @@ namespace Sce::Pss::Core {
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			delete x; \
+			x = nullptr; \
 			return error; \
 		}
 
@@ -17,13 +18,15 @@ namespace Sce::Pss::Core {
 			int error = x->GetError(); \
 			this->SetError(error); \
 			delete x; \
+			x = nullptr; \
 			return PSM_ERROR_NO_ERROR; \
 		} 
 	
-#define ReturnErrorableAsBool(x) \
+	#define ReturnErrorableAsBool(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			delete x; \
+			x = nullptr; \
 			return false; \
 		}
 

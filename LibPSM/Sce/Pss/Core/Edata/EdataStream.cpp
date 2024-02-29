@@ -11,9 +11,7 @@ using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
 
-
-
-	void EdataStream::rollIv(uint64_t blockNo, char blockIv[0x10]) {
+	void EdataStream::rollIv(uint64_t blockNo, std::byte blockIv[0x10]) {
 		memset(blockIv, 0x00, sizeof(EdataStream::fileIv));
 		memcpy(blockIv, &blockNo, sizeof(uint64_t));
 		for (int i = 0; i < sizeof(EdataStream::fileIv); i++)
@@ -71,7 +69,7 @@ namespace Sce::Pss::Core::Edata {
 		if (blockNo > this->totalBlocks) return;
 		if (blockNo < 0) return;
 		
-		char iv[0x10];
+		std::byte iv[0x10];
 		this->rollIv(blockNo, iv);
 		this->block = blockNo;
 
@@ -103,6 +101,7 @@ namespace Sce::Pss::Core::Edata {
 
 		// setup current block buffer
 		this->currentBlock.resize(totalRead);
+		this->osHandle->clear();
 		this->osHandle->seekg(blockPosition, std::ios::beg);
 
 		// decrypt block and copy to the currentBlock vector
@@ -132,13 +131,13 @@ namespace Sce::Pss::Core::Edata {
 	size_t EdataStream::getRemainLength(size_t length, size_t totalRead) {
 		return length - totalRead;
 	}
-	EdataStream::EdataStream(std::string file, std::ios::openmode mode, char* gameKey) {
+	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm) {
 		memset(this->TitleKey, 0x00, sizeof(EdataStream::TitleKey));
 		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
 
 		// Copy the game key into this folder
-		if (gameKey != nullptr)
-			memcpy(this->TitleKey, gameKey, sizeof(EdataStream::TitleKey));
+		if (drm != nullptr)
+			drm->GetTitleKey(this->TitleKey);
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
@@ -148,7 +147,7 @@ namespace Sce::Pss::Core::Edata {
 
 			// if stream errors, return error code
 
-			if (this->osHandle->fail()) {
+			if (this->osHandle->fail() || !this->osHandle->is_open()) {
 				Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
 				switch (errno) {
 				case EPERM:
@@ -185,8 +184,8 @@ namespace Sce::Pss::Core::Edata {
 				}
 
 				// is runtime file?
-				if (strncmp(this->header.ContentId, Keys::RuntimeContentId, sizeof(EdataHeader::ContentId)) == 0) {
-					memcpy(this->TitleKey, Keys::RuntimeGameKey, sizeof(Keys::RuntimeGameKey)); // copy the runtime game key as gamekey
+				if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
+					memcpy(this->TitleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
 				}
 
 				// if no content id set then this is psm developer assistant application
@@ -199,6 +198,7 @@ namespace Sce::Pss::Core::Edata {
 				return;
 			}
 			this->FileEncrypted = false;
+			this->osHandle->clear();
 			this->osHandle->seekg(0, std::ios::beg);
 		}
 		else {
@@ -279,14 +279,17 @@ namespace Sce::Pss::Core::Edata {
 			switch (pos) {
 			case SCE_PSS_FILE_SEEK_TYPE_BEGIN:
 				this->position = position;
+				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::beg);
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_CURRENT:
 				this->position += position;
+				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::cur);
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
 				this->position = this->totalFileSize - position;
+				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::end);
 				break;
 			default:

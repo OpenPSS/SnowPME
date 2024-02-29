@@ -34,6 +34,9 @@ namespace Sce::Pss::Core::Io {
 		static int PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags);
 		static int PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime);
 		static int PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo);
+	
+		static int PsmFileOpenSystem(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem);
+
 	};
 }
 

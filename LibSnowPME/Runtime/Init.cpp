@@ -62,16 +62,16 @@ namespace SnowPME::Runtime {
 		Sandbox* psmSandbox = new Sandbox(gameFolder);
 
 		std::string appInfoPath = "/Application/app.info";
-		CXMLElement* elem = !psmSandbox->PathExist(appInfoPath) 
+		CXMLElement* elem = !psmSandbox->PathExist(appInfoPath, false) 
 							? nullptr
-							: new CXMLElement(psmSandbox->LocateRealPath(appInfoPath),
+							: new CXMLElement(psmSandbox->LocateRealPath(appInfoPath, false),
 							"PSMA");
 		AppInfo* psmAppInfo = new AppInfo(elem);
 
 		Thread::SetMainThread();
 
 		// Initalize mono
-		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe"));
+		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe", false));
 	}
 	
 

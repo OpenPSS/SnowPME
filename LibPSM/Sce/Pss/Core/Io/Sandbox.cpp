@@ -9,6 +9,7 @@
 
 #include <LibShared.hpp>
 
+using namespace Shared;
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Edata;
@@ -23,25 +24,75 @@ namespace Sce::Pss::Core::Io {
 		}
 
 		std::filesystem::path gamePath = std::filesystem::path(gameFolder);
-		std::filesystem::path applicationPath = std::filesystem::path(gameFolder).append("Application");
-		std::filesystem::path documentsPath = std::filesystem::path(gameFolder).append("Documents");
-		std::filesystem::path tempPath = std::filesystem::path(gameFolder).append("Temp");
+		
+		// used for PSVita TargetImplementation only
+		std::filesystem::path roPath = std::filesystem::path(gameFolder).append("RO");
+		std::filesystem::path rwPath = std::filesystem::path(gameFolder).append("RW");
 
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(applicationPath).string(), "/Application", false, false));
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(tempPath).string(), "/Temp", true, false));
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(documentsPath).string(), "/Documents", true, false));
+		// accessible files
+		std::filesystem::path applicationPath;
+		std::filesystem::path documentsPath;
+		std::filesystem::path tempPath;
 
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(gamePath).string(), "/", false, true));
+		// system paths
+		std::filesystem::path licensePath;
+		std::filesystem::path systemPath;
+
+		if (Config::TargetImplementation == RuntimeImplementation::PSVita || std::filesystem::exists(roPath))
+		{
+			applicationPath = std::filesystem::path(std::filesystem::absolute(roPath).string()).append("Application");
+			licensePath = std::filesystem::path(std::filesystem::absolute(roPath).string()).append("License");
+
+			documentsPath = std::filesystem::path(std::filesystem::absolute(rwPath).string()).append("Documents");
+			tempPath = std::filesystem::path(std::filesystem::absolute(rwPath).string()).append("Temp");
+			systemPath = std::filesystem::path(std::filesystem::absolute(rwPath).string()).append("System");
+
+		}
+		else {
+			applicationPath = std::filesystem::path(gameFolder).append("Application");
+			licensePath = std::filesystem::path(gameFolder).append("License");
+			documentsPath = std::filesystem::path(gameFolder).append("Documents");
+			tempPath = std::filesystem::path(gameFolder).append("Temp");
+			systemPath = std::filesystem::path(gameFolder).append("System");
+		}
+
+
+
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(applicationPath).string(), "/Application", false, false, false));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(tempPath).string(), "/Temp", true, false, false));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(documentsPath).string(), "/Documents", true, false, false));
+
+		// system directories
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(licensePath).string(), "/License", false, false, true));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(systemPath).string(), "/System", false, false, true));
+
+		// emulated dir
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(gamePath).string(), "/", false, true, false));
+
 
 		this->currentWorkingDirectory = "/";
-
 		Sandbox::ApplicationSandbox = this;
+
+		this->readLicenseData();
+
 	}
+
+	int Sandbox::readLicenseData() {
+		if (this->PathExist("/License/FAKE.rif", true)) {
+			this->GameDrmProvider = new PsmDrm("/License/FAKE.rif");
+			ReturnErrorable(this->GameDrmProvider);
+		}
+		return PSM_ERROR_NO_ERROR;
+	}
+
 	Sandbox::~Sandbox() {
 		// Iterate over all fileystems
 		for (FileSystem* filesystem : this->filesystems) {
 			delete filesystem; // delete the filesystem
 		}
+
+		if (this->GameDrmProvider != nullptr) // delete game drm provider
+			delete this->GameDrmProvider;
 
 		Sandbox::filesystems.clear(); // Clear the filesystems vector
 	}
@@ -52,13 +103,12 @@ namespace Sce::Pss::Core::Io {
 		if (handle->opened && !handle->directory && handle->edataStream != NULL) {
 			// Close the file
 			size_t oldPos = handle->edataStream->Tell();
-			char* titleKey = handle->edataStream->TitleKey;
 
 			if(handle->edataStream != nullptr)
 				delete handle->edataStream;
 
 			// Open the file again
-			handle->edataStream = new EdataStream(handle->realPath, handle->iflags, titleKey);
+			handle->edataStream = new EdataStream(handle->realPath, handle->iflags, this->GameDrmProvider);
 
 			// Seek to where we were.
 			handle->edataStream->Seek(oldPos, SCE_PSS_FILE_SEEK_TYPE_BEGIN);
@@ -67,11 +117,13 @@ namespace Sce::Pss::Core::Io {
 
 	// Determines which "FileSystem" a given file is in,
 	// eg /Application or /Documents, 
-	FileSystem* Sandbox::findFilesystem(std::string sandboxedPath) {
+	FileSystem* Sandbox::findFilesystem(std::string sandboxedPath, bool includeSystem) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		for (FileSystem* filesystem : Sandbox::filesystems) {
-			if (Shared::String::StringUtil::ToLower(absPath).starts_with(Shared::String::StringUtil::ToLower(filesystem->SandboxPath()))) {
+			if (String::StringUtil::ToLower(absPath).starts_with(String::StringUtil::ToLower(filesystem->SandboxPath()))) {
+				if (filesystem->IsSystem() && !includeSystem) continue;
+
 				return filesystem;
 			}
 		}
@@ -92,16 +144,18 @@ namespace Sce::Pss::Core::Io {
 				return PSM_ERROR_PATH_NOT_FOUND;
 			}
 			else {
-
-				FileSystem* filesystem = this->filesystems[handle->emulatedFilePosition];
+				FileSystem* targetFs = this->filesystems[handle->emulatedFilePosition];
 				handle->emulatedFilePosition++;
-
-				if (filesystem->IsEmulated()) // look okay, / has crippling dysphoria, xe dont need to show xerself.
+				
+				if (targetFs->IsSystem()) // dont show system filesystems.
 					return this->ReadDirectory(handle, fileInfo);
 
-				std::string filename = Shared::String::Path::GetFilename(filesystem->SandboxPath());
+				if (targetFs->IsEmulated()) // dont show emulated filesystems
+					return this->ReadDirectory(handle, fileInfo);
 
-				ScePssFileInformation_t psmPathInformation = this->Stat(filesystem->SandboxPath(), filename);
+				std::string filename = String::Path::GetFilename(targetFs->SandboxPath());
+
+				ScePssFileInformation_t psmPathInformation = this->Stat(targetFs->SandboxPath(), filename);
 				memcpy(fileInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
 				
 				return PSM_ERROR_NO_ERROR;
@@ -123,10 +177,10 @@ namespace Sce::Pss::Core::Io {
 
 	ScePssFileInformation_t Sandbox::Stat(std::string sandboxedPath, std::string setName) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
-		FileSystem* filesystem = this->findFilesystem(sandboxedPath);
+		FileSystem* filesystem = this->findFilesystem(sandboxedPath, false);
 
 		struct stat stats;
-		stat(this->LocateRealPath(absPath).c_str(), &stats);
+		stat(this->LocateRealPath(absPath, false).c_str(), &stats);
 
 		ScePssFileInformation_t psmPathInformation;
 		memset(&psmPathInformation, 0, sizeof(ScePssFileInformation_t));
@@ -149,8 +203,8 @@ namespace Sce::Pss::Core::Io {
 		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
-		if (filesystem->IsEncrypted())
-			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
+		//if (filesystem->IsEncrypted())
+		//	psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
 
 
 		return psmPathInformation;
@@ -168,16 +222,16 @@ namespace Sce::Pss::Core::Io {
 		return false;
 	}
 
-	bool Sandbox::PathExist(std::string sandboxedPath) {
+	bool Sandbox::PathExist(std::string sandboxedPath, bool includeSystem) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		if (this->IsFileSystemRootDirectory(absPath))
 			return true;
 
-		if (this->findFilesystem(absPath) == NULL)
+		if (this->findFilesystem(absPath, includeSystem) == NULL)
 			return false;
 
-		if (std::filesystem::exists(LocateRealPath(absPath)))
+		if (std::filesystem::exists(LocateRealPath(absPath, includeSystem)))
 			return true;
 
 		return false;
@@ -186,7 +240,7 @@ namespace Sce::Pss::Core::Io {
 	bool Sandbox::IsFile(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		if (!this->PathExist(absPath))
+		if (!this->PathExist(absPath, false))
 			return false;
 
 		if (!this->IsDirectory(absPath))
@@ -201,10 +255,10 @@ namespace Sce::Pss::Core::Io {
 		if (this->IsFileSystemRootDirectory(absPath))
 			return true;
 
-		if (!this->PathExist(absPath))
+		if (!this->PathExist(absPath, false))
 			return false;
 
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 
 		if (std::filesystem::is_directory(realPath))
 			return true;
@@ -256,11 +310,12 @@ namespace Sce::Pss::Core::Io {
 		return handle->edataStream->Filesize();
 	}
 
-	PsmFileDescriptor* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags) {
+	PsmFileDescriptor* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
-		std::string realPath = this->LocateRealPath(absPath);
+		
+		std::string realPath = this->LocateRealPath(absPath, includeSystem);
+		FileSystem* filesystem = this->findFilesystem(absPath, includeSystem);
 
-		FileSystem* filesystem = this->findFilesystem(absPath);
 
 		PsmFileDescriptor* handle = new PsmFileDescriptor();
 
@@ -275,12 +330,6 @@ namespace Sce::Pss::Core::Io {
 
 		handle->directory = false;
 		handle->directoryFd = NULL;
-
-
-		if (filesystem->IsEncrypted()) {
-			// TODO: check psse.list
-			handle->encrypted = true;
-		}
 
 		if (openRw && !filesystem->IsRewitable()) {
 			handle->opened = false;
@@ -329,7 +378,7 @@ namespace Sce::Pss::Core::Io {
 	
 		handle->iflags = openmode;
 
-		EdataStream* str = new EdataStream(realPath, openmode, nullptr);
+		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider);
 		if (str->GetError() == PSM_ERROR_NO_ERROR) {
 			handle->failReason = PSM_ERROR_NO_ERROR;
 			handle->opened = true;
@@ -349,15 +398,15 @@ namespace Sce::Pss::Core::Io {
 		std::string absDst = this->AbsolutePath(sandboxDstPath);
 
 		// Find src and dest filesystem
-		FileSystem* srcFilesystem = this->findFilesystem(absSrc);
-		FileSystem* dstFilesystem = this->findFilesystem(absDst);
+		FileSystem* srcFilesystem = this->findFilesystem(absSrc, false);
+		FileSystem* dstFilesystem = this->findFilesystem(absDst, false);
 
 		// Check if src filesystem is read only- and this is a move
-		if (srcFilesystem->IsEmulated() || srcFilesystem->IsEncrypted() && move)
+		if (srcFilesystem->IsEmulated() || !srcFilesystem->IsRewitable() && move)
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if dst filesystem is read only-
-		if (dstFilesystem->IsEmulated() || dstFilesystem->IsEncrypted() || !dstFilesystem->IsRewitable())
+		if (dstFilesystem->IsEmulated() || !dstFilesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if either dst or src is a directory.
@@ -366,12 +415,12 @@ namespace Sce::Pss::Core::Io {
 
 		// Crate the directory if it does not exist.
 		std::string parentDirectory = Shared::String::Path::UpDirectory(sandboxDstPath);
-		if (!this->PathExist(parentDirectory))
+		if (!this->PathExist(parentDirectory, false))
 			this->CreateDirectory(parentDirectory);
 
 		// Locate real location of src and dst.
-		std::string realSrc = this->LocateRealPath(absSrc);
-		std::string realDst = this->LocateRealPath(absDst);
+		std::string realSrc = this->LocateRealPath(absSrc, false);
+		std::string realDst = this->LocateRealPath(absDst, false);
 
 		if (move) { // Move operation? simply "rename" the file to new location
 			std::filesystem::rename(realSrc, realDst);
@@ -381,8 +430,8 @@ namespace Sce::Pss::Core::Io {
 			const int totalReadAtOnce = 0x80000;
 			char* buffer = new char[totalReadAtOnce];
 
-			PsmFileDescriptor* srcHandle = this->OpenFile(absSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE));
-			PsmFileDescriptor* dstHandle = this->OpenFile(absDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE));
+			PsmFileDescriptor* srcHandle = this->OpenFile(absSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE), false);
+			PsmFileDescriptor* dstHandle = this->OpenFile(absDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE), false);
 			this->ChangeSize(dstHandle, 0);
 				
 			int totalRead = 0;
@@ -403,7 +452,7 @@ namespace Sce::Pss::Core::Io {
 	int Sandbox::SetAttributes(std::string sandboxedPath, uint32_t attributes) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
@@ -413,10 +462,10 @@ namespace Sce::Pss::Core::Io {
 		if (this->IsDirectory(absPath))
 			return PSM_ERROR_NOT_FOUND;
 
-		if (!this->PathExist(absPath))
+		if (!this->PathExist(absPath, false))
 			return PSM_ERROR_NOT_FOUND;
 
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 		
 		return PlatformSpecific::ChangeFileAttributes(realPath, attributes);
 	}
@@ -427,10 +476,10 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		// Determine filesystem its located in
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
 		// Check if exists
-		if (!this->PathExist(absPath))
+		if (!this->PathExist(absPath, false))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		// Check if is exactly an emulated directory.
@@ -454,7 +503,7 @@ namespace Sce::Pss::Core::Io {
 		if (LastWriteTime == -1)
 			LastWriteTime = fileInfo.tLastWriteTime;
 
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 
 
 		// Use OS Specific API to change file times
@@ -488,16 +537,16 @@ namespace Sce::Pss::Core::Io {
 	int Sandbox::DeleteDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		// Check the path is inside a rewritable filesystem.
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check the path is an actual directory, and that exists 
-		if (!this->IsDirectory(absPath) || !this->PathExist(absPath))
+		if (!this->IsDirectory(absPath) || !this->PathExist(absPath, false))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		// Locate the directory on disk and delete it
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 		try{
 			std::filesystem::remove(realPath);
 		}
@@ -517,7 +566,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_NO_ERROR;
 
 		// Check the path is inside a rewritable filesystem
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
 		if (!filesystem->IsRewitable())
 			return PSM_ERROR_ACCESS_DENIED;
@@ -527,7 +576,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_ALREADY_EXISTS;
 
 		// Locate path on disk, and create directores
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 		std::filesystem::create_directories(realPath);
 
 		return PSM_ERROR_NO_ERROR;
@@ -537,7 +586,7 @@ namespace Sce::Pss::Core::Io {
 	int Sandbox::SetCurrentDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
-		if (!this->PathExist(absPath))
+		if (!this->PathExist(absPath, false))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		if (this->IsFile(absPath))
@@ -556,16 +605,16 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		// Check that the file actually exists,
-		if (!this->PathExist(absPath) || this->IsDirectory(absPath))
+		if (!this->PathExist(absPath, false) || this->IsDirectory(absPath))
 			return PSM_ERROR_FILE_NOT_FOUND;
 		
 		// Check that the file is not in a read-only folder
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 		if (!filesystem->IsRewitable() || filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Locate the file on disk, and delete it
-		std::string realPath = this->LocateRealPath(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
 		std::filesystem::remove(std::filesystem::path(realPath));
 
 		return PSM_ERROR_NO_ERROR;
@@ -577,14 +626,14 @@ namespace Sce::Pss::Core::Io {
 
 	PsmFileDescriptor* Sandbox::OpenDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
-		std::string realPath = this->LocateRealPath(absPath);
-		FileSystem* filesystem = this->findFilesystem(absPath);
+		std::string realPath = this->LocateRealPath(absPath, false);
+		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
 		// Create a new PsmFileDescriptor 
 		PsmFileDescriptor* handle = new PsmFileDescriptor();
 
 		// Fail if its a file or it doesnt exist.
-		if (this->IsFile(absPath) || !this->PathExist(absPath)) {
+		if (this->IsFile(absPath) || !this->PathExist(absPath, false)) {
 			handle->failReason = PSM_ERROR_PATH_NOT_FOUND;
 			return handle;
 		}
@@ -592,7 +641,7 @@ namespace Sce::Pss::Core::Io {
 		// Setup handle struct
 		handle->opened = true;
 		handle->rw = filesystem->IsRewitable();
-		handle->encrypted = filesystem->IsEncrypted();
+		handle->encrypted = false;
 		handle->emulated = filesystem->IsEmulated();
 		handle->directory = true;
 
@@ -612,11 +661,11 @@ namespace Sce::Pss::Core::Io {
 		return handle;
 	}
 
-	std::string Sandbox::LocateRealPath(std::string sandboxedPath) {
+	std::string Sandbox::LocateRealPath(std::string sandboxedPath, bool includeSystem) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		
 		// find what filesystem the path is located in, (eg /Application) 
-		FileSystem* filesystem = this->findFilesystem(sandboxedPath);
+		FileSystem* filesystem = this->findFilesystem(sandboxedPath, includeSystem);
 
 		// Get the real path to this folder on disk
 		std::filesystem::path fsRealPath = std::filesystem::path(filesystem->PathOnDisk());

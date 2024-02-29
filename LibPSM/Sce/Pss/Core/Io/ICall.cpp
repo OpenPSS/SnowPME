@@ -72,7 +72,7 @@ namespace Sce::Pss::Core::Io {
 		
 		Logger::Debug("DirectoryOpen: " + relativePath);
 
-		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath))
+		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath, false))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		if (Sandbox::ApplicationSandbox->IsDirectory(absolutePath)) {
@@ -137,6 +137,10 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int ICall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
+		return ICall::PsmFileOpenSystem(pszFileName, uOpenFlags, phFile, false);
+	}
+
+	int ICall::PsmFileOpenSystem(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem) {
 		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -145,7 +149,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absolutePath = Sandbox::ApplicationSandbox->AbsolutePath(relativePath);
 
 		if (!Sandbox::ApplicationSandbox->IsDirectory(absolutePath)) {
-			PsmFileDescriptor* fileHandle = Sandbox::ApplicationSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags);
+			PsmFileDescriptor* fileHandle = Sandbox::ApplicationSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags, includeSystem);
 
 			if (fileHandle->failReason != PSM_ERROR_NO_ERROR)
 			{
@@ -325,7 +329,7 @@ namespace Sce::Pss::Core::Io {
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = Sandbox::ApplicationSandbox->AbsolutePath(relativePath);
 
-		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath))
+		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath, false))
 			return PSM_ERROR_NOT_FOUND;
 
 		return Sandbox::ApplicationSandbox->SetAttributes(absolutePath, uFlags);
@@ -358,7 +362,7 @@ namespace Sce::Pss::Core::Io {
 
 		Logger::Debug("GetPathInfo: " + relativePath);
 
-		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath))
+		if (!Sandbox::ApplicationSandbox->PathExist(absolutePath, false))
 			return PSM_ERROR_NOT_FOUND;
 
 		ScePssFileInformation_t fileinfo = Sandbox::ApplicationSandbox->Stat(absolutePath, relativePath);

@@ -5,14 +5,14 @@
 
 namespace Sce::Pss::Core::Io {
 	 
-	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated) {
+	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated, bool system) {
 		this->sandboxPath = sandboxPathName;
 		this->pathOnDisk = pathOnDisk;
 		this->rw = rewritable;
+		this->system = system;
+		this->emulated = emulated;
 
 		std::filesystem::create_directories(std::filesystem::path(pathOnDisk));
-
-		this->emulated = emulated;
 	}
 	FileSystem::~FileSystem() {
 
@@ -24,12 +24,12 @@ namespace Sce::Pss::Core::Io {
 	std::string FileSystem::PathOnDisk() {
 		return this->pathOnDisk;
 	}
-	bool FileSystem::IsEncrypted() {
-		return false;
+	bool FileSystem::IsSystem() {
+		return this->system;
 	}
 	bool FileSystem::IsRewitable() {
 		
-		if (this->IsEncrypted() || !this->rw || this->IsEmulated())
+		if (!this->rw || this->IsEmulated())
 			return false;
 		else
 			return true;

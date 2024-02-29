@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Io {
 		StackItem item = StackItem();
 		item.positionInFolder = 0;
 		item.sandboxPath = this->startFolderSandboxPath;
-		item.realPath = Sandbox::ApplicationSandbox->LocateRealPath(item.sandboxPath);
+		item.realPath = Sandbox::ApplicationSandbox->LocateRealPath(item.sandboxPath, false);
 		item.relativePath = "";
 		item.iterator = new std::filesystem::directory_iterator(item.realPath);
 
@@ -92,7 +92,7 @@ namespace Sce::Pss::Core::Io {
 				StackItem nitem = StackItem();
 				nitem.sandboxPath = sandboxAbsPath;
 				nitem.relativePath = sandboxRelativePath;
-				nitem.realPath = Sandbox::ApplicationSandbox->LocateRealPath(sandboxAbsPath);
+				nitem.realPath = Sandbox::ApplicationSandbox->LocateRealPath(sandboxAbsPath, false);
 
 				nitem.iterator = new std::filesystem::directory_iterator(nitem.realPath);
 				nitem.positionInFolder = 0;

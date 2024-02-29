@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
 #include <Sce/Pss/Core/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Io/PsmFileDescriptor.hpp>
+#include <Sce/Pss/Core/Edata/PsmDrm.hpp>
 
 #include <vector>
 #include <fstream>
@@ -17,15 +18,18 @@ namespace Sce::Pss::Core::Io {
 	private:
 		std::string currentWorkingDirectory;
 		std::vector<FileSystem*> filesystems;
-		FileSystem* findFilesystem(std::string sandboxedPath);
+		FileSystem* findFilesystem(std::string sandboxedPath, bool includeSystem);
 		void reopen(PsmFileDescriptor* handle);
+		int readLicenseData();
+
 	public:
 		static Sandbox* ApplicationSandbox;
+		Edata::PsmDrm* GameDrmProvider = nullptr;
 		Sandbox(std::string gameFolder);
 		~Sandbox();
 		ScePssFileInformation_t Stat(std::string sandboxedPath, std::string setName);
 		bool IsFileSystemRootDirectory(std::string sandboxedPath);
-		bool PathExist(std::string sandboxedPath);
+		bool PathExist(std::string sandboxedPath, bool includeSystem);
 		bool IsFile(std::string sandboxedPath);
 		bool IsDirectory(std::string sandboxedPath);
 		void CloseDirectory(PsmFileDescriptor* handle);
@@ -46,9 +50,9 @@ namespace Sce::Pss::Core::Io {
 		int SetAttributes(std::string sandboxedPath, uint32_t attributes);
 		int SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime);
 		PsmFileDescriptor* OpenDirectory(std::string sandboxedPath);
-		PsmFileDescriptor* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags);		
+		PsmFileDescriptor* OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem);		
 		std::string AbsolutePath(std::string sandboxedPath);
-		std::string LocateRealPath(std::string sandboxedPath);
+		std::string LocateRealPath(std::string sandboxedPath, bool includeSystem);
 	};
 
 }
