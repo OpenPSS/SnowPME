@@ -21,7 +21,7 @@ namespace Sce::Pss::Core::Edata {
 				this->contentId = std::string(rifData.ContentId, sizeof(rifData.ContentId));
 				memcpy(this->titleKey, rifData.Key, sizeof(this->titleKey));
 
-				Logger::Debug("Content ID: " + this->contentId);
+				Logger::Debug("RIF Content ID: " + this->contentId);
 			}
 			else {
 				this->SetError(err);

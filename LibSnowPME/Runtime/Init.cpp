@@ -57,7 +57,7 @@ namespace SnowPME::Runtime {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	void Init::LoadApplication(std::string gameFolder) {
+	void Init::LoadApplication(std::string gameFolder, Graphics::Window* window) {
 
 		Sandbox* psmSandbox = new Sandbox(gameFolder);
 
@@ -69,6 +69,9 @@ namespace SnowPME::Runtime {
 		AppInfo* psmAppInfo = new AppInfo(elem);
 
 		Thread::SetMainThread();
+
+		// setup window callbacks
+		Init::initCallbacks(window);
 
 		// Initalize mono
 		Init::initMono(psmSandbox->LocateRealPath("/Application/app.exe", false));
@@ -84,9 +87,6 @@ namespace SnowPME::Runtime {
 
 		int heapSizeLimit = AppInfo::CurrentApplication->ManagedHeapSize * 0x400;
 		int resourceSizeLimit = AppInfo::CurrentApplication->ResourceHeapSize * 0x400;
-
-		Graphics::Window* window = new Graphics::Window(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
-		Init::initCallbacks(window);
 
 		HeapAllocator::CreateResourceHeapAllocator(resourceSizeLimit);
 

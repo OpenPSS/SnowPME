@@ -26,6 +26,9 @@ External/lib/*/LibMonoBridge.idb
 External/lib/*/LibMonoBridge.lib
 External/lib/*/LibMonoBridge.pdb
 
+External/lib/*/LibImGui.idb
+External/lib/*/LibImGui.lib
+External/lib/*/LibImGui.pdb
 
 *.aps
 *.obj

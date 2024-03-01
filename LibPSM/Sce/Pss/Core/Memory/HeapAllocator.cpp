@@ -32,9 +32,10 @@ namespace Sce::Pss::Core::Memory {
 
 		if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
+#ifndef _DEBUG
 			this->allocMutex.unlock();
-
 			return nullptr;
+#endif
 		}
 
 		// allocate a vector of uint8_t, of the given size

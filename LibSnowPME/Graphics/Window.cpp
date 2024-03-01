@@ -3,7 +3,8 @@
 #include <LibShared.hpp>
 #include <glad/glad.h>
 #include <sdl/SDL.h>
-
+#include <thread>
+#include <string>
 #include <LibPSM.hpp>
 
 using namespace Shared::Debug;
@@ -15,34 +16,48 @@ namespace SnowPME::Graphics {
 			Logger::Error("Failed to initalize SDL2.");
 			throw std::exception("Failed to initalize SDL2.");
 		};
-		
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-		this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
 		
-		if (this->window == NULL) {
+		if (this->sdlWindow == NULL) {
 			Logger::Error("Failed to create SDL window.");
 			throw std::exception("Failed to create SDL window.");
 		}
 
-		this->glCtx = SDL_GL_CreateContext(this->window);
+		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
 
 		if (!gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress)) {
 			Logger::Error("Failed to initalize GL.");
 			throw std::exception("Failed to initalize GL.");
 		}
 
+		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
+		SDL_GL_SetSwapInterval(1);
+
 		onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
 	}
 	
+	SDL_Window* Window::GetSdlWindow() {
+		return this->sdlWindow;
+	}
+
+	SDL_GLContext Window::GetGlCtx() {
+		return this->glCtx;
+	}
+
 	void Window::onResized() {
 		int windowWidth = 0;
 		int windowHeight = 0;
-		SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
+		SDL_GetWindowSize(this->sdlWindow, &windowWidth, &windowHeight);
 		glViewport(0, 0, windowWidth, windowHeight);
 	}
 
@@ -51,8 +66,8 @@ namespace SnowPME::Graphics {
 		SDL_PollEvent(&event);
 
 	}
-	double Window::GetTime() {
-		return (double)SDL_GetTicks();
+	uint32_t Window::GetTime() {
+		return SDL_GetTicks();
 	}
 
 	bool Window::IsMinimized() {
@@ -60,11 +75,11 @@ namespace SnowPME::Graphics {
 	}
 
 	void Window::SwapBuffers() {
-		SDL_GL_SwapWindow(this->window);
+		SDL_GL_SwapWindow(this->sdlWindow);
 	}
 	
 	bool Window::ShouldClose() {
-		return false; //glfwWindowShouldClose(this->window);
+		return false; //glfwWindowShouldClose(this->sdlWindow);
 	}
 
 	bool Window::MessageBox(const char* message, const char* caption) {
@@ -83,7 +98,7 @@ namespace SnowPME::Graphics {
 		memset(&data, 0, sizeof(SDL_MessageBoxData));
 
 		data.flags = SDL_MESSAGEBOX_INFORMATION;
-		data.window = this->window;
+		data.window = this->sdlWindow;
 		data.title = caption;
 		data.message = message;
 		data.numbuttons = 2;
@@ -98,7 +113,7 @@ namespace SnowPME::Graphics {
 
 	Window::~Window() {
 		if(this->glCtx != nullptr) SDL_GL_DeleteContext(this->glCtx);
-		if(this->window != nullptr)	SDL_DestroyWindow(this->window);
+		if(this->sdlWindow != nullptr)	SDL_DestroyWindow(this->sdlWindow);
 		SDL_Quit();
 	}
 

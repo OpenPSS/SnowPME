@@ -19,7 +19,7 @@ using namespace Sce::Pss::Core::Edata;
 
 int pss_crypto_open(PssCryptoContext* context, const char* path) {
 	Logger::Debug(__FUNCTION__);
-	Logger::Debug("Crypto Opening file: " + std::string(path));
+	Logger::Debug("file: " + std::string(path));
 
 	if (context != nullptr) {
 		memset(context, 0, sizeof(PssCryptoContext));
@@ -34,6 +34,7 @@ int pss_crypto_open(PssCryptoContext* context, const char* path) {
 
 		return true;
 	}
+	Logger::Debug("file not found .");
 	return false;
 }
 

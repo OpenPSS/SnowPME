@@ -192,8 +192,11 @@ namespace Sce::Pss::Core::Edata {
 				this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
 
 				memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
+
+				// decrypt the IV from the file header
 				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
 
+				// decrypt first block from the PSSE'd file
 				decryptBlock(this->block);
 				return;
 			}

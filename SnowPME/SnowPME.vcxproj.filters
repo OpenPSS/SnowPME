@@ -96,12 +96,18 @@
     <ClCompile Include="SnowPME.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LibPSM\Sce\PlayStation\Core\Error.hpp">
       <Filter>Header Files\LibPSM\Sce\PlayStation\Core</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Program.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
