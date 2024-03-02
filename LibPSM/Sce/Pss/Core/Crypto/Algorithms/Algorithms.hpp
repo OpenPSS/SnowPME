@@ -8,6 +8,7 @@ extern "C" {
 
 #include <Sce/Pss/Core/Crypto/Algorithms/aes.h>
 #include <Sce/Pss/Core/Crypto/Algorithms/hmac_sha256.h>
+#include <Sce/Pss/Core/Crypto/Algorithms/sha1.h>
 #include <Sce/Pss/Core/Crypto/Algorithms/sha256.h>
 #include <Sce/Pss/Core/Crypto/Algorithms/md5.h>
 }

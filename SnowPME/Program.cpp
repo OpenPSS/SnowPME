@@ -24,7 +24,8 @@ namespace SnowPME {
 		this->gui = new Graphics::Gui::SnowGui(this->window);
 
 		Logger::Debug("Initalizing main window.");
-		Graphics::Gui::ImGuiWindow::RegisterWindow(new Graphics::Gui::MainWindow());
+		this->mainWindow = new Graphics::Gui::MainWindow();
+		this->mainWindow->Register();
 
 		Logger::Debug("Running GUI main loop.");
 		this->gui->RunMainLoop();

@@ -9,7 +9,20 @@ namespace Sce::Pss::Core::Crypto {
 	void CryptoLibrary::HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], std::vector<uint8_t> in) {
 		hmac_sha256(key, SHA256_HASH_SIZE, in.data(), in.size(), out, SHA256_HASH_SIZE);
 	}
-	
+
+	void CryptoLibrary::Sha1Sum(uint8_t* data, const uint32_t datasize, uint8_t sha[0x14]) {
+		SHA1_CTX ctx;
+		SHA1Init(&ctx);
+		SHA1Update(&ctx, data, datasize);
+		SHA1Final(sha, &ctx);
+	}
+
+	void CryptoLibrary::Sha256Sum(uint8_t* data, const uint32_t datasize, uint8_t sha[0x20]) {
+		SHA256_HASH shaHash;
+		Sha256Calculate(data, datasize, &shaHash);
+		memcpy(sha, shaHash.bytes, sizeof(shaHash.bytes));
+	}
+
 	void CryptoLibrary::Md5Sum(uint8_t* data, const size_t datasize, uint8_t md5[0x10]) {
 		MD5Context context;
 		md5Init(&context);

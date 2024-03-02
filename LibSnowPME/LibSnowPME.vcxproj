@@ -24,6 +24,7 @@
     <ClInclude Include="Callback\Impl.hpp" />
     <ClInclude Include="Callback\WindowImpl.hpp" />
     <ClInclude Include="Graphics\Gui\MainWindow.hpp" />
+    <ClInclude Include="Graphics\Gui\RuntimeLibsWindow.hpp" />
     <ClInclude Include="Graphics\Gui\SnowGui.hpp" />
     <ClInclude Include="Graphics\Gui\ImGuiWindow.hpp" />
     <ClInclude Include="Graphics\Window.hpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="Callback\WindowImpl.cpp" />
     <ClCompile Include="Graphics\Gui\ImGuiWindow.cpp" />
     <ClCompile Include="Graphics\Gui\MainWindow.cpp" />
+    <ClCompile Include="Graphics\Gui\RuntimeLibsWindow.cpp" />
     <ClCompile Include="Graphics\Gui\SnowGui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Runtime\Init.cpp" />

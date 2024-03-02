@@ -234,6 +234,9 @@
     <ClCompile Include="Sce\Pss\Core\Crypto\Md5Hash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -708,6 +711,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

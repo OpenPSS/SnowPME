@@ -2,28 +2,42 @@
 namespace SnowPME::Graphics::Gui {
 	std::list<ImGuiWindow*> ImGuiWindow::registeredWindows = std::list<ImGuiWindow*>();
 
-	void ImGuiWindow::ShowWindow() {
+	void ImGuiWindow::Show() {
 		this->windowOpen = true;
 	}
-	void ImGuiWindow::CloseWindow() {
+	void ImGuiWindow::Close() {
 		this->windowOpen = false;
 	}
 
-	void ImGuiWindow::DisplayWindow() {
-		if (this->windowOpen) {
+	void ImGuiWindow::Display() {
+		if (this->IsOpen()) {
 			this->updateWindow();
 			this->renderWindow();
 		}
 	}
 
+	bool ImGuiWindow::IsOpen() {
+		return this->windowOpen;
+	}
+
 	ImGuiWindow::ImGuiWindow() {
-		this->ShowWindow();
+		this->Show();
 	}
 
 	ImGuiWindow::~ImGuiWindow() {
-		this->CloseWindow();
+		this->Close();
+		this->Unregister();
+	}
+
+	void ImGuiWindow::Register() {
+		ImGuiWindow::RegisterWindow(this);
+	}
+
+	void ImGuiWindow::Unregister() {
 		ImGuiWindow::UnregisterWindow(this);
 	}
+
+	// static functions
 
 	void ImGuiWindow::RegisterWindow(ImGuiWindow* windowToRegister) {
 		if (windowToRegister != nullptr)
@@ -37,7 +51,13 @@ namespace SnowPME::Graphics::Gui {
 
 	void ImGuiWindow::ProcessWindows() {
 		for (ImGuiWindow* win : ImGuiWindow::registeredWindows) {
-			win->DisplayWindow();
+			if (win->IsOpen()) {
+				win->Display();
+			}
+			else {
+				delete win;
+				return;
+			}
 		}
 	}
 }

@@ -12,9 +12,13 @@ namespace SnowPME::Graphics::Gui {
 	public:
 		ImGuiWindow();
 		~ImGuiWindow();
-		void ShowWindow();
-		void DisplayWindow();
-		void CloseWindow();
+		void Show();
+		void Display();
+		void Close();
+		void Register();
+		void Unregister();
+
+		bool IsOpen();
 
 		static void ProcessWindows();
 		static void RegisterWindow(ImGuiWindow* windowToRegister);
