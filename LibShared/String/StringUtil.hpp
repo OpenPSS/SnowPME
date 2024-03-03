@@ -14,6 +14,7 @@ namespace Shared::String {
 		static std::string ToLower(std::string str);
 		static std::string ToUpper(std::string str);
 		static std::string Reverse(std::string str);
+		static std::string CreateRandomString(int length);
 	};
 }
 #endif

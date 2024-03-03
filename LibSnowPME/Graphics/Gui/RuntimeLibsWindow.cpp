@@ -1,7 +1,10 @@
-#include <LibPSM.hpp>
+#include <Sce/Pss/Core/Mono/Security.hpp>
+#include <Sce/Pss/Core/Mono/PsmDlls.hpp>
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
 #include <LibShared.hpp>
 #include <LibImGui.hpp>
+#include <filesystem>
+#include <pfd/portable-file-dialogs.h>
 
 using namespace Shared;
 using namespace Sce::Pss::Core::Mono;
@@ -12,36 +15,84 @@ namespace SnowPME::Graphics::Gui {
 		this->scePlayStationCoreValid	= Security::VerifyDll(Config::PsmCoreLibPath(), PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE);
 	}
 
+	void RuntimeLibsWindow::installDll(PsmDlls::PssSystemFileEnum whatDll) {
+
+		pfd::open_file* filepicker = new pfd::open_file("Open Runtime DLL", "/", { "Dynamic Link Libraries (.dll)", "*.dll" }, pfd::opt::none);
+		
+		if (!filepicker->result().empty()) {
+			std::string dllPath = filepicker->result().at(0);
+
+			if (Security::VerifyDll(dllPath, whatDll)) {
+				std::string outputDir = "";
+
+				switch (whatDll) {
+					case PsmDlls::PssSystemFileEnum::MSCORLIB:
+						outputDir = Config::MscorlibPath();
+						break;
+					case PsmDlls::PssSystemFileEnum::SYSTEM:
+						outputDir = Config::SystemLibPath();
+						break;
+					case PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE:
+						outputDir = Config::PsmCoreLibPath();
+						break;
+					case PsmDlls::PssSystemFileEnum::NONE:
+					default:
+						return;
+				}
+
+				// create runtime folders ..
+				std::filesystem::create_directories(std::filesystem::path(outputDir).remove_filename());
+
+				// copy file to output location ..
+				std::filesystem::copy_file(dllPath, outputDir, std::filesystem::copy_options::overwrite_existing);
+			}
+		}
+
+		delete filepicker;
+		checkDlls();
+	}
+
 	void RuntimeLibsWindow::updateWindow() {
 
 	}
 	void RuntimeLibsWindow::renderWindow() {
-		ImGui::Begin("Runtime Libraries", &this->windowOpen);
+		uint32_t n = 0;
 
+		ImGui::Begin(this->createWindowTitle("Runtime Libraries").c_str(), &this->windowOpen);
 		ImGui::Text("SnowPME requires the following libraries from the \"PlayStation Mobile Runtime Package\"");
 
-		ImGui::Text("mscorlib.dll            ");
+		ImGui::Text("mscorlib.dll:");
 		ImGui::SameLine();
 		if (!this->mscorlibValid) ImGui::TextColored(ImVec4(1, 0, 0, 1), "NOT FOUND"); else ImGui::TextColored(ImVec4(0, 1, 0, 1), "INSTALLED");
 		ImGui::SameLine();
+
+		ImGui::PushID(n++);
 		if (ImGui::Button("Browse")) {
-
+			installDll(PsmDlls::PssSystemFileEnum::MSCORLIB);
 		}
+		ImGui::PopID();
 
-		ImGui::Text("System.dll              ");
+		ImGui::Text("System.dll:");
 		ImGui::SameLine();
 		if (!this->systemValid) ImGui::TextColored(ImVec4(1, 0, 0, 1), "NOT FOUND"); else ImGui::TextColored(ImVec4(0, 1, 0, 1), "INSTALLED");
 		ImGui::SameLine();
-		if (ImGui::Button("Browse")) {
 
+		ImGui::PushID(n++);
+		if (ImGui::Button("Browse")) {
+			installDll(PsmDlls::PssSystemFileEnum::SYSTEM);
 		}
-		ImGui::Text("Sce.PlayStation.Core.dll");
+		ImGui::PopID();
+
+		ImGui::Text("Sce.PlayStation.Core.dll:");
 		ImGui::SameLine();
 		if (!this->scePlayStationCoreValid) ImGui::TextColored(ImVec4(1, 0, 0, 1), "NOT FOUND"); else ImGui::TextColored(ImVec4(0, 1, 0, 1), "INSTALLED");
 		ImGui::SameLine();
-		if (ImGui::Button("Browse")) {
 
+		ImGui::PushID(n++);	
+		if (ImGui::Button("Browse")) {
+			installDll(PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE);
 		}
+		ImGui::PopID();
 
 		ImGui::Text("For instructions on how to obtain this can be found below:");
 
@@ -79,6 +130,7 @@ namespace SnowPME::Graphics::Gui {
 		}
 
 		ImGui::End();
+
 	}
 
 	RuntimeLibsWindow::RuntimeLibsWindow() {

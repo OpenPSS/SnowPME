@@ -40,18 +40,18 @@ namespace Shared
 		GET_CFG_KEY_BOOL(SecurityCritical);
 
 	}
-	std::string Config::mono21Folder() {
+	std::string Config::Mono21Folder() {
 		return Path::Combine(Path::Combine(Config::RuntimeLibPath, "mono"), "2.1");
 	}
 
 	std::string Config::PsmCoreLibPath() {
-		return Path::Combine(mono21Folder() , "Sce.PlayStation.Core.dll");
+		return Path::Combine(Mono21Folder() , "Sce.PlayStation.Core.dll");
 	}
 	std::string Config::SystemLibPath() {
-		return Path::Combine(mono21Folder(), "System.dll");
+		return Path::Combine(Mono21Folder(), "System.dll");
 	}
 	std::string Config::MscorlibPath() {
-		return Path::Combine(mono21Folder(), "mscorlib.dll");
+		return Path::Combine(Mono21Folder(), "mscorlib.dll");
 	}
 
 	int Config::ScreenHeight(int idx) {

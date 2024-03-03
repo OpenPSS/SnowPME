@@ -67,6 +67,15 @@ namespace Shared::String {
 		return strs;
 	}
 
+	std::string StringUtil::CreateRandomString(int length) {
+		std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		std::string str = "";
+		for (int i = 0; i < length; i++) {
+			str += chars[rand() % chars.length()];
+		}
+		return str;
+	}
+
 	std::string StringUtil::Replace(std::string str, std::string find, std::string replace) {
 		// Dont modify the original string
 		std::string strcopy = str;

@@ -18,7 +18,6 @@ namespace Shared
 	class Config {
 	private:
 		static void parseKeyValuePair(std::string key, std::string value); // parses the line read from the cfg file
-		static std::string mono21Folder(); // gets RuntimeLibPath /mono/2.1
 	public:
 		static bool SecurityCritical; // If mono is allowed full access to native functions.
 		static std::string RuntimeLibPath; // Path to the folder containing all DLLs
@@ -31,6 +30,8 @@ namespace Shared
 
 		static int ScreenWidth(int idx);
 		static int ScreenHeight(int idx);
+
+		static std::string Mono21Folder(); // gets RuntimeLibPath /mono/2.1
 
 		static std::string PsmCoreLibPath(); // Path to Sce.PlayStation.Core.dll
 		static std::string SystemLibPath();  // Path to System.dll

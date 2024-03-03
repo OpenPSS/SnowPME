@@ -1,4 +1,9 @@
 #include <Graphics/Gui/ImGuiWindow.hpp>
+#include <LibImGui.hpp>
+#include <mutex>
+#include <LibShared.hpp>
+using namespace Shared::String;
+using namespace Shared::Debug;
 namespace SnowPME::Graphics::Gui {
 	std::list<ImGuiWindow*> ImGuiWindow::registeredWindows = std::list<ImGuiWindow*>();
 
@@ -9,10 +14,16 @@ namespace SnowPME::Graphics::Gui {
 		this->windowOpen = false;
 	}
 
+	std::string ImGuiWindow::createWindowTitle(std::string windowTitle) {
+		return windowTitle + "##" + this->uuid;
+	}
+
 	void ImGuiWindow::Display() {
 		if (this->IsOpen()) {
+			ImGui::PushID(this->uuid.c_str());
 			this->updateWindow();
 			this->renderWindow();
+			ImGui::PopID();
 		}
 	}
 
@@ -21,6 +32,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	ImGuiWindow::ImGuiWindow() {
+		this->uuid = StringUtil::CreateRandomString(10);
 		this->Show();
 	}
 

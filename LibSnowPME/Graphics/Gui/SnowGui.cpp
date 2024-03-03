@@ -9,6 +9,7 @@ namespace SnowPME::Graphics::Gui {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.IniFilename = nullptr;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -38,6 +39,11 @@ namespace SnowPME::Graphics::Gui {
 
 		this->NewFrame();
 		ImGuiWindow::ProcessWindows();
+
+#ifdef _DEBUG
+		ImGui::ShowDemoWindow();
+#endif
+
 		this->EndFrame();
 	}
 
