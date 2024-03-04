@@ -16,8 +16,7 @@ namespace Sce::Pss::Core::Crypto {
 		static void Sha1Sum(uint8_t* data, const uint32_t datasize, uint8_t sha[0x14]);
 
 		static void Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize);
-		static void Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], std::vector<uint8_t> in, std::vector<uint8_t>& out);
-
+		static void Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], std::vector<uint8_t>& in, std::vector<uint8_t>& out);
 		static void Aes128CbcDecrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize);
 	};
 }

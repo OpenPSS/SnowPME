@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Edata {
 			this->SetError(err);
 		}
 	}
-	PsmDrm::PsmDrm(std::string contentId, std::byte* titleKey) {
+	PsmDrm::PsmDrm(std::string contentId, uint8_t* titleKey) {
 		this->contentId = contentId;
 		memcpy(this->titleKey, titleKey, sizeof(this->titleKey));
 	}
@@ -41,7 +41,7 @@ namespace Sce::Pss::Core::Edata {
 		return this->contentId;
 	}
 
-	void PsmDrm::GetTitleKey(std::byte* outTitleKey) {
+	void PsmDrm::GetTitleKey(uint8_t* outTitleKey) {
 		memcpy(outTitleKey, this->titleKey, sizeof(this->titleKey));
 	}
 

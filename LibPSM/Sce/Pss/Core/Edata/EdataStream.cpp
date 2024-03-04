@@ -11,7 +11,7 @@ using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
 
-	void EdataStream::rollIv(uint64_t blockNo, std::byte blockIv[0x10]) {
+	void EdataStream::rollIv(uint64_t blockNo, uint8_t blockIv[0x10]) {
 		memset(blockIv, 0x00, sizeof(EdataStream::fileIv));
 		memcpy(blockIv, &blockNo, sizeof(uint64_t));
 		for (int i = 0; i < sizeof(EdataStream::fileIv); i++)
@@ -69,10 +69,13 @@ namespace Sce::Pss::Core::Edata {
 		if (blockNo > this->totalBlocks) return;
 		if (blockNo < 0) return;
 		
-		std::byte iv[0x10];
+		uint8_t iv[0x10];
+		// generate the new iv
 		this->rollIv(blockNo, iv);
-		this->block = blockNo;
+		// set is as the iv in the aes context
+		aes->SetIv(iv);
 
+		this->block = blockNo;
 
 		uint64_t blockPosition = blockNo * EdataStream::PsseBlockSize;
 		size_t totalRead = EdataStream::PsseBlockSize;
@@ -106,8 +109,10 @@ namespace Sce::Pss::Core::Edata {
 
 		// decrypt block and copy to the currentBlock vector
 		this->osHandle->read((char*)this->currentBlock.data(), totalRead);
-		CryptoLibrary::Aes128CbcDecrypt((uint8_t*)this->TitleKey, (uint8_t*)iv, this->currentBlock.data(), totalRead);
 		
+		// decrypt the current block
+		aes->Decrypt(this->currentBlock);
+
 		if(this->currentBlock.size() != trimTo)
 			this->currentBlock.resize(trimTo);
 
@@ -132,12 +137,13 @@ namespace Sce::Pss::Core::Edata {
 		return length - totalRead;
 	}
 	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm) {
-		memset(this->TitleKey, 0x00, sizeof(EdataStream::TitleKey));
+		memset(this->titleKey, 0x00, sizeof(EdataStream::titleKey));
 		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
 
 		// Copy the game key into this folder
-		if (drm != nullptr)
-			drm->GetTitleKey(this->TitleKey);
+		if (drm != nullptr) {
+			drm->GetTitleKey(this->titleKey);
+		}
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
@@ -185,9 +191,9 @@ namespace Sce::Pss::Core::Edata {
 
 				// is runtime file?
 				if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
-					memcpy(this->TitleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
+					memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
 				}
-
+				
 				// if no content id set then this is psm developer assistant application
 				this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
 
@@ -195,6 +201,8 @@ namespace Sce::Pss::Core::Edata {
 
 				// decrypt the IV from the file header
 				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
+
+				this->aes = new AesCbc(this->titleKey, this->fileIv);
 
 				// decrypt first block from the PSSE'd file
 				decryptBlock(this->block);
@@ -210,6 +218,10 @@ namespace Sce::Pss::Core::Edata {
 	}
 
 	EdataStream::~EdataStream() {
+		if (this->aes != nullptr) {
+			delete aes;
+		}
+
 		if (this->osHandle != nullptr && this->osHandle->is_open()) {
 			this->Close();
 		}

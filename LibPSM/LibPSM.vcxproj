@@ -25,6 +25,8 @@
     <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Callback\Callbacks.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\AesCbc.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha1.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Md5Hash.cpp" />
@@ -104,6 +106,8 @@
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\Callbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\AesCbc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha1.h" />
@@ -320,7 +324,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -342,7 +346,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>

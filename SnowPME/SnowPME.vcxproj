@@ -73,11 +73,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\Temp\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\Temp\$(ProjectName)\</IntDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,6 +116,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)External\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)\LibSnowPME\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +125,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>LibSnowPME.lib;LibCXML.lib;LibPSM.lib;LibShared.lib;LibGLAD.lib;LibMonoBridge.lib;LibImGui.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

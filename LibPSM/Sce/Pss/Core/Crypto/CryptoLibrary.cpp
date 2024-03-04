@@ -50,7 +50,7 @@ namespace Sce::Pss::Core::Crypto {
 		AES_init_ctx_iv(&ctx, key, iv);
 		AES_CBC_encrypt_buffer(&ctx, data, datasize);
 	}
-	void CryptoLibrary::Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], std::vector<uint8_t> in, std::vector<uint8_t>& out) {
+	void CryptoLibrary::Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], std::vector<uint8_t>& in, std::vector<uint8_t>& out) {
 		struct AES_ctx ctx;
 		AES_init_ctx_iv(&ctx, key, iv);
 

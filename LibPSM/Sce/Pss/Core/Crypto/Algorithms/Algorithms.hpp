@@ -1,10 +1,10 @@
-#ifndef LIB_PSS_CRYPTOALGORITHMS_H
-#define LIB_PSS_CRYPTOALGORITHMS_H 1
+#ifndef LIB_PSS_ALGORITHMS_H
+#define LIB_PSS_ALGORITHMS_H 1
 
 extern "C" {
 #define CBC 1
-#define CTR 1
 #define ECB 1
+#define CTR 1
 
 #include <Sce/Pss/Core/Crypto/Algorithms/aes.h>
 #include <Sce/Pss/Core/Crypto/Algorithms/hmac_sha256.h>

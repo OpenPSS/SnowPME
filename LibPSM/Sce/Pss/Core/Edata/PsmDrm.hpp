@@ -10,12 +10,12 @@ namespace Sce::Pss::Core::Edata {
 	class PsmDrm : public Errorable {
 	private:
 		std::string contentId;
-		std::byte titleKey[0x10];
+		uint8_t titleKey[0x10];
 	public:
 		PsmDrm(std::string licenseFile);
-		PsmDrm(std::string contentId, std::byte* titleKey);
+		PsmDrm(std::string contentId, uint8_t* titleKey);
 		std::string GetContentId();
-		void GetTitleKey(std::byte* outTitleKey);
+		void GetTitleKey(uint8_t* outTitleKey);
 	};
 }
 #endif
