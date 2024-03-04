@@ -4,10 +4,10 @@
 
 #include <string>
 #include <iostream>
-#include "PixelBufferType.hpp"
-#include "PixelFormat.hpp"
-#include "PixelBufferOption.hpp"
-#include "InternalOption.hpp"
+#include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
+#include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
+#include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
+#include <Sce/Pss/Core/Graphics/InternalOption.hpp>
 
 
 

@@ -8,10 +8,12 @@
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
+#include <Sce/PSs/Core/System/Handles.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
 
 using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
 
@@ -31,13 +33,19 @@ namespace Sce::Pss::Core::Graphics {
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
 				tex = new Texture2D(&filename, mipmap, format);
+				ReturnErrorable(tex);
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
 				tex = new TextureCube(&filename, mipmap, format);
+				ReturnErrorable(tex);
 			}
 			
-			return PSM_ERROR_NO_ERROR;
+			if (tex != nullptr) {
+				*result = Handles::CreateHandle((uintptr_t)tex);
+				return PSM_ERROR_NO_ERROR;
+			}
+			return PSM_ERROR_INVALID_PARAMETER;
 
 		}
 		else {

@@ -39,11 +39,6 @@ namespace SnowPME::Graphics::Gui {
 
 		this->NewFrame();
 		ImGuiWindow::ProcessWindows();
-
-#ifdef _DEBUG
-		ImGui::ShowDemoWindow();
-#endif
-
 		this->EndFrame();
 	}
 

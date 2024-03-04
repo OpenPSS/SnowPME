@@ -1,6 +1,7 @@
 #include <Graphics/Gui/SnowGui.hpp>
 #include <Graphics/Gui/MainWindow.hpp>
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
+#include <Graphics/Gui/InstallGamePackageWindow.hpp>
 #include <LibImGui.hpp>
 
 namespace SnowPME::Graphics::Gui {
@@ -12,8 +13,9 @@ namespace SnowPME::Graphics::Gui {
 					RuntimeLibsWindow* runtimeLibs = new RuntimeLibsWindow();
 					runtimeLibs->Register();
 				}
-				if (ImGui::MenuItem("Install Game from PKG File")) {
-
+				if (ImGui::MenuItem("Install Game from Package File")) {
+					InstallGamePackageWindow* gamePkgInstall = new InstallGamePackageWindow();
+					gamePkgInstall->Register();
 				}
 				if (ImGui::MenuItem("Install Game from Folder")) {
 

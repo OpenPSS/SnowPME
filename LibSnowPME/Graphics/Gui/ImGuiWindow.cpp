@@ -5,10 +5,12 @@
 using namespace Shared::String;
 using namespace Shared::Debug;
 namespace SnowPME::Graphics::Gui {
+
 	std::list<ImGuiWindow*> ImGuiWindow::registeredWindows = std::list<ImGuiWindow*>();
 
 	void ImGuiWindow::Show() {
 		this->windowOpen = true;
+		this->windowShown = true;
 	}
 	void ImGuiWindow::Close() {
 		this->windowOpen = false;
@@ -27,6 +29,13 @@ namespace SnowPME::Graphics::Gui {
 		}
 	}
 
+	void ImGuiWindow::Hide() {
+		this->windowShown = false;
+	}
+
+	bool ImGuiWindow::IsShown() {
+		return this->windowShown;
+	}
 	bool ImGuiWindow::IsOpen() {
 		return this->windowOpen;
 	}
@@ -34,6 +43,7 @@ namespace SnowPME::Graphics::Gui {
 	ImGuiWindow::ImGuiWindow() {
 		this->uuid = StringUtil::CreateRandomString(10);
 		this->Show();
+
 	}
 
 	ImGuiWindow::~ImGuiWindow() {
@@ -63,10 +73,10 @@ namespace SnowPME::Graphics::Gui {
 
 	void ImGuiWindow::ProcessWindows() {
 		for (ImGuiWindow* win : ImGuiWindow::registeredWindows) {
-			if (win->IsOpen()) {
+			if (win->IsOpen() && win->IsShown()) {
 				win->Display();
 			}
-			else {
+			else if(!win->IsOpen()) {
 				delete win;
 				return;
 			}

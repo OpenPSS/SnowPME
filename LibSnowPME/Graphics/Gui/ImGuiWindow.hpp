@@ -10,6 +10,7 @@ namespace SnowPME::Graphics::Gui {
 		static std::list<ImGuiWindow*> registeredWindows;
 	protected:
 		bool windowOpen = true;
+		bool windowShown = true;
 		std::string createWindowTitle(std::string windowTitle);
 		virtual void updateWindow() = NULL;
 		virtual void renderWindow() = NULL;
@@ -18,10 +19,12 @@ namespace SnowPME::Graphics::Gui {
 		~ImGuiWindow();
 		void Show();
 		void Display();
+		void Hide();
 		void Close();
 		void Register();
 		void Unregister();
 
+		bool IsShown();
 		bool IsOpen();
 
 		static void ProcessWindows();

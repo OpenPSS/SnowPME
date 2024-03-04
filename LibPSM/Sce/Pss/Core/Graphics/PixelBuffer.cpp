@@ -4,6 +4,10 @@
 #include <Sce/Pss/Core/Bool.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 
+#include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
+#include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
+#include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
+
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Io;
@@ -13,6 +17,16 @@ namespace Sce::Pss::Core::Graphics {
 	PixelBuffer::PixelBuffer() {
 	}
 	PixelBuffer::~PixelBuffer() {
+	}
+
+	int PixelBuffer::GetInfo(PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option) {
+		*type = this->type;
+		*width = this->width;
+		*height = this->height;
+		*level = this->level;
+		*format = this->format;
+		*option = this->option;
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int PixelBuffer::LoadFile(const char* fileName, uint8_t* &fileData, uint32_t& fileSize) {

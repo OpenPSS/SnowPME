@@ -7,7 +7,6 @@ namespace SnowPME {
 	private:
 		Graphics::Window* window = nullptr;
 		Graphics::Gui::SnowGui* gui = nullptr;
-		Graphics::Gui::MainWindow* mainWindow = nullptr;
 		void startMonoApplication(std::string gamePath);
 	public:
 		Program();

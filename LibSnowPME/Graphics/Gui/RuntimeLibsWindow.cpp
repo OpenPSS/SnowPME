@@ -1,6 +1,7 @@
 #include <Sce/Pss/Core/Mono/Security.hpp>
 #include <Sce/Pss/Core/Mono/PsmDlls.hpp>
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
+#include <Graphics/Gui/MsgBox.hpp>
 #include <LibShared.hpp>
 #include <LibImGui.hpp>
 #include <filesystem>
@@ -45,6 +46,12 @@ namespace SnowPME::Graphics::Gui {
 
 				// copy file to output location ..
 				std::filesystem::copy_file(dllPath, outputDir, std::filesystem::copy_options::overwrite_existing);
+
+			}
+			else {
+				MsgBox* box = new MsgBox("Fail", "Runtime library file:  " + std::filesystem::path(dllPath).filename().string() + " is corrupt or invalid.", { "OK" } );
+				box->KeepOutput = false;
+				box->Register();
 			}
 		}
 
