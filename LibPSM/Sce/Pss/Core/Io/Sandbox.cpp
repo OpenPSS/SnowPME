@@ -39,7 +39,7 @@ namespace Sce::Pss::Core::Io {
 		std::filesystem::path licensePath;
 		std::filesystem::path systemPath;
 
-		if (Config::TargetImplementation == RuntimeImplementation::PSVita || std::filesystem::exists(roPath))
+		if (Config::TargetImplementation == RuntimeImplementation::PSVita && std::filesystem::exists(roPath))
 		{
 			applicationPath = std::filesystem::path(std::filesystem::absolute(roPath).string()).append("Application");
 			licensePath = std::filesystem::path(std::filesystem::absolute(roPath).string()).append("License");
@@ -81,6 +81,9 @@ namespace Sce::Pss::Core::Io {
 		if (this->PathExist(FakeRifLocation, true)) {
 			this->GameDrmProvider = new PsmDrm(FakeRifLocation);
 			ReturnErrorable(this->GameDrmProvider);
+		}
+		else {
+			Logger::Debug("No " + FakeRifLocation + " found.");
 		}
 		return PSM_ERROR_NO_ERROR;
 	}

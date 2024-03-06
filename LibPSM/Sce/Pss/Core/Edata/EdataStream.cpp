@@ -388,7 +388,11 @@ namespace Sce::Pss::Core::Edata {
 		else {
 			this->osHandle->close();
 		}
-		delete this->osHandle;
+
+		if (this->osHandle != nullptr) {
+			delete this->osHandle;
+			this->osHandle = nullptr;
+		}
 	}
 	bool EdataStream::Verify() {
 		if (this->FileEncrypted) {

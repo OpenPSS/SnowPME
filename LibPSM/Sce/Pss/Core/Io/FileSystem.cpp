@@ -30,8 +30,8 @@ namespace Sce::Pss::Core::Io {
 
 		Logger::Debug("reading psse list.");
 
-		std::filesystem::path psseListFile = std::filesystem::path(this->pathOnDisk).append("/psse.list");
-		std::filesystem::path edataListFile = std::filesystem::path(this->pathOnDisk).append("/edata.list");
+		std::filesystem::path psseListFile = std::filesystem::path(this->PathOnDisk()).append("psse.list");
+		std::filesystem::path edataListFile = std::filesystem::path(this->PathOnDisk()).append("edata.list");
 
 		if (std::filesystem::exists(psseListFile) || std::filesystem::exists(edataListFile)) { // check either psse.list or edata.list exist
 			// read psse.list
@@ -74,7 +74,7 @@ namespace Sce::Pss::Core::Io {
 			delete this->edataList;
 	}
 	EdataList* FileSystem::GetEdataList(PsmDrm* psmDrm) {
-		if (this->edataList != nullptr) {
+		if (this->edataList == nullptr) {
 			int err = this->readEdataList(psmDrm);
 			if (err == PSM_ERROR_NO_ERROR) {
 				return this->edataList;

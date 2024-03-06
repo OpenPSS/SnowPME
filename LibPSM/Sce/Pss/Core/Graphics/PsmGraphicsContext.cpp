@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::Delete(int handle){
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (GraphicsContext::GetGraphicsContext() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 			delete GraphicsContext::GetGraphicsContext();
 			return PSM_ERROR_NO_ERROR;
 		}

@@ -16,10 +16,10 @@ using namespace Sce::Pss::Core::Callback;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
-	static GraphicsContext* activeGraphicsContext = nullptr;
+	GraphicsContext* GraphicsContext::activeGraphicsContext = nullptr;
 
 	GraphicsContext* GraphicsContext::GetGraphicsContext() {
-		return activeGraphicsContext;
+		return GraphicsContext::activeGraphicsContext;
 	}
 
 	int GraphicsContext::ActiveStateChanged(bool state) {
@@ -532,14 +532,16 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	GraphicsContext::~GraphicsContext() {
-		delete this->CapsState;
-		delete this->minFrameDelta;
+		if(this->CapsState != nullptr)
+			delete this->CapsState;
+		if(this->minFrameDelta != nullptr)
+			delete this->minFrameDelta;
 
-		activeGraphicsContext = NULL;
+		GraphicsContext::activeGraphicsContext = nullptr;
 	}
 
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
-		if (this->GetGraphicsContext() != NULL) 
+		if (this->GetGraphicsContext() != nullptr) 
 		{ 
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return;

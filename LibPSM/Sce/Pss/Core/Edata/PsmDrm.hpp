@@ -7,7 +7,7 @@
 #include <iostream>
 
 namespace Sce::Pss::Core::Edata {
-	static const std::string FakeRifLocation = "/Application/FAKE.rif";
+	static const std::string FakeRifLocation = "/License/FAKE.rif";
 
 	class PsmDrm : public Errorable {
 	private:

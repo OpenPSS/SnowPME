@@ -32,6 +32,7 @@ namespace Sce::Pss::Core::Graphics {
 	
 	class GraphicsContext : public GraphicsObject {
 	private:
+		static GraphicsContext* activeGraphicsContext;
 		const int shaderProgramHandleOffset = 0;
 		const int frameBufferHandleOffset = 1;
 		const int vertexBufferHandleOffset = 4;
