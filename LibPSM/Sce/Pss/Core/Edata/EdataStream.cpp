@@ -1,7 +1,14 @@
 #include <Sce/Pss/Core/Edata/EdataStream.hpp>
+
+#include <Sce/Pss/Core/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Crypto/Keys.hpp>
 #include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
+
 #include <Sce/Pss/Core/Crypto/Md5Hash.hpp>
+#include <Sce/Pss/Core/Edata/EdataHeader.hpp>
+#include <Sce/Pss/Core/Crypto/AesCbc.hpp>
+
+#include <Sce/Pss/Core/Edata/PsmDrm.hpp>
 #include <LibShared.hpp>
 #include <filesystem>
 #include <errno.h>
@@ -10,6 +17,9 @@ using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
+	static const int PsseBlockSize = 0x8000;
+	static const int PsseSignatureBlockSize = 0x80000;
+	static const int PsseSignatureSize = 0x400;
 
 	void EdataStream::rollIv(uint64_t blockNo, uint8_t blockIv[0x10]) {
 		memset(blockIv, 0x00, sizeof(EdataStream::fileIv));
@@ -19,13 +29,13 @@ namespace Sce::Pss::Core::Edata {
 	}
 
 	uint64_t EdataStream::getBlockAbsFileOffset(uint64_t blockNo) {
-		uint64_t blockPosition = blockNo * EdataStream::PsseBlockSize;
+		uint64_t blockPosition = blockNo * PsseBlockSize;
 
 		if (blockNo == 0) {
 			blockPosition = sizeof(EdataHeader);
 		}
-		else if (blockPosition % EdataStream::PsseSignatureBlockSize == 0) {
-			blockPosition += EdataStream::PsseSignatureSize;
+		else if (blockPosition % PsseSignatureBlockSize == 0) {
+			blockPosition += PsseSignatureSize;
 		}
 
 		return blockPosition;
@@ -37,10 +47,10 @@ namespace Sce::Pss::Core::Edata {
 
 	uint64_t EdataStream::absFileOffsetToDecryptedFileOffset(uint64_t offset) {
 
-		uint64_t totalSignatures = (offset / EdataStream::PsseSignatureBlockSize);
+		uint64_t totalSignatures = (offset / PsseSignatureBlockSize);
 
 		uint64_t decryptedOffset = offset;
-		decryptedOffset -= (EdataStream::PsseSignatureSize * totalSignatures);
+		decryptedOffset -= (PsseSignatureSize * totalSignatures);
 		decryptedOffset -= sizeof(EdataHeader);
 
 		return decryptedOffset;
@@ -49,16 +59,16 @@ namespace Sce::Pss::Core::Edata {
 		uint64_t absfileLocation = offset;
 		absfileLocation += sizeof(EdataHeader);
 
-		uint64_t totalSignatures = (absfileLocation / EdataStream::PsseSignatureBlockSize);
-		absfileLocation += (EdataStream::PsseSignatureSize * totalSignatures);
+		uint64_t totalSignatures = (absfileLocation / PsseSignatureBlockSize);
+		absfileLocation += (PsseSignatureSize * totalSignatures);
 
 		return absfileLocation;
 	}
 
 	uint64_t EdataStream::getBlockIdForOffset(uint64_t offset) {
 		uint64_t absFileOffset = this->decryptedOffsetToAbsFileOffset(offset);
-		absFileOffset -= (absFileOffset % EdataStream::PsseBlockSize);
-		return absFileOffset / EdataStream::PsseBlockSize;
+		absFileOffset -= (absFileOffset % PsseBlockSize);
+		return absFileOffset / PsseBlockSize;
 	}
 
 	void EdataStream::getNewBlockIfDifferent(uint64_t blockNo) {
@@ -77,8 +87,8 @@ namespace Sce::Pss::Core::Edata {
 
 		this->block = blockNo;
 
-		uint64_t blockPosition = blockNo * EdataStream::PsseBlockSize;
-		size_t totalRead = EdataStream::PsseBlockSize;
+		uint64_t blockPosition = blockNo * PsseBlockSize;
+		size_t totalRead = PsseBlockSize;
 		uint64_t trimTo = totalRead;
 
 		// Handle special processing ...
@@ -87,14 +97,14 @@ namespace Sce::Pss::Core::Edata {
 			totalRead -= sizeof(EdataHeader);
 			trimTo = totalRead;
 		}
-		else if (blockPosition % EdataStream::PsseSignatureBlockSize == 0) {
-			blockPosition += EdataStream::PsseSignatureSize;
-			totalRead -= EdataStream::PsseSignatureSize;
+		else if (blockPosition % PsseSignatureBlockSize == 0) {
+			blockPosition += PsseSignatureSize;
+			totalRead -= PsseSignatureSize;
 			trimTo = totalRead;
 		}
 
 		// total amount of bytes read so far
-		uint64_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (EdataStream::PsseSignatureSize * (blockPosition / EdataStream::PsseSignatureBlockSize)));
+		uint64_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PsseSignatureSize * (blockPosition / PsseSignatureBlockSize)));
 
 		if (blockNo >= this->totalBlocks) { // Is this the last block?
 			totalRead = this->header.FileSize - readAmount;
@@ -136,18 +146,22 @@ namespace Sce::Pss::Core::Edata {
 	size_t EdataStream::getRemainLength(size_t length, size_t totalRead) {
 		return length - totalRead;
 	}
-	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm) {
+
+	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
 		memset(this->titleKey, 0x00, sizeof(EdataStream::titleKey));
 		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
 
-		// Copy the game key into this folder
-		if (drm != nullptr) {
+		this->EncryptedDataList = edata;
+
+		// copy the titlekey into this object
+		if(drm != nullptr)
 			drm->GetTitleKey(this->titleKey);
-		}
+
+		memset(&this->header, 0x00, sizeof(EdataHeader));
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
-			this->totalBlocks = (this->totalFileSize / EdataStream::PsseBlockSize);
+			this->totalBlocks = (this->totalFileSize / PsseBlockSize);
 
 			this->osHandle = new std::fstream(file, mode);
 
@@ -155,6 +169,12 @@ namespace Sce::Pss::Core::Edata {
 
 			if (this->osHandle->fail() || !this->osHandle->is_open()) {
 				Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
+
+				if (this->osHandle != nullptr) {
+					delete this->osHandle;
+					this->osHandle = nullptr;
+				}
+
 				switch (errno) {
 				case EPERM:
 					this->SetError(PSM_ERROR_ACCESS_DENIED);
@@ -169,48 +189,60 @@ namespace Sce::Pss::Core::Edata {
 					this->SetError(PSM_ERROR_COMMON_IO);
 					break;
 				}
+
 				return;
+
 			}
 
 			// handle psse ;
 
 			// read psse header
-			this->osHandle->read((char*)&this->header, sizeof(EdataStream::header));
+			if (this->EncryptedDataList == nullptr || this->EncryptedDataList->IsFileInEdata(file)) {
+				this->osHandle->read((char*)&this->header, sizeof(EdataStream::header));
 
-			// check header is PSSE or PSME
-			if (this->osHandle->gcount() >= sizeof(EdataHeader) && memcmp(this->header.Magic, "PSSE", sizeof(EdataHeader::Magic)) == 0 || memcmp(this->header.Magic, "PSME", sizeof(EdataHeader::Magic)) == 0) {
+				// check header is PSSE or PSME
+				if (this->osHandle->gcount() >= sizeof(EdataHeader) &&
+					memcmp(this->header.Magic, "PSSE", sizeof(EdataHeader::Magic)) == 0 ||
+					memcmp(this->header.Magic, "PSME", sizeof(EdataHeader::Magic)) == 0) {
 
-				this->FileEncrypted = true;
+					this->FileEncrypted = true;
 
-				// check version & type is not 1
-				if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
-					Logger::Error(file + " Has an invalid PSSE header.");
-					this->SetError(PSM_ERROR_COMMON_IO);
+					// check version & type is not 1
+					if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
+						Logger::Error(file + " Has an invalid PSSE header.");
+
+						if (this->osHandle != nullptr) {
+							delete this->osHandle;
+							this->osHandle = nullptr;
+						}
+
+						this->SetError(PSM_ERROR_COMMON_IO);
+						return;
+					}
+
+					// is runtime file?
+					if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
+						std::memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
+					}
+
+					// if no content id set then this is psm developer assistant application
+					this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
+					std::memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
+
+					// decrypt the IV from the file header
+					CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
+					this->aes = new AesCbc(this->titleKey, this->fileIv);
+
+					// decrypt first block from the PSSE'd file
+					decryptBlock(this->block);
 					return;
 				}
-
-				// is runtime file?
-				if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
-					memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
-				}
-				
-				// if no content id set then this is psm developer assistant application
-				this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
-
-				memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
-
-				// decrypt the IV from the file header
-				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
-
-				this->aes = new AesCbc(this->titleKey, this->fileIv);
-
-				// decrypt first block from the PSSE'd file
-				decryptBlock(this->block);
-				return;
 			}
+			
 			this->FileEncrypted = false;
 			this->osHandle->clear();
 			this->osHandle->seekg(0, std::ios::beg);
+			return;
 		}
 		else {
 			this->SetError(PSM_ERROR_FILE_NOT_FOUND);
@@ -224,6 +256,11 @@ namespace Sce::Pss::Core::Edata {
 
 		if (this->osHandle != nullptr && this->osHandle->is_open()) {
 			this->Close();
+		}
+
+		if (this->osHandle != nullptr) {
+			delete this->osHandle;
+			this->osHandle = nullptr;
 		}
 	}
 

@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_PSSE_STREAM_H
 #define LIB_PSS_PSSE_STREAM_H 1
 #include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Edata/EdataHeader.hpp>
 #include <Sce/Pss/Core/Edata/PsmDrm.hpp>
 #include <Sce/Pss/Core/Crypto/AesCbc.hpp>
@@ -9,8 +10,6 @@
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Edata {
-	
-
 	class EdataStream : public PsmObject {
 	private:
 		std::fstream* osHandle = nullptr;
@@ -45,15 +44,14 @@ namespace Sce::Pss::Core::Edata {
 
 		uint64_t getBlockIdForOffset(uint64_t offset);
 
-	public:
-		static const int PsseBlockSize = 0x8000;
-		static const int PsseSignatureBlockSize = 0x80000;
-		static const int PsseSignatureSize = 0x400;
-
-		bool FileEncrypted = false;
 		
 
-		EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm);
+	public:
+
+		bool FileEncrypted = false;
+		EdataList* EncryptedDataList = nullptr;
+
+		EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
 		~EdataStream();
 		uint64_t Filesize();
 		int Read(char* buffer, size_t length);

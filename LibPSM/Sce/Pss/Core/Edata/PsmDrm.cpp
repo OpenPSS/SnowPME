@@ -7,6 +7,7 @@ using namespace Sce::Pss::Core::Io;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Edata {
+
 	PsmDrm::PsmDrm(std::string licenseFile) {
 		uint64_t handle = -1;
 		ScePsmDrmLicense rifData;
@@ -18,10 +19,11 @@ namespace Sce::Pss::Core::Edata {
 			err = ICall::PsmFileRead(handle, &rifData, sizeof(ScePsmDrmLicense), &wasRead);
 			
 			if (err == PSM_ERROR_NO_ERROR) {
-				this->contentId = std::string(rifData.ContentId, sizeof(rifData.ContentId));
+				this->psmContentId = std::string(rifData.ContentId, sizeof(rifData.ContentId));
 				memcpy(this->titleKey, rifData.Key, sizeof(this->titleKey));
 
-				Logger::Debug("RIF Content ID: " + this->contentId);
+				Logger::Debug("RIF Content ID: " + this->psmContentId);
+
 			}
 			else {
 				this->SetError(err);
@@ -33,12 +35,15 @@ namespace Sce::Pss::Core::Edata {
 			this->SetError(err);
 		}
 	}
+
 	PsmDrm::PsmDrm(std::string contentId, uint8_t* titleKey) {
-		this->contentId = contentId;
+		this->psmContentId = contentId;
 		memcpy(this->titleKey, titleKey, sizeof(this->titleKey));
 	}
+	
+
 	std::string PsmDrm::GetContentId() {
-		return this->contentId;
+		return this->psmContentId;
 	}
 
 	void PsmDrm::GetTitleKey(uint8_t* outTitleKey) {

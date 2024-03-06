@@ -1,5 +1,6 @@
 #include <String/StringUtil.hpp>
 #include <String/Path.hpp>
+
 #include <vector>
 
 namespace Shared::String {

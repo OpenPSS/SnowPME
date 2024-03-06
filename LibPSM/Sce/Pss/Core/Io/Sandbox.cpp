@@ -11,6 +11,7 @@
 
 using namespace Shared;
 using namespace Shared::Debug;
+using namespace Shared::String;
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Edata;
 
@@ -74,12 +75,11 @@ namespace Sce::Pss::Core::Io {
 		Sandbox::ApplicationSandbox = this;
 
 		this->readLicenseData();
-
 	}
 
 	int Sandbox::readLicenseData() {
-		if (this->PathExist("/License/FAKE.rif", true)) {
-			this->GameDrmProvider = new PsmDrm("/License/FAKE.rif");
+		if (this->PathExist(FakeRifLocation, true)) {
+			this->GameDrmProvider = new PsmDrm(FakeRifLocation);
 			ReturnErrorable(this->GameDrmProvider);
 		}
 		return PSM_ERROR_NO_ERROR;
@@ -103,12 +103,13 @@ namespace Sce::Pss::Core::Io {
 		if (handle->opened && !handle->directory && handle->edataStream != NULL) {
 			// Close the file
 			size_t oldPos = handle->edataStream->Tell();
+			EdataList* edata = handle->edataStream->EncryptedDataList;
 
 			if(handle->edataStream != nullptr)
 				delete handle->edataStream;
 
 			// Open the file again
-			handle->edataStream = new EdataStream(handle->realPath, handle->iflags, this->GameDrmProvider);
+			handle->edataStream = new EdataStream(handle->realPath, handle->iflags, this->GameDrmProvider, edata);
 
 			// Seek to where we were.
 			handle->edataStream->Seek(oldPos, SCE_PSS_FILE_SEEK_TYPE_BEGIN);
@@ -203,9 +204,11 @@ namespace Sce::Pss::Core::Io {
 		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
-		//if (filesystem->IsEncrypted())
-		//	psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
-
+		if (filesystem->GetEdataList() != nullptr) {
+			if (filesystem->GetEdataList()->IsFileInEdata(absPath)) {
+				psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
+			}
+		}
 
 		return psmPathInformation;
 	}
@@ -357,9 +360,10 @@ namespace Sce::Pss::Core::Io {
 			openmode |= std::ios::binary;
 		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0) {
-			openmode &= std::ios::binary;
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0) { 
+			openmode |= std::ios::binary; // need to open as binary anyway in the case of decrypted files, on VITA binary and text open are the same anyway.
 		}
+
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0) {
 			openmode |= std::ios::ate;
 		}
@@ -378,7 +382,7 @@ namespace Sce::Pss::Core::Io {
 	
 		handle->iflags = openmode;
 
-		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider);
+		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider, filesystem->GetEdataList(this->GameDrmProvider));
 		if (str->GetError() == PSM_ERROR_NO_ERROR) {
 			handle->failReason = PSM_ERROR_NO_ERROR;
 			handle->opened = true;
@@ -695,7 +699,7 @@ namespace Sce::Pss::Core::Io {
 		// Limit str to PSM_PATH_MAX.
 		sandboxedPath = sandboxedPath.substr(0, PSM_PATH_MAX);
 
-		std::string startDir = Sandbox::currentWorkingDirectory;
+		std::string startDir = this->GetCurrentDirectory();
 
 		// Check if string starts with a /, and act as though the working direcory is the root
 		if (sandboxedPath.length() >= 1 && sandboxedPath[0] == '/')

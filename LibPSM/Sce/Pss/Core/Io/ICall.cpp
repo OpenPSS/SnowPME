@@ -137,11 +137,11 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int ICall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
+		Logger::Debug(__FUNCTION__);
 		return ICall::PsmFileOpenSystem(pszFileName, uOpenFlags, phFile, false);
 	}
 
 	int ICall::PsmFileOpenSystem(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem) {
-		Logger::Debug(__FUNCTION__);
 		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 

@@ -34,6 +34,7 @@
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Log.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\NetworkInformation.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\LocationDeviceType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\ActionType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\Clipboard.hpp" />

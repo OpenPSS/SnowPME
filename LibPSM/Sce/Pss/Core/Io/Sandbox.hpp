@@ -2,9 +2,10 @@
 #define LIB_PSS_SANDBOX_H 1
 #include <Sce/Pss/Core/Io/DirectoryIterator.hpp>
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Io/PsmFileDescriptor.hpp>
+#include <Sce/Pss/Core/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Edata/PsmDrm.hpp>
+#include <Sce/Pss/Core/Edata/EdataList.hpp>
 
 #include <vector>
 #include <fstream>
@@ -18,9 +19,11 @@ namespace Sce::Pss::Core::Io {
 	private:
 		std::string currentWorkingDirectory;
 		std::vector<FileSystem*> filesystems;
+		
 		FileSystem* findFilesystem(std::string sandboxedPath, bool includeSystem);
 		void reopen(PsmFileDescriptor* handle);
 		int readLicenseData();
+
 
 	public:
 		static Sandbox* ApplicationSandbox;
