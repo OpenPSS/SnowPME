@@ -1,6 +1,8 @@
 #ifndef LIB_PSS_CRYPTOLIBRARY_H 
 #define LIB_PSS_CRYPTOLIBRARY_H
 #include <vector>
+#include <stdint.h>
+#include <stddef.h>
 
 
 namespace Sce::Pss::Core::Crypto {

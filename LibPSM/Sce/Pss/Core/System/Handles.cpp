@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Error.hpp>
+#include <string.h>
 namespace Sce::Pss::Core::System {
 	static uintptr_t addresses[Handles::MaxHandle];
 	static bool wasInit = false;

@@ -3,6 +3,7 @@
 #include "CXMLFile.hpp"
 #include "CXMLReader.hpp"
 #include "CXMLAttributeBase.hpp"
+#include <vector>
 
 namespace LibCXML {
 

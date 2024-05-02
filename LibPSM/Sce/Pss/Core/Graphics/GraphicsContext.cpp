@@ -8,6 +8,8 @@
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
+#include <string.h>
+#include <math.h>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
@@ -375,7 +377,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("notifyFlag & GraphicsUpdate::LineWidth");
 
 				float lnAdd = state->LineWidth + 0.5;
-				float lnFloor = std::floor(lnAdd);
+				float lnFloor = floor(lnAdd);
 				float lnBase = 1.0;
 				if (lnFloor >= 1.0)
 				{
@@ -730,8 +732,8 @@ namespace Sce::Pss::Core::Graphics {
 
 			// set internal state to nulls
 
-			std::memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
-			std::memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
+			memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
+			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
 
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 

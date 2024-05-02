@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_THREAD_H
 #define LIB_PSS_THREAD_H 1
 #include <vector>
+#include <stdint.h>
 
 namespace Sce::Pss::Core::Threading {
 	class Thread {

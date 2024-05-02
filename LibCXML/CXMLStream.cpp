@@ -30,9 +30,9 @@ namespace LibCXML {
 		return str;
 	}
 
-	wchar* CXMLStream::ReadWStrLen(size_t sz) {
-		wchar* str = (wchar*)(this->buffer + this->pos);
-		pos += sz * sizeof(wchar);
+	wchar_t* CXMLStream::ReadWStrLen(size_t sz) {
+		wchar_t* str = (wchar_t*)(this->buffer + this->pos);
+		pos += sz * sizeof(wchar_t);
 		return str;
 	}
 
@@ -42,9 +42,9 @@ namespace LibCXML {
 		return str;
 	}
 
-	wchar* CXMLStream::ReadWStr() {
-		wchar* str = (wchar*)(this->buffer + this->pos);
-		pos += (wcslen(str)) + (sizeof(wchar));
+	wchar_t* CXMLStream::ReadWStr() {
+		wchar_t* str = (wchar_t*)(this->buffer + this->pos);
+		pos += (wcslen(str)) + (sizeof(wchar_t));
 		return str;
 	}
 

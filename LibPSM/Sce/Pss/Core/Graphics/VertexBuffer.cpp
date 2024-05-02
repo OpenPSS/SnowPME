@@ -8,6 +8,7 @@
 #include <Sce/Pss/Core/Vector4.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;

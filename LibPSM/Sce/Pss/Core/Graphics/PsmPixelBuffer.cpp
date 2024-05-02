@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Graphics/PixelBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/PsmPixelBuffer.hpp>
-#include <Sce/PSs/Core/Graphics/Texture2D.hpp>
+#include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 
 #include <Sce/Pss/Core/System/Handles.hpp>

@@ -1,5 +1,5 @@
 #include <Sce/Pss/Core/Callback/Callbacks.hpp>
-#include <exception>
+#include <stdexcept>
 
 namespace Sce::Pss::Core::Callback {
 
@@ -7,7 +7,7 @@ namespace Sce::Pss::Core::Callback {
 
 	void Callbacks::errorOnNotInitalized() {
 		if (Callbacks::isInitalized == false) {
-			throw std::exception("AudioCallbacks is not initalized,");
+			throw std::runtime_error("AudioCallbacks is not initalized,");
 		}
 	}
 

@@ -17,9 +17,9 @@ namespace LibCXML {
 		float ReadFloat();
 		double ReadDouble();
 		char* ReadStr();
-		wchar* ReadWStr();
+		wchar_t* ReadWStr();
 		char* ReadStrLen(size_t sz);
-		wchar* ReadWStrLen(size_t sz);
+		wchar_t* ReadWStrLen(size_t sz);
 		void Seek(size_t pos);
 	};
 }

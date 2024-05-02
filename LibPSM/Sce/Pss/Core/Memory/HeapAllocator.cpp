@@ -72,7 +72,7 @@ namespace Sce::Pss::Core::Memory {
 	}
 	HeapAllocator* HeapAllocator::GetResourceHeapAllocator() {
 		if (HeapAllocator::resourceHeapAllocator == nullptr)
-			throw std::exception("resource heap allocator is not yet initalized.");
+			throw std::runtime_error("resource heap allocator is not yet initalized.");
 
 		return HeapAllocator::resourceHeapAllocator;
 	}

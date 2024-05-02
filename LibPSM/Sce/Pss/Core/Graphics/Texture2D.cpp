@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
+#include <string.h>
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Graphics;

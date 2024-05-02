@@ -11,6 +11,7 @@
 #include <mono/mono.h>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
 using namespace Shared::Debug;
 

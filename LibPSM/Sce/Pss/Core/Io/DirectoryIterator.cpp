@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <filesystem>
+#include <cstring>
 
 #include <LibShared.hpp>
 using namespace Sce::Pss::Core::System;
@@ -64,7 +65,7 @@ namespace Sce::Pss::Core::Io {
 			psmPathInformation = Sandbox::ApplicationSandbox->Stat(prevStackItem.sandboxPath, Path::Combine(item.relativePath, ".."));
 		}
 		else {
-			if (iterator._At_end()) {
+			if (iterator == std::filesystem::end(iterator)) {
 				delete item.iterator; // delete current iterator
 				this->folderStack.pop_back();// Pop from the stack, and set current directory to the previous one.
 

@@ -6,6 +6,7 @@
 
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
+#include <cstring>
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Services {
@@ -18,7 +19,7 @@ namespace Sce::Pss::Core::Services {
 		if (length > 0x10)
 			length = 0x10;
 
-		memcpy(id, username.c_str(), length);
+		std::memcpy(id, username.c_str(), length);
 
 		return PSM_ERROR_NO_ERROR;
 	}

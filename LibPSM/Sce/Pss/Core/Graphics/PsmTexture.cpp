@@ -8,7 +8,7 @@
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
-#include <Sce/PSs/Core/System/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
 

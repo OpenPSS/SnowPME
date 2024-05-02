@@ -1,6 +1,8 @@
 #ifndef LIB_PSS_HANDLES_H
 #define LIB_PSS_HANDLES_H 1
 #include <map>
+#include <cstddef>
+#include <stdint.h>
 
 namespace Sce::Pss::Core::System {
 	class Handles {

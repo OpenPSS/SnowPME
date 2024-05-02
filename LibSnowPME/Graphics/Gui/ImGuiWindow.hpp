@@ -12,8 +12,8 @@ namespace SnowPME::Graphics::Gui {
 		bool windowOpen = true;
 		bool windowShown = true;
 		std::string createWindowTitle(std::string windowTitle);
-		virtual void updateWindow() = NULL;
-		virtual void renderWindow() = NULL;
+		virtual void updateWindow() = 0;
+		virtual void renderWindow() = 0;
 	public:
 		ImGuiWindow();
 		~ImGuiWindow();

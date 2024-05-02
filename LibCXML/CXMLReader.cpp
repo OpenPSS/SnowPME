@@ -2,6 +2,7 @@
 #include "CXMLReader.hpp"
 #include "CXMLElement.hpp"
 #include <fstream>
+#include <string.h>
 
 namespace LibCXML {
 	bool CXMLReader::checkMagicNumber(const char* magic) {
@@ -29,7 +30,7 @@ namespace LibCXML {
 		this->cxmlFile->read((char*)&this->cxmlHeader, sizeof(CxmlFileHeader));
 
 		if (!checkMagicNumber(magic)) {
-			throw new std::exception("CXML File is invalid or corrupt");
+			throw std::runtime_error("CXML File is invalid or corrupt");
 		}
 
 		this->TreeTable			= readTable(this->cxmlHeader.treeTable);

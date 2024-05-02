@@ -7,6 +7,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
@@ -215,7 +216,7 @@ namespace Sce::Pss::Core::Graphics {
 		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 		uint8_t* cgxData = resourceHeap->sce_psm_malloc(shaderLen);
 		if (cgxData != nullptr) {
-			std::memcpy(cgxData, shaderSrc, shaderLen);
+			memcpy(cgxData, shaderSrc, shaderLen);
 			return cgxData;
 		}
 		else {

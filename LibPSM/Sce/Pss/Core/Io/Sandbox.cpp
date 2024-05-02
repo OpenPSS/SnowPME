@@ -132,7 +132,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		throw std::exception("FileSystem not found ?? ??");
+		throw std::runtime_error("FileSystem not found ?? ??");
 	}
 
 	size_t Sandbox::ReadFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
@@ -346,6 +346,16 @@ namespace Sce::Pss::Core::Io {
 		// Calculate mode
 
 		std::fstream::ios_base::openmode openmode = 0;
+#if   defined(_MSC_VER)
+		const std::ios::openmode noreplace = std::ios::_Noreplace;
+		const std::ios::openmode nocreate = std::ios::_Nocreate;
+#elif defined(__GNUC__)
+		const std::ios::openmode noreplace = std::ios::__noreplace;
+		#warning "std::ios::_Nocreate is not implemented in GCC (FIXME)"
+		const std::ios::openmode nocreate = 0;
+#else
+		#error "TODO"
+#endif
 
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {
@@ -355,7 +365,7 @@ namespace Sce::Pss::Core::Io {
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) {
 			openmode |= std::ios::out;
 
-			openmode |= std::ios::_Nocreate;
+			openmode |= nocreate;
 			openmode |= std::ios::trunc;
 		}
 
@@ -372,11 +382,11 @@ namespace Sce::Pss::Core::Io {
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
-			openmode |= std::ios::_Noreplace;
+			openmode |= noreplace;
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) {
-			openmode &= ~std::ios::_Nocreate;
+			openmode &= ~nocreate;
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0) {

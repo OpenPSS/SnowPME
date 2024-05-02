@@ -4,6 +4,7 @@
 #include <LibShared.hpp>
 #include <fstream>
 #include <filesystem>
+#include <string.h>
 using namespace Shared::String;
 using namespace Shared::Debug;
 

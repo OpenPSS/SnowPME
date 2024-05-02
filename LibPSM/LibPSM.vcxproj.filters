@@ -737,5 +737,11 @@
     <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Services\CommandResults.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

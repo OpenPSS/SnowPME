@@ -14,7 +14,7 @@ namespace SnowPME::Graphics {
 	Window::Window(int height, int width, std::string title) {
 		if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
 			Logger::Error("Failed to initalize SDL2.");
-			throw std::exception("Failed to initalize SDL2.");
+			throw std::runtime_error("Failed to initalize SDL2.");
 		};
 
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -28,14 +28,14 @@ namespace SnowPME::Graphics {
 		
 		if (this->sdlWindow == NULL) {
 			Logger::Error("Failed to create SDL window.");
-			throw std::exception("Failed to create SDL window.");
+			throw std::runtime_error("Failed to create SDL window.");
 		}
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
 
 		if (!gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress)) {
 			Logger::Error("Failed to initalize GL.");
-			throw std::exception("Failed to initalize GL.");
+			throw std::runtime_error("Failed to initalize GL.");
 		}
 
 		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);

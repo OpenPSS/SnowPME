@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
 #include <Sce/Pss/Core/Crypto/Algorithms/Algorithms.hpp>
+#include <stdexcept>
 
 namespace Sce::Pss::Core::Crypto {
 	void CryptoLibrary::HmacSha256(const uint8_t key[0x20], uint8_t out[0x20], uint8_t* in, size_t insize) {
@@ -35,7 +36,7 @@ namespace Sce::Pss::Core::Crypto {
 
 	void CryptoLibrary::Aes128CbcDecrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize) {
 		if (datasize % AES_BLOCKLEN != 0)
-			throw std::exception("data is not aligned to block size.");
+			throw std::runtime_error("data is not aligned to block size.");
 
 		struct AES_ctx ctx;
 		AES_init_ctx_iv(&ctx, key, iv);
@@ -44,7 +45,7 @@ namespace Sce::Pss::Core::Crypto {
 
 	void CryptoLibrary::Aes128CbcEncrypt(const uint8_t key[0x10], const uint8_t iv[0x10], uint8_t* data, size_t datasize) {
 		if (datasize % AES_BLOCKLEN != 0)
-			throw std::exception("data is not aligned to block size.");
+			throw std::runtime_error("data is not aligned to block size.");
 
 		struct AES_ctx ctx;
 		AES_init_ctx_iv(&ctx, key, iv);

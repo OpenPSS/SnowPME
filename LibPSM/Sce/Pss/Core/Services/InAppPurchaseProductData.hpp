@@ -2,12 +2,11 @@
 #define LIB_PSS_INAPPPURCHASEPRODUCTDATA_H
 #include <string>
 
-
 namespace Sce::Pss::Core::Services {
 	typedef struct InAppPurchaseProductData {
-		std::string Label;
-		std::string Name;
-		std::string Price;
+		char* Label;
+		char* Name;
+		char* Price;
 		int pad;
 		unsigned int TicketType;
 		bool TicketIsOK;

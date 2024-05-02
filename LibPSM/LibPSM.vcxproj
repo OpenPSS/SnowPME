@@ -215,6 +215,8 @@
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\CommandResults.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommand.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp" />

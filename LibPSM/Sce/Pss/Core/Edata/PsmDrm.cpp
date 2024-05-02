@@ -2,6 +2,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <LibShared.hpp>
+#include <string.h>
 
 using namespace Sce::Pss::Core::Io;
 using namespace Shared::Debug;

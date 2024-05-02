@@ -8,6 +8,7 @@
 #include <LibShared.hpp>
 #include <mono/mono.h>
 #include <iostream>
+#include <string.h>
 
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Io;

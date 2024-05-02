@@ -12,6 +12,7 @@
 #include <LibShared.hpp>
 #include <filesystem>
 #include <errno.h>
+#include <string.h>
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Crypto;
@@ -168,7 +169,7 @@ namespace Sce::Pss::Core::Edata {
 			// if stream errors, return error code
 
 			if (this->osHandle->fail() || !this->osHandle->is_open()) {
-				Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
+				Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + strerror(errno));
 
 				if (this->osHandle != nullptr) {
 					delete this->osHandle;
@@ -222,12 +223,12 @@ namespace Sce::Pss::Core::Edata {
 
 					// is runtime file?
 					if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
-						std::memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
+						memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
 					}
 
 					// if no content id set then this is psm developer assistant application
 					this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
-					std::memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
+					memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
 
 					// decrypt the IV from the file header
 					CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
