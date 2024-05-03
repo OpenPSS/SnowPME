@@ -364,8 +364,6 @@ namespace Sce::Pss::Core::Io {
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) {
 			openmode |= std::ios::out;
-
-			openmode |= nocreate;
 			openmode |= std::ios::trunc;
 		}
 
@@ -374,25 +372,38 @@ namespace Sce::Pss::Core::Io {
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0) { 
-			openmode |= std::ios::binary; // need to open as binary anyway in the case of decrypted files, on VITA binary and text open are the same anyway.
+			openmode |= std::ios::binary; // need to open as binary anyway in the case of decrypted files, 
+										  // on VITA & ANDROID binary and text open are the same anyway.
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0) {
 			openmode |= std::ios::ate;
 		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
-			openmode |= noreplace;
-		}
-
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) {
-			openmode &= ~nocreate;
-		}
-
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0) {
 			openmode &= ~std::ios::trunc;
 		}
-	
+		
+		if (openRw) {
+			// handle NOCREATE
+			if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) == 0) {
+				if (!this->PathExist(sandboxedPath, false)) {
+					handle->opened = false;
+					handle->failReason = PSM_ERROR_FILE_NOT_FOUND;
+					return handle;
+				}
+			}
+
+			// handle NOREPLACE
+			if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
+				if (this->PathExist(sandboxedPath, false)) {
+					handle->opened = false;
+					handle->failReason = PSM_ERROR_ALREADY_EXISTS;
+					return handle;
+				}
+			}
+		}
+
 		handle->iflags = openmode;
 
 		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider, filesystem->GetEdataList(this->GameDrmProvider));

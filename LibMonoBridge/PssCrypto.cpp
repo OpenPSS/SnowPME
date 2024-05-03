@@ -1,79 +1,98 @@
 #include <LibShared.hpp>
-#include <LibPSM.hpp>
-#include <PssCrypto.hpp>
-#include <mono/mono.h>
+#include <Sce/Pss/Core/Error.hpp>
 
-#include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
+#include <PssCryptoCallbacks.h>
+#include <PssCryptoSeek.h>
+#include <PssCryptoContext.h>
+#include <PssCrypto.h>
+#include <mono/mono.h>
 
 #include <string>
 #include <iostream>
 #include <fstream>
 
 using namespace Shared::Debug;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Edata;
+static PssCryptoCallbacks efuncs;
 
+int ScePsmEdataMonoInit(PssCryptoCallbacks* edataFunctions) {
+	Logger::Debug(">>>>>>>>>> ScePsmEdataMonoInit inside");
+	if (edataFunctions != nullptr) {
+		Logger::Debug(">>>>>>>>>> ScePsmEdataMonoInit Initializing");
+
+		efuncs.eOpen = edataFunctions->eOpen;
+		efuncs.eClose = edataFunctions->eClose;
+		efuncs.eRead = edataFunctions->eRead;
+		efuncs.eSeek = edataFunctions->eSeek;
+	}
+
+	return PSM_ERROR_NO_ERROR;
+}
+
+int mapToEdataSeek(int whence)
+{
+	// TODO: wtf are these seek whence? whats 0, where is 3???? 
+	if (whence == SEEK_CUR)
+		return PssCryptoSeekCur;
+	if (whence == SEEK_END)
+		return PssCryptoSeekEnd;
+	return PssCryptoSeekSet;
+}
+
+long workaround_seek(PssCryptoContext* context, long offset, int whence)
+{
+	long totalSeeked = 0;
+	int whencePss = mapToEdataSeek(whence);
+	Logger::Debug("Seeking handle: " + std::to_string(context->handle) + ", offset: " + std::to_string(offset) + ", whence: " + std::to_string(whencePss) + "[" + std::to_string(whence) + "]");
+	int res = efuncs.eSeek(context->handle, offset, whencePss, &totalSeeked);
+	Logger::Debug("Seek returned: " + std::to_string(res) + ", size: "+std::to_string(totalSeeked)+" [" + std::to_string(totalSeeked) + "]");
+
+	if (!res)
+		return totalSeeked;
+
+	Logger::Debug("scePsmEdataLseek failed with "+std::to_string(res));
+	return (long)res;
+}
 
 int pss_crypto_open(PssCryptoContext* context, const char* path) {
-	Logger::Debug(__FUNCTION__);
-	Logger::Debug("file: " + std::string(path));
+	context->valid = 0;
 
-	if (context != nullptr) {
-		memset(context, 0, sizeof(PssCryptoContext));
-
-		EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::ApplicationSandbox->GameDrmProvider, nullptr);
-		ReturnErrorableAsBool(stream);
-
-		context->handle = stream->Handle;
-		context->size = stream->Filesize();
-		context->type = SCE_PSS_FILE_FLAG_READONLY;
-		context->valid = true;
-
-		return true;
+	if(efuncs.eOpen(path, 1, 0, &context->handle, &context->type) == PSM_ERROR_NO_ERROR) {
+		long sz = workaround_seek(context, 0x1, SEEK_END);
+		workaround_seek(context, 0x0, SEEK_SET);
+		Logger::Debug("Getting size: " + std::to_string(sz));
+		context->size = sz + 1;
+		context->valid = 1;
 	}
-	Logger::Debug("file not found .");
-	return false;
+
+	return context->valid;
 }
 
 char* pss_crypto_read(PssCryptoContext* context) {
-	Logger::Debug(__FUNCTION__);
-	if (context != nullptr) {
-		if (Handles::IsValid(context->handle)) {
-			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
+	int totalRead = 0;
+	char* ptr = new char[context->size];
 
-			char* data = new char[context->size];
-			str->Read(data, context->size);
-			return data;
-		}
+	if (ptr == nullptr) {
 		return nullptr;
 	}
+
+	if ((efuncs.eRead(context->handle, ptr, context->size, &totalRead) == PSM_ERROR_NO_ERROR) && context->size == totalRead) {
+		return ptr;
+	}
+	
+	delete[] ptr;
 	return nullptr;
 }
 
 int pss_crypto_fread(PssCryptoContext* context, char* buffer, int bytes) {
-	Logger::Debug(__FUNCTION__);
-	if (context != nullptr) {
-		if (Handles::IsValid(context->handle)) {
-			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
-
-			return str->Read(buffer, bytes);
-		}
-		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-	}
-	return PSM_ERROR_COMMON_ARGUMENT_NULL;
+	int totalRead = 0;
+	efuncs.eRead(context->handle, buffer, bytes, &totalRead);
+	return totalRead;
 }
 
 void pss_crypto_close(PssCryptoContext* context) {
-	Logger::Debug(__FUNCTION__);
-	if (context != nullptr) {
-		if (Handles::IsValid(context->handle)) {
-			EdataStream* str = (EdataStream*)Handles::GetHandle(context->handle);
-			context->handle = Handles::NoHandle;
-			context->valid = false;
-			delete str;
-		}
+	if (context->valid)
+	{
+		efuncs.eClose(context->handle);
+		context->valid = 0;
 	}
 }

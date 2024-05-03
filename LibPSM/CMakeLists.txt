@@ -56,6 +56,8 @@ add_library(LibPSM STATIC
     Sce/Pss/Core/Audio/BgmPlayer.cpp
     Sce/Pss/Core/Audio/SoundPlayer.cpp
     Sce/Pss/Core/Audio/BgmStatus.hpp
+    Sce/Pss/Core/Mono/Init.cpp
+    Sce/Pss/Core/Mono/Init.hpp
     Sce/Pss/Core/Mono/Util.cpp
     Sce/Pss/Core/Mono/Util.hpp
     Sce/Pss/Core/Mono/Security.cpp
@@ -67,8 +69,8 @@ add_library(LibPSM STATIC
     Sce/Pss/Core/Callback/AudioCallbacks.hpp
     Sce/Pss/Core/Callback/WindowCallbacks.hpp
     Sce/Pss/Core/Callback/WindowCallbacks.cpp
-    Sce/Pss/Core/Callback/Callbacks.hpp
-    Sce/Pss/Core/Callback/Callbacks.cpp
+    Sce/Pss/Core/Callback/CallbackBase.hpp
+    Sce/Pss/Core/Callback/CallbackBase.cpp
     Sce/Pss/Core/Callback/AudioCallbacks.cpp
     Sce/Pss/Core/Edata/EdataHeader.hpp
     Sce/Pss/Core/Edata/PsmDrm.hpp
@@ -78,6 +80,8 @@ add_library(LibPSM STATIC
     Sce/Pss/Core/Edata/EdataStream.cpp
     Sce/Pss/Core/Edata/EdataStream.hpp
     Sce/Pss/Core/Edata/EdataList.cpp
+    Sce/Pss/Core/Edata/Callbacks.cpp
+    Sce/Pss/Core/Edata/Callbacks.hpp
     Sce/Pss/Core/Input/GamePadData.hpp
     Sce/Pss/Core/Input/Touch.hpp
     Sce/Pss/Core/Input/GamePad.cpp
@@ -260,5 +264,6 @@ target_link_libraries(LibPSM PRIVATE
     LibCXML
     LibShared
     LibPSSMono
-    glad    
+    LibMonoBridge
+    glad
 )

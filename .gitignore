@@ -3,33 +3,33 @@ Win32/*
 Debug/*
 build/
 
-External/lib/*/LibPSM.idb
-External/lib/*/LibPSM.lib
-External/lib/*/LibPSM.pdb
+External/Win32/lib/*/LibPSM.idb
+External/Win32/lib/*/LibPSM.lib
+External/Win32/lib/*/LibPSM.pdb
 
-External/lib/*/LibCXML.idb
-External/lib/*/LibCXML.lib
-External/lib/*/LibCXML.pdb
+External/Win32/lib/*/LibCXML.idb
+External/Win32/lib/*/LibCXML.lib
+External/Win32/lib/*/LibCXML.pdb
 
-External/lib/*/LibGLAD.idb
-External/lib/*/LibGLAD.lib
-External/lib/*/LibGLAD.pdb
+External/Win32/lib/*/LibGLAD.idb
+External/Win32/lib/*/LibGLAD.lib
+External/Win32/lib/*/LibGLAD.pdb
 
-External/lib/*/LibSnowPME.idb
-External/lib/*/LibSnowPME.lib
-External/lib/*/LibSnowPME.pdb
+External/Win32/lib/*/LibSnowPME.idb
+External/Win32/lib/*/LibSnowPME.lib
+External/Win32/lib/*/LibSnowPME.pdb
 
-External/lib/*/LibShared.idb
-External/lib/*/LibShared.lib
-External/lib/*/LibShared.pdb
+External/Win32/lib/*/LibShared.idb
+External/Win32/lib/*/LibShared.lib
+External/Win32/lib/*/LibShared.pdb
 
-External/lib/*/LibMonoBridge.idb
-External/lib/*/LibMonoBridge.lib
-External/lib/*/LibMonoBridge.pdb
+External/Win32/lib/*/LibMonoBridge.idb
+External/Win32/lib/*/LibMonoBridge.lib
+External/Win32/lib/*/LibMonoBridge.pdb
 
-External/lib/*/LibImGui.idb
-External/lib/*/LibImGui.lib
-External/lib/*/LibImGui.pdb
+External/Win32/lib/*/LibImGui.idb
+External/Win32/lib/*/LibImGui.lib
+External/Win32/lib/*/LibImGui.pdb
 
 *.aps
 *.obj

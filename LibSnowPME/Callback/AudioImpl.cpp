@@ -1,8 +1,8 @@
 #include <Callback/AudioImpl.hpp>
 #include <Callback/AudioObject.hpp>
 
-#include <sdl/SDL.h>
-#include <sdl/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include <exception>
 #include <mutex>
 #include <cstring>

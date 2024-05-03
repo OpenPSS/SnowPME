@@ -8,9 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(LibMonoBridge
     LibMonoBridge.hpp
     PssCrypto.cpp
-    PssCrypto.hpp
+    PssCryptoCallbacks.h
+    PssCryptoContext.h
+    PssCryptoSeek.h
 )
 
 target_compile_options(LibMonoBridge PRIVATE -Wall -Wextra)
 
-target_link_libraries(LibMonoBridge PRIVATE LibPSM)
+target_link_libraries(LibMonoBridge PRIVATE LibPSM LibShared)
+
+target_include_directories(LibMonoBridge PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

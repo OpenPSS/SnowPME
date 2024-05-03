@@ -316,18 +316,11 @@ namespace Sce::Pss::Core::Edata {
 				this->position += position;
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->totalFileSize - position;
+				this->position = this->Filesize() - position;
 				break;
 			default:
-				return PSM_ERROR_ERROR;
+				return PSM_ERROR_INVALID_PARAMETER;
 			}
-			
-			if (this->position > this->Filesize())
-				this->position = this->Filesize();
-			if (this->position < 0)
-				this->position = 0;
-
-			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
 		}
 		else{
 			switch (pos) {
@@ -342,30 +335,33 @@ namespace Sce::Pss::Core::Edata {
 				this->osHandle->seekg(position, std::ios::cur);
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->totalFileSize - position;
+				this->position = this->Filesize() - position;
 				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::end);
 				break;
 			default:
-				return PSM_ERROR_ERROR;
+				return PSM_ERROR_INVALID_PARAMETER;
 			}
-
-			if (this->position > this->totalFileSize)
-				this->position = this->totalFileSize;
-
-			if (this->position < 0)
-				this->position = 0;
-
-
-			return PSM_ERROR_NO_ERROR;
 		}
+
+
+		if (this->position > this->Filesize())
+			this->position = this->Filesize();
+
+		if (this->position < 0)
+			this->position = 0;
+
+ 		if (this->FileEncrypted)
+			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	bool EdataStream::IsOpen() {
 		return this->osHandle->is_open();
 	}
 
-	size_t EdataStream::Tell() {
+	uint64_t EdataStream::Tell() {
 		return this->position;
 	}
 

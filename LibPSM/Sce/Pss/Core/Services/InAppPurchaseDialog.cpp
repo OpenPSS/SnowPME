@@ -1,4 +1,6 @@
-#include "InAppPurchaseDialog.hpp"
+#include <Sce/Pss/Core/Environment/CommonDialogState.hpp>
+#include <Sce/Pss/Core/Environment/CommonDialogResult.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseDialog.hpp>
 
 namespace Sce::Pss::Core::Services {
 	using namespace Sce::Pss::Core::Environment;

@@ -1,8 +1,8 @@
 #include <LibImGui.hpp>
 #include <Graphics/Gui/SnowGui.hpp>
 #include <Graphics/Gui/ImGuiWindow.hpp>
-#include <sdl/SDL.h>
-#include <sdl/SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
 
 namespace SnowPME::Graphics::Gui {
 	void SnowGui::setupImgui() {

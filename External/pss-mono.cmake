@@ -5,15 +5,15 @@ if(WIN32)
 
     if(${CMAKE_BUILD_TYPE} EQUAL "Debug")
         set_target_properties(LibPSSMono PROPERTIES
-            IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/lib/Debug/monosgen-2.0.lib
+            IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/Win32/lib/Debug/monosgen-2.0.lib
         )
     else()
         set_target_properties(LibPSSMono PROPERTIES
-            IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/lib/Release/monosgen-2.0.lib
+            IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/Win32/lib/Release/monosgen-2.0.lib
         )
     endif()
 
-    target_include_directories(LibPSSMono PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
+    target_include_directories(LibPSSMono PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Win32/include)
 else()
     set(MAKE_CFLAGS "-DTARGET_PSS -DPSS_USE_CRYPTO -DHAVE_ISINF=1 -include sys/sysmacros.h")
 
@@ -49,5 +49,5 @@ else()
     add_custom_target(monosgen DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libmonosgen-static.a)
     add_dependencies(LibPSSMono monosgen)
 
-    target_include_directories(LibPSSMono INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
+    target_include_directories(LibPSSMono INTERFACE ${CMAKE_CURRENT_LIST_DIR}/Linux/include)
 endif()

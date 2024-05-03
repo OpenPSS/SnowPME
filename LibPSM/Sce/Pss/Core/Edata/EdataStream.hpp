@@ -1,5 +1,5 @@
-#ifndef LIB_PSS_PSSE_STREAM_H
-#define LIB_PSS_PSSE_STREAM_H 1
+#ifndef LIB_PSS_EDATASTREAM_H
+#define LIB_PSS_EDATASTREAM_H 1
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Edata/EdataHeader.hpp>
@@ -61,7 +61,7 @@ namespace Sce::Pss::Core::Edata {
 		void Close();
 		bool Verify();
 		void Flush();
-		size_t Tell();
+		uint64_t Tell();
 	};
 }
 
