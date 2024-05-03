@@ -15,7 +15,7 @@ if(WIN32)
 
     target_include_directories(LibPSSMono INTERFACE ${CMAKE_CURRENT_LIST_DIR}/Win32/include)
 else()
-    set(MAKE_CFLAGS "-DTARGET_PSS -DPSS_USE_CRYPTO -DHAVE_ISINF=1 -include sys/sysmacros.h")
+    set(MAKE_CFLAGS "-DTARGET_PSS -DPSS_USE_CRYPTO -DHAVE_ISINF=1 -g")
 
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libmonosgen-static.a ${CMAKE_CURRENT_BINARY_DIR}/libeglib-static.a
