@@ -24,7 +24,7 @@
     <ClCompile Include="Sce\Pss\Core\Audio\Sound.cpp" />
     <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Callback\Callbacks.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesCbc.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
@@ -34,6 +34,7 @@
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Log.cpp" />
@@ -58,6 +59,7 @@
     <ClCompile Include="Sce\Pss\Core\Input\Touch.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Init.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
@@ -106,7 +108,7 @@
     <ClInclude Include="Sce\Pss\Core\Audio\SoundPlayer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
     <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Callback\Callbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesCbc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
@@ -125,6 +127,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\LocationDeviceType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\Callbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\ActionType.hpp" />
@@ -212,6 +215,7 @@
     <ClInclude Include="Sce\Pss\Core\Io\PsmFileDescriptor.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Init.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
@@ -335,7 +339,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)\LibMonoBridge;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

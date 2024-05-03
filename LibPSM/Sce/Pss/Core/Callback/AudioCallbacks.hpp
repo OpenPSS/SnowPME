@@ -1,10 +1,10 @@
 #ifndef LIB_PSS_AUDIOCALLBACKS_H
 #define LIB_PSS_AUDIOCALLBACKS_H 1
-#include <Sce/Pss/Core/Callback/Callbacks.hpp>
+#include <Sce/Pss/Core/Callback/CallbackBase.hpp>
 #include <string>
 
 namespace Sce::Pss::Core::Callback {
-    class AudioCallbacks : public Callbacks {
+    class AudioCallbacks : public CallbackBase {
 	private:
 		static void* (*openMp3)(uint8_t* data, size_t dataSz);
 		static void  (*closeMp3)(void* bgmObject);

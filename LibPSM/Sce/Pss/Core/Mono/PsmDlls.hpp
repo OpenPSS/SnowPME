@@ -1,5 +1,5 @@
 #ifndef LIB_PSS_PSMDLLS_H
-#define LIB_PSS_PSMDLLS_H !
+#define LIB_PSS_PSMDLLS_H 1
 #include <cstdint>
 #include <string>
 

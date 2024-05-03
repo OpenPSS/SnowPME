@@ -1,9 +1,9 @@
-#ifndef LIB_PSS_EDATA_HEADER_H
-#define LIB_PSS_EDATA_HEADER_H 1
+#ifndef LIB_PSS_EDATAHEADER_H
+#define LIB_PSS_EDATAHEADER_H 1
 #include <iostream>
 
 namespace Sce::Pss::Core::Edata {
-	typedef struct EdataHeader {
+	typedef struct _EdataHeader {
 		char     Magic[0x4];
 		uint32_t Version;
 		uint64_t FileSize;

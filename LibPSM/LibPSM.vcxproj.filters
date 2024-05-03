@@ -219,9 +219,6 @@
     <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Callback\Callbacks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -244,6 +241,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Mono\Init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -692,9 +698,6 @@
     <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Callback\Callbacks.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -741,6 +744,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Mono\Init.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Edata\Callbacks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

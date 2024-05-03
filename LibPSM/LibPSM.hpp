@@ -35,20 +35,8 @@
 #include <Sce/Pss/Core/Services/NetworkRequest.hpp>
 #include <Sce/Pss/Core/Services/Network.hpp>
 
-#include <Sce/Pss/Core/System/PlatformSpecific.hpp>
-#include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
-#include <Sce/Pss/Core/Io/Sandbox.hpp>
-#include <Sce/Pss/Core/Io/FileSystem.hpp>
-#include <Sce/Pss/Core/Mono/Resources.hpp>
-#include <Sce/Pss/Core/Mono/Security.hpp>
-#include <Sce/Pss/Core/Mono/Util.hpp>
-#include <Sce/Pss/Core/Timing/DeltaTime.hpp>
-#include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
-
+// things calling app has to setup :
+#include <Sce/Pss/Core/Mono/Init.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
 
