@@ -13,15 +13,13 @@
 #include <glad/glad.h>
 #include <string.h>
 
-using namespace Shared::Debug;
-
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Graphics {
-
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Graphics;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::System;
 
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
 		Logger::Debug(__FUNCTION__);

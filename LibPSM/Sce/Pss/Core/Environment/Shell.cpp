@@ -3,9 +3,11 @@
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <LibShared.hpp>
-using namespace Sce::Pss::Core::System;
+
 
 namespace Sce::Pss::Core::Environment {
+	using namespace Sce::Pss::Core::System;
+
 	Shell::Shell(ActionType type, char* p0, char* p1, char* p2, char* p3) {
 
 		this->type = type;

@@ -9,13 +9,13 @@
 
 #include <LibShared.hpp>
 
-using namespace Shared;
-using namespace Shared::Debug;
-using namespace Shared::String;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Edata;
 
 namespace Sce::Pss::Core::Io {
+	using namespace Shared;
+	using namespace Shared::Debug;
+	using namespace Shared::String;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Edata;
 
 	Sandbox* Sandbox::ApplicationSandbox = nullptr;
 
@@ -345,14 +345,14 @@ namespace Sce::Pss::Core::Io {
 
 		// Calculate mode
 
-		std::fstream::ios_base::openmode openmode = 0;
+		std::fstream::ios_base::openmode openmode = static_cast<std::ios::openmode>(0);
 #if   defined(_MSC_VER)
 		const std::ios::openmode noreplace = std::ios::_Noreplace;
 		const std::ios::openmode nocreate = std::ios::_Nocreate;
 #elif defined(__GNUC__)
 		const std::ios::openmode noreplace = std::ios::__noreplace;
 		#warning "std::ios::_Nocreate is not implemented in GCC (FIXME)"
-		const std::ios::openmode nocreate = 0;
+		const std::ios::openmode nocreate = static_cast<std::ios::openmode>(0);
 #else
 		#error "TODO"
 #endif

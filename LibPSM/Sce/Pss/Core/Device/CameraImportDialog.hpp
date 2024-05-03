@@ -8,9 +8,9 @@
 #include "../Environment/CommonDialogResult.hpp"
 
 
-using namespace Sce::Pss::Core::Environment;
-
 namespace Sce::Pss::Core::Device {
+	using namespace Sce::Pss::Core::Environment;
+
 	class CameraImportDialog {
 	private:
 		typedef struct DialogArguments { } DialogArguments;

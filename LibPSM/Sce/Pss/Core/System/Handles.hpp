@@ -9,7 +9,7 @@ namespace Sce::Pss::Core::System {
 	private:
 		static void init();		
 	public:
-		static const int NoHandle = NULL;
+		static const int NoHandle = 0x0;
 		static const int MinHandle = 0x1;
 		static const int MaxHandle = 0x500000;
 		static bool IsValid(int handle);

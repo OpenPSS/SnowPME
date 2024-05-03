@@ -2,6 +2,7 @@
 #define LIB_PSS_AUDIOCALLBACKS_H 1
 #include <Sce/Pss/Core/Callback/Callbacks.hpp>
 #include <string>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Callback {
     class AudioCallbacks : public Callbacks {

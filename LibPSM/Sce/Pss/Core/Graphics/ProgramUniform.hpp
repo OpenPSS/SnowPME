@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_PROGRAMUNIFORM
 #define LIB_PSS_PROGRAMUNIFORM 1
 #include <string>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Graphics {
 	typedef struct ProgramUniform {

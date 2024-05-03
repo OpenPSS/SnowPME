@@ -2,6 +2,7 @@
 #define LIB_PSS_UNIQUEID_H 1
 
 #include <string>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Services {
 	class UniqueId {

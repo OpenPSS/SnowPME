@@ -7,10 +7,10 @@
 #include <vector>
 #include <filesystem>
 
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Edata;
 
 namespace Sce::Pss::Core::Io {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Edata;
 	 
 	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated, bool system) {
 		this->sandboxPath = sandboxPathName;

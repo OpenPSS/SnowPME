@@ -3,11 +3,10 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <LibShared.hpp>
 
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Callback;
-using namespace Shared::Debug;
-
 namespace Sce::Pss::Core::Audio {
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Callback;
+	using namespace Shared::Debug;
 
 	BgmPlayer::BgmPlayer(Bgm* bgm) {
 		this->audioBgm = bgm;

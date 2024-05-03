@@ -1,13 +1,14 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/Environment/SystemEvents.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
-
 #include <LibShared.hpp>
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Environment;
-using namespace Sce::Pss::Core::Callback;
+
 
 namespace Sce::Pss::Core::Environment {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Environment;
+	using namespace Sce::Pss::Core::Callback;
+
 	bool SystemEvents::lastMinimized = false;
 	bool SystemEvents::lastQuit = false;
 	bool SystemEvents::lastRestored = false;

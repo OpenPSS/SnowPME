@@ -1,8 +1,9 @@
 #include <Sce/Pss/Core/Graphics/FrameBuffer.hpp>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
 
 	int FrameBuffer::ActiveStateChanged(bool state) {
 		Logger::Debug(__FUNCTION__);

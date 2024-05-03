@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_TEXTURECUBEFACE_H
 #define LIB_PSS_TEXTURECUBEFACE_H 1
 #include <string>
+#include <cstdint>
 namespace Sce::Pss::Core::Graphics {
 	enum class TextureCubeFace : uint8_t {
 		PositiveX = 0,

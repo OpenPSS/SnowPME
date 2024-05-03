@@ -4,9 +4,10 @@
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
 
 	bool CGX::headerIsValid() {
 		if (this->cgxBuf == nullptr) {

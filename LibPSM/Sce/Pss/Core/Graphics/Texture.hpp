@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Graphics/PixelBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
 #include <glad/glad.h>
+
 namespace Sce::Pss::Core::Graphics {
 	class Texture : public PixelBuffer {
 	private:

@@ -7,10 +7,10 @@
 #include <Sce/Pss/Core/Graphics/VertexFormat.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::Graphics;
+	using namespace Sce::Pss::Core;
 
 	typedef uint16_t half;
 	typedef int8_t byte;

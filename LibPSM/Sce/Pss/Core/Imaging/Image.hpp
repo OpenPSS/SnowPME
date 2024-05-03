@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdint>
 #include "ImageSize.hpp"
 #include "ImageColor.hpp"
 #include "ImageRect.hpp"

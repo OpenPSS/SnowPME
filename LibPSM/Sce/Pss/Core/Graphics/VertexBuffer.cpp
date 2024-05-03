@@ -10,11 +10,11 @@
 #include <glad/glad.h>
 #include <string.h>
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Threading;
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Shared::Debug;
 
 	bool VertexBuffer::GetFormatElementNormalize(VertexFormat format) {
 		switch (format) {

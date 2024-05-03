@@ -8,16 +8,16 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Mono/Util.hpp>
 
-
 #include <LibShared.hpp>
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Threading;
+
 
 namespace Sce::Pss::Core::Graphics {
-	
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Graphics;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Threading;
+
 	int PsmVertexBuffer::Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray* formats, int* result) {
 		Logger::Debug(__FUNCTION__);
 

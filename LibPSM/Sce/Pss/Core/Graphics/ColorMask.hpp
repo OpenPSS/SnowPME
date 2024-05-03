@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_COLORMASK_H
 #define LIB_PSS_COLORMASK_H
 #include <string>
+#include <cstdint>
 #include <Sce/Pss/Core/BitwiseEnum.hpp>
 
 

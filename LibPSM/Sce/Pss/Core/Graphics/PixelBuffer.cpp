@@ -8,11 +8,11 @@
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Memory;
-using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Memory;
+	using namespace Sce::Pss::Core::Io;
 
 	PixelBuffer::PixelBuffer() {
 	}

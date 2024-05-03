@@ -3,10 +3,10 @@
 #include <LibShared.hpp>
 #include <string>
 
-using namespace Shared::String;
-using namespace Shared::Debug;
-
 namespace Sce::Pss::Core::Edata {
+	using namespace Shared::String;
+	using namespace Shared::Debug;
+
 	bool EdataList::IsFileInEdata(std::string path) {
 		for (std::string edataFile : this->edataFilesList) {
 			if (StringUtil::ToLower(edataFile) == StringUtil::ToLower(path)) {

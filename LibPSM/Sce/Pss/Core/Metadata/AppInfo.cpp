@@ -1,10 +1,11 @@
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 #include <LibShared.hpp>
 #include <LibCXML.hpp>
-using namespace LibCXML;
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Metadata {
+	using namespace LibCXML;
+	using namespace Shared::Debug;
 
 	AppInfo* AppInfo::CurrentApplication = nullptr;
 

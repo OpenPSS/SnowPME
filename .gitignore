@@ -1,6 +1,7 @@
 .vs/*
 Win32/*
 Debug/*
+build/
 
 External/lib/*/LibPSM.idb
 External/lib/*/LibPSM.lib
@@ -33,3 +34,6 @@ External/lib/*/LibImGui.pdb
 *.aps
 *.obj
 *.user
+*.o
+Makefile-autogen.mk
+.vscode/settings.json

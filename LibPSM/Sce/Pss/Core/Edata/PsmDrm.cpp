@@ -4,10 +4,9 @@
 #include <LibShared.hpp>
 #include <string.h>
 
-using namespace Sce::Pss::Core::Io;
-using namespace Shared::Debug;
-
 namespace Sce::Pss::Core::Edata {
+	using namespace Sce::Pss::Core::Io;
+	using namespace Shared::Debug;
 
 	PsmDrm::PsmDrm(std::string licenseFile) {
 		uint64_t handle = -1;

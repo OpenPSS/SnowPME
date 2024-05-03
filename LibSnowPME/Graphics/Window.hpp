@@ -1,9 +1,8 @@
 #ifndef SNOW_PME_WINDOW_H
 #define SNOW_PME_WINDOW_H 1
-#include <sdl/SDL.h>
 #include <cstdint>
 #include <string>
-#include <sdl/SDL.h>
+#include <SDL.h>
 
 namespace SnowPME::Graphics {
 	class Window {

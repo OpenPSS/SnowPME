@@ -7,11 +7,13 @@
 #include <LibShared.hpp>
 
 #include <mono/mono.h>
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Services;
+
 
 namespace Sce::Pss::Core::Services {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Services;
+
 	int AccountInformation::GetUniqueID(MonoArray* id) {
 		Logger::Debug(__FUNCTION__);
 

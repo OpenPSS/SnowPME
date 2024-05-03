@@ -1,5 +1,6 @@
 #include <Graphics/Gui/MsgBox.hpp>
 #include <LibImGui.hpp>
+#include <cstdint>
 
 namespace SnowPME::Graphics::Gui {
 

@@ -14,10 +14,11 @@
 #include <errno.h>
 #include <string.h>
 
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Crypto;
+
 	static const int PsseBlockSize = 0x8000;
 	static const int PsseSignatureBlockSize = 0x80000;
 	static const int PsseSignatureSize = 0x400;

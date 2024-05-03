@@ -10,11 +10,12 @@
 #include <cstring>
 
 #include <LibShared.hpp>
-using namespace Sce::Pss::Core::System;
-using namespace Shared::String;
-using namespace Shared;
+
 
 namespace Sce::Pss::Core::Io {
+	using namespace Sce::Pss::Core::System;
+	using namespace Shared::String;
+	using namespace Shared;
 
 	DirectoryIterator::DirectoryIterator(std::string relativePath, bool recursive) {
 		

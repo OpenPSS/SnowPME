@@ -14,10 +14,11 @@
 #include <Sce/Pss/Core/Vector3.hpp>
 #include <Sce/Pss/Core/Vector4.hpp>
 #include <Sce/Pss/Core/Matrix4.hpp>
-using namespace Sce::Pss::Core;
 
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+
 	class PsmShaderProgram {
 	public:
 		static int FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString*  constKeys, int* constVals, int* result);

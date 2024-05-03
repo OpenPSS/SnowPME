@@ -10,13 +10,13 @@
 #include <iostream>
 #include <string.h>
 
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Memory;
-using namespace Sce::Pss::Core::Callback;
-using namespace Shared::Debug;
-
 namespace Sce::Pss::Core::Audio {
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Io;
+	using namespace Sce::Pss::Core::Memory;
+	using namespace Sce::Pss::Core::Callback;
+	using namespace Shared::Debug;
+
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
 			if (memcmp(this->audioData, "ID3", 3) == 0) {

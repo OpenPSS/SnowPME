@@ -5,19 +5,21 @@
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
+#include <Sce/Pss/Core/Graphics/ColorMask.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
 #include <math.h>
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Callback;
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Callback;
+	using namespace Shared::Debug;
+
 	GraphicsContext* GraphicsContext::activeGraphicsContext = nullptr;
 
 	GraphicsContext* GraphicsContext::GetGraphicsContext() {
@@ -365,11 +367,13 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::ColorMask) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ColorMask");
 
+				using namespace Sce::Pss::Core::Graphics;
+
 				glColorMask(
-					(state->ColorMask & ColorMask::R) != ColorMask::None,
-					(state->ColorMask & ColorMask::G) != ColorMask::None,
-					(state->ColorMask & ColorMask::B) != ColorMask::None,
-					(state->ColorMask & ColorMask::A) != ColorMask::None);
+					(state->ColorMask & ColorMask::R) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::G) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::B) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::A) != Sce::Pss::Core::Graphics::ColorMask::None);
 
 			}
 

@@ -9,11 +9,11 @@
 #include <glad/glad.h>
 #include <string.h>
 
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Io;
+	using namespace Sce::Pss::Core::Memory;
 	
 	int ShaderProgram::compileShader(int type, char* source) {
 		int shader = glCreateShader(type);

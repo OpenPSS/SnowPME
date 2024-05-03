@@ -3,9 +3,11 @@
 #include <iostream>
 #include <mutex>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Memory {
+	using namespace Shared::Debug;
+
 	HeapAllocator* HeapAllocator::resourceHeapAllocator = nullptr;
 
 	HeapAllocator::HeapAllocator(size_t heapSize, std::string heapName) {

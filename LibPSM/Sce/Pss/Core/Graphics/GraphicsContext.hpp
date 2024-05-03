@@ -24,11 +24,9 @@
 #include <mono/mono.h>
 #include <glad/glad.h>
 
-using namespace Sce::Pss::Core::Imaging;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::Timing;
-
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::Imaging;
+	using namespace Sce::Pss::Core::Timing;
 	
 	class GraphicsContext : public GraphicsObject {
 	private:

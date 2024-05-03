@@ -1,8 +1,10 @@
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 
-using Sce::Pss::Core::System::Handles;
+
 namespace Sce::Pss::Core {
+	using Sce::Pss::Core::System::Handles;
+
 	PsmObject::PsmObject() {
 		this->Handle = Handles::CreateHandle((uintptr_t)this);
 	}

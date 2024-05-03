@@ -8,10 +8,11 @@
 #include <mono/mono.h>
 
 #include <LibShared.hpp>
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::System;
+
 
 namespace Sce::Pss::Core::Io {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::System;
 
 	int ICall::PsmClose(uint64_t handle) {
 		Logger::Debug(__FUNCTION__);

@@ -13,16 +13,16 @@
 #include <iostream>
 #include <string>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
 
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::Graphics;
+	using namespace Sce::Pss::Core::Io;
+	using namespace Sce::Pss::Core::System;
 
 	int PsmShaderProgram::FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result) {
 		Logger::Debug(__FUNCTION__);

@@ -2,6 +2,8 @@
 #define SHARED_CONFIG_H 1
 #include <RuntimeImplementation.hpp>
 #include <string>
+#include <cstdint>
+
 namespace Shared
 {
 #define GET_CFG_KEY_STR(name) if (key == #name) Config::name = value
