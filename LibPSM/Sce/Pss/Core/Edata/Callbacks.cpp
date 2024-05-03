@@ -15,17 +15,15 @@ namespace Sce::Pss::Core::Edata {
 		Logger::Debug(__FUNCTION__);
 		Logger::Debug("file: " + std::string(path));
 
-		if (handle != nullptr) {
+		if (handle != nullptr && type != nullptr) {
 			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::ApplicationSandbox->GameDrmProvider, nullptr);
 			ReturnErrorable(stream);
 
 			*handle = stream->Handle;
 
-			if (type != nullptr) {
-				*type = SCE_PSS_FILE_FLAG_READONLY;
-				if (stream->FileEncrypted)
-					*type |= SCE_PSS_FILE_FLAG_ENCRYPTED;
-			}
+			*type = SCE_PSS_FILE_FLAG_READONLY;
+			if (stream->FileEncrypted)
+				*type |= SCE_PSS_FILE_FLAG_ENCRYPTED;
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -35,16 +33,11 @@ namespace Sce::Pss::Core::Edata {
 	}
 	int Callbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
 		Logger::Debug(__FUNCTION__);
-		int amtRead = 0;
 
-		if (Handles::IsValid(handle)) {
+		if (Handles::IsValid(handle) && totalRead != nullptr) {
 			EdataStream* stream = (EdataStream*)Handles::GetHandle(handle);
 
-			amtRead = stream->Read((char*)buffer, toRead);
-			
-			if (totalRead != nullptr) {
-				*totalRead = amtRead;
-			}
+			*totalRead = stream->Read((char*)buffer, toRead);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -52,7 +45,7 @@ namespace Sce::Pss::Core::Edata {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int Callbacks::EdataSeek(int handle, long offset, int whence, long* totalSeeked) {
-		if (Handles::IsValid(handle)) {
+		if (Handles::IsValid(handle) && totalSeeked != nullptr) {
 			EdataStream* stream = (EdataStream*)Handles::GetHandle(handle);
 
 			ScePssFileSeekType_t whenceType = SCE_PSS_FILE_SEEK_TYPE_BEGIN;
@@ -69,13 +62,10 @@ namespace Sce::Pss::Core::Edata {
 			uint64_t endPos = stream->Tell();
 
 			if (err == PSM_ERROR_NO_ERROR) {
-				if (totalSeeked != nullptr) {
-				
-					if (startPos >= endPos)
-						*totalSeeked = (long)(startPos - endPos);
-					else if (endPos >= startPos)
-						*totalSeeked = (long)(endPos - startPos);
-				}
+				if (startPos >= endPos)
+					*totalSeeked = (long)(startPos - endPos);
+				else if (endPos >= startPos)
+					*totalSeeked = (long)(endPos - startPos);
 			}
 			else {
 				return err;

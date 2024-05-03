@@ -344,19 +344,7 @@ namespace Sce::Pss::Core::Io {
 		}
 
 		// Calculate mode
-
 		std::fstream::ios_base::openmode openmode = 0;
-#if   defined(_MSC_VER)
-		const std::ios::openmode noreplace = std::ios::_Noreplace;
-		const std::ios::openmode nocreate = std::ios::_Nocreate;
-#elif defined(__GNUC__)
-		const std::ios::openmode noreplace = std::ios::__noreplace;
-		#warning "std::ios::_Nocreate is not implemented in GCC (FIXME)"
-		const std::ios::openmode nocreate = 0;
-#else
-		#error "TODO"
-#endif
-
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {
 			openmode |= std::ios::in;
@@ -364,8 +352,6 @@ namespace Sce::Pss::Core::Io {
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) {
 			openmode |= std::ios::out;
-
-			openmode |= nocreate;
 			openmode |= std::ios::trunc;
 		}
 
@@ -381,18 +367,27 @@ namespace Sce::Pss::Core::Io {
 			openmode |= std::ios::ate;
 		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
-			openmode |= noreplace;
-		}
-
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) {
-			openmode &= ~nocreate;
-		}
-
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0) {
 			openmode &= ~std::ios::trunc;
 		}
 	
+		// handle NOCREATE and NOREPLACE ...
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) == 0) {
+			if (!this->PathExist(sandboxedPath, false)) {
+				handle->opened = false;
+				handle->failReason = PSM_ERROR_FILE_NOT_FOUND;
+				return handle;
+			}
+		}
+
+		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
+			if (this->PathExist(sandboxedPath, false)) {
+				handle->opened = false;
+				handle->failReason = PSM_ERROR_ALREADY_EXISTS;
+				return handle;
+			}
+		}
+
 		handle->iflags = openmode;
 
 		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider, filesystem->GetEdataList(this->GameDrmProvider));
