@@ -52,7 +52,7 @@ namespace Sce::Pss::Core::Mono {
 	int Init::initMonoAssembly(std::string exeFile) {
 		Thread::SetMainThread();
 
-		appExe = exeFile;
+		Init::appExe = exeFile;
 
 		int heapSizeLimit = AppInfo::CurrentApplication->ManagedHeapSize * 0x400;
 		int resourceSizeLimit = AppInfo::CurrentApplication->ResourceHeapSize * 0x400;

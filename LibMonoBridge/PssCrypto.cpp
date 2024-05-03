@@ -56,7 +56,7 @@ long workaround_seek(PssCryptoContext* context, long offset, int whence)
 int pss_crypto_open(PssCryptoContext* context, const char* path) {
 	context->valid = 0;
 
-	if(!efuncs.eOpen(path, 1, 0, &context->handle, &context->type)) {
+	if(efuncs.eOpen(path, 1, 0, &context->handle, &context->type) == PSM_ERROR_NO_ERROR) {
 		long sz = workaround_seek(context, 0x1, SEEK_END);
 		workaround_seek(context, 0x0, SEEK_SET);
 		Logger::Debug("Getting size: " + std::to_string(sz));
@@ -75,7 +75,7 @@ char* pss_crypto_read(PssCryptoContext* context) {
 		return nullptr;
 	}
 
-	if ((!efuncs.eRead(context->handle, ptr, context->size, &totalRead)) && context->size == totalRead) {
+	if ((efuncs.eRead(context->handle, ptr, context->size, &totalRead) == PSM_ERROR_NO_ERROR) && context->size == totalRead) {
 		return ptr;
 	}
 	

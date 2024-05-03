@@ -339,7 +339,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)\LibMonoBridge;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -359,7 +359,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
