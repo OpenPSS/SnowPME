@@ -9,7 +9,7 @@ namespace SnowPME {
 		Graphics::Gui::SnowGui* gui = nullptr;
 		void startMonoApplication(std::string gamePath);
 	public:
-		Program();
+		Program(int argc, const char* const* argv);
 		~Program();
 	};
 

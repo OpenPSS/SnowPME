@@ -10,10 +10,12 @@ namespace SnowPME::Graphics {
 		SDL_Window* sdlWindow = nullptr;
 		SDL_GLContext glCtx = nullptr;
 		std::string openGlVersion;
+		float refreshRate;
 		void onResized();
 	public:
 		Window(int height, int width, std::string title);
 		void SwapBuffers();
+		void Vsync(uint32_t frameTaken);
 		uint32_t GetTime();
 		void PollEvents();
 		bool IsMinimized();

@@ -24,12 +24,20 @@ namespace SnowPME::Graphics {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
-		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
+		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
 		
 		if (this->sdlWindow == NULL) {
 			Logger::Error("Failed to create SDL window.");
 			throw std::runtime_error("Failed to create SDL window.");
 		}
+
+		int displayIndex = SDL_GetWindowDisplayIndex(this->sdlWindow);
+		SDL_DisplayMode mode;
+		if (SDL_GetDisplayMode(displayIndex, 0, &mode) != 0) {
+			SDL_Log("Could not get display mode! SDL_Error: %s\n", SDL_GetError());
+			mode.refresh_rate = 60;
+		}
+		this->refreshRate = mode.refresh_rate;
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
 
@@ -76,6 +84,14 @@ namespace SnowPME::Graphics {
 
 	void Window::SwapBuffers() {
 		SDL_GL_SwapWindow(this->sdlWindow);
+	}
+
+	void Window::Vsync(uint32_t frameTaken) {
+		int32_t frameTime = 1000 / this->refreshRate;
+        int32_t frameDelay = frameTime - frameTaken;
+        if (frameDelay > 0) {
+            SDL_Delay(frameDelay);
+        }
 	}
 	
 	bool Window::ShouldClose() {

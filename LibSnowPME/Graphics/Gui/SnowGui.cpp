@@ -36,10 +36,12 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void SnowGui::renderGui() {
-
+		uint32_t frameStart = this->window->GetTime();
 		this->NewFrame();
 		ImGuiWindow::ProcessWindows();
 		this->EndFrame();
+		uint32_t frameEnd = this->window->GetTime();
+		this->window->Vsync(frameEnd - frameStart);
 	}
 
 	void SnowGui::NewFrame() {
