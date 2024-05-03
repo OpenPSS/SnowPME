@@ -23,7 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LibMonoBridge.hpp" />
-    <ClInclude Include="PssCrypto.hpp" />
+    <ClInclude Include="PssCrypto.h" />
+    <ClInclude Include="PssCrypytoContext.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

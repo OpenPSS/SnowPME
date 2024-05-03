@@ -20,10 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PssCrypto.hpp">
+    <ClInclude Include="PssCrypto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LibMonoBridge.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PssCrypytoContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
