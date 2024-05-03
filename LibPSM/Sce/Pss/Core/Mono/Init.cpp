@@ -83,7 +83,7 @@ namespace Sce::Pss::Core::Mono {
 		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
 
 		// Create a domain in which this application will run under.
-		psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
+		Init::psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
 
 		// PSM Icalls
 		pss_io_icall_install_functions(

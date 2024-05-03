@@ -128,7 +128,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -149,7 +149,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -170,7 +170,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -191,7 +191,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
