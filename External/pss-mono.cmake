@@ -13,7 +13,7 @@ if(WIN32)
         )
     endif()
 
-    target_include_directories(LibPSSMono PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Win32/include)
+    target_include_directories(LibPSSMono INTERFACE ${CMAKE_CURRENT_LIST_DIR}/Win32/include)
 else()
     set(MAKE_CFLAGS "-DTARGET_PSS -DPSS_USE_CRYPTO -DHAVE_ISINF=1 -include sys/sysmacros.h")
 
