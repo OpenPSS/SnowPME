@@ -371,7 +371,7 @@ namespace Sce::Pss::Core::Io {
 			openmode &= ~std::ios::trunc;
 		}
 	
-		// handle NOCREATE and NOREPLACE ...
+		// handle NOCREATE
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) == 0) {
 			if (!this->PathExist(sandboxedPath, false)) {
 				handle->opened = false;
@@ -380,6 +380,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
+		// handle NOREPLACE
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
 			if (this->PathExist(sandboxedPath, false)) {
 				handle->opened = false;
