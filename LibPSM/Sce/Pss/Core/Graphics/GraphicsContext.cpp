@@ -546,6 +546,20 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsContext::activeGraphicsContext = nullptr;
 	}
 
+	void GraphicsContext::ErrorCallback(
+		GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam
+	) {
+		fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+			type, severity, message );
+	}
+
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
 		if (this->GetGraphicsContext() != nullptr) 
 		{ 
@@ -741,6 +755,8 @@ namespace Sce::Pss::Core::Graphics {
 
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 
+			glEnable(GL_DEBUG_OUTPUT);
+			glDebugMessageCallback(GraphicsContext::ErrorCallback, nullptr);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");

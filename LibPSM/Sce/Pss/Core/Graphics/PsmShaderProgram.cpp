@@ -163,7 +163,26 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmShaderProgram::GetAttributeBinding(int handle, int index, MonoString* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
+		Logger::Debug(__FUNCTION__);
+		if(!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads."); 
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		ShaderProgram* prog = Handles::Get<ShaderProgram>(handle);
+		if (prog == NULL) {
+			Logger::Error("handle was null.");
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		for (ProgramAttribute attribute : prog->Attributes)
+		{
+			if (attribute.Binding == index) {
+				// TODO idk how to make a monostring
+				return PSM_ERROR_NO_ERROR;
+			}
+		}
+
 		return 0;
 	}
 	int PsmShaderProgram::SetAttributeBinding(int handle, int index, MonoString* name) {

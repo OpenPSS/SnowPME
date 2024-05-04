@@ -24,10 +24,10 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
 		Logger::Debug(__FUNCTION__);
 		
-		GraphicsContext* grphxCtx = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
-		ReturnErrorable(grphxCtx);
+		GraphicsContext* graphicsContext = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
+		ReturnErrorable(graphicsContext);
 
-		*result = Handles::Create(grphxCtx);
+		*result = Handles::Create(graphicsContext);
 		
 		return PSM_ERROR_NO_ERROR;
 	}

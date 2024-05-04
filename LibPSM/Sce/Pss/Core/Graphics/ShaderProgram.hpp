@@ -17,7 +17,6 @@ namespace Sce::Pss::Core::Graphics {
 		std::string fragmentSrc = "";
 		std::string vertexSrc = "";
 
-		int getShadersFromCgx(uint8_t* cgxBuf, int cgxSz);
 		int compileShader(int type, char* source);
 
 		ShaderProgramOption* programOptions;

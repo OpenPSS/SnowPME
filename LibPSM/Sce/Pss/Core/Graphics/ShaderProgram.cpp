@@ -43,38 +43,33 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ShaderProgram::getShadersFromCgx(uint8_t* cgxBuf, int cgxSz) {
-		CGX* cgxFile = new CGX(cgxBuf, cgxSz);
-		ReturnErrorable(cgxFile);
-
-		std::string src = cgxFile->FragmentShader("GLSL");
-		if (cgxFile->GetClearError() == PSM_ERROR_NO_ERROR)
-			this->fragmentSrc = src;
-
-		src = cgxFile->VertexShader("GLSL");
-		if (cgxFile->GetClearError() == PSM_ERROR_NO_ERROR)
-			this->vertexSrc = src;
-
-		delete cgxFile;
-		return PSM_ERROR_NO_ERROR;
-	}
-
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
 
 		if (vertexShaderBuf != nullptr) {
-			int res = getShadersFromCgx(vertexShaderBuf, vertexShaderSz);
-			if (res != PSM_ERROR_NO_ERROR) {
-				this->SetError(res);
-				return 0;
+			CGX* cgxFile = new CGX(vertexShaderBuf, vertexShaderSz);
+			ReturnErrorable(cgxFile);
+
+			std::string src = cgxFile->FindVertexShader("GLSL");
+			ReturnErrorable(cgxFile);
+			this->vertexSrc = src;
+
+			if(fragmentShaderBuf == nullptr) {
+				std::string src = cgxFile->FindFragmentShader("GLSL");
+				ReturnErrorable(cgxFile);
+				this->fragmentSrc = src;
 			}
+
+			delete cgxFile;
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			int res = getShadersFromCgx(fragmentShaderBuf, fragmentShaderSz);
-			if (res != PSM_ERROR_NO_ERROR) {
-				this->SetError(res);
-				return 0;
-			}
+			CGX* cgxFile = new CGX(fragmentShaderBuf, fragmentShaderSz);
+			ReturnErrorable(cgxFile);
+
+			std::string src = cgxFile->FindFragmentShader("GLSL");
+			ReturnErrorable(cgxFile);
+			this->fragmentSrc = src;
+			delete cgxFile;
 		}
 
 		this->GLReference = glCreateProgram();
@@ -175,6 +170,9 @@ namespace Sce::Pss::Core::Graphics {
 			this->Attributes.push_back(attribute);
 		}
 		
+		//TODO: temp
+		printf("%s\n", this->vertexSrc.c_str());
+
 		return this->GLReference;
 	}
 
@@ -257,6 +255,11 @@ namespace Sce::Pss::Core::Graphics {
 
 		this->vertexCgxLen = vertexShaderSz;
 		this->fragmentCgxLen = fragmentShaderSz;
+
+		// ignore, this is for debugger breakpoint
+		if(fragmentShaderSz == 0x224) {
+			printf("a");
+		}
 
 		this->GLReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 

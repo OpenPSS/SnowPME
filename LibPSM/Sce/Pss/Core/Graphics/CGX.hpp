@@ -62,17 +62,17 @@ namespace Sce::Pss::Core::Graphics {
 		std::string glesVer;
 
 		CGXHeader header;
-		CGXVarientTableEntry fragmentVarientTableEntry;
-		CGXVarientTableEntry vertexVarientTableEntry;
-		CGXVarient* fragmentVarients = nullptr;
-		CGXVarient* vertexVarients = nullptr;
+		CGXVarientTableEntry fragmentVariantTableEntry;
+		CGXVarientTableEntry vertexVariantTableEntry;
+		CGXVarient* fragmentVariants = nullptr;
+		CGXVarient* vertexVariants = nullptr;
 
 		bool headerIsValid();
 	public:
 		CGX(uint8_t* cgx, size_t cgxSz);
 		~CGX();
-		std::string FragmentShader(std::string shaderLanguage);
-		std::string VertexShader(std::string shaderLanguage);
+		std::string FindFragmentShader(std::string shaderLanguage);
+		std::string FindVertexShader(std::string shaderLanguage);
 	};
 }
 

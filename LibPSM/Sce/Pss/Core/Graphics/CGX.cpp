@@ -4,7 +4,7 @@
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
-
+#include <cstring>
 
 namespace Sce::Pss::Core::Graphics {
 	using namespace Shared::Debug;
@@ -95,41 +95,43 @@ namespace Sce::Pss::Core::Graphics {
 			return;
 		}
 
+		memset((void*)&this->fragmentVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
+		memset((void*)&this->vertexVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
 
-		if (this->header.vertexShaderVarientsPtr != NULL) {
-			memcpy(&this->vertexVarientTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.vertexShaderVarientsPtr), sizeof(CGXVarientTableEntry));
+		if (this->header.vertexShaderVarientsPtr != 0) {
+			memcpy(&this->vertexVariantTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.vertexShaderVarientsPtr), sizeof(CGXVarientTableEntry));
 		
-			this->vertexVarients = new CGXVarient[this->vertexVarientTableEntry.varientCount];
+			this->vertexVariants = new CGXVarient[this->vertexVariantTableEntry.varientCount];
 
-			for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
-				this->vertexVarients[i] = ((CGXVarient*)(this->cgxBuf + this->vertexVarientTableEntry.varientListPtr))[i];
+			for (uint32_t i = 0; i < this->vertexVariantTableEntry.varientCount; i++) {
+				this->vertexVariants[i] = ((CGXVarient*)(this->cgxBuf + this->vertexVariantTableEntry.varientListPtr))[i];
 
-				Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN)));
+				Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN)));
 			}
 		}
 
-		if (this->header.fragmentShaderVarientsPtr != NULL) {
-			memcpy(&this->fragmentVarientTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.fragmentShaderVarientsPtr), sizeof(CGXVarientTableEntry));
+		if (this->header.fragmentShaderVarientsPtr != 0) {
+			memcpy(&this->fragmentVariantTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.fragmentShaderVarientsPtr), sizeof(CGXVarientTableEntry));
 
 
-			this->fragmentVarients = new CGXVarient[this->fragmentVarientTableEntry.varientCount];
+			this->fragmentVariants = new CGXVarient[this->fragmentVariantTableEntry.varientCount];
 
-			for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
-				this->fragmentVarients[i] = ((CGXVarient*)(this->cgxBuf + this->fragmentVarientTableEntry.varientListPtr))[i];
+			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.varientCount; i++) {
+				this->fragmentVariants[i] = ((CGXVarient*)(this->cgxBuf + this->fragmentVariantTableEntry.varientListPtr))[i];
 
-				Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN)));
+				Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN)));
 			}
 
 		}
 	}
-	std::string CGX::VertexShader(std::string shaderLanguage) {
-		if (this->vertexVarients != NULL) {
+	std::string CGX::FindVertexShader(std::string shaderLanguage) {
+		if (this->vertexVariants != NULL) {
 			
-			for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
-				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN));
+			for (uint32_t i = 0; i < this->vertexVariantTableEntry.varientCount; i++) {
+				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN));
 
 				if (foundLanguage == shaderLanguage) {
-					return std::string((char*)(this->cgxBuf + this->vertexVarients[i].sourcePtr), this->vertexVarients[i].sourceSz);
+					return std::string((char*)(this->cgxBuf + this->vertexVariants[i].sourcePtr), this->vertexVariants[i].sourceSz);
 				}
 			}
 
@@ -139,17 +141,15 @@ namespace Sce::Pss::Core::Graphics {
 		return "";
 	}
 
-	std::string CGX::FragmentShader(std::string shaderLanguage) {
-		if (this->fragmentVarients != NULL) {
-
-			for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
-				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN));
+	std::string CGX::FindFragmentShader(std::string shaderLanguage) {
+		if (this->fragmentVariants != NULL) {
+			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.varientCount; i++) {
+				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN));
 
 				if (foundLanguage == shaderLanguage) {
-					return std::string((char*)(this->cgxBuf + this->fragmentVarients[i].sourcePtr), this->fragmentVarients[i].sourceSz);
+					return std::string((char*)(this->cgxBuf + this->fragmentVariants[i].sourcePtr), this->fragmentVariants[i].sourceSz);
 				}
 			}
-
 		}
 
 		ExceptionInfo::AddMessage("Fragment shader not found");
@@ -158,8 +158,8 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	CGX::~CGX() {		
-		delete[] fragmentVarients;
-		delete[] vertexVarients;
+		delete[] fragmentVariants;
+		delete[] vertexVariants;
 	}
 
 
