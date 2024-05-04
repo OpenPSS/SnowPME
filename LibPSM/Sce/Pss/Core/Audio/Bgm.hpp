@@ -7,7 +7,7 @@
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Audio {
-	class Bgm : public PsmObject {
+	class Bgm : public PsmObject<Bgm> {
 		uint8_t* audioData = nullptr;
 		uint32_t audioSz = 0;
 

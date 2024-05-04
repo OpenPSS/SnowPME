@@ -10,7 +10,7 @@
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Edata {
-	class EdataStream : public PsmObject {
+	class EdataStream : public PsmObject<EdataStream> {
 	private:
 		std::fstream* osHandle = nullptr;
 		Sce::Pss::Core::Crypto::AesCbc* aes = nullptr;

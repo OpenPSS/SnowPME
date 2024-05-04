@@ -6,7 +6,7 @@
 #include <Sce/Pss/Core/Errorable.hpp>
 
 namespace Sce::Pss::Core::Graphics {
-	class GraphicsObject : public PsmObject {
+	class GraphicsObject : public PsmObject<GraphicsObject> {
 	private:
 	public:
 		virtual int ActiveStateChanged(bool state) = 0;
