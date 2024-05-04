@@ -148,6 +148,7 @@ namespace Sce::Pss::Core::Io {
 
 		std::string relativePath = std::string(pszFileName);
 		std::string absolutePath = Sandbox::ApplicationSandbox->AbsolutePath(relativePath);
+		Logger::Debug("Accessing: "+relativePath);
 
 		if (!Sandbox::ApplicationSandbox->IsDirectory(absolutePath)) {
 			PsmFileDescriptor* fileHandle = Sandbox::ApplicationSandbox->OpenFile(absolutePath, (ScePssFileOpenFlag_t)uOpenFlags, includeSystem);

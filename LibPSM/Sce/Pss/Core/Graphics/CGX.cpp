@@ -1,6 +1,7 @@
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
+#include <Sce/Pss/Core/Io/ICall.hpp>
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
@@ -9,10 +10,12 @@
 namespace Sce::Pss::Core::Graphics {
 	using namespace Shared::Debug;
 
+
+
 	bool CGX::headerIsValid() {
-		if (this->cgxBuf == nullptr) {
+		if (this->cgxBuf == nullptr) 
 			return true;
-		}
+
 		if (this->header.headerSize < 64)
 			return false;
 
@@ -46,10 +49,9 @@ namespace Sce::Pss::Core::Graphics {
 				return false;
 		}
 		else if (this->header.unk1)
-		{
 			return false;
-		}
 
+		return true;
 		// TODO: implement the rest of the checks
 	}
 
@@ -135,7 +137,6 @@ namespace Sce::Pss::Core::Graphics {
 				return std::string((char*)(this->cgxBuf + this->fragmentVarients[i].sourcePtr), this->fragmentVarients[i].sourceSz);
 			}
 		}
-
 		ExceptionInfo::AddMessage("Fragment shader not found");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 		return std::string();
