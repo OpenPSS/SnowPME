@@ -73,10 +73,6 @@ namespace Sce::Pss::Core::Edata {
 		return absFileOffset / PsseBlockSize;
 	}
 
-	void EdataStream::getNewBlockIfDifferent(uint64_t blockNo) {
-		if (this->block != blockNo) this->decryptBlock(blockNo);
-	}
-
 	void EdataStream::decryptBlock(uint64_t blockNo) {
 		if (blockNo > this->totalBlocks) return;
 		if (blockNo < 0) return;
@@ -276,7 +272,10 @@ namespace Sce::Pss::Core::Edata {
 	int EdataStream::Read(char* buffer, size_t length) {
 		if (this->FileEncrypted) {
 
-			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
+			int blockNo = this->getBlockIdForOffset(this->position);
+			if (this->block != blockNo) {
+				this->decryptBlock(blockNo);
+			}
 
 			size_t totalRead = 0;
 			if (length > this->getRemainLength(this->Filesize(), this->position))
@@ -351,8 +350,12 @@ namespace Sce::Pss::Core::Edata {
 		if (this->position < 0)
 			this->position = 0;
 
- 		if (this->FileEncrypted)
-			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
+ 		if (this->FileEncrypted) {
+			int blockNo = this->getBlockIdForOffset(this->position);
+			if (this->block != blockNo) {
+				this->decryptBlock(blockNo);
+			}
+		}
 
 		return PSM_ERROR_NO_ERROR;
 	}

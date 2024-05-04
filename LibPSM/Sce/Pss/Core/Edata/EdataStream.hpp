@@ -34,7 +34,6 @@ namespace Sce::Pss::Core::Edata {
 		int bytesLeftInBlock();
 		size_t getRemainLength(size_t length, size_t totalRead);
 		void decryptBlock(uint64_t blockNo);
-		void getNewBlockIfDifferent(uint64_t blockNo);
 		void rollIv(uint64_t blockNo, uint8_t blockIv[0x10]);
 		
 		uint64_t decryptedOffsetToAbsFileOffset(uint64_t offset);
