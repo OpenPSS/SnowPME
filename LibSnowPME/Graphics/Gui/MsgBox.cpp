@@ -23,7 +23,7 @@ namespace SnowPME::Graphics::Gui {
 		uint32_t n = 0;
 		ImGui::Begin(this->createWindowTitle(this->title).c_str(), &this->windowShown);
 		ImGui::Text("%s", this->message.c_str());
-		for (std::string button : this->buttons) {
+		for (const std::string& button : this->buttons) {
 			ImGui::PushID(n);
 			if (ImGui::Button(button.c_str())) {
 				if (!this->KeepOutput) {
@@ -39,7 +39,7 @@ namespace SnowPME::Graphics::Gui {
 		}
 		ImGui::End();
 	}
-	MsgBox::MsgBox(std::string msgTitle, std::string msgMessage, std::vector<std::string> msgButtons) {
+	MsgBox::MsgBox(const std::string& msgTitle, const std::string& msgMessage, std::vector<std::string> msgButtons) {
 		this->title = msgTitle;
 		this->message = msgMessage;
 		this->buttons = msgButtons;

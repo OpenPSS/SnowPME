@@ -10,7 +10,7 @@ namespace Sce::Pss::Core::Memory {
 
 	HeapAllocator* HeapAllocator::resourceHeapAllocator = nullptr;
 
-	HeapAllocator::HeapAllocator(size_t heapSize, std::string heapName) {
+	HeapAllocator::HeapAllocator(size_t heapSize, const std::string& heapName) {
 		this->HeapName = heapName;
 		this->TotalHeapSize = heapSize;
 

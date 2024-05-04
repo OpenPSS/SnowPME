@@ -8,7 +8,7 @@ using namespace Shared::String;
 using namespace SnowPME::Runtime;
 
 namespace SnowPME {
-	void Program::startMonoApplication(std::string gamePath) {
+	void Program::startMonoApplication(const std::string& gamePath) {
 		// load the mono executable
 		Init::LoadApplication(gamePath, this->window);
 		// start executing the mono executable

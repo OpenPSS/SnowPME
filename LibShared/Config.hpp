@@ -40,8 +40,8 @@ namespace Shared
 		static std::string SystemLibPath();  // Path to System.dll
 		static std::string MscorlibPath();  // Path to mscorlib.dll
 
-		static void WriteConfig(std::string configFile);
-		static void ReadConfig(std::string runningFrom, std::string configFile);
+		static void WriteConfig(const std::string& configFile);
+		static void ReadConfig(const std::string& runningFrom, const std::string& configFile);
 	};
 }
 #endif

@@ -25,7 +25,7 @@ namespace Sce::Pss::Core::Callback {
 		static void PollEvents();
 		static bool IsClosed();
 		static bool IsMinimized();
-		static bool YesNoDialog(std::string message, std::string caption);
+		static bool YesNoDialog(const std::string& message, const std::string& caption);
 	};
 
 }

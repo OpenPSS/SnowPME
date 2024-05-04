@@ -24,7 +24,7 @@ namespace LibCXML {
 	}
 
 
-	CXMLReader::CXMLReader(std::string cxmlFilePath, const char* magic) {
+	CXMLReader::CXMLReader(const std::string& cxmlFilePath, const char* magic) {
 		
 		this->cxmlFile = new std::fstream(cxmlFilePath, std::ios::in | std::ios::binary);
 		this->cxmlFile->read((char*)&this->cxmlHeader, sizeof(CxmlFileHeader));

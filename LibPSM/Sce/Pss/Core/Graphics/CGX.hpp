@@ -7,28 +7,28 @@ namespace Sce::Pss::Core::Graphics {
 #define CGX_MAX_LEN (0x10000)
 #define CGX_MAGIC_LEN (0x4)
 
-	enum class CGXVarientType : uint32_t {
+	enum class CGXVariantType : uint32_t {
 		Vertex = 0x1,
 		Fragment = 0x2
 	};
 
-	typedef struct CGXVarientTableEntry {
+	typedef struct CGXVariantTableEntry {
 		uint32_t nullSeperatorListPtr;
-		uint32_t varientListPtr;
-		uint32_t varientCount;
+		uint32_t VariantListPtr;
+		uint32_t VariantCount;
 		int unk0;
 		int unk1;
 		int unk2;
-		CGXVarientType varientType;
+		CGXVariantType VariantType;
 		int unk4;
-	} CGXVarientTableEntry;
+	} CGXVariantTableEntry;
 
-	typedef struct CGXVarient {
+	typedef struct CGXVariant {
 		char language[CGX_MAGIC_LEN];
 		uint32_t sourcePtr;
 		uint32_t sourceSz;
 		uint32_t reserved;
-	} CGXVarient;
+	} CGXVariant;
 
 	typedef struct CGXHeader {
 		char magic[CGX_MAGIC_LEN];
@@ -38,9 +38,9 @@ namespace Sce::Pss::Core::Graphics {
 		int unk0;
 		int unk1;
 
-		uint32_t vertexShaderVarientsPtr;
+		uint32_t vertexShaderVariantsPtr;
 		int unk2;
-		uint32_t fragmentShaderVarientsPtr;
+		uint32_t fragmentShaderVariantsPtr;
 		int unk4;
 
 		uint32_t headerSize;
@@ -62,17 +62,17 @@ namespace Sce::Pss::Core::Graphics {
 		std::string glesVer;
 
 		CGXHeader header;
-		CGXVarientTableEntry fragmentVariantTableEntry;
-		CGXVarientTableEntry vertexVariantTableEntry;
-		CGXVarient* fragmentVariants = nullptr;
-		CGXVarient* vertexVariants = nullptr;
+		CGXVariantTableEntry fragmentVariantTableEntry;
+		CGXVariantTableEntry vertexVariantTableEntry;
+		CGXVariant* fragmentVariants = nullptr;
+		CGXVariant* vertexVariants = nullptr;
 
 		bool headerIsValid();
 	public:
 		CGX(uint8_t* cgx, size_t cgxSz);
 		~CGX();
-		std::string FindFragmentShader(std::string shaderLanguage);
-		std::string FindVertexShader(std::string shaderLanguage);
+		const std::string FindFragmentShader(const std::string& shaderLanguage);
+		const std::string FindVertexShader(const std::string& shaderLanguage);
 	};
 }
 

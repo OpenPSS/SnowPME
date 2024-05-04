@@ -62,7 +62,7 @@ namespace Shared
 		return screenWidth;
 	}
 
-	void Config::WriteConfig(std::string configFile) {
+	void Config::WriteConfig(const std::string& configFile) {
 		std::ofstream cfgStream = std::ofstream(configFile);
 		if (!cfgStream.fail()) {
 			SET_CFG_COMMENT(cfgStream, "- Account information -");
@@ -81,7 +81,7 @@ namespace Shared
 		}
 
 	}
-	void Config::ReadConfig(std::string runningFrom, std::string configFile) {
+	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
 		std::string cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
 		Logger::Debug("Reading config file: "+cfgFilePath);

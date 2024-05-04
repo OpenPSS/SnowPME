@@ -5,11 +5,11 @@
 
 namespace Shared::Debug
 {
-	void Logger::logMultiline(std::string channel, std::string msg) {
+	void Logger::logMultiline(const std::string& channel, const std::string& msg) {
 		std::string fixedStr = String::StringUtil::Replace(msg, "\r", "");
 		std::vector<std::string> lines = String::StringUtil::Split(fixedStr, "\n");
 
-		for (std::string line : lines) {
+		for (std::string& line : lines) {
 			line = String::StringUtil::Replace(line, "\n", "");
 
 			if (line.empty()) continue;
@@ -22,21 +22,21 @@ namespace Shared::Debug
 
 	}
 
-	void Logger::Debug(std::string msg) {
+	void Logger::Debug(const std::string& msg) {
 #ifdef _DEBUG
 		logMultiline("DEBUG", msg);
 #endif
 	}
-	void Logger::Warn(std::string msg) {
+	void Logger::Warn(const std::string& msg) {
 		logMultiline("WARN", msg);
 	}
-	void Logger::Error(std::string msg) {
+	void Logger::Error(const std::string& msg) {
 		logMultiline("ERROR", msg);
 	}
-	void Logger::Info(std::string msg) {
+	void Logger::Info(const std::string& msg) {
 		logMultiline("INFO", msg);
 	}
-	void Logger::Game(std::string msg) {
+	void Logger::Game(const std::string& msg) {
 		logMultiline("GAME", msg);
 	}
 }

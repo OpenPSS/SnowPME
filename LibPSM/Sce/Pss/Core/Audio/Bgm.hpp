@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Audio {
 		bool isMp3();
 	public:
 		void* NativeBgmObject = nullptr;
-		Bgm(std::string filename);
+		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();
 		static int NewFromFilename(MonoString* filename, int* handle);

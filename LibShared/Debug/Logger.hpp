@@ -6,13 +6,13 @@ namespace Shared::Debug
 {
 	class Logger {
 	private:
-		static void logMultiline(std::string channel, std::string msg);
+		static void logMultiline(const std::string& channel, const std::string& msg);
 	public:
-		static void Debug(std::string msg);
-		static void Error(std::string msg);
-		static void Warn(std::string msg);
-		static void Info(std::string msg);
-		static void Game(std::string msg);
+		static void Debug(const std::string& msg);
+		static void Error(const std::string& msg);
+		static void Warn(const std::string& msg);
+		static void Info(const std::string& msg);
+		static void Game(const std::string& msg);
 
 	};
 }

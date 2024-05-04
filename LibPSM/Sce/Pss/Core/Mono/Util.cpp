@@ -40,8 +40,10 @@ namespace Sce::Pss::Core::Mono {
 			}
 			fields = mono_class_get_fields(typeClass, &iter);
 			if (!fields)
-				return 1;
+				return true;
 		}
+
+		return false;
 	}
 	std::string* Util::MonoStringToStdString(MonoString* mstr, std::string& string) {
 		if (!mstr)

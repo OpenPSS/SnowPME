@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Io {
 	using namespace Shared::Debug;
 	using namespace Sce::Pss::Core::Edata;
 	 
-	FileSystem::FileSystem(std::string pathOnDisk, std::string sandboxPathName, bool rewritable, bool emulated, bool system) {
+	FileSystem::FileSystem(const std::string& pathOnDisk, const std::string& sandboxPathName, bool rewritable, bool emulated, bool system) {
 		this->sandboxPath = sandboxPathName;
 		this->pathOnDisk = pathOnDisk;
 		this->rw = rewritable;
@@ -25,7 +25,7 @@ namespace Sce::Pss::Core::Io {
 	int FileSystem::readEdataList(PsmDrm* psmDrm) {
 		int res = PSM_ERROR_NO_ERROR;
 
-		if (this->IsRewitable() || this->IsSystem())
+		if (this->IsWritable() || this->IsSystem())
 			return PSM_ERROR_COMMON_IO;
 
 		Logger::Debug("reading psse list.");
@@ -92,12 +92,8 @@ namespace Sce::Pss::Core::Io {
 	bool FileSystem::IsSystem() {
 		return this->system;
 	}
-	bool FileSystem::IsRewitable() {
-		
-		if (!this->rw || this->IsEmulated())
-			return false;
-		else
-			return true;
+	bool FileSystem::IsWritable() {
+		return this->rw && !this->IsEmulated();
 	}
 
 	bool FileSystem::IsEmulated() {

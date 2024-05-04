@@ -4,11 +4,11 @@
 #include <vector>
 
 namespace Shared::String {
-	std::string Path::ChangeSlashesToPsmStyle(std::string path) {
+	std::string Path::ChangeSlashesToPsmStyle(const std::string& path) {
 		return StringUtil::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
 	}
 
-	std::string Path::ChangeSlashesToNativeStyle(std::string path) {
+	std::string Path::ChangeSlashesToNativeStyle(const std::string& path) {
 #ifdef _WIN32
 		return StringUtil::Replace(path, PSM_PATH_SEPERATOR, WINDOWS_PATH_SEPERATOR); // Replace all / with \.
 #else
@@ -16,18 +16,18 @@ namespace Shared::String {
 #endif
 	}
 
-	std::string Path::Combine(std::string path, std::string newPart) {
+	std::string Path::Combine(const std::string& path, const std::string& newPart) {
 		if (path == "")
 			return newPart;
 
 		return path + PSM_PATH_SEPERATOR + newPart; // Append /newPart
 	}
 
-	std::string Path::GetFilename(std::string fullPath) {
+	std::string Path::GetFilename(const std::string& fullPath) {
 		return ChangeSlashesToPsmStyle(fullPath).substr(ChangeSlashesToPsmStyle(fullPath).find_last_of(PSM_PATH_SEPERATOR) + 1);
 	}
 
-	std::string Path::UpDirectory(std::string fullPath) {
+	std::string Path::UpDirectory(const std::string& fullPath) {
 		std::string filename = GetFilename(fullPath);
 		return fullPath.substr(0, fullPath.length() - (filename.length()+1));
 	}

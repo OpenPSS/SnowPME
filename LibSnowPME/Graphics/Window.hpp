@@ -13,14 +13,14 @@ namespace SnowPME::Graphics {
 		float refreshRate;
 		void onResized();
 	public:
-		Window(int height, int width, std::string title);
+		Window(int height, int width, const std::string& title);
 		void SwapBuffers();
 		void Vsync(uint32_t frameTaken);
 		uint32_t GetTime();
 		void PollEvents();
 		bool IsMinimized();
 		bool ShouldClose();
-		bool MessageBox(const char* message, const char* caption);
+		bool MessageBox(const std::string& message, const std::string&  caption);
 
 		SDL_Window* GetSdlWindow();
 		SDL_GLContext GetGlCtx();

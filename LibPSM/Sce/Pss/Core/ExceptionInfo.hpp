@@ -6,7 +6,7 @@
 namespace Sce::Pss::Core {
 	class ExceptionInfo {
 	public:
-		static void AddMessage(std::string message);
+		static void AddMessage(const std::string& message);
 	};
 }
 

@@ -55,7 +55,7 @@ namespace Sce::Pss::Core::Callback {
 		return wasMinimizedCallback();
 	}
 
-	bool WindowCallbacks::YesNoDialog(std::string message, std::string caption) {
+	bool WindowCallbacks::YesNoDialog(const std::string& message, const std::string& caption) {
 		errorOnNotInitalized();
 		return showYesNoDialogCallback(message.c_str(), caption.c_str());
 	}

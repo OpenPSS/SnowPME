@@ -655,7 +655,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->Renderer = std::string((char*)glGetString(GL_RENDERER));
 
 			unsigned int gext = GraphicsExtension::None;
-			for (std::string extension : extensionList) {
+			for (const std::string& extension : extensionList) {
 
 				if (extension == "GL_OES_depth_texture")
 					gext |= GraphicsExtension::DepthTexture;

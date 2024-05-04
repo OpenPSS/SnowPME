@@ -180,10 +180,13 @@ namespace Sce::Pss::Core::Graphics {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
+
 	int PsmShaderProgram::GetAttributeType(int handle, int index, ShaderAttributeType* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		GET_PROG();
+		prog->GetAttributeType(index, result);
+		return PSM_ERROR_NO_ERROR;
 	}
+
 	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;

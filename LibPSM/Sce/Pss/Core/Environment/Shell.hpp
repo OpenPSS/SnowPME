@@ -13,8 +13,8 @@ namespace Sce::Pss::Core::Environment {
 		std::string paramater1 = "";
 		std::string paramater2 = "";
 		std::string paramater3 = "";
-		int executeBrowserWindows(std::string url);
-		int executeBrowserVita(std::string url);
+		int executeBrowserWindows(const std::string& url);
+		int executeBrowserVita(const std::string& url);
 	public:
 		static int ExecuteNative(Action* data);
 		Shell(ActionType type, char* p0, char* p1, char* p2, char* p3);

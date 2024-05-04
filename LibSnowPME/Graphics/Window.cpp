@@ -11,7 +11,7 @@ using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
 
-	Window::Window(int height, int width, std::string title) {
+	Window::Window(int height, int width, const std::string& title) {
 		if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
 			Logger::Error("Failed to initalize SDL2.");
 			throw std::runtime_error("Failed to initalize SDL2.");
@@ -98,7 +98,7 @@ namespace SnowPME::Graphics {
 		return false; //glfwWindowShouldClose(this->sdlWindow);
 	}
 
-	bool Window::MessageBox(const char* message, const char* caption) {
+	bool Window::MessageBox(const std::string& message, const std::string& caption) {
 		SDL_MessageBoxButtonData buttonData[2];
 		memset(buttonData, 0, sizeof(SDL_MessageBoxButtonData) * 2);
 
@@ -115,8 +115,8 @@ namespace SnowPME::Graphics {
 
 		data.flags = SDL_MESSAGEBOX_INFORMATION;
 		data.window = this->sdlWindow;
-		data.title = caption;
-		data.message = message;
+		data.title = caption.c_str();
+		data.message = message.c_str();
 		data.numbuttons = 2;
 		data.buttons = buttonData;
 		data.colorScheme = nullptr;

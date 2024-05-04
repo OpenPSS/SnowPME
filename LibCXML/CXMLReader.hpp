@@ -25,7 +25,7 @@ namespace LibCXML {
 		CXMLStream* FloatArrayTable;
 		CXMLStream* FileTable;
 
-		CXMLReader(std::string cxmlFilePath, const char* magic);
+		CXMLReader(const std::string& cxmlFilePath, const char* magic);
 		~CXMLReader();
 	};
 

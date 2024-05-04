@@ -50,7 +50,7 @@ namespace Sce::Pss::Core::Edata {
 		bool FileEncrypted = false;
 		EdataList* EncryptedDataList = nullptr;
 
-		EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
+		EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
 		~EdataStream();
 		uint64_t Filesize();
 		int Read(char* buffer, size_t length);

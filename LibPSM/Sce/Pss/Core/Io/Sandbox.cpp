@@ -204,7 +204,7 @@ namespace Sce::Pss::Core::Io {
 		if (this->IsDirectory(sandboxedPath))
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_DIRECTORY;
 
-		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
+		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsWritable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
 		if (filesystem->GetEdataList() != nullptr) {
@@ -337,7 +337,7 @@ namespace Sce::Pss::Core::Io {
 		handle->directory = false;
 		handle->directoryFd = NULL;
 
-		if (openRw && !filesystem->IsRewitable()) {
+		if (openRw && !filesystem->IsWritable()) {
 			handle->opened = false;
 			handle->failReason = PSM_ERROR_ACCESS_DENIED;
 			return handle;
@@ -430,11 +430,11 @@ namespace Sce::Pss::Core::Io {
 		FileSystem* dstFilesystem = this->findFilesystem(absDst, false);
 
 		// Check if src filesystem is read only- and this is a move
-		if (srcFilesystem->IsEmulated() || !srcFilesystem->IsRewitable() && move)
+		if (srcFilesystem->IsEmulated() || !srcFilesystem->IsWritable() && move)
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if dst filesystem is read only-
-		if (dstFilesystem->IsEmulated() || !dstFilesystem->IsRewitable())
+		if (dstFilesystem->IsEmulated() || !dstFilesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if either dst or src is a directory.
@@ -484,7 +484,7 @@ namespace Sce::Pss::Core::Io {
 
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
 		if (this->IsDirectory(absPath))
@@ -518,7 +518,7 @@ namespace Sce::Pss::Core::Io {
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 		// Check if dir is writable
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 
@@ -566,7 +566,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		// Check the path is inside a rewritable filesystem.
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check the path is an actual directory, and that exists 
@@ -596,7 +596,7 @@ namespace Sce::Pss::Core::Io {
 		// Check the path is inside a rewritable filesystem
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
 		// Check the path does not already contain a file.
@@ -638,7 +638,7 @@ namespace Sce::Pss::Core::Io {
 		
 		// Check that the file is not in a read-only folder
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
-		if (!filesystem->IsRewitable() || filesystem->IsEmulated())
+		if (!filesystem->IsWritable() || filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Locate the file on disk, and delete it
@@ -668,7 +668,7 @@ namespace Sce::Pss::Core::Io {
 
 		// Setup handle struct
 		handle->opened = true;
-		handle->rw = filesystem->IsRewitable();
+		handle->rw = filesystem->IsWritable();
 		handle->encrypted = false;
 		handle->emulated = filesystem->IsEmulated();
 		handle->directory = true;

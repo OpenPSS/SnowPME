@@ -5,7 +5,7 @@
 
 namespace LibCXML {
 
-	CXMLElement::CXMLElement(std::string cxmlFile, std::string magic) {
+	CXMLElement::CXMLElement(const std::string& cxmlFile, const std::string& magic) {
 		this->reader = new CXMLReader(cxmlFile, magic.c_str());
 		this->reader->TreeTable->Seek(0);
 		this->attributes = std::vector<CXMLAttributeBase*>();

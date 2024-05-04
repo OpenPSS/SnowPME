@@ -10,7 +10,7 @@ namespace SnowPME::Runtime
 		static int initCallbacks(Graphics::Window* oglWindow);
 		static std::string gameFolder;
 	public:
-		static void LoadApplication(std::string gameFolder, Graphics::Window* window);
+		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);
 		static void StartApplication();
 	};
 }

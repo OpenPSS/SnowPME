@@ -4,6 +4,7 @@
 #include <vector>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgramOption.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderAttributeType.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -39,10 +40,12 @@ namespace Sce::Pss::Core::Graphics {
 
 		void SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
-		
 		const inline std::unordered_map<int, std::string>& GetAttributeBindings() const {
 			return attributeBindings;
 		}
+		int GetAttributeType(int index, ShaderAttributeType* attributeType);
+
+		int GetUniformName(int index, std::string& uniformName) const;
 	};
 }
 

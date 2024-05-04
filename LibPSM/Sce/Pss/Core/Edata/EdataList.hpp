@@ -8,8 +8,8 @@ namespace Sce::Pss::Core::Edata {
 	private:
 		std::vector<std::string> edataFilesList;
 	public:
-		bool IsFileInEdata(std::string path);
-		EdataList(std::string psseListData);
+		bool IsFileInEdata(const std::string& path);
+		EdataList(std::string& psseListData);
 	};
 }
 

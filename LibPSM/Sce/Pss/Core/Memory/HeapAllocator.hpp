@@ -13,7 +13,7 @@ namespace Sce::Pss::Core::Memory {
 		std::map<uintptr_t, std::vector<uint8_t>*> heapAllocations;
 		std::mutex allocMutex = std::mutex();
 	public:
-		HeapAllocator(size_t heapSize, std::string heapName);
+		HeapAllocator(size_t heapSize, const std::string& heapName);
 		~HeapAllocator();
 
 		size_t TotalHeapSize = 0;

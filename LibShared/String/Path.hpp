@@ -11,11 +11,11 @@ namespace Shared::String {
 
 	class Path {
 	public:
-		static std::string ChangeSlashesToPsmStyle(std::string path);
-		static std::string ChangeSlashesToNativeStyle(std::string path);
-		static std::string Combine(std::string path, std::string newPart);
-		static std::string GetFilename(std::string path);
-		static std::string UpDirectory(std::string path);
+		static std::string ChangeSlashesToPsmStyle(const std::string& path);
+		static std::string ChangeSlashesToNativeStyle(const std::string& path);
+		static std::string Combine(const std::string& path, const std::string& newPart);
+		static std::string GetFilename(const std::string& path);
+		static std::string UpDirectory(const std::string& path);
 	};
 }
 

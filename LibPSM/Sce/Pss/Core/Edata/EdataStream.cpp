@@ -145,7 +145,7 @@ namespace Sce::Pss::Core::Edata {
 		return length - totalRead;
 	}
 
-	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
+	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
 		memset(this->titleKey, 0x00, sizeof(EdataStream::titleKey));
 		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
 

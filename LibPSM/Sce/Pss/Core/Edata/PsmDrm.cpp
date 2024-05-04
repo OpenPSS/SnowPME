@@ -8,7 +8,7 @@ namespace Sce::Pss::Core::Edata {
 	using namespace Sce::Pss::Core::Io;
 	using namespace Shared::Debug;
 
-	PsmDrm::PsmDrm(std::string licenseFile) {
+	PsmDrm::PsmDrm(const std::string& licenseFile) {
 		uint64_t handle = -1;
 		ScePsmDrmLicense rifData;
 		uint32_t wasRead = 0;
@@ -36,13 +36,13 @@ namespace Sce::Pss::Core::Edata {
 		}
 	}
 
-	PsmDrm::PsmDrm(std::string contentId, uint8_t* titleKey) {
+	PsmDrm::PsmDrm(const std::string& contentId, uint8_t* titleKey) {
 		this->psmContentId = contentId;
 		memcpy(this->titleKey, titleKey, sizeof(this->titleKey));
 	}
 	
 
-	std::string PsmDrm::GetContentId() {
+	const std::string& PsmDrm::GetContentId() {
 		return this->psmContentId;
 	}
 

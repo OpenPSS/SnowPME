@@ -46,7 +46,7 @@ namespace SnowPME::Runtime {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	void Init::LoadApplication(std::string gameFolder, Graphics::Window* window) {
+	void Init::LoadApplication(const std::string& gameFolder, Graphics::Window* window) {
 
 		// setup window callbacks
 		Init::initCallbacks(window);

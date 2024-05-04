@@ -98,40 +98,40 @@ namespace Sce::Pss::Core::Graphics {
 		memset((void*)&this->fragmentVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
 		memset((void*)&this->vertexVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
 
-		if (this->header.vertexShaderVarientsPtr != 0) {
-			memcpy(&this->vertexVariantTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.vertexShaderVarientsPtr), sizeof(CGXVarientTableEntry));
+		if (this->header.vertexShaderVariantsPtr != 0) {
+			memcpy(&this->vertexVariantTableEntry, (CGXVariantTableEntry*)(this->cgxBuf + this->header.vertexShaderVariantsPtr), sizeof(CGXVariantTableEntry));
 		
-			this->vertexVariants = new CGXVarient[this->vertexVariantTableEntry.varientCount];
+			this->vertexVariants = new CGXVariant[this->vertexVariantTableEntry.VariantCount];
 
-			for (uint32_t i = 0; i < this->vertexVariantTableEntry.varientCount; i++) {
-				this->vertexVariants[i] = ((CGXVarient*)(this->cgxBuf + this->vertexVariantTableEntry.varientListPtr))[i];
+			for (uint32_t i = 0; i < this->vertexVariantTableEntry.VariantCount; i++) {
+				this->vertexVariants[i] = ((CGXVariant*)(this->cgxBuf + this->vertexVariantTableEntry.VariantListPtr))[i];
 
 				Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN)));
 			}
 		}
 
-		if (this->header.fragmentShaderVarientsPtr != 0) {
-			memcpy(&this->fragmentVariantTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.fragmentShaderVarientsPtr), sizeof(CGXVarientTableEntry));
+		if (this->header.fragmentShaderVariantsPtr != 0) {
+			memcpy(&this->fragmentVariantTableEntry, (CGXVariantTableEntry*)(this->cgxBuf + this->header.fragmentShaderVariantsPtr), sizeof(CGXVariantTableEntry));
 
 
-			this->fragmentVariants = new CGXVarient[this->fragmentVariantTableEntry.varientCount];
+			this->fragmentVariants = new CGXVariant[this->fragmentVariantTableEntry.VariantCount];
 
-			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.varientCount; i++) {
-				this->fragmentVariants[i] = ((CGXVarient*)(this->cgxBuf + this->fragmentVariantTableEntry.varientListPtr))[i];
+			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.VariantCount; i++) {
+				this->fragmentVariants[i] = ((CGXVariant*)(this->cgxBuf + this->fragmentVariantTableEntry.VariantListPtr))[i];
 
 				Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN)));
 			}
-
 		}
 	}
-	std::string CGX::FindVertexShader(std::string shaderLanguage) {
+	const std::string CGX::FindVertexShader(const std::string& shaderLanguage) {
 		if (this->vertexVariants != NULL) {
 			
-			for (uint32_t i = 0; i < this->vertexVariantTableEntry.varientCount; i++) {
+			for (uint32_t i = 0; i < this->vertexVariantTableEntry.VariantCount; i++) {
 				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN));
 
 				if (foundLanguage == shaderLanguage) {
-					return std::string((char*)(this->cgxBuf + this->vertexVariants[i].sourcePtr), this->vertexVariants[i].sourceSz);
+					const char* shaderData = (char*)(this->cgxBuf + this->vertexVariants[i].sourcePtr);
+					return std::string(shaderData, this->vertexVariants[i].sourceSz);
 				}
 			}
 
@@ -141,13 +141,14 @@ namespace Sce::Pss::Core::Graphics {
 		return "";
 	}
 
-	std::string CGX::FindFragmentShader(std::string shaderLanguage) {
+	const std::string CGX::FindFragmentShader(const std::string& shaderLanguage) {
 		if (this->fragmentVariants != NULL) {
-			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.varientCount; i++) {
+			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.VariantCount; i++) {
 				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN));
 
 				if (foundLanguage == shaderLanguage) {
-					return std::string((char*)(this->cgxBuf + this->fragmentVariants[i].sourcePtr), this->fragmentVariants[i].sourceSz);
+					const char* shaderData = (char*)(this->cgxBuf + this->fragmentVariants[i].sourcePtr);
+					return std::string(shaderData, this->fragmentVariants[i].sourceSz);
 				}
 			}
 		}

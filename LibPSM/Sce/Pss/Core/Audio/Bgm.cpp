@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::Audio {
 		}
 	}
 
-	Bgm::Bgm(std::string filename) {
+	Bgm::Bgm(const std::string& filename) {
 		uint64_t file = NULL;
 		// Open the file specified
 		if (ICall::PsmFileOpen((char*)filename.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ, &file) == PSM_ERROR_NO_ERROR) {

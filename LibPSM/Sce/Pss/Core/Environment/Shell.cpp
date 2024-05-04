@@ -34,7 +34,7 @@ namespace Sce::Pss::Core::Environment {
 			return PSM_ERROR_COMMON_ARGUMENT;
 		}
 	}
-	int Shell::executeBrowserWindows(std::string url) {
+	int Shell::executeBrowserWindows(const std::string& url) {
 		if (Callback::WindowCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
 			return PlatformSpecific::OpenWebsite(url);
 
@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Environment {
 
 	}
 
-	int Shell::executeBrowserVita(std::string url) {
+	int Shell::executeBrowserVita(const std::string& url) {
 		return PlatformSpecific::OpenWebsite(url);
 	}
 

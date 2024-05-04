@@ -321,4 +321,30 @@ namespace Sce::Pss::Core::Graphics {
             return "";
         }
     }
+
+	int ShaderProgram::GetAttributeType(int index, ShaderAttributeType* attributeType) {
+		GLint params = 0;
+		glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &params);
+		GLenum err = glGetError();
+		if(err != GL_NO_ERROR) {
+			return err;
+		}
+		switch(params) {
+			case GL_BYTE:
+			case GL_UNSIGNED_BYTE:
+			case GL_SHORT:
+				return 0; // TODO
+			case GL_FLOAT:
+				*attributeType = ShaderAttributeType::Float;
+				return 0;
+		}
+	}
+
+	int ShaderProgram::GetUniformName(int index, std::string& name) const {
+		GLchar nameBuf[0xff];
+		GLsizei nameLength;
+		glGetActiveUniform(this->GLReference, index, name.capacity(), &nameLength, nullptr, nullptr, nameBuf);
+		name = std::string(nameBuf, nameLength);
+		return PSM_ERROR_NO_ERROR;
+	}
 }
