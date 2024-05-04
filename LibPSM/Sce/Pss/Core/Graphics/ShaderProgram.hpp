@@ -16,10 +16,11 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::string fragmentSrc = "";
 		std::string vertexSrc = "";
+		ShaderProgramOption* programOptions;
+
+		std::unordered_map<int, std::string> attributeBindings; 
 
 		int compileShader(int type, char* source);
-
-		ShaderProgramOption* programOptions;
 	public:
 		int ActiveStateChanged(bool state);
 		int UniformCount();
@@ -35,6 +36,13 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath);
 		ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 		~ShaderProgram();
+
+		void SetAttributeBinding(int index, std::string& name);
+		std::string GetAttributeBinding(int index) const;
+		
+		const inline std::unordered_map<int, std::string>& GetAttributeBindings() const {
+			return attributeBindings;
+		}
 	};
 }
 

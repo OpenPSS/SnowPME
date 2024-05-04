@@ -302,4 +302,23 @@ namespace Sce::Pss::Core::Graphics {
 		return this->Attributes.size();
 	}
 
+	void ShaderProgram::SetAttributeBinding(int index, std::string& name) {
+		GLuint attributeLocation = glGetAttribLocation(this->GLReference, name.c_str());
+
+		if(attributeLocation == -1) {
+			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
+			return;
+		}
+		glBindAttribLocation(this->GLReference, index, name.c_str());
+		attributeBindings[index] = name;
+	}
+
+	std::string ShaderProgram::GetAttributeBinding(int index) const {
+        auto it = attributeBindings.find(index);
+        if (it != attributeBindings.end()) {
+            return it->second;
+        } else {
+            return "";
+        }
+    }
 }

@@ -10,6 +10,7 @@ namespace Sce::Pss::Core::Mono {
 		static MonoType* MonoArrayElementsType(MonoArray* ar);
 		static bool MonoTypeIsValueType(MonoType* type);
 		static std::string* MonoStringToStdString(MonoString* mstr, std::string& string);
+		static MonoString* StdStringToMonoString(const std::string& str);
 	};
 }
 #endif

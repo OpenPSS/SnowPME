@@ -54,6 +54,12 @@ namespace Sce::Pss::Core::Mono {
 		return &string;
 	}
 
+	MonoString* Util::StdStringToMonoString(const std::string& str) {
+		MonoDomain* domain = mono_domain_get();
+		MonoString* monoStr = mono_string_new_len(domain, str.c_str(), str.length());
+		return monoStr;
+	}
+
 	MonoType* Util::MonoArrayElementsType(MonoArray* ar) {
 		if (ar == NULL)
 			return 0;
