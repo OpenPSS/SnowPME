@@ -19,7 +19,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(handle))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileDescriptor* fd = (PsmFileDescriptor*)Handles::GetHandle(handle);
+		PsmFileDescriptor* fd = Handles::Get<PsmFileDescriptor>(handle);
 	
 		if (!fd->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -31,7 +31,7 @@ namespace Sce::Pss::Core::Io {
 			Sandbox::ApplicationSandbox->CloseFile(fd);
 		}
 
-		Handles::DeleteHandle(handle);
+		Handles::Delete(handle);
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -87,7 +87,7 @@ namespace Sce::Pss::Core::Io {
 			}
 			
 			
-			*pDirectory = Handles::CreateHandle((uintptr_t)directoryHandle);
+			*pDirectory = Handles::Create(directoryHandle);
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -100,7 +100,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(directory);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(directory);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -159,7 +159,7 @@ namespace Sce::Pss::Core::Io {
 				return failReason;
 			}
 
-			*phFile = (uint64_t)Handles::CreateHandle((uintptr_t)fileHandle);
+			*phFile = (uint64_t)Handles::Create(fileHandle);
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -190,7 +190,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(file) || pFileInfo == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -211,7 +211,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -231,7 +231,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(file) || buffer == NULL || uBytesToWrite == NULL || puBytesWritten == NULL)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -253,7 +253,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if(!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -269,7 +269,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 		return Sandbox::ApplicationSandbox->FlushFile(handle);
 	}
 	
@@ -278,7 +278,7 @@ namespace Sce::Pss::Core::Io {
 		if (puSize == NULL || !Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if (!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -293,7 +293,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileDescriptor* handle = (PsmFileDescriptor*)Handles::GetHandle(file);
+		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
 
 		if(!handle->opened)
 			return PSM_ERROR_INVALID_PARAMETER;

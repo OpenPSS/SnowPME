@@ -138,7 +138,7 @@ namespace Sce::Pss::Core::Audio {
 		Logger::Debug(__FUNCTION__);
 		
 		if (Handles::IsValid(handle)) {
-			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			Bgm* bgm = Handles::Get<Bgm>(handle);
 			delete bgm;
 		}
 
@@ -150,7 +150,7 @@ namespace Sce::Pss::Core::Audio {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		if (Handles::IsValid(handle)) {
-			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			Bgm* bgm = Handles::Get<Bgm>(handle);
 			BgmPlayer* player = new BgmPlayer(bgm);
 
 			if (Handles::IsValid(player->Handle)) {

@@ -86,7 +86,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
+			ShaderProgram* prog = Handles::Get<ShaderProgram>(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
@@ -102,7 +102,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmShaderProgram::GetAttributeCount(int handle, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
+			ShaderProgram* prog = Handles::Get<ShaderProgram>(handle);
 			if (prog == NULL) {
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			}
@@ -130,7 +130,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
+			ShaderProgram* prog = Handles::Get<ShaderProgram>(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -169,7 +169,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmShaderProgram::SetAttributeBinding(int handle, int index, MonoString* name) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			ShaderProgram* prog = (ShaderProgram*)Handles::GetHandle(handle);
+			ShaderProgram* prog = Handles::Get<ShaderProgram>(handle);
 			if (prog == NULL) {
 				Logger::Error("handle was null.");
 				return PSM_ERROR_COMMON_OBJECT_DISPOSED;

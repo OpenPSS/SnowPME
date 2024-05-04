@@ -93,7 +93,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
 
 				// Resolve the handle for the new shader program
-				ShaderProgram* workingShaderProgram = (ShaderProgram*)Handles::GetHandle(handles[GraphicsContext::shaderProgramHandleOffset]);
+				ShaderProgram* workingShaderProgram = Handles::Get<ShaderProgram>(handles[GraphicsContext::shaderProgramHandleOffset]);
 				
 				// Set this shader program as the currently active shader program.
 				setCurrentObject(workingShaderProgram);
@@ -107,7 +107,7 @@ namespace Sce::Pss::Core::Graphics {
 				// Check this handle is valid ..
 				if (fbHandle != Handles::NoHandle) {
 					// Resolve the handle for the new shader program
-					FrameBuffer* workingFrameBuffer = (FrameBuffer*)Handles::GetHandle(fbHandle);
+					FrameBuffer* workingFrameBuffer = Handles::Get<FrameBuffer>(fbHandle);
 
 					// Set this frame buffer as the currently active frame buffer.
 					setCurrentObject(workingFrameBuffer);
@@ -135,7 +135,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::VertexBuffer");
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
-					VertexBuffer* workingVertexBuffer = (VertexBuffer*)Handles::GetHandle(handles[GraphicsContext::vertexBufferHandleOffset + i]);
+					VertexBuffer* workingVertexBuffer = Handles::Get<VertexBuffer>(handles[GraphicsContext::vertexBufferHandleOffset + i]);
 					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
 
 					if (currentVertexBuffer == workingVertexBuffer) {

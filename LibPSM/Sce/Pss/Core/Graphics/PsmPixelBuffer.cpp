@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pix = (PixelBuffer*)Handles::GetHandle(handle);
+			PixelBuffer* pix = Handles::Get<PixelBuffer>(handle);
 			delete pix;
 		}
 		else
@@ -65,7 +65,7 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pixBuffer = (PixelBuffer*)Handles::GetHandle(handle);
+			PixelBuffer* pixBuffer = Handles::Get<PixelBuffer>(handle);
 
 			return pixBuffer->GetInfo(type, width, height, level, format, option);
 		}

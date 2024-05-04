@@ -27,7 +27,7 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsContext* grphxCtx = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
 		ReturnErrorable(grphxCtx);
 
-		*result = Handles::CreateHandle((uintptr_t)grphxCtx);
+		*result = Handles::Create(grphxCtx);
 		
 		return PSM_ERROR_NO_ERROR;
 	}

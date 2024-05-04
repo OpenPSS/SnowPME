@@ -801,7 +801,7 @@ namespace Sce::Pss::Core::Graphics {
 				if (this->GetError() != PSM_ERROR_NO_ERROR)
 					return;
 
-				if (versionFormatSz < 0)
+				if (versionFormatSz > 0)
 					sz += versionFormatSz;
 
 				this->VertexFormats.push_back(format);

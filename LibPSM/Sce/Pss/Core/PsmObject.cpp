@@ -6,7 +6,7 @@ namespace Sce::Pss::Core {
 	using Sce::Pss::Core::System::Handles;
 
 	PsmObject::PsmObject() {
-		this->Handle = Handles::CreateHandle((uintptr_t)this);
+		this->Handle = Handles::Create(this);
 	}
 
 	PsmObject::~PsmObject() {
@@ -16,7 +16,7 @@ namespace Sce::Pss::Core {
 	void PsmObject::Dispose() {
 		this->IsDisposed = true;
 		if (Handles::IsValid(this->Handle))
-			Handles::DeleteHandle(this->Handle);
+			Handles::Delete(this->Handle);
 		this->Handle = Handles::NoHandle;
 	}
 }

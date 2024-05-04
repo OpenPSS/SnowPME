@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 			
 			if (tex != nullptr) {
-				*result = Handles::CreateHandle((uintptr_t)tex);
+				*result = Handles::Create(tex);
 				return PSM_ERROR_NO_ERROR;
 			}
 			return PSM_ERROR_INVALID_PARAMETER;
