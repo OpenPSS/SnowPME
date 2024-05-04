@@ -1,7 +1,6 @@
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
@@ -16,19 +15,19 @@ namespace Sce::Pss::Core::Graphics {
 		if (this->cgxBuf == nullptr) 
 			return true;
 
-		if (this->header.headerSize < 64)
+		if (this->header.headerSize < 0x40)
 			return false;
 
-		if (this->header.unk5 < this->header.headerSize)
+		if (this->header.shaderDataPtr < this->header.headerSize)
 			return false;
 		
-		if (this->header.unk6 < this->header.unk5)
+		if (this->header.nullTermListStartPtr < this->header.shaderDataPtr)
 			return false;
 		
-		if (this->header.unk7 < this->header.unk6)
+		if (this->header.nullTermListStartPtr2 < this->header.nullTermListStartPtr)
 			return false;
 
-		if (this->header.totalSize < this->header.unk7 || this->cgxSz < this->header.totalSize)
+		if (this->header.totalSize < this->header.nullTermListStartPtr2 || this->cgxSz < this->header.totalSize)
 			return false;
 		
 		if (this->header.unk1 > 0x400)
@@ -45,14 +44,15 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (this->header.unk0)
 		{
-			if (this->header.unk0 < this->header.headerSize || this->header.unk0 + 16 * this->header.unk1 > this->header.unk5)
+			if (this->header.unk0 < this->header.headerSize || this->header.unk0 + 16 * this->header.unk1 > this->header.shaderDataPtr)
 				return false;
 		}
-		else if (this->header.unk1)
+		else if (this->header.unk1) {
 			return false;
+		}
 
-		return true;
 		// TODO: implement the rest of the checks
+		return true;
 	}
 
 	CGX::CGX(uint8_t* cgx, size_t cgxSz) {
@@ -95,51 +95,66 @@ namespace Sce::Pss::Core::Graphics {
 			return;
 		}
 
-		CGXVarientTableEntry* varientTable = (CGXVarientTableEntry*)(this->cgxBuf + this->header.varientTablePtr);
 
-		this->vertexVarientTableEntry = varientTable[0];
-		this->fragmentVarientTableEntry = varientTable[1];
+		if (this->header.vertexShaderVarientsPtr != NULL) {
+			memcpy(&this->vertexVarientTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.vertexShaderVarientsPtr), sizeof(CGXVarientTableEntry));
+		
+			this->vertexVarients = new CGXVarient[this->vertexVarientTableEntry.varientCount];
 
-		this->fragmentVarients = new CGXVarient[this->fragmentVarientTableEntry.varientCount];
-		this->vertexVarients = new CGXVarient[this->vertexVarientTableEntry.varientCount];
+			for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
+				this->vertexVarients[i] = ((CGXVarient*)(this->cgxBuf + this->vertexVarientTableEntry.varientListPtr))[i];
 
-		for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
-			this->fragmentVarients[i] = ((CGXVarient*)(this->cgxBuf + this->fragmentVarientTableEntry.varientListPtr))[i];
-
-			Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN)));
+				Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN)));
+			}
 		}
 
-		for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
-			this->vertexVarients[i] = ((CGXVarient*)(this->cgxBuf + this->vertexVarientTableEntry.varientListPtr))[i];
+		if (this->header.fragmentShaderVarientsPtr != NULL) {
+			memcpy(&this->fragmentVarientTableEntry, (CGXVarientTableEntry*)(this->cgxBuf + this->header.fragmentShaderVarientsPtr), sizeof(CGXVarientTableEntry));
 
-			Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN)));
+
+			this->fragmentVarients = new CGXVarient[this->fragmentVarientTableEntry.varientCount];
+
+			for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
+				this->fragmentVarients[i] = ((CGXVarient*)(this->cgxBuf + this->fragmentVarientTableEntry.varientListPtr))[i];
+
+				Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN)));
+			}
+
 		}
-
 	}
 	std::string CGX::VertexShader(std::string shaderLanguage) {
-		for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
-			std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN));
+		if (this->vertexVarients != NULL) {
+			
+			for (uint32_t i = 0; i < this->vertexVarientTableEntry.varientCount; i++) {
+				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVarients[i].language, CGX_MAGIC_LEN));
 
-			if (foundLanguage == shaderLanguage) {
-				return std::string((char*)(this->cgxBuf + this->vertexVarients[i].sourcePtr), this->vertexVarients[i].sourceSz);
+				if (foundLanguage == shaderLanguage) {
+					return std::string((char*)(this->cgxBuf + this->vertexVarients[i].sourcePtr), this->vertexVarients[i].sourceSz);
+				}
 			}
+
 		}
 		ExceptionInfo::AddMessage("Vertex shader not found");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
-		return std::string();
+		return "";
 	}
 
 	std::string CGX::FragmentShader(std::string shaderLanguage) {
-		for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
-			std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN));
+		if (this->fragmentVarients != NULL) {
 
-			if (foundLanguage == shaderLanguage) {
-				return std::string((char*)(this->cgxBuf + this->fragmentVarients[i].sourcePtr), this->fragmentVarients[i].sourceSz);
+			for (uint32_t i = 0; i < this->fragmentVarientTableEntry.varientCount; i++) {
+				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVarients[i].language, CGX_MAGIC_LEN));
+
+				if (foundLanguage == shaderLanguage) {
+					return std::string((char*)(this->cgxBuf + this->fragmentVarients[i].sourcePtr), this->fragmentVarients[i].sourceSz);
+				}
 			}
+
 		}
+
 		ExceptionInfo::AddMessage("Fragment shader not found");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
-		return std::string();
+		return "";
 	}
 
 	CGX::~CGX() {		

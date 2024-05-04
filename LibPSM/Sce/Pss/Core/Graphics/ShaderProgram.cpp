@@ -43,24 +43,38 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
+	int ShaderProgram::getShadersFromCgx(uint8_t* cgxBuf, int cgxSz) {
+		CGX* cgxFile = new CGX(cgxBuf, cgxSz);
+		ReturnErrorable(cgxFile);
+
+		std::string src = cgxFile->FragmentShader("GLSL");
+		if (cgxFile->GetClearError() == PSM_ERROR_NO_ERROR)
+			this->fragmentSrc = src;
+
+		src = cgxFile->VertexShader("GLSL");
+		if (cgxFile->GetClearError() == PSM_ERROR_NO_ERROR)
+			this->vertexSrc = src;
+
+		delete cgxFile;
+		return PSM_ERROR_NO_ERROR;
+	}
+
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
-		std::string fragmentSrc = "";
-		std::string vertexSrc = "";
 
 		if (vertexShaderBuf != nullptr) {
-			CGX* cgx = new CGX(vertexShaderBuf, vertexShaderSz);
-			PassErrorable(cgx);
-			fragmentSrc = cgx->FragmentShader("GLSL");
-			vertexSrc = cgx->VertexShader("GLSL");
-			delete cgx;
+			int res = getShadersFromCgx(vertexShaderBuf, vertexShaderSz);
+			if (res != PSM_ERROR_NO_ERROR) {
+				this->SetError(res);
+				return 0;
+			}
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			CGX* cgx = new CGX(fragmentShaderBuf, fragmentShaderSz);
-			PassErrorable(cgx);
-			fragmentSrc = cgx->FragmentShader("GLSL");
-			vertexSrc = cgx->VertexShader("GLSL");
-			delete cgx;
+			int res = getShadersFromCgx(fragmentShaderBuf, fragmentShaderSz);
+			if (res != PSM_ERROR_NO_ERROR) {
+				this->SetError(res);
+				return 0;
+			}
 		}
 
 		this->GLReference = glCreateProgram();
@@ -69,17 +83,17 @@ namespace Sce::Pss::Core::Graphics {
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
 		// i dont know why.
-		fragmentSrc = "#version 150\r\n" + fragmentSrc;
-		vertexSrc = "#version 150\r\n" + vertexSrc;
+		this->fragmentSrc = "#version 150\r\n" + this->fragmentSrc;
+		this->vertexSrc = "#version 150\r\n" + this->vertexSrc;
 
-		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)fragmentSrc.c_str());
+		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)this->fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return 0;
 		}
 
-		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)vertexSrc.c_str());
+		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)this->vertexSrc.c_str());
 		if (compileVertexShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);

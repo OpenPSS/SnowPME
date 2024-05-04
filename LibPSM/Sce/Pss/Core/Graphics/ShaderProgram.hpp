@@ -11,9 +11,13 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
-		int vertexCgxLen;
-		int fragmentCgxLen;
+		int vertexCgxLen = NULL;
+		int fragmentCgxLen = NULL;
 
+		std::string fragmentSrc = "";
+		std::string vertexSrc = "";
+
+		int getShadersFromCgx(uint8_t* cgxBuf, int cgxSz);
 		int compileShader(int type, char* source);
 
 		ShaderProgramOption* programOptions;
