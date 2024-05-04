@@ -20,7 +20,7 @@ namespace Shared
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
 
-
+	std::string Config::RunningFromDirectory = "";
 	std::string Config::RuntimeLibPath = DEFAULT_RUNTIME_FOLDER;
 	std::string Config::RuntimeConfigPath = DEFAULT_RUNTIME_FOLDER;
 
@@ -41,7 +41,7 @@ namespace Shared
 
 	}
 	std::string Config::Mono21Folder() {
-		return Path::Combine(Path::Combine(Config::RuntimeLibPath, "mono"), "2.1");
+		return Path::Combine(Config::RunningFromDirectory, Path::Combine(Path::Combine(Config::RuntimeLibPath, "mono"), "2.1"));
 	}
 
 	std::string Config::PsmCoreLibPath() {
@@ -61,6 +61,7 @@ namespace Shared
 	int Config::ScreenWidth(int idx) {
 		return screenWidth;
 	}
+
 	void Config::WriteConfig(std::string configFile) {
 		std::ofstream cfgStream = std::ofstream(configFile);
 		if (!cfgStream.fail()) {
@@ -80,8 +81,12 @@ namespace Shared
 		}
 
 	}
-	void Config::ReadConfig(std::string configFile) {
-		std::ifstream cfgStream = std::ifstream(configFile);
+	void Config::ReadConfig(std::string runningFrom, std::string configFile) {
+		Config::RunningFromDirectory = runningFrom;
+		std::string cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
+		Logger::Debug("Reading config file: "+cfgFilePath);
+
+		std::ifstream cfgStream = std::ifstream(cfgFilePath);
 		if (cfgStream.fail()) return WriteConfig(configFile);
 
 		std::string ln;

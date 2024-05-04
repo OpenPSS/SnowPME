@@ -22,6 +22,7 @@ namespace Shared
 		static void parseKeyValuePair(std::string key, std::string value); // parses the line read from the cfg file
 	public:
 		static bool SecurityCritical; // If mono is allowed full access to native functions.
+		static std::string RunningFromDirectory; // Path to the folder containing the main executable.
 		static std::string RuntimeLibPath; // Path to the folder containing all DLLs
 		static std::string RuntimeConfigPath; // Path to the folder containing the machine.config file.
 		
@@ -40,7 +41,7 @@ namespace Shared
 		static std::string MscorlibPath();  // Path to mscorlib.dll
 
 		static void WriteConfig(std::string configFile);
-		static void ReadConfig(std::string configFile);
+		static void ReadConfig(std::string runningFrom, std::string configFile);
 	};
 }
 #endif

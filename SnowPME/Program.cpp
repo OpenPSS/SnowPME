@@ -4,6 +4,7 @@
 #include <cxxopts.hpp>
 using namespace Shared;
 using namespace Shared::Debug;
+using namespace Shared::String;
 using namespace SnowPME::Runtime;
 
 namespace SnowPME {
@@ -15,8 +16,9 @@ namespace SnowPME {
 	}
 
 	Program::Program(int argc, const char* const* argv) {
-		Logger::Debug("Reading config file.");
-		Config::ReadConfig("SnowPME.cfg");
+		std::string runningFrom = ""; // Path::UpDirectory(std::string(argv[0])); (doesnt work on windows ...)
+		Config::ReadConfig(runningFrom, "SnowPME.cfg");
+		
 
 		cxxopts::Options options("snowpme", "SnowPME PlayStation Mobile Emulator");
 
