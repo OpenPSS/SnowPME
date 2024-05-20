@@ -2,9 +2,12 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/Mono/Util.hpp>
 #include <LibShared.hpp>
-using namespace Sce::Pss::Core;
-using namespace Shared::Debug;
+
+
 namespace Sce::Pss::Core::Environment {
+	using namespace Sce::Pss::Core;
+	using namespace Shared::Debug;
+
 	int Log::WriteNative(MonoString* text){
 		Shared::Debug::Logger::Debug(__FUNCTION__);
 

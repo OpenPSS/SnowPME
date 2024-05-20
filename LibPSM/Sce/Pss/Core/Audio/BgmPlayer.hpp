@@ -8,7 +8,7 @@
 #include <Sce/Pss/Core/Audio/Bgm.hpp>
 
 namespace Sce::Pss::Core::Audio {
-	class BgmPlayer : public PsmObject {
+	class BgmPlayer : public PsmObject<BgmPlayer> {
 	private:
 		Bgm* audioBgm = nullptr;
 		bool loop = false;

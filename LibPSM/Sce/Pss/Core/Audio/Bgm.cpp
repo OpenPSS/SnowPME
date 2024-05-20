@@ -8,14 +8,15 @@
 #include <LibShared.hpp>
 #include <mono/mono.h>
 #include <iostream>
-
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Memory;
-using namespace Sce::Pss::Core::Callback;
-using namespace Shared::Debug;
+#include <string.h>
 
 namespace Sce::Pss::Core::Audio {
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Io;
+	using namespace Sce::Pss::Core::Memory;
+	using namespace Sce::Pss::Core::Callback;
+	using namespace Shared::Debug;
+
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
 			if (memcmp(this->audioData, "ID3", 3) == 0) {
@@ -47,7 +48,7 @@ namespace Sce::Pss::Core::Audio {
 		}
 	}
 
-	Bgm::Bgm(std::string filename) {
+	Bgm::Bgm(const std::string& filename) {
 		uint64_t file = NULL;
 		// Open the file specified
 		if (ICall::PsmFileOpen((char*)filename.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ, &file) == PSM_ERROR_NO_ERROR) {
@@ -137,7 +138,7 @@ namespace Sce::Pss::Core::Audio {
 		Logger::Debug(__FUNCTION__);
 		
 		if (Handles::IsValid(handle)) {
-			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			Bgm* bgm = Handles::Get<Bgm>(handle);
 			delete bgm;
 		}
 
@@ -149,7 +150,7 @@ namespace Sce::Pss::Core::Audio {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		if (Handles::IsValid(handle)) {
-			Bgm* bgm = (Bgm*)Handles::GetHandle(handle);
+			Bgm* bgm = Handles::Get<Bgm>(handle);
 			BgmPlayer* player = new BgmPlayer(bgm);
 
 			if (Handles::IsValid(player->Handle)) {

@@ -3,17 +3,17 @@
 
 #include <vector>
 namespace LibCXML {
-	CXMLAttribute<std::vector<int>*>::~CXMLAttribute() {
+	template<> CXMLAttribute<std::vector<int>*>::~CXMLAttribute() {
 		attributeValue->clear();
 		delete attributeValue;
 	}
 
-	CXMLAttribute<std::vector<float>*>::~CXMLAttribute() {
+	template<> CXMLAttribute<std::vector<float>*>::~CXMLAttribute() {
 		attributeValue->clear();
 		delete attributeValue;
 	}
 
-	CXMLAttribute<CXMLStream*>::~CXMLAttribute() {
+	template<> CXMLAttribute<CXMLStream*>::~CXMLAttribute() {
 		delete attributeValue;
 	}
 

@@ -5,7 +5,7 @@
 
 namespace LibCXML {
 
-	CXMLElement::CXMLElement(std::string cxmlFile, std::string magic) {
+	CXMLElement::CXMLElement(const std::string& cxmlFile, const std::string& magic) {
 		this->reader = new CXMLReader(cxmlFile, magic.c_str());
 		this->reader->TreeTable->Seek(0);
 		this->attributes = std::vector<CXMLAttributeBase*>();
@@ -36,7 +36,7 @@ namespace LibCXML {
 			this->attributes.push_back(new CXMLAttribute<std::string>(attributeName, std::string(reader->StringTable->ReadStr(), attributeHeader.sz)));
 			break;
 		case TYPE_WSTRING:
-			reader->WStringTable->Seek(attributeHeader.value * sizeof(wchar));
+			reader->WStringTable->Seek(attributeHeader.value * sizeof(wchar_t));
 			this->attributes.push_back(new CXMLAttribute<std::wstring>(attributeName, std::wstring(reader->WStringTable->ReadWStr(), attributeHeader.sz)));
 			break;
 		case TYPE_HASH:

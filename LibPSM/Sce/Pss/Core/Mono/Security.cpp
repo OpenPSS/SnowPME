@@ -4,12 +4,15 @@
 #include <LibShared.hpp>
 #include <fstream>
 #include <filesystem>
-using namespace Shared::String;
-using namespace Shared::Debug;
+#include <string.h>
 
-using namespace Sce::Pss::Core::Mono::PsmDlls;
+
 namespace Sce::Pss::Core::Mono
 {
+	using namespace Shared::String;
+	using namespace Shared::Debug;
+
+	using namespace Sce::Pss::Core::Mono::PsmDlls;
 
 	PssSystemFileEnum Security::nameToEnum(std::string name) {
 		for (int i = 0; i < (sizeof(PsmDllFilenameList) / sizeof(std::string)); i++) {

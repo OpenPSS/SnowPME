@@ -3,9 +3,11 @@
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <LibShared.hpp>
-using namespace Sce::Pss::Core::System;
+
 
 namespace Sce::Pss::Core::Environment {
+	using namespace Sce::Pss::Core::System;
+
 	Shell::Shell(ActionType type, char* p0, char* p1, char* p2, char* p3) {
 
 		this->type = type;
@@ -32,7 +34,7 @@ namespace Sce::Pss::Core::Environment {
 			return PSM_ERROR_COMMON_ARGUMENT;
 		}
 	}
-	int Shell::executeBrowserWindows(std::string url) {
+	int Shell::executeBrowserWindows(const std::string& url) {
 		if (Callback::WindowCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
 			return PlatformSpecific::OpenWebsite(url);
 
@@ -40,7 +42,7 @@ namespace Sce::Pss::Core::Environment {
 
 	}
 
-	int Shell::executeBrowserVita(std::string url) {
+	int Shell::executeBrowserVita(const std::string& url) {
 		return PlatformSpecific::OpenWebsite(url);
 	}
 

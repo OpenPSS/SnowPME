@@ -8,9 +8,8 @@
 #include "../Environment/CommonDialogState.hpp"
 
 
-using namespace Sce::Pss::Core::Environment;
-
 namespace Sce::Pss::Core::Device {
+	using namespace Sce::Pss::Core::Environment;
 	
 	class PhotoImportDialog {
 	private:

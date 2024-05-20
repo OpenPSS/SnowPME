@@ -1,8 +1,10 @@
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Timing/DeltaTime.hpp>
-using namespace Sce::Pss::Core::Callback;
+
 
 namespace Sce::Pss::Core::Timing {
+	using namespace Sce::Pss::Core::Callback;
+
 	DeltaTime::DeltaTime(int minDelta) {
 		this->minDelta = minDelta;
 		this->lastTime = WindowCallbacks::GetTime();

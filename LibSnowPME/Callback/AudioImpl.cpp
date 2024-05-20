@@ -1,10 +1,11 @@
 #include <Callback/AudioImpl.hpp>
 #include <Callback/AudioObject.hpp>
 
-#include <sdl/SDL.h>
-#include <sdl/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include <exception>
 #include <mutex>
+#include <cstring>
 
 namespace SnowPME::Callback {
 
@@ -12,15 +13,15 @@ namespace SnowPME::Callback {
 	
 	void AudioImpl::Init() {
 		if (Mix_Init(MIX_INIT_MP3) < 0) {
-			throw std::exception("failed to Mix_Init.");
+			throw std::runtime_error("failed to Mix_Init.");
 		}
 
 		if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512) < 0) {
-			throw std::exception("failed to Mix_OpenAudio.");
+			throw std::runtime_error("failed to Mix_OpenAudio.");
 		}
 
 		if (Mix_AllocateChannels(AudioImpl::TotalChannels) < 0) {
-			throw std::exception("failed to Mix_AllocateChannels.");
+			throw std::runtime_error("failed to Mix_AllocateChannels.");
 		}
 
 		std::memset(AudioImpl::ChannelsUsed, false, AudioImpl::TotalChannels);
@@ -122,7 +123,7 @@ namespace SnowPME::Callback {
 		// TODO: work out how to set it to loop while its playing already
 
 
-		throw std::exception("Not implemented.");
+		throw std::runtime_error("Not implemented.");
 	}
 
 	bool AudioImpl::IsMP3Paused(void* bgmObject) {

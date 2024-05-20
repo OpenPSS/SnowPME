@@ -3,12 +3,12 @@
 #include <LibShared.hpp>
 #include <string>
 
-using namespace Shared::String;
-using namespace Shared::Debug;
-
 namespace Sce::Pss::Core::Edata {
-	bool EdataList::IsFileInEdata(std::string path) {
-		for (std::string edataFile : this->edataFilesList) {
+	using namespace Shared::String;
+	using namespace Shared::Debug;
+
+	bool EdataList::IsFileInEdata(const std::string& path) {
+		for (const std::string& edataFile : this->edataFilesList) {
 			if (StringUtil::ToLower(edataFile) == StringUtil::ToLower(path)) {
 				return true;
 			}
@@ -16,11 +16,10 @@ namespace Sce::Pss::Core::Edata {
 		return false;
 	}
 
-	EdataList::EdataList(std::string psseListData) {		
-		psseListData = StringUtil::Replace(psseListData, "\r", "");
-		std::vector<std::string> psseFilesList = StringUtil::Split(psseListData, "\n");
+	EdataList::EdataList(std::string& psseListData) {		
+		std::vector<std::string> psseFilesList = StringUtil::Split(StringUtil::Replace(psseListData, "\r", ""), "\n");
 
-		for (std::string psseFile : psseFilesList) {
+		for (const std::string& psseFile : psseFilesList) {
 			Logger::Debug("Registering file: " + psseFile);
 			this->edataFilesList.push_back(psseFile);
 		}

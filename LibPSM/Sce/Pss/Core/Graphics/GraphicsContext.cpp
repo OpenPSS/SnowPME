@@ -5,17 +5,21 @@
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
+#include <Sce/Pss/Core/Graphics/ColorMask.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
+#include <string.h>
+#include <math.h>
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Callback;
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Callback;
+	using namespace Shared::Debug;
+
 	GraphicsContext* GraphicsContext::activeGraphicsContext = nullptr;
 
 	GraphicsContext* GraphicsContext::GetGraphicsContext() {
@@ -89,7 +93,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
 
 				// Resolve the handle for the new shader program
-				ShaderProgram* workingShaderProgram = (ShaderProgram*)Handles::GetHandle(handles[GraphicsContext::shaderProgramHandleOffset]);
+				ShaderProgram* workingShaderProgram = Handles::Get<ShaderProgram>(handles[GraphicsContext::shaderProgramHandleOffset]);
 				
 				// Set this shader program as the currently active shader program.
 				setCurrentObject(workingShaderProgram);
@@ -103,7 +107,7 @@ namespace Sce::Pss::Core::Graphics {
 				// Check this handle is valid ..
 				if (fbHandle != Handles::NoHandle) {
 					// Resolve the handle for the new shader program
-					FrameBuffer* workingFrameBuffer = (FrameBuffer*)Handles::GetHandle(fbHandle);
+					FrameBuffer* workingFrameBuffer = Handles::Get<FrameBuffer>(fbHandle);
 
 					// Set this frame buffer as the currently active frame buffer.
 					setCurrentObject(workingFrameBuffer);
@@ -131,7 +135,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::VertexBuffer");
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
-					VertexBuffer* workingVertexBuffer = (VertexBuffer*)Handles::GetHandle(handles[GraphicsContext::vertexBufferHandleOffset + i]);
+					VertexBuffer* workingVertexBuffer = Handles::Get<VertexBuffer>(handles[GraphicsContext::vertexBufferHandleOffset + i]);
 					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
 
 					if (currentVertexBuffer == workingVertexBuffer) {
@@ -363,11 +367,13 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::ColorMask) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ColorMask");
 
+				using namespace Sce::Pss::Core::Graphics;
+
 				glColorMask(
-					(state->ColorMask & ColorMask::R) != ColorMask::None,
-					(state->ColorMask & ColorMask::G) != ColorMask::None,
-					(state->ColorMask & ColorMask::B) != ColorMask::None,
-					(state->ColorMask & ColorMask::A) != ColorMask::None);
+					(state->ColorMask & ColorMask::R) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::G) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::B) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->ColorMask & ColorMask::A) != Sce::Pss::Core::Graphics::ColorMask::None);
 
 			}
 
@@ -375,7 +381,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("notifyFlag & GraphicsUpdate::LineWidth");
 
 				float lnAdd = state->LineWidth + 0.5;
-				float lnFloor = std::floor(lnAdd);
+				float lnFloor = floor(lnAdd);
 				float lnBase = 1.0;
 				if (lnFloor >= 1.0)
 				{
@@ -540,6 +546,20 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsContext::activeGraphicsContext = nullptr;
 	}
 
+	void GraphicsContext::ErrorCallback(
+		GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam
+	) {
+		fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+			type, severity, message );
+	}
+
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
 		if (this->GetGraphicsContext() != nullptr) 
 		{ 
@@ -635,7 +655,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->Renderer = std::string((char*)glGetString(GL_RENDERER));
 
 			unsigned int gext = GraphicsExtension::None;
-			for (std::string extension : extensionList) {
+			for (const std::string& extension : extensionList) {
 
 				if (extension == "GL_OES_depth_texture")
 					gext |= GraphicsExtension::DepthTexture;
@@ -730,11 +750,13 @@ namespace Sce::Pss::Core::Graphics {
 
 			// set internal state to nulls
 
-			std::memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
-			std::memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
+			memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
+			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
 
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 
+			glEnable(GL_DEBUG_OUTPUT);
+			glDebugMessageCallback(GraphicsContext::ErrorCallback, nullptr);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");

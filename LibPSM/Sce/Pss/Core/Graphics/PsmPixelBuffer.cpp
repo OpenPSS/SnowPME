@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Graphics/PixelBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/PsmPixelBuffer.hpp>
-#include <Sce/PSs/Core/Graphics/Texture2D.hpp>
+#include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 
 #include <Sce/Pss/Core/System/Handles.hpp>
@@ -10,11 +10,11 @@
 
 #include <LibShared.hpp>
 
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Threading;
-
-using namespace Shared::Debug;
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Shared::Debug;
+
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pix = (PixelBuffer*)Handles::GetHandle(handle);
+			PixelBuffer* pix = Handles::Get<PixelBuffer>(handle);
 			delete pix;
 		}
 		else
@@ -65,7 +65,7 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pixBuffer = (PixelBuffer*)Handles::GetHandle(handle);
+			PixelBuffer* pixBuffer = Handles::Get<PixelBuffer>(handle);
 
 			return pixBuffer->GetInfo(type, width, height, level, format, option);
 		}

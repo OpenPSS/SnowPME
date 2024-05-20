@@ -7,12 +7,13 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Io;
-using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Io;
+	using namespace Sce::Pss::Core::Memory;
 	
 	int ShaderProgram::compileShader(int type, char* source) {
 		int shader = glCreateShader(type);
@@ -43,23 +44,32 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
-		std::string fragmentSrc = "";
-		std::string vertexSrc = "";
 
 		if (vertexShaderBuf != nullptr) {
-			CGX* cgx = new CGX(vertexShaderBuf, vertexShaderSz);
-			PassErrorable(cgx);
-			fragmentSrc = cgx->FragmentShader("GLSL");
-			vertexSrc = cgx->VertexShader("GLSL");
-			delete cgx;
+			CGX* cgxFile = new CGX(vertexShaderBuf, vertexShaderSz);
+			ReturnErrorable(cgxFile);
+
+			std::string src = cgxFile->FindVertexShader("GLSL");
+			ReturnErrorable(cgxFile);
+			this->vertexSrc = src;
+
+			if(fragmentShaderBuf == nullptr) {
+				std::string src = cgxFile->FindFragmentShader("GLSL");
+				ReturnErrorable(cgxFile);
+				this->fragmentSrc = src;
+			}
+
+			delete cgxFile;
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			CGX* cgx = new CGX(fragmentShaderBuf, fragmentShaderSz);
-			PassErrorable(cgx);
-			fragmentSrc = cgx->FragmentShader("GLSL");
-			vertexSrc = cgx->VertexShader("GLSL");
-			delete cgx;
+			CGX* cgxFile = new CGX(fragmentShaderBuf, fragmentShaderSz);
+			ReturnErrorable(cgxFile);
+
+			std::string src = cgxFile->FindFragmentShader("GLSL");
+			ReturnErrorable(cgxFile);
+			this->fragmentSrc = src;
+			delete cgxFile;
 		}
 
 		this->GLReference = glCreateProgram();
@@ -68,17 +78,17 @@ namespace Sce::Pss::Core::Graphics {
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
 		// i dont know why.
-		fragmentSrc = "#version 150\r\n" + fragmentSrc;
-		vertexSrc = "#version 150\r\n" + vertexSrc;
+		this->fragmentSrc = "#version 150\r\n" + this->fragmentSrc;
+		this->vertexSrc = "#version 150\r\n" + this->vertexSrc;
 
-		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)fragmentSrc.c_str());
+		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)this->fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return 0;
 		}
 
-		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)vertexSrc.c_str());
+		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)this->vertexSrc.c_str());
 		if (compileVertexShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
@@ -160,6 +170,9 @@ namespace Sce::Pss::Core::Graphics {
 			this->Attributes.push_back(attribute);
 		}
 		
+		//TODO: temp
+		printf("%s\n", this->vertexSrc.c_str());
+
 		return this->GLReference;
 	}
 
@@ -215,7 +228,7 @@ namespace Sce::Pss::Core::Graphics {
 		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 		uint8_t* cgxData = resourceHeap->sce_psm_malloc(shaderLen);
 		if (cgxData != nullptr) {
-			std::memcpy(cgxData, shaderSrc, shaderLen);
+			memcpy(cgxData, shaderSrc, shaderLen);
 			return cgxData;
 		}
 		else {
@@ -242,6 +255,11 @@ namespace Sce::Pss::Core::Graphics {
 
 		this->vertexCgxLen = vertexShaderSz;
 		this->fragmentCgxLen = fragmentShaderSz;
+
+		// ignore, this is for debugger breakpoint
+		if(fragmentShaderSz == 0x224) {
+			printf("a");
+		}
 
 		this->GLReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 
@@ -284,4 +302,49 @@ namespace Sce::Pss::Core::Graphics {
 		return this->Attributes.size();
 	}
 
+	void ShaderProgram::SetAttributeBinding(int index, std::string& name) {
+		GLuint attributeLocation = glGetAttribLocation(this->GLReference, name.c_str());
+
+		if(attributeLocation == -1) {
+			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
+			return;
+		}
+		glBindAttribLocation(this->GLReference, index, name.c_str());
+		attributeBindings[index] = name;
+	}
+
+	std::string ShaderProgram::GetAttributeBinding(int index) const {
+        auto it = attributeBindings.find(index);
+        if (it != attributeBindings.end()) {
+            return it->second;
+        } else {
+            return "";
+        }
+    }
+
+	int ShaderProgram::GetAttributeType(int index, ShaderAttributeType* attributeType) {
+		GLint params = 0;
+		glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &params);
+		GLenum err = glGetError();
+		if(err != GL_NO_ERROR) {
+			return err;
+		}
+		switch(params) {
+			case GL_BYTE:
+			case GL_UNSIGNED_BYTE:
+			case GL_SHORT:
+				return 0; // TODO
+			case GL_FLOAT:
+				*attributeType = ShaderAttributeType::Float;
+				return 0;
+		}
+	}
+
+	int ShaderProgram::GetUniformName(int index, std::string& name) const {
+		GLchar nameBuf[0xff];
+		GLsizei nameLength;
+		glGetActiveUniform(this->GLReference, index, name.capacity(), &nameLength, nullptr, nullptr, nameBuf);
+		name = std::string(nameBuf, nameLength);
+		return PSM_ERROR_NO_ERROR;
+	}
 }

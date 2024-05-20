@@ -11,24 +11,23 @@
 #include <mono/mono.h>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
-using namespace Shared::Debug;
-
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Graphics {
-
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Graphics;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::System;
 
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
 		Logger::Debug(__FUNCTION__);
 		
-		GraphicsContext* grphxCtx = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
-		ReturnErrorable(grphxCtx);
+		GraphicsContext* graphicsContext = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
+		ReturnErrorable(graphicsContext);
 
-		*result = Handles::CreateHandle((uintptr_t)grphxCtx);
+		*result = Handles::Create(graphicsContext);
 		
 		return PSM_ERROR_NO_ERROR;
 	}

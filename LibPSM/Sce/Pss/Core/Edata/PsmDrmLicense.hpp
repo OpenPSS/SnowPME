@@ -1,6 +1,7 @@
 #ifndef LIB_PSM_LICENSE_H
 #define LIB_PSM_LICENSE_H 1
 #include <iostream>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Edata {
 	typedef struct ScePsmDrmLicense {

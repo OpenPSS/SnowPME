@@ -2,9 +2,10 @@
 #include <mono/mono.h>
 #include <LibShared.hpp>
 
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Mono {
+	using namespace Shared::Debug;
+
 	void Resources::ResourceLimitReachedCallback(int resourceType, uintptr_t value, int isSoft) {
 		if (resourceType < MONO_RESOURCE_JIT_CODE || resourceType <= MONO_RESOURCE_GC_HEAP || resourceType != MONO_RESOURCE_GC_HEAP) {
 			if (resourceType <= MONO_RESOURCE_METADATA)

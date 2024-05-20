@@ -2,18 +2,18 @@
 
 namespace Shared::String {
 
-	std::string StringUtil::Reverse(std::string str) {
+	std::string StringUtil::Reverse(const std::string& str) {
 		std::string littleEndainStr = str;
-		std::string bigEndainStr = "";
+		std::string bigEndianStr = "";
 
 		// Read string in reverse order
 		for (int i = littleEndainStr.length(); i >= 0; i--)
-			bigEndainStr += littleEndainStr.substr(i, 1);
+			bigEndianStr += littleEndainStr.substr(i, 1);
 
-		return bigEndainStr;
+		return bigEndianStr;
 	}
 
-	std::string StringUtil::ToLower(std::string str) {
+	std::string StringUtil::ToLower(const std::string& str) {
 		// dont modify the original string
 		std::string strcopy = str;
 		
@@ -25,7 +25,7 @@ namespace Shared::String {
 		return strcopy;
 	}
 
-	std::string StringUtil::ToUpper(std::string str) {
+	std::string StringUtil::ToUpper(const std::string& str) {
 		// dont modify the original string
 		std::string strcopy = str;
 
@@ -37,7 +37,7 @@ namespace Shared::String {
 		return strcopy;
 	}
 
-	std::string StringUtil::Join(std::vector<std::string> parts, std::string delimiter) {
+	std::string StringUtil::Join(const std::vector<std::string> parts, const std::string& delimiter) {
 		std::string str = "";
 		for (size_t i = 0; i < parts.size(); i++) {
 			str += parts.at(i);
@@ -47,7 +47,7 @@ namespace Shared::String {
 		return str;
 	}
 
-	std::vector<std::string> StringUtil::Split(std::string str, std::string delimiter) {
+	std::vector<std::string> StringUtil::Split(const std::string& str, const std::string& delimiter) {
 		std::vector<std::string> strs;
 
 		// Dont modify the original string
@@ -76,7 +76,7 @@ namespace Shared::String {
 		return str;
 	}
 
-	std::string StringUtil::Replace(std::string str, std::string find, std::string replace) {
+	std::string StringUtil::Replace(const std::string& str, const std::string& find, const std::string& replace) {
 		// Dont modify the original string
 		std::string strcopy = str;
 

@@ -16,7 +16,7 @@ namespace SnowPME::Graphics::Gui {
 		this->windowOpen = false;
 	}
 
-	std::string ImGuiWindow::createWindowTitle(std::string windowTitle) {
+	std::string ImGuiWindow::createWindowTitle(const std::string& windowTitle) {
 		return windowTitle + "##" + this->uuid;
 	}
 

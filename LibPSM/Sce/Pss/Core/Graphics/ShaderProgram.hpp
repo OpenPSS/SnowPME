@@ -4,6 +4,7 @@
 #include <vector>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgramOption.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderAttributeType.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -11,12 +12,16 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
-		int vertexCgxLen;
-		int fragmentCgxLen;
+		int vertexCgxLen = NULL;
+		int fragmentCgxLen = NULL;
+
+		std::string fragmentSrc = "";
+		std::string vertexSrc = "";
+		ShaderProgramOption* programOptions;
+
+		std::unordered_map<int, std::string> attributeBindings; 
 
 		int compileShader(int type, char* source);
-
-		ShaderProgramOption* programOptions;
 	public:
 		int ActiveStateChanged(bool state);
 		int UniformCount();
@@ -32,6 +37,15 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath);
 		ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 		~ShaderProgram();
+
+		void SetAttributeBinding(int index, std::string& name);
+		std::string GetAttributeBinding(int index) const;
+		const inline std::unordered_map<int, std::string>& GetAttributeBindings() const {
+			return attributeBindings;
+		}
+		int GetAttributeType(int index, ShaderAttributeType* attributeType);
+
+		int GetUniformName(int index, std::string& uniformName) const;
 	};
 }
 

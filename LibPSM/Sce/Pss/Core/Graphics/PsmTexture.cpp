@@ -8,18 +8,19 @@
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
-#include <Sce/PSs/Core/System/Handles.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Threading;
-using namespace Sce::Pss::Core::Graphics;
-
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Sce::Pss::Core::Graphics;
+
+	using namespace Shared::Debug;
+
 	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
@@ -42,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 			
 			if (tex != nullptr) {
-				*result = Handles::CreateHandle((uintptr_t)tex);
+				*result = Handles::Create(tex);
 				return PSM_ERROR_NO_ERROR;
 			}
 			return PSM_ERROR_INVALID_PARAMETER;

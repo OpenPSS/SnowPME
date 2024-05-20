@@ -7,14 +7,14 @@
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Audio {
-	class Bgm : public PsmObject {
+	class Bgm : public PsmObject<Bgm> {
 		uint8_t* audioData = nullptr;
 		uint32_t audioSz = 0;
 
 		bool isMp3();
 	public:
 		void* NativeBgmObject = nullptr;
-		Bgm(std::string filename);
+		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();
 		static int NewFromFilename(MonoString* filename, int* handle);

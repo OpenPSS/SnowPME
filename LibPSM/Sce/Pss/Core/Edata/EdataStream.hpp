@@ -1,5 +1,5 @@
-#ifndef LIB_PSS_PSSE_STREAM_H
-#define LIB_PSS_PSSE_STREAM_H 1
+#ifndef LIB_PSS_EDATASTREAM_H
+#define LIB_PSS_EDATASTREAM_H 1
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Edata/EdataHeader.hpp>
@@ -10,7 +10,7 @@
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Edata {
-	class EdataStream : public PsmObject {
+	class EdataStream : public PsmObject<EdataStream> {
 	private:
 		std::fstream* osHandle = nullptr;
 		Sce::Pss::Core::Crypto::AesCbc* aes = nullptr;
@@ -34,7 +34,6 @@ namespace Sce::Pss::Core::Edata {
 		int bytesLeftInBlock();
 		size_t getRemainLength(size_t length, size_t totalRead);
 		void decryptBlock(uint64_t blockNo);
-		void getNewBlockIfDifferent(uint64_t blockNo);
 		void rollIv(uint64_t blockNo, uint8_t blockIv[0x10]);
 		
 		uint64_t decryptedOffsetToAbsFileOffset(uint64_t offset);
@@ -51,7 +50,7 @@ namespace Sce::Pss::Core::Edata {
 		bool FileEncrypted = false;
 		EdataList* EncryptedDataList = nullptr;
 
-		EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
+		EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
 		~EdataStream();
 		uint64_t Filesize();
 		int Read(char* buffer, size_t length);
@@ -61,7 +60,7 @@ namespace Sce::Pss::Core::Edata {
 		void Close();
 		bool Verify();
 		void Flush();
-		size_t Tell();
+		uint64_t Tell();
 	};
 }
 

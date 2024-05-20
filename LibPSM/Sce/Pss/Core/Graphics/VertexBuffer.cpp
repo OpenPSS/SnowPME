@@ -8,12 +8,13 @@
 #include <Sce/Pss/Core/Vector4.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>
+#include <string.h>
 
-using namespace Sce::Pss::Core;
-using namespace Sce::Pss::Core::Threading;
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core;
+	using namespace Sce::Pss::Core::Threading;
+	using namespace Shared::Debug;
 
 	bool VertexBuffer::GetFormatElementNormalize(VertexFormat format) {
 		switch (format) {
@@ -800,7 +801,7 @@ namespace Sce::Pss::Core::Graphics {
 				if (this->GetError() != PSM_ERROR_NO_ERROR)
 					return;
 
-				if (versionFormatSz < 0)
+				if (versionFormatSz > 0)
 					sz += versionFormatSz;
 
 				this->VertexFormats.push_back(format);

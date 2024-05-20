@@ -6,10 +6,10 @@
 #include <Sce/Pss/Core/Errorable.hpp>
 
 namespace Sce::Pss::Core::Graphics {
-	class GraphicsObject : public PsmObject {
+	class GraphicsObject : public PsmObject<GraphicsObject> {
 	private:
 	public:
-		virtual int ActiveStateChanged(bool state) = NULL;
+		virtual int ActiveStateChanged(bool state) = 0;
 		bool Active = false;
 		static void Release(GraphicsObject* object);
 		uint32_t GLReference;

@@ -13,7 +13,7 @@ namespace SnowPME::Graphics::Gui {
 		void updateWindow();
 		void renderWindow();
 	public:
-		MsgBox(std::string msgTitle, std::string msgMessage, std::vector<std::string>msgButtons);
+		MsgBox(const std::string& msgTitle, const std::string& msgMessage, std::vector<std::string>msgButtons);
 		std::string GetResult();
 		bool KeepOutput = true;
 	};

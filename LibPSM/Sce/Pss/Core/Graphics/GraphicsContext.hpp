@@ -24,11 +24,9 @@
 #include <mono/mono.h>
 #include <glad/glad.h>
 
-using namespace Sce::Pss::Core::Imaging;
-using namespace Sce::Pss::Core::Graphics;
-using namespace Sce::Pss::Core::Timing;
-
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::Imaging;
+	using namespace Sce::Pss::Core::Timing;
 	
 	class GraphicsContext : public GraphicsObject {
 	private:
@@ -79,6 +77,16 @@ namespace Sce::Pss::Core::Graphics {
 
 		int setCurrentObject(ShaderProgram* program);
 		int setCurrentObject(FrameBuffer* frameBuffer);
+
+		static void ErrorCallback(
+			GLenum source,
+			GLenum type,
+			GLuint id,
+			GLenum severity,
+			GLsizei length,
+			const GLchar* message,
+			const void* userParam
+		);
 
 	public:
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);

@@ -3,11 +3,14 @@
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Memory;
-using namespace Sce::Pss::Core::Graphics;
+#include <string.h>
+
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Memory;
+	using namespace Sce::Pss::Core::Graphics;
+
 
 	Texture2D::Texture2D(std::string* fileName, bool mipmap, PixelFormat format) {
 		Logger::Debug(__FUNCTION__);

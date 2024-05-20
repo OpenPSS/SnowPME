@@ -1,10 +1,10 @@
 #ifndef LIB_PSS_WINDOWCALLBACKS_H
 #define LIB_PSS_WINDOWCALLBACKS_H 1
-#include <Sce/Pss/Core/Callback/Callbacks.hpp>
+#include <Sce/Pss/Core/Callback/CallbackBase.hpp>
 #include <string>
 
 namespace Sce::Pss::Core::Callback {
-	class WindowCallbacks : public Callbacks{
+	class WindowCallbacks : public CallbackBase{
 	private:
 		static void (*swapBufferCallback)(void);
 		static double (*getTimeCallback)(void);
@@ -25,7 +25,7 @@ namespace Sce::Pss::Core::Callback {
 		static void PollEvents();
 		static bool IsClosed();
 		static bool IsMinimized();
-		static bool YesNoDialog(std::string message, std::string caption);
+		static bool YesNoDialog(const std::string& message, const std::string& caption);
 	};
 
 }

@@ -2,25 +2,15 @@
 #define SNOW_PME_RUNTIME_INIT_H 1
 #include <string>
 #include <Graphics/Window.hpp>
-#include <mono/mono.h>
 
 namespace SnowPME::Runtime
 {
 	class Init {
 	private:
-		static std::string appExe;
-		static MonoDomain* psmDomain;
-		static MonoAssembly* psmCoreLib;
-		static MonoAssembly* msCoreLib;
-		static MonoAssembly* systemLib;
-
-		static void addFunctions();
-		static void launchExe(std::string runExe);
-		static int initMono(std::string executablePath);
 		static int initCallbacks(Graphics::Window* oglWindow);
-
+		static std::string gameFolder;
 	public:
-		static void LoadApplication(std::string gameFolder, Graphics::Window* window);
+		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);
 		static void StartApplication();
 	};
 }

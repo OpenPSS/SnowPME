@@ -40,8 +40,10 @@ namespace Sce::Pss::Core::Mono {
 			}
 			fields = mono_class_get_fields(typeClass, &iter);
 			if (!fields)
-				return 1;
+				return true;
 		}
+
+		return false;
 	}
 	std::string* Util::MonoStringToStdString(MonoString* mstr, std::string& string) {
 		if (!mstr)
@@ -52,6 +54,12 @@ namespace Sce::Pss::Core::Mono {
 			mono_free(str);
 		}
 		return &string;
+	}
+
+	MonoString* Util::StdStringToMonoString(const std::string& str) {
+		MonoDomain* domain = mono_domain_get();
+		MonoString* monoStr = mono_string_new_len(domain, str.c_str(), str.length());
+		return monoStr;
 	}
 
 	MonoType* Util::MonoArrayElementsType(MonoArray* ar) {

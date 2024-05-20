@@ -3,12 +3,14 @@
 #include <iostream>
 #include <mutex>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Memory {
+	using namespace Shared::Debug;
+
 	HeapAllocator* HeapAllocator::resourceHeapAllocator = nullptr;
 
-	HeapAllocator::HeapAllocator(size_t heapSize, std::string heapName) {
+	HeapAllocator::HeapAllocator(size_t heapSize, const std::string& heapName) {
 		this->HeapName = heapName;
 		this->TotalHeapSize = heapSize;
 
@@ -32,10 +34,7 @@ namespace Sce::Pss::Core::Memory {
 
 		if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
-#ifndef _DEBUG
-			this->allocMutex.unlock();
-			return nullptr;
-#endif
+			Logger::Debug("This should exceeed the resource heap limit, but since it barely works ima allow it for now ..");
 		}
 
 		// allocate a vector of uint8_t, of the given size
@@ -72,7 +71,7 @@ namespace Sce::Pss::Core::Memory {
 	}
 	HeapAllocator* HeapAllocator::GetResourceHeapAllocator() {
 		if (HeapAllocator::resourceHeapAllocator == nullptr)
-			throw std::exception("resource heap allocator is not yet initalized.");
+			throw std::runtime_error("resource heap allocator is not yet initalized.");
 
 		return HeapAllocator::resourceHeapAllocator;
 	}

@@ -7,19 +7,28 @@ namespace Sce::Pss::Core::Graphics {
 #define CGX_MAX_LEN (0x10000)
 #define CGX_MAGIC_LEN (0x4)
 
-	typedef struct CGXVarientTableEntry {
-		uint32_t nullSeperatorListPtr;
-		uint32_t varientListPtr;
-		uint32_t varientCount;
-		char unk0[0x14];
-	} CGXVarientTableEntry;
+	enum class CGXVariantType : uint32_t {
+		Vertex = 0x1,
+		Fragment = 0x2
+	};
 
-	typedef struct CGXVarient {
+	typedef struct CGXVariantTableEntry {
+		uint32_t nullSeperatorListPtr;
+		uint32_t VariantListPtr;
+		uint32_t VariantCount;
+		int unk0;
+		int unk1;
+		int unk2;
+		CGXVariantType VariantType;
+		int unk4;
+	} CGXVariantTableEntry;
+
+	typedef struct CGXVariant {
 		char language[CGX_MAGIC_LEN];
 		uint32_t sourcePtr;
 		uint32_t sourceSz;
 		uint32_t reserved;
-	} CGXVarient;
+	} CGXVariant;
 
 	typedef struct CGXHeader {
 		char magic[CGX_MAGIC_LEN];
@@ -28,19 +37,19 @@ namespace Sce::Pss::Core::Graphics {
 		uint32_t flags;
 		int unk0;
 		int unk1;
-		uint32_t varientTablePtr;
 
+		uint32_t vertexShaderVariantsPtr;
 		int unk2;
-		int unk3;
+		uint32_t fragmentShaderVariantsPtr;
 		int unk4;
-		int headerSize;
-		int unk5;
-		int unk6;
-		int unk7;
-		int totalSize;
-		int unk9;
 
-		char hash[0x10];
+		uint32_t headerSize;
+		uint32_t shaderDataPtr;
+		uint32_t nullTermListStartPtr;
+		uint32_t nullTermListStartPtr2;
+		uint32_t totalSize;
+
+		uint8_t hash[0x14];
 	} CGXHeader;
 
 	class CGX : public Errorable{
@@ -53,17 +62,17 @@ namespace Sce::Pss::Core::Graphics {
 		std::string glesVer;
 
 		CGXHeader header;
-		CGXVarientTableEntry fragmentVarientTableEntry;
-		CGXVarientTableEntry vertexVarientTableEntry;
-		CGXVarient* fragmentVarients;
-		CGXVarient* vertexVarients;
+		CGXVariantTableEntry fragmentVariantTableEntry;
+		CGXVariantTableEntry vertexVariantTableEntry;
+		CGXVariant* fragmentVariants = nullptr;
+		CGXVariant* vertexVariants = nullptr;
 
 		bool headerIsValid();
 	public:
 		CGX(uint8_t* cgx, size_t cgxSz);
 		~CGX();
-		std::string FragmentShader(std::string shaderLanguage);
-		std::string VertexShader(std::string shaderLanguage);
+		const std::string FindFragmentShader(const std::string& shaderLanguage);
+		const std::string FindVertexShader(const std::string& shaderLanguage);
 	};
 }
 

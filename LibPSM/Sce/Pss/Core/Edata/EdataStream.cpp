@@ -12,11 +12,13 @@
 #include <LibShared.hpp>
 #include <filesystem>
 #include <errno.h>
+#include <string.h>
 
-using namespace Shared::Debug;
-using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
+	using namespace Shared::Debug;
+	using namespace Sce::Pss::Core::Crypto;
+
 	static const int PsseBlockSize = 0x8000;
 	static const int PsseSignatureBlockSize = 0x80000;
 	static const int PsseSignatureSize = 0x400;
@@ -69,10 +71,6 @@ namespace Sce::Pss::Core::Edata {
 		uint64_t absFileOffset = this->decryptedOffsetToAbsFileOffset(offset);
 		absFileOffset -= (absFileOffset % PsseBlockSize);
 		return absFileOffset / PsseBlockSize;
-	}
-
-	void EdataStream::getNewBlockIfDifferent(uint64_t blockNo) {
-		if (this->block != blockNo) this->decryptBlock(blockNo);
 	}
 
 	void EdataStream::decryptBlock(uint64_t blockNo) {
@@ -147,7 +145,7 @@ namespace Sce::Pss::Core::Edata {
 		return length - totalRead;
 	}
 
-	EdataStream::EdataStream(std::string file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
+	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
 		memset(this->titleKey, 0x00, sizeof(EdataStream::titleKey));
 		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
 
@@ -158,95 +156,90 @@ namespace Sce::Pss::Core::Edata {
 			drm->GetTitleKey(this->titleKey);
 
 		memset(&this->header, 0x00, sizeof(EdataHeader));
+ 
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
 			this->totalBlocks = (this->totalFileSize / PsseBlockSize);
+		}
+		this->osHandle = new std::fstream(file, mode);
 
-			this->osHandle = new std::fstream(file, mode);
+		// if stream errors, return error code
 
-			// if stream errors, return error code
+		if (this->osHandle->fail() || !this->osHandle->is_open()) {
+			Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + strerror(errno));
 
-			if (this->osHandle->fail() || !this->osHandle->is_open()) {
-				Logger::Error("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + std::strerror(errno));
-
-				if (this->osHandle != nullptr) {
-					delete this->osHandle;
-					this->osHandle = nullptr;
-				}
-
-				switch (errno) {
-				case EPERM:
-					this->SetError(PSM_ERROR_ACCESS_DENIED);
-					break;
-				case ENOENT:
-					this->SetError(PSM_ERROR_FILE_NOT_FOUND);
-					break;
-				case EEXIST:
-					this->SetError(PSM_ERROR_ALREADY_EXISTS);
-					break;
-				default:
-					this->SetError(PSM_ERROR_COMMON_IO);
-					break;
-				}
-
-				return;
-
+			if (this->osHandle != nullptr) {
+				delete this->osHandle;
+				this->osHandle = nullptr;
 			}
 
-			// handle psse ;
+			switch (errno) {
+			case EPERM:
+				this->SetError(PSM_ERROR_ACCESS_DENIED);
+				break;
+			case ENOENT:
+				this->SetError(PSM_ERROR_FILE_NOT_FOUND);
+				break;
+			case EEXIST:
+				this->SetError(PSM_ERROR_ALREADY_EXISTS);
+				break;
+			default:
+				this->SetError(PSM_ERROR_COMMON_IO);
+				break;
+			}
 
-			// read psse header
-			if (this->EncryptedDataList == nullptr || this->EncryptedDataList->IsFileInEdata(file)) {
-				this->osHandle->read((char*)&this->header, sizeof(EdataStream::header));
+			return;
 
-				// check header is PSSE or PSME
-				if (this->osHandle->gcount() >= sizeof(EdataHeader) &&
-					memcmp(this->header.Magic, "PSSE", sizeof(EdataHeader::Magic)) == 0 ||
-					memcmp(this->header.Magic, "PSME", sizeof(EdataHeader::Magic)) == 0) {
+		}
 
-					this->FileEncrypted = true;
+		// handle psse ;
+		if (this->EncryptedDataList == nullptr || this->EncryptedDataList->IsFileInEdata(file) && std::filesystem::exists(file)) {
+			this->osHandle->read((char*)&this->header, sizeof(EdataStream::header));
 
-					// check version & type is not 1
-					if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
-						Logger::Error(file + " Has an invalid PSSE header.");
+			// check header is PSSE or PSME
+			if (this->osHandle->gcount() >= sizeof(EdataHeader) &&
+				memcmp(this->header.Magic, "PSSE", sizeof(EdataHeader::Magic)) == 0 ||
+				memcmp(this->header.Magic, "PSME", sizeof(EdataHeader::Magic)) == 0) {
 
-						if (this->osHandle != nullptr) {
-							delete this->osHandle;
-							this->osHandle = nullptr;
-						}
+				this->FileEncrypted = true;
 
-						this->SetError(PSM_ERROR_COMMON_IO);
-						return;
+				// check version & type is not 1
+				if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
+					Logger::Error(file + " Has an invalid PSSE header.");
+
+					if (this->osHandle != nullptr) {
+						delete this->osHandle;
+						this->osHandle = nullptr;
 					}
 
-					// is runtime file?
-					if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
-						std::memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
-					}
-
-					// if no content id set then this is psm developer assistant application
-					this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
-					std::memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
-
-					// decrypt the IV from the file header
-					CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
-					this->aes = new AesCbc(this->titleKey, this->fileIv);
-
-					// decrypt first block from the PSSE'd file
-					decryptBlock(this->block);
+					this->SetError(PSM_ERROR_COMMON_IO);
 					return;
 				}
+
+				// is runtime file?
+				if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
+					memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
+				}
+
+				// if no content id set then this is psm developer assistant application
+				this->psmDeveloperAssistant = (strnlen(this->header.ContentId, sizeof(EdataHeader::ContentId)) == 0);
+				memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
+
+				// decrypt the IV from the file header
+				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
+				this->aes = new AesCbc(this->titleKey, this->fileIv);
+
+				// decrypt first block from the PSSE'd file
+				decryptBlock(this->block);
+				return;
 			}
+		}
 			
-			this->FileEncrypted = false;
-			this->osHandle->clear();
-			this->osHandle->seekg(0, std::ios::beg);
-			return;
-		}
-		else {
-			this->SetError(PSM_ERROR_FILE_NOT_FOUND);
-		}
+		this->FileEncrypted = false;
+		this->osHandle->clear();
+		this->osHandle->seekg(0, std::ios::beg);
+		return;
 	}
 
 	EdataStream::~EdataStream() {
@@ -274,7 +267,10 @@ namespace Sce::Pss::Core::Edata {
 	int EdataStream::Read(char* buffer, size_t length) {
 		if (this->FileEncrypted) {
 
-			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
+			uint64_t blockNo = this->getBlockIdForOffset(this->position);
+			if (this->block != blockNo) {
+				this->decryptBlock(blockNo);
+			}
 
 			size_t totalRead = 0;
 			if (length > this->getRemainLength(this->Filesize(), this->position))
@@ -314,18 +310,11 @@ namespace Sce::Pss::Core::Edata {
 				this->position += position;
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->totalFileSize - position;
+				this->position = this->Filesize() - position;
 				break;
 			default:
-				return PSM_ERROR_ERROR;
+				return PSM_ERROR_INVALID_PARAMETER;
 			}
-			
-			if (this->position > this->Filesize())
-				this->position = this->Filesize();
-			if (this->position < 0)
-				this->position = 0;
-
-			this->getNewBlockIfDifferent(this->getBlockIdForOffset(this->position));
 		}
 		else{
 			switch (pos) {
@@ -340,30 +329,37 @@ namespace Sce::Pss::Core::Edata {
 				this->osHandle->seekg(position, std::ios::cur);
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->totalFileSize - position;
+				this->position = this->Filesize() - position;
 				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::end);
 				break;
 			default:
-				return PSM_ERROR_ERROR;
+				return PSM_ERROR_INVALID_PARAMETER;
 			}
-
-			if (this->position > this->totalFileSize)
-				this->position = this->totalFileSize;
-
-			if (this->position < 0)
-				this->position = 0;
-
-
-			return PSM_ERROR_NO_ERROR;
 		}
+
+
+		if (this->position > this->Filesize())
+			this->position = this->Filesize();
+
+		if (this->position < 0)
+			this->position = 0;
+
+ 		if (this->FileEncrypted) {
+			uint64_t blockNo = this->getBlockIdForOffset(this->position);
+			if (this->block != blockNo) {
+				this->decryptBlock(blockNo);
+			}
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	bool EdataStream::IsOpen() {
 		return this->osHandle->is_open();
 	}
 
-	size_t EdataStream::Tell() {
+	uint64_t EdataStream::Tell() {
 		return this->position;
 	}
 

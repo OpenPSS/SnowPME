@@ -5,12 +5,23 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 
 namespace Sce::Pss::Core {
-	class PsmObject : public Errorable {
+	using Sce::Pss::Core::System::Handles;
+
+	template<typename T> class PsmObject : public Errorable {
 	private:
 	public:
-		PsmObject();
-		~PsmObject();
-		void Dispose();
+		PsmObject() {
+			this->Handle = Handles::Create(static_cast<T*>(this));
+		};
+		~PsmObject() {
+			this->Dispose();
+		};
+		void Dispose() {
+			this->IsDisposed = true;
+			if (Handles::IsValid(this->Handle))
+				Handles::Delete(this->Handle);
+			this->Handle = Handles::NoHandle;
+		};
 		bool IsDisposed = false;
 		int Handle = System::Handles::NoHandle;
 	};

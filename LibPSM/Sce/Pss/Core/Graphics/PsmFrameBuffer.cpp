@@ -4,9 +4,11 @@
 #include <Sce/Pss/Core/Error.hpp>
 
 #include <LibShared.hpp>
-using namespace Shared::Debug;
+
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Shared::Debug;
+
 	int PsmFrameBuffer::Create(int *result){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;

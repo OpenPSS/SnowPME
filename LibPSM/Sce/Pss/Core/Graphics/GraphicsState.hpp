@@ -12,10 +12,11 @@
 #include <Sce/Pss/Core/Imaging/ImageRect.hpp>
 #include <Sce/Pss/Core/Vector4.hpp>
 #include <Sce/Pss/Core/Vector2.hpp>
-using namespace Sce::Pss::Core::Imaging;
-using namespace Sce::Pss::Core;
 
 namespace Sce::Pss::Core::Graphics {
+	using namespace Sce::Pss::Core::Imaging;
+	using namespace Sce::Pss::Core;
+
 	typedef struct GraphicsState {
 		EnableMode Enable; 
 		ImageRect Scissor;
@@ -24,16 +25,16 @@ namespace Sce::Pss::Core::Graphics {
 		Vector4 ClearColor;
 		float ClearDepth;
 		int ClearStencil;
-		CullFace CullFace;
-		BlendFunc BlendFuncRgb;
-		BlendFunc BlendFuncAlpha;
-		DepthFunc DepthFunc;
-		PolygonOffset PolygonOffset;
-		StencilFunc StencilFuncFront;
-		StencilOp StencilOpFront;
-		StencilFunc StencilFuncBack;
-		StencilOp StencilOpBack;
-		ColorMask ColorMask;
+		Sce::Pss::Core::Graphics::CullFace CullFace;
+		Sce::Pss::Core::Graphics::BlendFunc BlendFuncRgb;
+		Sce::Pss::Core::Graphics::BlendFunc BlendFuncAlpha;
+		Sce::Pss::Core::Graphics::DepthFunc DepthFunc;
+		Sce::Pss::Core::Graphics::PolygonOffset PolygonOffset;
+		Sce::Pss::Core::Graphics::StencilFunc StencilFuncFront;
+		Sce::Pss::Core::Graphics::StencilOp StencilOpFront;
+		Sce::Pss::Core::Graphics::StencilFunc StencilFuncBack;
+		Sce::Pss::Core::Graphics::StencilOp StencilOpBack;
+		Sce::Pss::Core::Graphics::ColorMask ColorMask;
 		float LineWidth;
 	} GraphicsState;
 }

@@ -1,12 +1,9 @@
 #include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
-#include <glad/glad.h>
-
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Callback {
-
+	using namespace Shared::Debug;
 
 	void*   (*AudioCallbacks::openMp3)(uint8_t* data, size_t dataSz) = nullptr;
 	void	(*AudioCallbacks::closeMp3)(void* bgmObject) = nullptr;

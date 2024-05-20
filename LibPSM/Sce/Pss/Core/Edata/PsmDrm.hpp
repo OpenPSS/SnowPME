@@ -14,9 +14,9 @@ namespace Sce::Pss::Core::Edata {
 		std::string psmContentId;
 		uint8_t titleKey[0x10];
 	public:
-		PsmDrm(std::string licenseFile);
-		PsmDrm(std::string contentId, uint8_t* titleKey);
-		std::string GetContentId();
+		PsmDrm(const std::string& licenseFile);
+		PsmDrm(const std::string& contentId, uint8_t* titleKey);
+		const std::string& GetContentId();
 		void GetTitleKey(uint8_t* outTitleKey);
 	};
 }

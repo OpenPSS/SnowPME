@@ -1,11 +1,9 @@
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
-#include <glad/glad.h>
-
-using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Callback {
+	using namespace Shared::Debug;
 
 	void   (*WindowCallbacks::swapBufferCallback)(void) = nullptr;
 	double (*WindowCallbacks::getTimeCallback)(void) = nullptr;
@@ -57,7 +55,7 @@ namespace Sce::Pss::Core::Callback {
 		return wasMinimizedCallback();
 	}
 
-	bool WindowCallbacks::YesNoDialog(std::string message, std::string caption) {
+	bool WindowCallbacks::YesNoDialog(const std::string& message, const std::string& caption) {
 		errorOnNotInitalized();
 		return showYesNoDialogCallback(message.c_str(), caption.c_str());
 	}

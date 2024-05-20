@@ -9,13 +9,13 @@
 
 #include <LibShared.hpp>
 
-using namespace Shared;
-using namespace Shared::Debug;
-using namespace Shared::String;
-using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Edata;
 
 namespace Sce::Pss::Core::Io {
+	using namespace Shared;
+	using namespace Shared::Debug;
+	using namespace Shared::String;
+	using namespace Sce::Pss::Core::System;
+	using namespace Sce::Pss::Core::Edata;
 
 	Sandbox* Sandbox::ApplicationSandbox = nullptr;
 
@@ -132,7 +132,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		throw std::exception("FileSystem not found ?? ??");
+		throw std::runtime_error("FileSystem not found ?? ??");
 	}
 
 	size_t Sandbox::ReadFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
@@ -204,7 +204,7 @@ namespace Sce::Pss::Core::Io {
 		if (this->IsDirectory(sandboxedPath))
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_DIRECTORY;
 
-		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsRewitable())
+		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsWritable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
 		if (filesystem->GetEdataList() != nullptr) {
@@ -337,7 +337,7 @@ namespace Sce::Pss::Core::Io {
 		handle->directory = false;
 		handle->directoryFd = NULL;
 
-		if (openRw && !filesystem->IsRewitable()) {
+		if (openRw && !filesystem->IsWritable()) {
 			handle->opened = false;
 			handle->failReason = PSM_ERROR_ACCESS_DENIED;
 			return handle;
@@ -345,7 +345,17 @@ namespace Sce::Pss::Core::Io {
 
 		// Calculate mode
 
-		std::fstream::ios_base::openmode openmode = 0;
+		std::fstream::ios_base::openmode openmode = static_cast<std::ios::openmode>(0);
+#if   defined(_MSC_VER)
+		const std::ios::openmode noreplace = std::ios::_Noreplace;
+		const std::ios::openmode nocreate = std::ios::_Nocreate;
+#elif defined(__GNUC__)
+		const std::ios::openmode noreplace = std::ios::__noreplace;
+		#warning "std::ios::_Nocreate is not implemented in GCC (FIXME)"
+		const std::ios::openmode nocreate = static_cast<std::ios::openmode>(0);
+#else
+		#error "TODO"
+#endif
 
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {
@@ -354,8 +364,6 @@ namespace Sce::Pss::Core::Io {
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_WRITE) != 0) {
 			openmode |= std::ios::out;
-
-			openmode |= std::ios::_Nocreate;
 			openmode |= std::ios::trunc;
 		}
 
@@ -364,25 +372,38 @@ namespace Sce::Pss::Core::Io {
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_TEXT) != 0) { 
-			openmode |= std::ios::binary; // need to open as binary anyway in the case of decrypted files, on VITA binary and text open are the same anyway.
+			openmode |= std::ios::binary; // need to open as binary anyway in the case of decrypted files, 
+										  // on VITA & ANDROID binary and text open are the same anyway.
 		}
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_APPEND) != 0) {
 			openmode |= std::ios::ate;
 		}
 
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
-			openmode |= std::ios::_Noreplace;
-		}
-
-		if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) != 0) {
-			openmode &= ~std::ios::_Nocreate;
-		}
-
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE) != 0) {
 			openmode &= ~std::ios::trunc;
 		}
-	
+		
+		if (openRw) {
+			// handle NOCREATE
+			if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) == 0) {
+				if (!this->PathExist(sandboxedPath, false)) {
+					handle->opened = false;
+					handle->failReason = PSM_ERROR_FILE_NOT_FOUND;
+					return handle;
+				}
+			}
+
+			// handle NOREPLACE
+			if ((flags & SCE_PSS_FILE_OPEN_FLAG_NOREPLACE) != 0) {
+				if (this->PathExist(sandboxedPath, false)) {
+					handle->opened = false;
+					handle->failReason = PSM_ERROR_ALREADY_EXISTS;
+					return handle;
+				}
+			}
+		}
+
 		handle->iflags = openmode;
 
 		EdataStream* str = new EdataStream(realPath, openmode, this->GameDrmProvider, filesystem->GetEdataList(this->GameDrmProvider));
@@ -409,11 +430,11 @@ namespace Sce::Pss::Core::Io {
 		FileSystem* dstFilesystem = this->findFilesystem(absDst, false);
 
 		// Check if src filesystem is read only- and this is a move
-		if (srcFilesystem->IsEmulated() || !srcFilesystem->IsRewitable() && move)
+		if (srcFilesystem->IsEmulated() || !srcFilesystem->IsWritable() && move)
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if dst filesystem is read only-
-		if (dstFilesystem->IsEmulated() || !dstFilesystem->IsRewitable())
+		if (dstFilesystem->IsEmulated() || !dstFilesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check if either dst or src is a directory.
@@ -463,7 +484,7 @@ namespace Sce::Pss::Core::Io {
 
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
 		if (this->IsDirectory(absPath))
@@ -497,7 +518,7 @@ namespace Sce::Pss::Core::Io {
 		if (filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 		// Check if dir is writable
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 
@@ -545,7 +566,7 @@ namespace Sce::Pss::Core::Io {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 		// Check the path is inside a rewritable filesystem.
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Check the path is an actual directory, and that exists 
@@ -575,7 +596,7 @@ namespace Sce::Pss::Core::Io {
 		// Check the path is inside a rewritable filesystem
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
 
-		if (!filesystem->IsRewitable())
+		if (!filesystem->IsWritable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
 		// Check the path does not already contain a file.
@@ -617,7 +638,7 @@ namespace Sce::Pss::Core::Io {
 		
 		// Check that the file is not in a read-only folder
 		FileSystem* filesystem = this->findFilesystem(absPath, false);
-		if (!filesystem->IsRewitable() || filesystem->IsEmulated())
+		if (!filesystem->IsWritable() || filesystem->IsEmulated())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		// Locate the file on disk, and delete it
@@ -647,7 +668,7 @@ namespace Sce::Pss::Core::Io {
 
 		// Setup handle struct
 		handle->opened = true;
-		handle->rw = filesystem->IsRewitable();
+		handle->rw = filesystem->IsWritable();
 		handle->encrypted = false;
 		handle->emulated = filesystem->IsEmulated();
 		handle->directory = true;

@@ -9,8 +9,8 @@
 namespace Sce::Pss::Core::Environment {
 	class Clipboard {
 	public:
-		static int SetTextNative(std::string text);
-		static int GetTextNative(std::string *text);
+		static int SetTextNative(const std::string& text);
+		static int GetTextNative(std::string& text);
 	};
 }
 #endif

@@ -12,7 +12,7 @@ namespace LibCXML {
 	private:
 		T attributeValue;
 	public:
-		CXMLAttribute(std::string cxmlAttributeName, T cxnlAttributeValue) {
+		CXMLAttribute(const std::string& cxmlAttributeName, T cxnlAttributeValue) {
 			this->attributeName = cxmlAttributeName;
 			this->attributeValue = cxnlAttributeValue;
 		}

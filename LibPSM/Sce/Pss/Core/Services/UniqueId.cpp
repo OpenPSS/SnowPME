@@ -6,9 +6,11 @@
 
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
-using namespace Shared::Debug;
+#include <cstring>
+
 
 namespace Sce::Pss::Core::Services {
+	using namespace Shared::Debug;
 	
 	int UniqueId::getUniqueIDWindows(uint8_t* id) {
 		std::string username = Shared::Config::Username;
@@ -18,7 +20,7 @@ namespace Sce::Pss::Core::Services {
 		if (length > 0x10)
 			length = 0x10;
 
-		memcpy(id, username.c_str(), length);
+		std::memcpy(id, username.c_str(), length);
 
 		return PSM_ERROR_NO_ERROR;
 	}
