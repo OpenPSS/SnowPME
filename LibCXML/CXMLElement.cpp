@@ -80,7 +80,7 @@ namespace LibCXML {
 			break;
 		case TYPE_ID_HASH:
 			reader->HashIdTable->Seek(attributeHeader.value * sizeof(int));
-			this->attributes.push_back(new CXMLAttribute(attributeName, reader->HashIdTable->ReadInt()));
+			this->attributes.push_back(new CXMLAttribute<int>(attributeName, reader->HashIdTable->ReadInt()));
 			break;
 		case TYPE_NONE:
 		default:
