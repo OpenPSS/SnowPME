@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Metadata {
 	class AppInfo {
 	private:
 		LibCXML::CXMLElement* element;
-
+		bool nextElement();
 	public:
 		static AppInfo* CurrentApplication;
 		AppInfo(LibCXML::CXMLElement* elem);

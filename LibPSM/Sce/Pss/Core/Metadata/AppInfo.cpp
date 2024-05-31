@@ -13,6 +13,29 @@ namespace Sce::Pss::Core::Metadata {
 		delete element;
 	}
 
+	bool AppInfo::nextElement() {
+		// goto next element
+
+		if (element->HasFirstChild()) {
+			element->FirstChild();
+			return true;
+		}
+		else if (element->HasNextSibling()) {
+			element->NextSibling();
+			return true;
+		}
+
+		while (element->HasParentElement()) {
+			element->ParentElement();
+			if (element->HasNextSibling()) {
+				element->NextSibling();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
 		if (AppInfo::CurrentApplication != nullptr) {
 			delete AppInfo::CurrentApplication;
@@ -25,7 +48,7 @@ namespace Sce::Pss::Core::Metadata {
 		ProductInfo productInfo = ProductInfo();
 
 		if (elem != nullptr) {
-			while (true) {
+			do {
 				if (element->ElementName() == "name") parserMode = element->ElementName();
 				if (element->ElementName() == "short_name") parserMode = element->ElementName();
 				if (element->ElementName() == "product") parserMode = element->ElementName();
@@ -141,25 +164,9 @@ namespace Sce::Pss::Core::Metadata {
 				else {
 					Logger::Warn("app.info contains unknown element name: " + element->ElementName());
 				}
-				// goto next element
+				
 
-				if (element->HasFirstChild()) {
-					element->FirstChild();
-				}
-				else if (element->HasNextSibling()) {
-					element->NextSibling();
-				}
-				else if (element->HasParentElement()) {
-					element->ParentElement();
-					if (element->HasNextSibling()) {
-						element->NextSibling();
-					}
-					else {
-						break;
-					}
-				}
-
-			}
+			}while (this->nextElement());
 		}
 		AppInfo::CurrentApplication = this;
 	}
