@@ -38,13 +38,13 @@ namespace LibCXML {
 
 	char* CXMLStream::ReadStr() {
 		char* str = this->buffer + this->pos;
-		pos += (strlen(str)) + (sizeof(char));
+		pos += (strlen(str)) * (sizeof(char)) + 1;
 		return str;
 	}
 
 	wchar_t* CXMLStream::ReadWStr() {
 		wchar_t* str = (wchar_t*)(this->buffer + this->pos);
-		pos += (wcslen(str)) + (sizeof(wchar_t));
+		pos += (wcslen(str)) * (sizeof(wchar_t)) + 1;
 		return str;
 	}
 
