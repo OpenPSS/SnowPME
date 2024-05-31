@@ -756,7 +756,9 @@ namespace Sce::Pss::Core::Graphics {
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 
 			glEnable(GL_DEBUG_OUTPUT);
+#ifdef _DEBUG
 			glDebugMessageCallback(GraphicsContext::ErrorCallback, nullptr);
+#endif
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
