@@ -755,8 +755,8 @@ namespace Sce::Pss::Core::Graphics {
 
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
 
-			glEnable(GL_DEBUG_OUTPUT);
 #ifdef _DEBUG
+			glEnable(GL_DEBUG_OUTPUT);
 			glDebugMessageCallback(GraphicsContext::ErrorCallback, nullptr);
 #endif
 		}
