@@ -37,6 +37,7 @@
     <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\CommonDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Log.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\NetworkInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\PersistentMemory.cpp" />
@@ -132,7 +133,10 @@
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\ActionType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\Clipboard.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogArguments.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogResult.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogResults.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\InternalData.hpp" />
@@ -224,6 +228,7 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommand.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\Network.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\NetworkRequest.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector2.hpp" />

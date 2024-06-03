@@ -3,8 +3,11 @@
 
 namespace Sce::Pss::Core::Environment {
 	enum class CommonDialogType : unsigned int {
-		Reserved0 = 0,
-		TextInput = 1
+		Reserved0 = 0x0,
+		TextInput = 0x1,
+		InAppPurchaseDialog = 0x101,
+		CameraImportDialog = 0x201,
+		PhotoImportDialog = 0x301,
 	};
 }
 

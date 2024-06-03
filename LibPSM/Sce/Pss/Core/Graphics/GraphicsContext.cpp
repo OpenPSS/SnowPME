@@ -557,7 +557,7 @@ namespace Sce::Pss::Core::Graphics {
 	) 
 	{
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
-	}
+	}	
 
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
 		if (this->GetGraphicsContext() != nullptr) 

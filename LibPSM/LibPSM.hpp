@@ -8,6 +8,7 @@
 #include <Sce/Pss/Core/Environment/SystemMemory.hpp>
 #include <Sce/Pss/Core/Environment/PersistentMemory.hpp>
 #include <Sce/Pss/Core/Environment/Shell.hpp>
+#include <Sce/Pss/Core/Environment/CommonDialog.hpp>
 #include <Sce/Pss/Core/Environment/TextInputDialog.hpp>
 #include <Sce/Pss/Core/Services/AccountInformation.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseDialog.hpp>
@@ -34,7 +35,6 @@
 #include <Sce/Pss/Core/Device/Camera.hpp>
 #include <Sce/Pss/Core/Services/NetworkRequest.hpp>
 #include <Sce/Pss/Core/Services/Network.hpp>
-
 // things calling app has to setup :
 #include <Sce/Pss/Core/Mono/Init.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
