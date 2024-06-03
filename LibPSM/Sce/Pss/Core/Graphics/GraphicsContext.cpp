@@ -554,10 +554,9 @@ namespace Sce::Pss::Core::Graphics {
 		GLsizei length,
 		const GLchar* message,
 		const void* userParam
-	) {
-		fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-			( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-			type, severity, message );
+	) 
+	{
+		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
 	}
 
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
