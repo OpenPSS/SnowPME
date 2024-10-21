@@ -55,12 +55,13 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\PsmVertexBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Font.cpp" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Image.cpp" />
+    <ClCompile Include="Sce\Pss\Core\InitializeCsharp.cpp" />
     <ClCompile Include="Sce\Pss\Core\Input\GamePad.cpp" />
     <ClCompile Include="Sce\Pss\Core\Input\Motion.cpp" />
     <ClCompile Include="Sce\Pss\Core\Input\Touch.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp" />
     <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Mono\Init.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Sce\Pss\Core\Imaging\ImagePosition.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\ImageRect.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\ImageSize.hpp" />
+    <ClInclude Include="Sce\Pss\Core\InitializeCsharp.hpp" />
     <ClInclude Include="Sce\Pss\Core\Input\GamePad.hpp" />
     <ClInclude Include="Sce\Pss\Core\Input\GamePadButtons.hpp" />
     <ClInclude Include="Sce\Pss\Core\Input\GamePadData.hpp" />
@@ -219,8 +221,9 @@
     <ClInclude Include="Sce\Pss\Core\Io\PsmFileDescriptor.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Mono\Init.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
+    <ClInclude Include="Sce\Pss\Core\PsmMonoFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp" />

@@ -58,6 +58,6 @@ namespace SnowPME::Runtime {
 
 	void Init::StartApplication() {
 		// load mono and start program !
-		Sce::Pss::Core::Mono::Init::ScePsmMonoInit(gameFolder.c_str());
+		Sce::Pss::Core::Mono::InitalizeMono::ScePsmMonoInit(gameFolder.c_str());
 	}
 }

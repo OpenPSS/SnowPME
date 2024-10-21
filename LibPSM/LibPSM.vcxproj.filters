@@ -243,7 +243,7 @@
     <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Mono\Init.cpp">
+    <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp">
@@ -253,6 +253,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Environment\CommonDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\InitializeCsharp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -749,7 +752,7 @@
     <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Mono\Init.hpp">
+    <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Edata\Callbacks.hpp">
@@ -768,6 +771,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogArguments.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\InitializeCsharp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\PsmMonoFunc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

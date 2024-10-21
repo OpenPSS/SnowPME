@@ -143,7 +143,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	int ICall::PsmFileOpenSystem(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem) {
-		if (pszFileName == NULL || phFile == NULL || strlen(pszFileName) > PSM_PATH_MAX)
+		if (pszFileName == nullptr || phFile == nullptr || strlen(pszFileName) > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string relativePath = std::string(pszFileName);
@@ -229,7 +229,7 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
 		Logger::Debug(__FUNCTION__);
-		if (!Handles::IsValid(file) || buffer == NULL || uBytesToWrite == NULL || puBytesWritten == NULL)
+		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToWrite == NULL || puBytesWritten == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);

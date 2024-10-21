@@ -83,7 +83,7 @@ namespace Sce::Pss::Core::Io {
 			ReturnErrorable(this->GameDrmProvider);
 		}
 		else {
-			Logger::Debug("No " + FakeRifLocation + " found.");
+			Logger::Warn("No " + FakeRifLocation + " found.");
 		}
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -346,16 +346,7 @@ namespace Sce::Pss::Core::Io {
 		// Calculate mode
 
 		std::fstream::ios_base::openmode openmode = static_cast<std::ios::openmode>(0);
-#if   defined(_MSC_VER)
-		const std::ios::openmode noreplace = std::ios::_Noreplace;
-		const std::ios::openmode nocreate = std::ios::_Nocreate;
-#elif defined(__GNUC__)
-		const std::ios::openmode noreplace = std::ios::__noreplace;
-		#warning "std::ios::_Nocreate is not implemented in GCC (FIXME)"
-		const std::ios::openmode nocreate = static_cast<std::ios::openmode>(0);
-#else
-		#error "TODO"
-#endif
+
 
 
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {

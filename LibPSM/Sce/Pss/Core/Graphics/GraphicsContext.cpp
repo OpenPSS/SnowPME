@@ -545,7 +545,6 @@ namespace Sce::Pss::Core::Graphics {
 
 		GraphicsContext::activeGraphicsContext = nullptr;
 	}
-
 	void GraphicsContext::ErrorCallback(
 		GLenum source,
 		GLenum type,
@@ -553,15 +552,12 @@ namespace Sce::Pss::Core::Graphics {
 		GLenum severity,
 		GLsizei length,
 		const GLchar* message,
-		const void* userParam
-	) 
-	{
+		const void* userParam) {
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
-	}	
+	}
 
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
-		if (this->GetGraphicsContext() != nullptr) 
-		{ 
+		if (this->GetGraphicsContext() != nullptr) { 
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return;
 		}
@@ -756,7 +752,7 @@ namespace Sce::Pss::Core::Graphics {
 
 #ifdef _DEBUG
 			glEnable(GL_DEBUG_OUTPUT);
-			glDebugMessageCallback(GraphicsContext::ErrorCallback, nullptr);
+			glDebugMessageCallback((GLDEBUGPROC) (GraphicsContext::ErrorCallback), nullptr);
 #endif
 		}
 		else {
