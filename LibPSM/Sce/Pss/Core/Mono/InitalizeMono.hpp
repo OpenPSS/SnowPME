@@ -2,25 +2,21 @@
 #define LIB_PSS_INIT_H 1
 #include <string>
 #include <mono/mono.h>
+#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
+
 namespace Sce::Pss::Core::Mono
 {
 	class InitalizeMono {
 	private:
-		static std::string appExe;
 		static MonoDomain* psmDomain;
-		static MonoAssembly* psmCoreLib;
-		static MonoAssembly* msCoreLib;
-		static MonoAssembly* systemLib;
-		static void launchExe();
 
-	protected:
-		static int initMono(std::string gameFolder);
-		static int initMonoAssembly(std::string exeFile);
-
+		static int scePsmExecute(const char* exeFile, int* resCode);
+		static int scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc);
 
 	public:
-		static void ScePsmMonoInit(const char* gameFolder);
-
+		static int ScePsmInitalize(const char* assemblyPath, Sce::Pss::Core::Metadata::AppInfo* settings);
+		static int ScePsmTerminate();
+		static int ScePssMain(const char* gameFolder);
 	};
 }
 

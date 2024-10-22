@@ -4,7 +4,7 @@
 #include <Sce/Pss/Core/InitializeCsharp.hpp>
 #include <LibPSM.hpp>
 
-namespace Sce::Pss::Core {
+namespace Sce::Pss::Core::Mono {
 
 	static PsmMonoFunc ErrorFunctions [] {
 		{ "Sce.PlayStation.Core.Error::GetExceptionInfoNative(string&,string&)", Sce::Pss::Core::Error::GetExceptionInfoNative },

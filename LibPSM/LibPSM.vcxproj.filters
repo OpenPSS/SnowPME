@@ -126,7 +126,7 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Mono\Util.cpp">
+    <ClCompile Include="Sce\Pss\Core\Mono\MonoUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\System\PlatformSpecific.cpp">
@@ -572,7 +572,7 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Mono\Util.hpp">
+    <ClInclude Include="Sce\Pss\Core\Mono\MonoUtil.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\System\PlatformSpecific.hpp">
@@ -776,7 +776,7 @@
     <ClInclude Include="Sce\Pss\Core\InitializeCsharp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\PsmMonoFunc.hpp">
+    <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

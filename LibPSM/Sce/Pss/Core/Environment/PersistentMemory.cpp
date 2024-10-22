@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Environment {
 	uint8_t PersistentMemory::memoryBuffer[0x10000] = { 0 };
 	std::string PersistentMemory::pmDatFile = "/System/pm.dat";
 
-	int PersistentMemory::readPersistantMemory(uint8_t* persistantMemory, size_t persistantMemSize) {
+	int PersistentMemory::Read(uint8_t* persistantMemory, size_t persistantMemSize) {
 		if (persistantMemory == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (persistantMemSize == sizeof(PersistentMemory::memoryBuffer)) {
@@ -25,7 +25,7 @@ namespace Sce::Pss::Core::Environment {
 		}
 		return PSM_ERROR_COMMON_ARGUMENT;
 	}
-	int PersistentMemory::writePersistantMemory(uint8_t* persistantMemory, size_t persistantMemSize) {
+	int PersistentMemory::Write(uint8_t* persistantMemory, size_t persistantMemSize) {
 		if (persistantMemory == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (persistantMemSize == sizeof(PersistentMemory::memoryBuffer)) {
@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_COMMON_ARGUMENT;
 	}
 
-	int PersistentMemory::WritePersistantMemoryToDisk() { // runs when the program exits.
+	int PersistentMemory::Initalize() { // runs when the program exits.
 		Logger::Debug("Writing " + pmDatFile + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t bytesWritten = 0;
@@ -50,7 +50,12 @@ namespace Sce::Pss::Core::Environment {
 		}
 		return PSM_ERROR_NO_ERROR;
 	}
-	int PersistentMemory::ReadPersistantMemoryFromDisk() { // runs when the program starts 
+
+	int PersistentMemory::Terminate() {
+		return PersistentMemory::Flush();
+	}
+
+	int PersistentMemory::Flush() { 
 		Logger::Debug("Reading " + pmDatFile + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t bytesRead = 0;
@@ -72,7 +77,7 @@ namespace Sce::Pss::Core::Environment {
 		uint8_t* pm = (uint8_t*)mono_array_addr_with_size(fileImage, 0, 1);
 		size_t pmLen = mono_array_length(fileImage);
 
-		return writePersistantMemory(pm, pmLen);
+		return PersistentMemory::Write(pm, pmLen);
 	}
 	int PersistentMemory::ReadNative(MonoArray* fileImage) {
 		Logger::Debug(__FUNCTION__);
@@ -82,6 +87,6 @@ namespace Sce::Pss::Core::Environment {
 		uint8_t* pm = (uint8_t*)mono_array_addr_with_size(fileImage, 0, 1);
 		size_t pmLen = mono_array_length(fileImage);
 
-		return readPersistantMemory(pm, pmLen);
+		return PersistentMemory::Read(pm, pmLen);
 	}
 }

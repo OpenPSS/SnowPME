@@ -8,11 +8,14 @@ using namespace Shared::String;
 using namespace SnowPME::Runtime;
 
 namespace SnowPME {
+
 	void Program::startMonoApplication(const std::string& gamePath) {
-		// load the mono executable
-		Init::LoadApplication(gamePath, this->window);
-		// start executing the mono executable
-		Init::StartApplication();
+		// run program
+		Application::LoadApplication(gamePath, this->window);
+		
+		while (1) {
+			this->window->PollEvents();
+		}
 	}
 
 	Program::Program(int argc, const char* const* argv) {

@@ -2,7 +2,6 @@
 #define LIB_PSS_INITALIZECSHARP_H 1
 #include <string>
 #include <mono/mono.h>
-#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 namespace Sce::Pss::Core {
 
 	typedef struct PsmMonoFunc {
@@ -11,11 +10,10 @@ namespace Sce::Pss::Core {
 	} PsmMonoFunc;
 
 
-	class InitalizeCsharp {
+	static class InitalizeCsharp {
 	private:
 		static int installFunctions(PsmMonoFunc* functions);
-		static int registerFunctions();
-		static int registerError();
+		static int registerErrors();
 		static int registerServices();
 		static int registerCamera();
 		static int registerLocation();
@@ -25,9 +23,10 @@ namespace Sce::Pss::Core {
 		static int registerGraphics();
 		static int registerEnvironment();
 
+		static int unregisterEnvironment();
 	public:
-		InitalizeCsharp();
-
+		static int Initalize();
+		static int Terminate();
 	};
 }
 

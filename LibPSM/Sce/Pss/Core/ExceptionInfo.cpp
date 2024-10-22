@@ -1,9 +1,9 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <LibShared.hpp>
 
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core {
-	using namespace Shared::Debug;
 
 	static std::vector<std::string> messages;
 

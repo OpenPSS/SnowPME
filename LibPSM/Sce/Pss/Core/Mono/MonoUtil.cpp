@@ -1,18 +1,18 @@
-#include <Sce/Pss/Core/Mono/Util.hpp>
+#include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Mono {
 
-	size_t Util::MonoArrayLength(MonoArray* ar) {
-		if (ar == NULL)
-			return 0;
+	size_t MonoUtil::MonoArrayLength(MonoArray* ar) {
+		if (ar == nullptr)
+			return NULL;
 
 		MonoClass* cls = mono_object_get_class((MonoObject*)ar);
 		size_t elmSize = mono_array_element_size(cls);
 		return mono_array_length(ar) * elmSize;
 	}
 
-	bool Util::MonoTypeIsValueType(MonoType* type) {
+	bool MonoUtil::MonoTypeIsValueType(MonoType* type) {
 
 		int typeEnum = mono_type_get_type(type);
 		
@@ -27,7 +27,7 @@ namespace Sce::Pss::Core::Mono {
 		void* iter = 0;
 		MonoClassField* fields = mono_class_get_fields(typeClass, &iter);
 		
-		if (fields == NULL)
+		if (fields == nullptr)
 			return true;
 
 		while (true)
@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Mono {
 			if ((mono_field_get_flags(fields) & FIELD_ATTRIBUTE_STATIC) == 0)
 			{
 				MonoType* fieldType = mono_field_get_type(fields);
-				if (!Util::MonoTypeIsValueType(fieldType))
+				if (!MonoUtil::MonoTypeIsValueType(fieldType))
 					break;
 			}
 			fields = mono_class_get_fields(typeClass, &iter);
@@ -45,7 +45,7 @@ namespace Sce::Pss::Core::Mono {
 
 		return false;
 	}
-	std::string* Util::MonoStringToStdString(MonoString* mstr, std::string& string) {
+	std::string* MonoUtil::MonoStringToStdString(MonoString* mstr, std::string& string) {
 		if (!mstr)
 			return &string;
 		char* str = mono_string_to_utf8(mstr);
@@ -56,30 +56,48 @@ namespace Sce::Pss::Core::Mono {
 		return &string;
 	}
 
-	MonoString* Util::StdStringToMonoString(const std::string& str) {
+	MonoString* MonoUtil::StdStringToMonoString(const std::string& str) {
 		MonoDomain* domain = mono_domain_get();
 		MonoString* monoStr = mono_string_new_len(domain, str.c_str(), str.length());
 		return monoStr;
 	}
 
-	MonoType* Util::MonoArrayElementsType(MonoArray* ar) {
-		if (ar == NULL)
-			return 0;
+	MonoAssembly* MonoUtil::MonoAssemblyOpenFull(MonoDomain* domain, const char* exePath) {
+		if (strlen(exePath) == 0)
+			return mono_domain_assembly_open(domain, exePath);
+
+		// TODO:
+		// figure out why does psm.exe do this ???
+		// is this filtering out special characters or something?
+		int i = 0;
+		while ((exePath[i] - 0x20) <= 0x5E)
+		{
+			if (++i >= strlen(exePath)) {
+				return mono_domain_assembly_open(domain, exePath);
+			}
+		}
+
+		return nullptr;
+	}
+
+	MonoType* MonoUtil::MonoArrayElementsType(MonoArray* ar) {
+		if (ar == nullptr)
+			return NULL;
 
 		MonoClass* cls = mono_object_get_class((MonoObject*)ar);
 
-		if (cls == NULL)
-			return 0;
+		if (cls == nullptr)
+			return NULL;
 
 		MonoClass* elmClass = mono_class_get_element_class(cls);
 
-		if (elmClass == NULL)
-			return 0;
+		if (elmClass == nullptr)
+			return NULL;
 
 		MonoType* type = mono_class_get_type(elmClass);
 		
-		if (type == NULL)
-			return 0;
+		if (type == nullptr)
+			return NULL;
 
 		return type;
 	}

@@ -15,6 +15,7 @@ extern "C" {
 #include <mono/metadata/profiler.h>
 #include <mono/metadata/mono-debug.h>
 #include <mono/metadata/tabledefs.h>
+#include <mono/metadata/environment.h>
 
 #include <mono/jit/jit.h>
 #include <mono/utils/mono-counters.h>

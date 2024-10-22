@@ -24,10 +24,12 @@ namespace Shared
 	std::string Config::RuntimeLibPath = DEFAULT_RUNTIME_FOLDER;
 	std::string Config::RuntimeConfigPath = DEFAULT_RUNTIME_FOLDER;
 
-	std::string Config::Username = "Li";
-	uint64_t Config::AccountId = 0x0000000000000000;
+	std::string Config::Username = "SnowPME";
+	uint64_t Config::AccountId = 0x123456789ABCDEF0ull;
 	RuntimeImplementation Config::TargetImplementation = RuntimeImplementation::PSVita;
 
+	bool Config::MonoDebugger = false;
+	std::string Config::ProfilerSettings = "";
 
 	void Config::parseKeyValuePair(std::string key, std::string value) {
 		GET_CFG_KEY_STR(Username);
@@ -38,6 +40,9 @@ namespace Shared
 
 		GET_CFG_KEY_ENUM(TargetImplementation, RuntimeImplementation);
 		GET_CFG_KEY_BOOL(SecurityCritical);
+
+		GET_CFG_KEY_STR(ProfilerSettings);
+		GET_CFG_KEY_BOOL(MonoDebugger);
 
 	}
 	std::string Config::Mono21Folder() {
@@ -76,6 +81,10 @@ namespace Shared
 			SET_CFG_COMMENT(cfgStream, "- Implementation Details -");
 			SET_CFG_KEY_ENUM(cfgStream, TargetImplementation);
 			SET_CFG_KEY_BOOL(cfgStream, SecurityCritical);
+
+			SET_CFG_COMMENT(cfgStream, "- Mono Settings -");
+			SET_CFG_KEY_STR(cfgStream, ProfilerSettings);
+			SET_CFG_KEY_STR(cfgStream, MonoDebugger);
 
 			cfgStream.close();
 		}

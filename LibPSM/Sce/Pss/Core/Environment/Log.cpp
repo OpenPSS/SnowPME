@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Environment/Log.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#include <Sce/Pss/Core/Mono/Util.hpp>
+#include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <LibShared.hpp>
 
 
@@ -17,7 +17,7 @@ namespace Sce::Pss::Core::Environment {
 		}
 
 		std::string msg;
-		Mono::Util::MonoStringToStdString(text, msg);
+		Mono::MonoUtil::MonoStringToStdString(text, msg);
 		Logger::Game(msg);
 
 		return PSM_ERROR_NO_ERROR;

@@ -18,7 +18,7 @@
     <ClInclude Include="LibSnowPME.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Runtime\Init.hpp">
+    <ClInclude Include="Runtime\Application.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Window.hpp">
@@ -59,7 +59,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Runtime\Init.cpp">
+    <ClCompile Include="Runtime\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Window.cpp">

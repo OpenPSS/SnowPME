@@ -1,5 +1,7 @@
 #include <Sce/Pss/Core/Mono/InitalizeMono.hpp>
 #include <Sce/Pss/Core/Mono/Resources.hpp>
+#include <Sce/Pss/Core/Mono/MonoUtil.hpp>
+
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Mono/Security.hpp>
@@ -13,6 +15,8 @@
 #include <LibShared.hpp>
 #include <LibMonoBridge.hpp>
 
+#include <mono/mono.h>
+
 using namespace LibCXML;
 
 using namespace Shared::Debug;
@@ -24,49 +28,21 @@ using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Mono {
-	std::string InitalizeMono::appExe = "";
+
 	MonoDomain* InitalizeMono::psmDomain = nullptr;
-	MonoAssembly* InitalizeMono::psmCoreLib = nullptr;
-	MonoAssembly* InitalizeMono::msCoreLib = nullptr;
-	MonoAssembly* InitalizeMono::systemLib = nullptr;
 
-	int InitalizeMono::initMono(std::string gameFolder) {
-		Sandbox* sandbox = new Sandbox(gameFolder);
-
-		std::string appInfoPath = "/Application/app.info";
-		CXMLElement* elem = (!sandbox->PathExist(appInfoPath, false) ? nullptr : new CXMLElement(sandbox->LocateRealPath(appInfoPath, false), "PSMA"));
-		AppInfo* appInfo = new AppInfo(elem);
-
-		// setup Edata ...
-		PssCryptoCallbacks callbacks; 
-		callbacks.eOpen = Pss::Core::Edata::Callbacks::EdataOpen;
-		callbacks.eRead = Pss::Core::Edata::Callbacks::EdataRead;
-		callbacks.eSeek = Pss::Core::Edata::Callbacks::EdataSeek;
-		callbacks.eClose = Pss::Core::Edata::Callbacks::EdataClose;
-		ScePsmEdataMonoInit(&callbacks);
-
-		// Initalize mono assembly
-		return InitalizeMono::initMonoAssembly(sandbox->LocateRealPath("/Application/app.exe", false));
+	int InitalizeMono::ScePsmTerminate() {
+		mono_runtime_quit();
+		psmDomain = nullptr;
+		InitalizeCsharp::Terminate();
+		delete HeapAllocator::GetResourceHeapAllocator();
+		return PSM_ERROR_NO_ERROR;
 	}
 
-	int InitalizeMono::initMonoAssembly(std::string exeFile) {
-
-
-		InitalizeMono::appExe = exeFile;
-
-		int heapSizeLimit = AppInfo::CurrentApplication->ManagedHeapSize * 0x400;
-		int resourceSizeLimit = AppInfo::CurrentApplication->ResourceHeapSize * 0x400;
-
-
-		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
-			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
-			return PSM_ERROR_OUT_OF_MEMORY;
-		}
-		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
-		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
-
-		Logger::Debug("Starting: " + exeFile);
-
+	int InitalizeMono::ScePsmInitalize(const char* assemblyPath, AppInfo* settings) {
+		
+		std::string appExePath = std::string(assemblyPath, strlen(assemblyPath));
+		Logger::Info("C# Assembly Loading [ " + appExePath + " ]");
 
 		// Lockdown mono if security is enabled
 		if (!Config::SecurityCritical) {
@@ -81,8 +57,15 @@ namespace Sce::Pss::Core::Mono {
 		// Set runtime install location
 		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
 
+
 		// Create a domain in which this application will run under.
-		InitalizeMono::psmDomain = mono_jit_init_version(appExe.c_str(), "mobile");
+		InitalizeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
+
+		// run profiler and debug if needed
+		if (!Config::ProfilerSettings.empty())
+			mono_profiler_load(Config::ProfilerSettings.c_str());
+		if (Config::MonoDebugger)
+			mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 
 		// PSM Icalls
 		pss_io_icall_install_functions(
@@ -109,18 +92,18 @@ namespace Sce::Pss::Core::Mono {
 
 
 		// setup all C# side psm related functions ...
-		HeapAllocator::CreateResourceHeapAllocator(resourceSizeLimit);
+		HeapAllocator::CreateResourceHeapAllocator(settings->ResourceHeapSize);
 		Thread::SetMainThread();
-		InitalizeCsharp();
+		InitalizeCsharp::Initalize();
 
 		// Load essential dlls
 		std::string msCorLibPath = Config::MscorlibPath();
 		std::string systemLibPath = Config::SystemLibPath();
 		std::string psmCoreLibPath = Config::PsmCoreLibPath();
 
-		msCoreLib = mono_domain_assembly_open(psmDomain, msCorLibPath.c_str());
-		systemLib = mono_domain_assembly_open(psmDomain, systemLibPath.c_str());
-		psmCoreLib = mono_domain_assembly_open(psmDomain, psmCoreLibPath.c_str());
+		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, msCorLibPath.c_str());
+		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, systemLibPath.c_str());
+		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, psmCoreLibPath.c_str());
 
 		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
 		MonoImage* systemImage = mono_assembly_get_image(systemLib);
@@ -131,6 +114,95 @@ namespace Sce::Pss::Core::Mono {
 		MonoMethod* psmSetToConsoleMethod = mono_class_get_method_from_name(psmLogClass, "SetToConsole", 0);
 		mono_runtime_invoke(psmSetToConsoleMethod, NULL, NULL, NULL);
 
+		return PSM_ERROR_NO_ERROR;
+	}
+
+
+	int InitalizeMono::scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc) {
+		MonoObject* exception = NULL;
+
+		// Get executable image
+		MonoImage* runImage = mono_assembly_get_image(assembly);
+
+		// Get address of entry point
+		uint32_t entryPointAddr = mono_image_get_entry_point(runImage);
+
+		// Get entry point method
+		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, NULL);
+
+		// Run entry point function
+		mono_runtime_run_main(entryPointMethod, argc, argv, &exception);
+
+		if (exception != NULL)
+			mono_unhandled_exception(exception);
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	int InitalizeMono::scePsmExecute(const char* appExe, int* resCode) {
+		// Load the executable
+		MonoAssembly* appExeBin = MonoUtil::MonoAssemblyOpenFull(InitalizeMono::psmDomain, appExe);
+
+		// Create argv
+		char* argv[2] = { (char*)appExe, NULL };
+
+		if (appExeBin != nullptr) {
+
+			// start assembly
+			InitalizeMono::scePsmMonoJitExec2(appExeBin, argv, 1);
+
+			mono_runtime_set_shutting_down();
+			mono_threads_set_shutting_down();
+
+			mono_thread_suspend_all_other_threads();
+
+			if (appExe != nullptr) {
+				*resCode = mono_environment_exitcode_get();
+			}
+			return PSM_ERROR_NO_ERROR;
+		}
+		else {
+			Logger::Error("Cannot open assembly: " + std::string(appExe));
+			return PSM_ERROR_COMMON_FILE_NOT_FOUND;
+		}
+	}
+
+	int InitalizeMono::ScePssMain(const char* gameFolder) {
+		int resCode = 0;
+		Sandbox* sandbox = new Sandbox(gameFolder);
+
+		std::string appInfoPath = "/Application/app.info";
+		std::string realAppExePath = sandbox->LocateRealPath("/Application/app.exe", false);
+		
+		// read & parse app.info
+		CXMLElement* elem = (!sandbox->PathExist(appInfoPath, false) ? nullptr : new CXMLElement(sandbox->LocateRealPath(appInfoPath, false), "PSMA"));
+		AppInfo* appInfo = new AppInfo(elem);
+
+		// setup Edata ... for DRM..
+		PssCryptoCallbacks callbacks;
+		callbacks.eOpen = Pss::Core::Edata::Callbacks::EdataOpen;
+		callbacks.eRead = Pss::Core::Edata::Callbacks::EdataRead;
+		callbacks.eSeek = Pss::Core::Edata::Callbacks::EdataSeek;
+		callbacks.eClose = Pss::Core::Edata::Callbacks::EdataClose;
+		ScePsmEdataMonoInit(&callbacks);
+
+		// setup limits 
+
+		int heapSizeLimit = appInfo->ManagedHeapSize * 0x400;
+		int resourceSizeLimit = appInfo->ResourceHeapSize * 0x400;
+		
+
+		if (heapSizeLimit + resourceSizeLimit > 0x6000000) {
+			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
+			return PSM_ERROR_OUT_OF_MEMORY;
+		}
+		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
+		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
+
+
+		if (InitalizeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo) != PSM_ERROR_NO_ERROR) {
+			return 1;
+		}
 		// This is automatically called when a resource limit is reached
 		mono_runtime_resource_set_callback(Resources::ResourceLimitReachedCallback);
 
@@ -141,42 +213,18 @@ namespace Sce::Pss::Core::Mono {
 		mono_gc_set_heap_size_limit(heapSizeLimit, heapSizeLimit);
 		mono_thread_set_max_threads(16);
 		mono_threadpool_set_max_threads(8, 8);
-		mono_thread_set_threads_exhausted_callback(Sce::Pss::Core::Mono::Resources::ThreadsExhaustedCallback);
+		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		return PSM_ERROR_NO_ERROR;
+		InitalizeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
+		InitalizeMono::ScePsmTerminate();
+
+		return resCode;
+		/*
+		ScePsmMonoTerm(v168);
+        scePssGraphicsTerminate(v169);
+        scePssFilesystemTerminate(v170);
+        scePssSystemTerminate(v171);
+		*/
 	}
 
-	void InitalizeMono::launchExe() {
-		// Load the executable
-		MonoAssembly* runAssembly = mono_domain_assembly_open(psmDomain, appExe.c_str());
-
-		// Create argv
-		char* args[2] = { (char*)appExe.c_str(), NULL };
-
-		MonoObject* exception = NULL;
-
-		// Get executable image
-		MonoImage* runImage = mono_assembly_get_image(runAssembly);
-
-		// Get address of entry point
-		uint32_t entryPointAddr = mono_image_get_entry_point(runImage);
-
-		// Get entry point method
-		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, NULL);
-
-		// Run entry point function
-		mono_runtime_run_main(entryPointMethod, 1, args, &exception);
-
-		if (exception != NULL)
-			mono_unhandled_exception(exception);
-
-	}
-
-	void InitalizeMono::ScePsmMonoInit(const char* gameFolder) {
-
-		if (InitalizeMono::initMono(std::string(gameFolder)) == PSM_ERROR_NO_ERROR) {
-			InitalizeMono::launchExe();
-		}
-
-	}
 }

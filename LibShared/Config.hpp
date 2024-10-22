@@ -26,6 +26,9 @@ namespace Shared
 		static std::string RuntimeLibPath; // Path to the folder containing all DLLs
 		static std::string RuntimeConfigPath; // Path to the folder containing the machine.config file.
 		
+		static std::string ProfilerSettings;
+		static bool MonoDebugger;
+
 		static int ScreenTotal; // How many screens? 
 		static std::string Username; // Username
 		static uint64_t AccountId; // Account Name

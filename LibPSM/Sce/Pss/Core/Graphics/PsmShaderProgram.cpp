@@ -8,7 +8,7 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
-#include <Sce/Pss/Core/Mono/Util.hpp>
+#include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 
 #include <iostream>
 #include <string>
@@ -62,8 +62,8 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		MAIN_THREAD();
 
-		size_t vertexShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(vpFileImage);
-		size_t fragmentShaderSz = Sce::Pss::Core::Mono::Util::MonoArrayLength(fpFileImage);
+		size_t vertexShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayLength(vpFileImage);
+		size_t fragmentShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayLength(fpFileImage);
 		uint8_t* vertexShaderBuf = nullptr;
 		uint8_t* fragmentShaderBuf = nullptr;
 
@@ -110,7 +110,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 
 		std::string attributeName;
-    	Mono::Util::MonoStringToStdString(name, attributeName);
+    	Mono::MonoUtil::MonoStringToStdString(name, attributeName);
 
 		for (const auto& binding : prog->GetAttributeBindings()) {
 			if (binding.second == attributeName) {
@@ -130,7 +130,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 		
 		std::string uniformName;
-		Mono::Util::MonoStringToStdString(name, uniformName);
+		Mono::MonoUtil::MonoStringToStdString(name, uniformName);
 
 		bool found = false;
 		for (ProgramUniform uniform : prog->Uniforms)
@@ -158,7 +158,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		*result = Mono::Util::StdStringToMonoString(bindingName);
+		*result = Mono::MonoUtil::StdStringToMonoString(bindingName);
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -166,7 +166,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 
 		std::string attributeName;
-		Mono::Util::MonoStringToStdString(name, attributeName);
+		Mono::MonoUtil::MonoStringToStdString(name, attributeName);
 
 		prog->SetAttributeBinding(index, attributeName);
 		if(prog->GetError() != PSM_ERROR_NO_ERROR) {

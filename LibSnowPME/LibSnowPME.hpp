@@ -1,7 +1,7 @@
 #ifndef SNOW_PME_H
 #define SNOW_PME_H 1
 
-#include <Runtime/Init.hpp>
+#include <Runtime/Application.hpp>
 #include <Graphics/Window.hpp>
 #include <Graphics/Gui/SnowGui.hpp>
 

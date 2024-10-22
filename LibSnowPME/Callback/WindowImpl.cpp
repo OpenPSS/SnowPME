@@ -11,7 +11,6 @@ namespace SnowPME::Callback {
 	}
 
 	void WindowImpl::PollEvents() {
-
 		WindowImpl::Impl::ErrorOnNotInit();
 		WindowImpl::mainWindow->PollEvents();
 	}

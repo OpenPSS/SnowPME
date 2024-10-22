@@ -4,7 +4,7 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
-#include <Sce/Pss/Core/Mono/Util.hpp>
+#include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
@@ -28,7 +28,7 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_GRAPHICS_SYSTEM;
 			
 			std::string filename;
-			Mono::Util::MonoStringToStdString(fileName, filename);
+			Mono::MonoUtil::MonoStringToStdString(fileName, filename);
 
 			Texture* tex = nullptr;
 			if (type == PixelBufferType::Texture2D) {

@@ -51,6 +51,11 @@ extern uint32_t mono_threads_get_default_stacksize (void);
 
 void mono_threads_request_thread_dump (void);
 
+// manually added; psm uses these, there not included for some reason
+// ugh
+void mono_threads_set_shutting_down (void);
+void mono_thread_suspend_all_other_threads (void);
+
 MONO_END_DECLS
 
 #endif /* _MONO_METADATA_THREADS_H_ */

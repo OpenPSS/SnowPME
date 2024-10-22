@@ -1,5 +1,5 @@
 #include <Sce/Pss/Core/InitializeCsharp.hpp>
-#include <Sce/Pss/Core/PsmMonoFunc.hpp>
+#include <Sce/Pss/Core/Mono/PsmMonoFunc.hpp>
 #include <Sce/Pss/Core/Environment/PersistentMemory.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 
@@ -9,6 +9,7 @@
 #include <LibShared.hpp>
 #include <mono/mono.h>
 
+using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Environment;
 using namespace Shared::Debug;
@@ -24,7 +25,7 @@ namespace Sce::Pss::Core {
 		}
 	}
 
-	int InitalizeCsharp::registerError() {
+	int InitalizeCsharp::registerErrors() {
 		return installFunctions(ErrorFunctions);
 	}
 	int InitalizeCsharp::registerServices() {
@@ -55,12 +56,20 @@ namespace Sce::Pss::Core {
 		}
 	}
 	int InitalizeCsharp::registerEnvironment() {
-		PersistentMemory::ReadPersistantMemoryFromDisk();
+		PersistentMemory::Initalize();
 		return installFunctions(EnvironmentFunctions);
 	}
 
-	int InitalizeCsharp::registerFunctions() {
-		InitalizeCsharp::registerError();
+	int InitalizeCsharp::unregisterEnvironment() {
+		PersistentMemory::Terminate();
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	int InitalizeCsharp::Initalize() {
+		InitalizeCsharp::registerErrors();
+		// IntHandleTable::Initialize(); ?
+
 		InitalizeCsharp::registerEnvironment();
 		InitalizeCsharp::registerGraphics();
 		InitalizeCsharp::registerAudio();
@@ -73,8 +82,10 @@ namespace Sce::Pss::Core {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	InitalizeCsharp::InitalizeCsharp() {
-		InitalizeCsharp::registerFunctions();
+	int InitalizeCsharp::Terminate() {
+		InitalizeCsharp::unregisterEnvironment();
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 }
