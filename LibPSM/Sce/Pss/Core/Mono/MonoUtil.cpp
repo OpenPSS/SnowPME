@@ -66,18 +66,10 @@ namespace Sce::Pss::Core::Mono {
 		if (strlen(exePath) == 0)
 			return mono_domain_assembly_open(domain, exePath);
 
-		// TODO:
-		// figure out why does psm.exe do this ???
-		// is this filtering out special characters or something?
-		int i = 0;
-		while ((exePath[i] - 0x20) <= 0x5E)
-		{
-			if (++i >= strlen(exePath)) {
-				return mono_domain_assembly_open(domain, exePath);
-			}
-		}
+		// check if any invalid characters in the string
+		for (int i = 0; i < strlen(exePath); ++i) if (exePath[i] < ' ' || exePath[i] > '~') return nullptr;
 
-		return nullptr;
+		return mono_domain_assembly_open(domain, exePath);
 	}
 
 	MonoType* MonoUtil::MonoArrayElementsType(MonoArray* ar) {
