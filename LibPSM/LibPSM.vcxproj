@@ -103,7 +103,6 @@
     <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Users\Administrator\Downloads\stb_image.h" />
     <ClInclude Include="LibPSM.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\BgmPlayer.hpp" />
