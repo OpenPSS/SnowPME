@@ -6,6 +6,9 @@
 #include <exception>
 #include <mutex>
 #include <cstring>
+#include <LibShared.hpp>
+
+using namespace Shared::Debug;
 
 namespace SnowPME::Callback {
 
@@ -16,17 +19,17 @@ namespace SnowPME::Callback {
 			throw std::runtime_error("failed to Mix_Init.");
 		}
 
-		if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512) < 0) {
-			throw std::runtime_error("failed to Mix_OpenAudio.");
+		if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 512) >= 0) {
+			Logger::Warn("failed to Mix_OpenAudio.");
+
+			if (Mix_AllocateChannels(AudioImpl::TotalChannels) < 0) {
+				throw std::runtime_error("failed to Mix_AllocateChannels.");
+			}
+
+			std::memset(AudioImpl::ChannelsUsed, false, AudioImpl::TotalChannels);
+
+			AudioImpl::Impl::isInitalized = true;
 		}
-
-		if (Mix_AllocateChannels(AudioImpl::TotalChannels) < 0) {
-			throw std::runtime_error("failed to Mix_AllocateChannels.");
-		}
-
-		std::memset(AudioImpl::ChannelsUsed, false, AudioImpl::TotalChannels);
-
-		AudioImpl::Impl::isInitalized = true;
 	}
 
 

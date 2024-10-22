@@ -39,7 +39,7 @@ namespace Sce::Pss::Core::Io {
 
 			// if no psmDrm object cannot decrypt psse.list file, and must use edata.list.
 			if(psmDrm != nullptr)
-				EdataStream* str = new EdataStream(psseListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
+				str = new EdataStream(psseListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
 
 			if (str->GetError() == PSM_ERROR_NOT_FOUND) { // if that not exist, open edata.list
 				if(str != nullptr)
