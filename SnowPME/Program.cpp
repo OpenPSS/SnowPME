@@ -12,10 +12,6 @@ namespace SnowPME {
 	void Program::startMonoApplication(const std::string& gamePath) {
 		// run program
 		Application::LoadApplication(gamePath, this->window);
-		
-		while (1) {
-			this->window->PollEvents();
-		}
 	}
 
 	Program::Program(int argc, const char* const* argv) {

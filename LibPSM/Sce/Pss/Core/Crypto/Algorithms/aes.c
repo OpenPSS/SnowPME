@@ -291,7 +291,7 @@ static void ShiftRows(state_t* state)
     (*state)[1][3] = temp;
 }
 
-static uint8_t xtime(uint8_t x)
+static inline uint8_t xtime(uint8_t x)
 {
     return ((x << 1) ^ (((x >> 7) & 1) * 0x1b));
 }
@@ -312,28 +312,13 @@ static void MixColumns(state_t* state)
     }
 }
 
-// Multiply is used to multiply numbers in the field GF(2^8)
-// Note: The last call to xtime() is unneeded, but often ends up generating a smaller binary
-//       The compiler seems to be able to vectorize the operation better this way.
-//       See https://github.com/kokke/tiny-AES-c/pull/34
-#if MULTIPLY_AS_A_FUNCTION
-static uint8_t Multiply(uint8_t x, uint8_t y)
+static const uint8_t poly_reduce_mask[8] = { 0, 27, 54, 45, 108, 119, 90, 65 };
+static inline uint8_t Multiply(uint8_t x, uint8_t y)
 {
-    return (((y & 1) * x) ^
-        ((y >> 1 & 1) * xtime(x)) ^
-        ((y >> 2 & 1) * xtime(xtime(x))) ^
-        ((y >> 3 & 1) * xtime(xtime(xtime(x)))) ^
-        ((y >> 4 & 1) * xtime(xtime(xtime(xtime(x)))))); /* this last call to xtime() can be omitted */
+    uint16_t r = ((y & 1) * x) ^ ((y & 2) * x) ^ ((y & 4) * x) ^ ((y & 8) * x);
+    return (uint8_t)(r ^ poly_reduce_mask[r >> 8]);
 }
-#else
-#define Multiply(x, y)                                \
-      (  ((y & 1) * x) ^                              \
-      ((y>>1 & 1) * xtime(x)) ^                       \
-      ((y>>2 & 1) * xtime(xtime(x))) ^                \
-      ((y>>3 & 1) * xtime(xtime(xtime(x)))) ^         \
-      ((y>>4 & 1) * xtime(xtime(xtime(xtime(x))))))   \
 
-#endif
 
 #if (defined(CBC) && CBC == 1) || (defined(ECB) && ECB == 1)
 /*

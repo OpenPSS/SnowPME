@@ -219,12 +219,6 @@ namespace Sce::Pss::Core::Mono {
 		InitalizeMono::ScePsmTerminate();
 
 		return resCode;
-		/*
-		ScePsmMonoTerm(v168);
-        scePssGraphicsTerminate(v169);
-        scePssFilesystemTerminate(v170);
-        scePssSystemTerminate(v171);
-		*/
 	}
 
 }
