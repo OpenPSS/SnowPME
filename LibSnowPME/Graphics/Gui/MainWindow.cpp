@@ -2,6 +2,7 @@
 #include <Graphics/Gui/MainWindow.hpp>
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
 #include <Graphics/Gui/InstallGamePackageWindow.hpp>
+#include <Graphics/Gui/InstallGameFolderWindow.hpp>
 #include <LibImGui.hpp>
 
 namespace SnowPME::Graphics::Gui {
@@ -18,7 +19,8 @@ namespace SnowPME::Graphics::Gui {
 					gamePkgInstall->Register();
 				}
 				if (ImGui::MenuItem("Install Game from Folder")) {
-
+					InstallGameFolderWindow* gameFolderInstall = new InstallGameFolderWindow();
+					gameFolderInstall->Register();
 				}
 				ImGui::EndMenu();
 			}

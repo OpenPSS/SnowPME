@@ -31,6 +31,8 @@ namespace Shared
 	bool Config::MonoDebugger = false;
 	std::string Config::ProfilerSettings = "";
 
+	std::string Config::PsmApps = "psm";
+
 	void Config::parseKeyValuePair(std::string key, std::string value) {
 		GET_CFG_KEY_STR(Username);
 		GET_CFG_KEY_UINT64(AccountId);
@@ -43,6 +45,8 @@ namespace Shared
 
 		GET_CFG_KEY_STR(ProfilerSettings);
 		GET_CFG_KEY_BOOL(MonoDebugger);
+
+		GET_CFG_KEY_STR(PsmApps);
 
 	}
 	std::string Config::Mono21Folder() {
@@ -85,6 +89,9 @@ namespace Shared
 			SET_CFG_COMMENT(cfgStream, "- Mono Settings -");
 			SET_CFG_KEY_STR(cfgStream, ProfilerSettings);
 			SET_CFG_KEY_STR(cfgStream, MonoDebugger);
+
+			SET_CFG_COMMENT(cfgStream, "- SnowPME -");
+			SET_CFG_KEY_STR(cfgStream, PsmApps);
 
 			cfgStream.close();
 		}

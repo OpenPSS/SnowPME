@@ -23,7 +23,7 @@
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="String\Path.cpp" />
     <ClCompile Include="String\StringUtil.cpp" />
-    <ClCompile Include="Threading\ThreadSafeCounter.cpp" />
+    <ClCompile Include="Threading\ProgressTracker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
@@ -32,7 +32,7 @@
     <ClInclude Include="RuntimeImplementation.hpp" />
     <ClInclude Include="String\Path.hpp" />
     <ClInclude Include="String\StringUtil.hpp" />
-    <ClInclude Include="Threading\ThreadSafeCounter.hpp" />
+    <ClInclude Include="Threading\ProgressTracker.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

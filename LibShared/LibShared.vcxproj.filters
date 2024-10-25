@@ -27,7 +27,7 @@
     <ClCompile Include="String\Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Threading\ThreadSafeCounter.cpp">
+    <ClCompile Include="Threading\ProgressTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,10 +47,10 @@
     <ClInclude Include="String\Path.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Threading\ThreadSafeCounter.hpp">
+    <ClInclude Include="RuntimeImplementation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RuntimeImplementation.hpp">
+    <ClInclude Include="Threading\ProgressTracker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

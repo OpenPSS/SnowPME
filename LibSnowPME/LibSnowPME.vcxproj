@@ -24,7 +24,9 @@
     <ClInclude Include="Callback\Impl.hpp" />
     <ClInclude Include="Callback\WindowImpl.hpp" />
     <ClInclude Include="Graphics\Gui\DemoWindow.hpp" />
+    <ClInclude Include="Graphics\Gui\InstallGameFolderWindow.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGamePackageWindow.hpp" />
+    <ClInclude Include="Graphics\Gui\InstallGameWindow.hpp" />
     <ClInclude Include="Graphics\Gui\MainWindow.hpp" />
     <ClInclude Include="Graphics\Gui\MsgBox.hpp" />
     <ClInclude Include="Graphics\Gui\RuntimeLibsWindow.hpp" />
@@ -40,7 +42,9 @@
     <ClCompile Include="Callback\WindowImpl.cpp" />
     <ClCompile Include="Graphics\Gui\DemoWindow.cpp" />
     <ClCompile Include="Graphics\Gui\ImGuiWindow.cpp" />
+    <ClCompile Include="Graphics\Gui\InstallGameFolderWindow.cpp" />
     <ClCompile Include="Graphics\Gui\InstallGamePackageWindow.cpp" />
+    <ClCompile Include="Graphics\Gui\InstallGameWindow.cpp" />
     <ClCompile Include="Graphics\Gui\MainWindow.cpp" />
     <ClCompile Include="Graphics\Gui\MsgBox.cpp" />
     <ClCompile Include="Graphics\Gui\RuntimeLibsWindow.cpp" />
