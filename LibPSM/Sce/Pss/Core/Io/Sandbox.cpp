@@ -207,8 +207,8 @@ namespace Sce::Pss::Core::Io {
 		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem->IsWritable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
-		if (filesystem->GetEdataList() != nullptr) {
-			if (filesystem->GetEdataList()->IsFileInEdata(absPath)) {
+		if (filesystem->GetEdataList(this->GameDrmProvider) != nullptr) {
+			if (filesystem->GetEdataList(this->GameDrmProvider)->IsFileInEdata(absPath)) {
 				psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
 			}
 		}
