@@ -105,7 +105,7 @@ namespace Sce::Pss::Core::Io {
 	void Sandbox::reopen(PsmFileDescriptor* handle) {
 		if (handle->opened && !handle->directory && handle->edataStream != NULL) {
 			// Close the file
-			size_t oldPos = handle->edataStream->Tell();
+			size_t oldPos = (size_t)handle->edataStream->Tell();
 			EdataList* edata = handle->edataStream->EncryptedDataList;
 
 			if(handle->edataStream != nullptr)
@@ -313,7 +313,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	size_t Sandbox::GetSize(PsmFileDescriptor* handle) {
-		return handle->edataStream->Filesize();
+		return (size_t)handle->edataStream->Filesize();
 	}
 
 	PsmFileDescriptor* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem) {

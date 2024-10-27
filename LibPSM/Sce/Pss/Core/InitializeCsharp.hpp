@@ -10,7 +10,7 @@ namespace Sce::Pss::Core {
 	} PsmMonoFunc;
 
 
-	static class InitalizeCsharp {
+	class InitalizeCsharp {
 	private:
 		static int installFunctions(PsmMonoFunc* functions);
 		static int registerErrors();

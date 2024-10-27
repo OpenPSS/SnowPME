@@ -333,11 +333,13 @@ namespace Sce::Pss::Core::Graphics {
 			case GL_BYTE:
 			case GL_UNSIGNED_BYTE:
 			case GL_SHORT:
+				Logger::Error("GL Params is not implemented type; " + std::to_string(params));
 				return 0; // TODO
 			case GL_FLOAT:
 				*attributeType = ShaderAttributeType::Float;
 				return 0;
 		}
+		return 0;
 	}
 
 	int ShaderProgram::GetUniformName(int index, std::string& name) const {

@@ -33,6 +33,7 @@ namespace Sce::Pss::Core::Graphics {
 					Logger::Error("PixelBufferType::TextureCube unimplemented.");
 					return PSM_ERROR_NOT_IMPLEMENTED;
 				}
+				return PSM_ERROR_COMMON_ARGUMENT;
 			}
 			else {
 				return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -50,6 +51,8 @@ namespace Sce::Pss::Core::Graphics {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			PixelBuffer* pix = Handles::Get<PixelBuffer>(handle);
 			delete pix;
+
+			return PSM_ERROR_NO_ERROR;
 		}
 		else
 		{

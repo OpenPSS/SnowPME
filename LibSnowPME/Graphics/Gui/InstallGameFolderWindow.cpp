@@ -21,7 +21,6 @@ namespace SnowPME::Graphics::Gui {
 		this->progress.SetShowProgress(true);
 
 		// do the actual copy of files to new directory
-		std::filesystem::current_path(rootDirectory);
 		iter = std::filesystem::recursive_directory_iterator(rootDirectory);
 		for (std::filesystem::directory_entry ent : iter) {
 			std::string srcFile = ent.path().relative_path().string();

@@ -4,9 +4,9 @@
 #include <mutex>
 #include <LibShared.hpp>
 
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Memory {
-	using namespace Shared::Debug;
 
 	HeapAllocator* HeapAllocator::resourceHeapAllocator = nullptr;
 
@@ -16,7 +16,7 @@ namespace Sce::Pss::Core::Memory {
 
 		this->heapAllocations = std::map<uintptr_t, std::vector<uint8_t>*>();
 	}
-	HeapAllocator::~HeapAllocator() 
+	HeapAllocator::~HeapAllocator()
 	{
 		this->allocMutex.lock();
 
@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Memory {
 
 		// increase the total size by the size of the vector
 		this->UsedSpace += vec->size();
-		
+
 		// get the ptr to the buffer
 		uint8_t* buffer = vec->data();
 

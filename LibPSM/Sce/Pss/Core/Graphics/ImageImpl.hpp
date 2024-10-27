@@ -15,7 +15,9 @@ namespace Sce::Pss::Core::Graphics {
 		virtual ~ImageImpl();
 
 	private:
-		uint8_t* image;
-		int x, y, comp;
+		uint8_t* image = nullptr;
+		int x = NULL;
+		int y = NULL;
+		int comp = NULL;
 	};
 }

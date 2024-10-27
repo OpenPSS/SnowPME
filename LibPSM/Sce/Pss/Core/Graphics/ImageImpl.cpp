@@ -12,7 +12,7 @@ using namespace Shared::Debug;
 namespace Sce::Pss::Core::Graphics {
 
 	ImageImpl::ImageImpl() {
-		image = nullptr;
+		this->image = nullptr;
 	}
 
 	ImageImpl::~ImageImpl() {

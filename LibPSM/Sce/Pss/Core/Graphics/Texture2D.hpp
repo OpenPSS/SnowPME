@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_TEXTURE_2D_H
 #define LIB_PSS_TEXTURE_2D_H 1
 
+#include <Sce/Pss/Core/Graphics/ImageImpl.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <glad/glad.h>
 
