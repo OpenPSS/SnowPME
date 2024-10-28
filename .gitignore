@@ -31,6 +31,8 @@ External/Win32/lib/*/LibImGui.idb
 External/Win32/lib/*/LibImGui.lib
 External/Win32/lib/*/LibImGui.pdb
 
+*.cfg
+
 *.aps
 *.obj
 *.user
