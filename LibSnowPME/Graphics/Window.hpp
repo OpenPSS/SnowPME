@@ -18,6 +18,7 @@ namespace SnowPME::Graphics {
 		void Vsync(uint32_t frameTaken);
 		uint32_t GetTime();
 		void PollEvents();
+		void MakeCurrent();
 		bool IsMinimized();
 		bool ShouldClose();
 		bool MessageBox(const std::string& message, const std::string&  caption);

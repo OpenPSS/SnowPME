@@ -1,6 +1,5 @@
 #include <Runtime/Application.hpp>
 #include <Debug/Logger.hpp>
-#include <sdl/sdl.h>
 
 #include <LibShared.hpp>
 #include <LibPSM.hpp>
@@ -10,6 +9,7 @@
 #include <Callback/AudioImpl.hpp>
 
 #include <string>
+#include <thread>
 
 using namespace Sce::Pss::Core::Mono;
 using namespace Shared::Debug;
@@ -19,10 +19,10 @@ using namespace LibCXML;
 
 namespace SnowPME::Runtime {
 	Application* Application::runningApplication = nullptr;
-	SDL_Thread* Application::psmGameThread = nullptr;
+	std::thread* Application::psmGameThread = nullptr;
 
-	int Application::initCallbacks(Graphics::Window* oglWindow) {
-		Callback::WindowImpl::Init(oglWindow);
+	int Application::initCallbacks(Graphics::Window* window) {
+		Callback::WindowImpl::Init(window);
 
 		Sce::Pss::Core::Callback::WindowCallbacks::Init(
 			Callback::WindowImpl::SwapBuffers,
@@ -49,21 +49,14 @@ namespace SnowPME::Runtime {
 	}
 
 
-	Application::Application(const std::string& gameFolder) {
+	Application::Application(const std::string& gameFolder, Graphics::Window* window) {
+		this->appWindow = window;
 		this->appMainDirectory = gameFolder;
 	}
 
 	void Application::RunPssMain() {
-		InitalizeMono::ScePssMain(this->appMainDirectory.c_str());;
-	}
-
-	int __cdecl Application::runGameThread(void* app) {
-		Application* application = (Application*)app;
-		
-		Logger::Info("Starting PsmGameThread for " + application->appMainDirectory);
-		application->RunPssMain();
-
-		return 0;
+		this->appWindow->MakeCurrent();
+		InitalizeMono::ScePssMain(this->appMainDirectory.c_str());
 	}
 
 	void Application::LoadApplication(const std::string& gameFolder, Graphics::Window* window) {
@@ -76,13 +69,11 @@ namespace SnowPME::Runtime {
 		}
 
 		if (Application::psmGameThread != nullptr) {
-			SDL_WaitThread(Application::psmGameThread, nullptr);
+			Application::psmGameThread->join();
 			Application::psmGameThread = nullptr;
 		}
 		
-		Application::runningApplication = new Application(gameFolder);
+		Application::runningApplication = new Application(gameFolder, window);
 		Application::runningApplication->RunPssMain();
-		// TODO: run game in seperate thread somehow? (would allow the program to not lock up if the game does)
-		//Application::psmGameThread = SDL_CreateThread(Application::runGameThread, "PsmGameThread", Application::runningApplication);
 	}
 }

@@ -3,22 +3,26 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
-#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 #include <Sce/Pss/Core/Graphics/ColorMask.hpp>
+
+#include <Sce/Pss/Core/Event/PsmEventQueue.hpp>
+#include <Sce/Pss/Core/Event/PsmEvent.hpp>
+#include <Sce/Pss/Core/Event/PsmEventType.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
 #include <math.h>
 
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Event;
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core;
-	using namespace Sce::Pss::Core::Threading;
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Callback;
-	using namespace Shared::Debug;
+
 
 	GraphicsContext* GraphicsContext::activeGraphicsContext = nullptr;
 
@@ -273,7 +277,9 @@ namespace Sce::Pss::Core::Graphics {
 		this->EndFrame();
 		// swap buffers ..
 		glFlush();
-		WindowCallbacks::SwapBuffers();
+
+		PsmEventQueue::IncomingEventQueue.Push(new PsmEvent(PsmEventType::SwapBuffers));
+
 		// begin a new frame
 		this->BeginFrame();
 		

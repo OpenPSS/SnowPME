@@ -37,6 +37,11 @@
 #include <Sce/Pss/Core/Services/Network.hpp>
 // things calling app has to setup :
 #include <Sce/Pss/Core/Mono/InitalizeMono.hpp>
+
+#include <Sce/Pss/Core/Event/PsmEventQueue.hpp>
+#include <Sce/Pss/Core/Event/PsmEventType.hpp>
+#include <Sce/Pss/Core/Event/PsmEvent.hpp>
+
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
 

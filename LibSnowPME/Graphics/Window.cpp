@@ -98,6 +98,10 @@ namespace SnowPME::Graphics {
 		return false; //glfwWindowShouldClose(this->sdlWindow);
 	}
 
+	void Window::MakeCurrent() {
+		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
+	}
+
 	bool Window::MessageBox(const std::string& message, const std::string& caption) {
 		SDL_MessageBoxButtonData buttonData[2];
 		memset(buttonData, 0, sizeof(SDL_MessageBoxButtonData) * 2);

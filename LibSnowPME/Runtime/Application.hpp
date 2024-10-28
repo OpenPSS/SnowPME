@@ -2,22 +2,22 @@
 #define SNOW_PME_RUNTIME_INIT_H 1
 #include <string>
 #include <Graphics/Window.hpp>
-#include <sdl/sdl.h>
+#include <thread>
 
 namespace SnowPME::Runtime
 {
 	class Application {
 	private:
 		std::string appMainDirectory;
+		Graphics::Window* appWindow;
 
-		static SDL_Thread* psmGameThread;
+		static std::thread* psmGameThread;
 		static Application* runningApplication;
 
-		static int initCallbacks(Graphics::Window* oglWindow);
-		static int __cdecl runGameThread(void* app);
+		static int initCallbacks(Graphics::Window* window);
 
 	public:
-		Application(const std::string& gameFolder);
+		Application(const std::string& gameFolder, Graphics::Window* window);
 		void RunPssMain();
 
 		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);

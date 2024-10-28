@@ -1,11 +1,14 @@
 #include "Program.hpp"
 #include <LibShared.hpp>
 #include <LibSnowPME.hpp>
+#include <LibPSM.hpp>
+
 #include <cxxopts.hpp>
 using namespace Shared;
 using namespace Shared::Debug;
 using namespace Shared::String;
 using namespace SnowPME::Runtime;
+using namespace Sce::Pss::Core::Event;
 
 namespace SnowPME {
 
@@ -14,10 +17,10 @@ namespace SnowPME {
 		Application::LoadApplication(gamePath, this->window);
 	}
 
+
 	Program::Program(int argc, const char* const* argv) {
 		std::string runningFrom = ""; // Path::UpDirectory(std::string(argv[0])); (doesnt work on windows ...)
 		Config::ReadConfig(runningFrom, "SnowPME.cfg");
-		
 
 		cxxopts::Options options("snowpme", "SnowPME PlayStation Mobile Emulator");
 

@@ -47,6 +47,8 @@
     <ClCompile Include="Sce\Pss\Core\Environment\SystemParameters.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\TextInputDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Error.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Event\PsmEvent.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Event\PsmEventQueue.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ImageImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\PsmFrameBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\PsmGraphicsContext.cpp" />
@@ -153,6 +155,9 @@
     <ClInclude Include="Sce\Pss\Core\Environment\TextInputDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\TextInputMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Error.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEvent.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEventQueue.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEventType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncFactor.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncMode.hpp" />

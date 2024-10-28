@@ -23,7 +23,7 @@ namespace SnowPME::Graphics::Gui {
 		// do the actual copy of files to new directory
 		iter = std::filesystem::recursive_directory_iterator(rootDirectory);
 		for (std::filesystem::directory_entry ent : iter) {
-			std::string srcFile = ent.path().relative_path().string();
+			std::string srcFile = ent.path().string().substr(rootDirectory.length());
 			std::string dstFile = Path::Combine(installDirectory, srcFile);
 
 			if (ent.is_directory()) {
