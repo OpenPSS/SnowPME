@@ -8,6 +8,14 @@ namespace SnowPME::Graphics::Gui {
 
 	std::list<ImGuiWindow*> ImGuiWindow::registeredWindows = std::list<ImGuiWindow*>();
 
+	void ImGuiWindow::updateWindow() {
+
+	}
+
+	void ImGuiWindow::onWindowClose() {
+		Logger::Debug(__FUNCTION__);
+	}
+
 	void ImGuiWindow::Show() {
 		this->windowOpen = true;
 		this->windowShown = true;
@@ -59,6 +67,7 @@ namespace SnowPME::Graphics::Gui {
 		ImGuiWindow::UnregisterWindow(this);
 	}
 
+
 	// static functions
 
 	void ImGuiWindow::RegisterWindow(ImGuiWindow* windowToRegister) {
@@ -77,6 +86,7 @@ namespace SnowPME::Graphics::Gui {
 				win->Display();
 			}
 			else if(!win->IsOpen()) {
+				win->onWindowClose();
 				delete win;
 				return;
 			}

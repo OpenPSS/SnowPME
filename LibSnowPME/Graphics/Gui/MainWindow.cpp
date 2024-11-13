@@ -3,6 +3,7 @@
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
 #include <Graphics/Gui/InstallGamePackageWindow.hpp>
 #include <Graphics/Gui/InstallGameFolderWindow.hpp>
+#include <Graphics/Gui/ConfigurationWindow.hpp>
 #include <LibImGui.hpp>
 
 namespace SnowPME::Graphics::Gui {
@@ -36,24 +37,14 @@ namespace SnowPME::Graphics::Gui {
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Configure")) {
-				if (ImGui::MenuItem("Set Account ID")) {
-
-				}
-				if (ImGui::MenuItem("Change Username")) {
-
-				}
-				if (ImGui::MenuItem("Change Target Runtime Implementation")) {
-
-				}
+			if (ImGui::BeginMenu("Configuration")) {
+				ConfigurationWindow* configWindow = new ConfigurationWindow();
+				configWindow->Register();
 				ImGui::EndMenu();
 			}
 
 			ImGui::EndMainMenuBar();
 		}
-	}
-	void MainWindow::updateWindow() {
-
 	}
 	void MainWindow::renderWindow() {
 		this->createMenuBar();

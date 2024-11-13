@@ -4,7 +4,6 @@
 namespace SnowPME::Graphics::Gui {
 	class DemoWindow : public ImGuiWindow {
 	protected:
-		void updateWindow();
 		void renderWindow();
 	};
 }

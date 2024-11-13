@@ -8,49 +8,63 @@
 using namespace Shared::String;
 using namespace Shared::Debug;
 
+#define GET_CFG_KEY_STR(name) if (key == #name) strncpy(Config::name, value.c_str(), sizeof(Config::name)-1)
+#define GET_CFG_KEY_UINT64(name) if (key == #name) Config::name = strtoull(value.c_str(), NULL, 16)
+#define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) Config::name = (enumName)strtoull(value.c_str(), NULL, 16)
+#define GET_CFG_KEY_BOOL(name) if (key == #name) Config::name = (value == "true")
+
+#define SET_CFG_COMMENT(str, cmt) str << COMMENT << cmt << std::endl;
+#define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(Config::name) << std::endl;
+#define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << (uint64_t)Config::name << std::endl;
+#define SET_CFG_KEY_ENUM(str, name) SET_CFG_KEY_UINT64(str, name)
+#define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (Config::name ? "true" : "false") << std::endl;
+
 namespace Shared
 {
+
+
 	static const std::string SEPERATOR = ":";
 	static const std::string COMMENT = "#";
-	static const std::string DEFAULT_RUNTIME_FOLDER = "RUNTIME";
-	static const std::string DEFAULT_CONFIG_FOLDER = "CONFIG";
 
 	static int screenWidth = 960;
 	static int screenHeight = 544;
+
+	std::string Config::RunningFromDirectory = "";
+	std::string Config::cfgFilePath = "";
+
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
 
-	std::string Config::RunningFromDirectory = "";
-	std::string Config::RuntimeLibPath = DEFAULT_RUNTIME_FOLDER;
-	std::string Config::RuntimeConfigPath = DEFAULT_RUNTIME_FOLDER;
+	char Config::RuntimeLibPath[0x1028] = "./RUNTIME";
+	char Config::RuntimeConfigPath[0x1028] = "./RUNTIME";
 
-	std::string Config::Username = "SnowPME";
+	char Config::Username[0x1028] = "SnowPME";
 	uint64_t Config::AccountId = 0x123456789ABCDEF0ull;
 	RuntimeImplementation Config::TargetImplementation = RuntimeImplementation::PSVita;
 
 	bool Config::MonoDebugger = false;
-	std::string Config::ProfilerSettings = "";
+	char Config::ProfilerSettings[0x1028] = "";
 
-	std::string Config::PsmApps = "psm";
+	char Config::PsmApps[0x1028] = "./psm";
 
 	void Config::parseKeyValuePair(std::string key, std::string value) {
-		GET_CFG_KEY_STR(Username);
-		GET_CFG_KEY_UINT64(AccountId);
+		GET_CFG_KEY_STR(Config::Username);
+		GET_CFG_KEY_UINT64(Config::AccountId);
 
-		GET_CFG_KEY_STR(RuntimeLibPath);
-		GET_CFG_KEY_STR(RuntimeConfigPath);
+		GET_CFG_KEY_STR(Config::RuntimeLibPath);
+		GET_CFG_KEY_STR(Config::RuntimeConfigPath);
 
-		GET_CFG_KEY_ENUM(TargetImplementation, RuntimeImplementation);
-		GET_CFG_KEY_BOOL(SecurityCritical);
+		GET_CFG_KEY_ENUM(Config::TargetImplementation, RuntimeImplementation);
+		GET_CFG_KEY_BOOL(Config::SecurityCritical);
 
-		GET_CFG_KEY_STR(ProfilerSettings);
-		GET_CFG_KEY_BOOL(MonoDebugger);
+		GET_CFG_KEY_STR(Config::ProfilerSettings);
+		GET_CFG_KEY_BOOL(Config::MonoDebugger);
 
-		GET_CFG_KEY_STR(PsmApps);
+		GET_CFG_KEY_STR(Config::PsmApps);
 
 	}
 	std::string Config::Mono21Folder() {
-		return Path::Combine(Config::RunningFromDirectory, Path::Combine(Path::Combine(Config::RuntimeLibPath, "mono"), "2.1"));
+		return Path::Combine(std::string(Config::RunningFromDirectory), Path::Combine(Path::Combine(std::string(Config::RuntimeLibPath), "mono"), "2.1"));
 	}
 
 	std::string Config::PsmCoreLibPath() {
@@ -71,27 +85,33 @@ namespace Shared
 		return screenWidth;
 	}
 
+	void Config::ReloadConfig() {
+		Config::ReadConfig(Config::RunningFromDirectory, Config::cfgFilePath);
+	}
+	void Config::SaveConfig() {
+		Config::WriteConfig(Config::cfgFilePath);
+	}
+
 	void Config::WriteConfig(const std::string& configFile) {
+		Logger::Debug("Writing config file: " + configFile);
 		std::ofstream cfgStream = std::ofstream(configFile);
 		if (!cfgStream.fail()) {
 			SET_CFG_COMMENT(cfgStream, "- Account information -");
-			SET_CFG_KEY_STR(cfgStream, Username);
-			SET_CFG_KEY_UINT64(cfgStream, AccountId);
+			SET_CFG_KEY_STR(cfgStream, Config::Username);
+			SET_CFG_KEY_UINT64(cfgStream, Config::AccountId);
 
 			SET_CFG_COMMENT(cfgStream, "- Runtime Files -");
-			SET_CFG_KEY_STR(cfgStream, RuntimeLibPath);
-			SET_CFG_KEY_STR(cfgStream, RuntimeConfigPath);
-
-			SET_CFG_COMMENT(cfgStream, "- Implementation Details -");
-			SET_CFG_KEY_ENUM(cfgStream, TargetImplementation);
-			SET_CFG_KEY_BOOL(cfgStream, SecurityCritical);
+			SET_CFG_KEY_STR(cfgStream, Config::RuntimeLibPath);
+			SET_CFG_KEY_STR(cfgStream, Config::RuntimeConfigPath);
 
 			SET_CFG_COMMENT(cfgStream, "- Mono Settings -");
-			SET_CFG_KEY_STR(cfgStream, ProfilerSettings);
-			SET_CFG_KEY_STR(cfgStream, MonoDebugger);
+			SET_CFG_KEY_STR(cfgStream,  Config::ProfilerSettings);
+			SET_CFG_KEY_BOOL(cfgStream, Config::SecurityCritical);
+			SET_CFG_KEY_BOOL(cfgStream, Config::MonoDebugger);
 
 			SET_CFG_COMMENT(cfgStream, "- SnowPME -");
-			SET_CFG_KEY_STR(cfgStream, PsmApps);
+			SET_CFG_KEY_STR(cfgStream, Config::PsmApps);
+			SET_CFG_KEY_ENUM(cfgStream, Config::TargetImplementation);
 
 			cfgStream.close();
 		}
@@ -99,10 +119,10 @@ namespace Shared
 	}
 	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
-		std::string cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
-		Logger::Debug("Reading config file: "+cfgFilePath);
+		Config::cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
+		Logger::Debug("Reading config file: "+ Config::cfgFilePath);
 
-		std::ifstream cfgStream = std::ifstream(cfgFilePath);
+		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);
 		if (cfgStream.fail()) return WriteConfig(configFile);
 
 		std::string ln;

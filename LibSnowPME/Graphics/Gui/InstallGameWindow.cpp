@@ -1,10 +1,8 @@
 #include <Graphics/Gui/InstallGameWindow.hpp>
 #include <pfd/portable-file-dialogs.h>
-#include <imgui.h>
+#include <LibImGui.hpp>
 
 namespace SnowPME::Graphics::Gui {
-
-	void InstallGameWindow::updateWindow() {};
 
 	void InstallGameWindow::renderWindow() {
 		uint32_t n = 0;

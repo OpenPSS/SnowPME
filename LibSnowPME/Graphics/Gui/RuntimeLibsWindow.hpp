@@ -14,7 +14,6 @@ namespace SnowPME::Graphics::Gui {
 		void checkDlls();
 		void installDll(Sce::Pss::Core::Mono::PsmDlls::PssSystemFileEnum whatDll);
 	protected:
-		void updateWindow();
 		void renderWindow();
 	public:
 		RuntimeLibsWindow();

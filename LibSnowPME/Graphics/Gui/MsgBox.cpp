@@ -15,9 +15,6 @@ namespace SnowPME::Graphics::Gui {
 		return result;
 	}
 
-	void MsgBox::updateWindow() {
-
-	}
 
 	void MsgBox::renderWindow() {
 		uint32_t n = 0;

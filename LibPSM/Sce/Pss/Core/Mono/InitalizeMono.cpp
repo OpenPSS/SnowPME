@@ -55,15 +55,15 @@ namespace Sce::Pss::Core::Mono {
 		mono_config_parse(NULL);
 
 		// Set runtime install location
-		mono_set_dirs(Config::RuntimeLibPath.c_str(), Config::RuntimeConfigPath.c_str());
+		mono_set_dirs(Config::RuntimeLibPath, Config::RuntimeConfigPath);
 
 
 		// Create a domain in which this application will run under.
 		InitalizeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
 
 		// run profiler and debug if needed
-		if (!Config::ProfilerSettings.empty())
-			mono_profiler_load(Config::ProfilerSettings.c_str());
+		if (strlen(Config::ProfilerSettings) <= 0)
+			mono_profiler_load(Config::ProfilerSettings);
 		if (Config::MonoDebugger)
 			mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 

@@ -59,9 +59,6 @@ namespace SnowPME::Graphics::Gui {
 		checkDlls();
 	}
 
-	void RuntimeLibsWindow::updateWindow() {
-
-	}
 	void RuntimeLibsWindow::renderWindow() {
 		uint32_t n = 0;
 

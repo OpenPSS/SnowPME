@@ -23,6 +23,7 @@
     <ClInclude Include="Callback\AudioObject.hpp" />
     <ClInclude Include="Callback\Impl.hpp" />
     <ClInclude Include="Callback\WindowImpl.hpp" />
+    <ClInclude Include="Graphics\Gui\ConfigurationWindow.hpp" />
     <ClInclude Include="Graphics\Gui\DemoWindow.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGameFolderWindow.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGamePackageWindow.hpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Callback\AudioImpl.cpp" />
     <ClCompile Include="Callback\Impl.cpp" />
     <ClCompile Include="Callback\WindowImpl.cpp" />
+    <ClCompile Include="Graphics\Gui\ConfigurationWindow.cpp" />
     <ClCompile Include="Graphics\Gui\DemoWindow.cpp" />
     <ClCompile Include="Graphics\Gui\ImGuiWindow.cpp" />
     <ClCompile Include="Graphics\Gui\InstallGameFolderWindow.cpp" />

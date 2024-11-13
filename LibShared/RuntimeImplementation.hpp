@@ -3,9 +3,9 @@
 
 namespace Shared {
 	typedef enum class RuntimeImplementation : unsigned int {
-		Android,
-		PSVita,
-		Windows
+		PSVita = 0,
+		Android = 1,
+		Windows = 2
 	} RuntimeImplementation;
 }
 

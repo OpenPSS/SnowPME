@@ -20,7 +20,6 @@ namespace SnowPME::Graphics::Gui {
 		virtual void browseGame();
 		virtual void installGame() = NULL;
 		void renderWindow();
-		void updateWindow();
 	public:
 		InstallGameWindow();
 	};

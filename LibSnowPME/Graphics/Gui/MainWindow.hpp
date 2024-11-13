@@ -8,7 +8,6 @@ namespace SnowPME::Graphics::Gui {
 
 		void createMenuBar();
 	protected:
-		void updateWindow();
 		void renderWindow();
 	};
 

@@ -10,7 +10,6 @@ namespace SnowPME::Graphics::Gui {
 		std::string message;
 		std::vector<std::string> buttons;
 	protected:
-		void updateWindow();
 		void renderWindow();
 	public:
 		MsgBox(const std::string& msgTitle, const std::string& msgMessage, std::vector<std::string>msgButtons);
