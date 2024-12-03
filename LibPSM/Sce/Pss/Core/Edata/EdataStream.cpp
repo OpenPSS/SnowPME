@@ -289,6 +289,8 @@ namespace Sce::Pss::Core::Edata {
 
 				return length;
 			}
+
+			return 0;
 		}
 		else {
 			this->osHandle->read(buffer, length);

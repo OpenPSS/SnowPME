@@ -1,3 +1,9 @@
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", on )
+#endif
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  WjCryptLib_Sha256
 //
@@ -265,3 +271,9 @@ void Sha256Calculate(void const* Buffer,   // [in]
   Sha256Update(&context, Buffer, BufferSize);
   Sha256Finalise(&context, Digest);
 }
+
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", off )
+#endif
+#endif

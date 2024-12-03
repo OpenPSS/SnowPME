@@ -1,3 +1,8 @@
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", on )
+#endif
+#endif
 /*
 
 This is an implementation of the AES algorithm, specifically ECB, CTR and CBC mode.
@@ -555,3 +560,8 @@ void AES_CTR_xcrypt_buffer(struct AES_ctx* ctx, uint8_t* buf, size_t length)
 
 #endif // #if defined(CTR) && (CTR == 1)
 
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", off )
+#endif
+#endif

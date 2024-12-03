@@ -2,6 +2,7 @@
 #define LIB_PSS_BGM_H 1
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
+#include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
 #include <string>
 #include <iostream>
 #include <mono/mono.h>
@@ -13,7 +14,7 @@ namespace Sce::Pss::Core::Audio {
 
 		bool isMp3();
 	public:
-		void* NativeBgmObject = nullptr;
+		Impl::Audio* AudioImplObject = nullptr;
 		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();

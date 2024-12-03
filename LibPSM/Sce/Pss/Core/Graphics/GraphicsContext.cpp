@@ -648,10 +648,15 @@ namespace Sce::Pss::Core::Graphics {
 
 			std::vector<std::string> extensionList = Shared::String::StringUtil::Split(this->Extensions, " ");
 
-			Logger::Info("GL Vendor: " + std::string((char*)glGetString(GL_VENDOR)));
-			Logger::Info("GL Renderer: " + std::string((char*)glGetString(GL_RENDERER)));
-			Logger::Info("GL Version: " + std::string((char*)glGetString(GL_VERSION)));
-			Logger::Info("GL Shader Language Version: " + std::string((char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
+			char* glVendor = (char*)glGetString(GL_VENDOR);
+			char* glRenderer = (char*)glGetString(GL_RENDERER);
+			char* glVersion = (char*)glGetString(GL_VERSION);
+			char* glslVersion = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+			Logger::Info("GL Vendor: " + std::string(glVendor));
+			Logger::Info("GL Renderer: " + std::string(glRenderer));
+			Logger::Info("GL Version: " + std::string(glVersion));
+			Logger::Info("GL Shader Language Version: " + std::string(glslVersion));
 
 			this->Renderer = std::string((char*)glGetString(GL_RENDERER));
 

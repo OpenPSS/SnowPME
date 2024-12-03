@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Graphics/ImageImpl.hpp>
+#include <Sce/Pss/Core/Imaging/Impl/Image.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
@@ -8,7 +8,7 @@
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Memory;
-using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::Imaging;
 
 namespace Sce::Pss::Core::Graphics {
 

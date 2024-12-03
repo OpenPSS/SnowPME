@@ -103,7 +103,7 @@ namespace Sce::Pss::Core::Metadata {
 		std::vector<std::string> FeatureList;
 
 		// <unity>
-		std::string RuntimeVersion;
+		std::string UnityRuntimeVersion;
 		std::string UnityApplicationVer;
 	};
 }

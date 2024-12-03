@@ -2,6 +2,7 @@
 #define SNOW_PME_WINDOW_H 1
 #include <cstdint>
 #include <string>
+#include <thread>
 #include <SDL.h>
 
 namespace SnowPME::Graphics {
@@ -10,8 +11,10 @@ namespace SnowPME::Graphics {
 		SDL_Window* sdlWindow = nullptr;
 		SDL_GLContext glCtx = nullptr;
 		std::string openGlVersion;
+		std::thread* updateThread = nullptr;
 		float refreshRate;
 		void onResized();
+		void updateWindow();
 	public:
 		Window(int height, int width, const std::string& title);
 		void SwapBuffers();

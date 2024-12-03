@@ -216,9 +216,6 @@
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Callback\AudioCallbacks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -258,13 +255,16 @@
     <ClCompile Include="Sce\Pss\Core\InitializeCsharp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Graphics\ImageImpl.cpp">
+    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Event\PsmEventQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Event\PsmEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Audio\Impl\AudioImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -710,9 +710,6 @@
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Callback\AudioCallbacks.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -788,7 +785,7 @@
     <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Graphics\ImageImpl.hpp">
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\Image.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Event\PsmEventQueue.hpp">
@@ -798,6 +795,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Event\PsmEventType.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

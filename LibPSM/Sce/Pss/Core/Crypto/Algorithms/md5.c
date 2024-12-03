@@ -1,3 +1,9 @@
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", on )
+#endif
+#endif
+
 /*
  * Derived from the RSA Data Security, Inc. MD5 Message-Digest Algorithm
  * and modified slightly to be functionally identical but condensed into control structures.
@@ -221,3 +227,9 @@ void md5File(FILE *file, uint8_t *result){
 
     memcpy(result, ctx.digest, 16);
 }
+
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", off )
+#endif
+#endif

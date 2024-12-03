@@ -1,3 +1,9 @@
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", on )
+#endif
+#endif
+
 /*
    hmac_sha256.c
    Originally written by https://github.com/h5p9sl
@@ -102,3 +108,9 @@ static void* sha256(const void* data,
   sz = (outlen > SHA256_HASH_SIZE) ? SHA256_HASH_SIZE : outlen;
   return memcpy(out, hash.bytes, sz);
 }
+
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", off )
+#endif
+#endif

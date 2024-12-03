@@ -4,19 +4,19 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Callback/AudioCallbacks.hpp>
+#include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
+
 #include <LibShared.hpp>
 #include <mono/mono.h>
 #include <iostream>
 #include <string.h>
 
-namespace Sce::Pss::Core::Audio {
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Io;
-	using namespace Sce::Pss::Core::Memory;
-	using namespace Sce::Pss::Core::Callback;
-	using namespace Shared::Debug;
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::Memory;
+using namespace Shared::Debug;
 
+namespace Sce::Pss::Core::Audio {
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
 			if (memcmp(this->audioData, "ID3", 3) == 0) {
@@ -28,11 +28,11 @@ namespace Sce::Pss::Core::Audio {
 
 	Bgm::~Bgm() {
 		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
-		if(this->audioData != nullptr)
-			allocator->sce_psm_free(this->audioData);
+		if(this->audioData != nullptr) allocator->sce_psm_free(this->audioData);
+		if (this->AudioImplObject != nullptr) delete this->AudioImplObject;
 
-		if (this->NativeBgmObject != nullptr)
-			AudioCallbacks::CloseMP3(this->NativeBgmObject);
+		this->audioData = nullptr;
+		this->AudioImplObject = nullptr;
 
 	}
 	Bgm::Bgm(uint8_t* data, int dataSz) {
@@ -41,7 +41,8 @@ namespace Sce::Pss::Core::Audio {
 		this->audioSz = dataSz;
 
 		if (this->isMp3()) { // check data is an MP3 file
-			this->NativeBgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
+			this->AudioImplObject = new Impl::Audio(this->audioData, this->audioSz); // send it to the audio engine !
+			this->SetError(this->AudioImplObject->GetError());
 		}
 		else {
 			this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);
@@ -67,7 +68,8 @@ namespace Sce::Pss::Core::Audio {
 
 				if (this->audioSz == bytesRead) {
 					if (!this->isMp3()) { // ensure file is an mp3
-						this->NativeBgmObject = AudioCallbacks::OpenMP3(this->audioData, this->audioSz); // send it to the audio engine !
+						this->AudioImplObject = new Impl::Audio(this->audioData, this->audioSz); // send it to the audio engine !
+						this->SetError(this->AudioImplObject->GetError());
 					}
 					else {
 						this->SetError(PSM_ERROR_COMMON_INVALID_FORMAT);

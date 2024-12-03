@@ -11,7 +11,6 @@ namespace Sce::Pss::Core::Audio {
 	class BgmPlayer : public PsmObject<BgmPlayer> {
 	private:
 		Bgm* audioBgm = nullptr;
-		bool loop = false;
 	public:
 		BgmPlayer(Bgm* bgm);
 		~BgmPlayer();

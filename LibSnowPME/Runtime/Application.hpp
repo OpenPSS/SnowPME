@@ -15,11 +15,12 @@ namespace SnowPME::Runtime
 		static Application* runningApplication;
 
 		static int initCallbacks(Graphics::Window* window);
+		
 
 	public:
 		Application(const std::string& gameFolder, Graphics::Window* window);
 		void RunPssMain();
-
+		static void WaitForExit();
 		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);
 	};
 }

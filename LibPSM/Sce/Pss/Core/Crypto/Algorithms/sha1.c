@@ -1,3 +1,9 @@
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", on )
+#endif
+#endif
+
 /*
 SHA-1 in C
 By Steve Reid <steve@edmweb.com>
@@ -294,3 +300,9 @@ void SHA1(
     SHA1Final((unsigned char*)hash_out, &ctx);
 }
 
+
+#ifdef _DEBUG
+#ifdef _MSC_VER
+#pragma optimize( "3", off )
+#endif
+#endif

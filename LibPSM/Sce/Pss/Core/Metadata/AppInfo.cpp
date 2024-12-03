@@ -2,10 +2,10 @@
 #include <LibShared.hpp>
 #include <LibCXML.hpp>
 
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Metadata {
-	using namespace LibCXML;
-	using namespace Shared::Debug;
+
 
 	AppInfo* AppInfo::CurrentApplication = nullptr;
 
@@ -50,15 +50,19 @@ namespace Sce::Pss::Core::Metadata {
 		if (elem != nullptr) {
 			do {
 				if (element->ElementName() == "name") parserMode = element->ElementName();
-				if (element->ElementName() == "short_name") parserMode = element->ElementName();
-				if (element->ElementName() == "product") parserMode = element->ElementName();
-
-				if (element->ElementName() == "application") {
+				else if (element->ElementName() == "short_name") parserMode = element->ElementName();
+				else if (element->ElementName() == "product") parserMode = element->ElementName();
+				else if (element->ElementName() == "unity") parserMode = element->ElementName();
+				else if (element->ElementName() == "application") {
 					READATTRIBUTE(std::string, "default_locale", this->DefaultLocale);
 					READATTRIBUTE(std::string, "sdk_version", this->TargetSdkVerison);
 					READATTRIBUTE(std::string, "project_name", this->ProjectName);
 					READATTRIBUTE(std::string, "version", this->AppVersion);
 					READATTRIBUTE(std::string, "runtime_version", this->TargetRuntimeVersion);
+				}
+				else if (element->ElementName() == "app_xml_format") {
+					READATTRIBUTE(std::string, "sdk_type", this->SdkType);
+					READATTRIBUTE(std::string, "version", this->AltVersion);
 				}
 				else if (parserMode == "name" && element->ElementName() == "localized_item") {
 					LocaleInfo locale;
@@ -77,6 +81,12 @@ namespace Sce::Pss::Core::Metadata {
 					READATTRIBUTE(std::string, "locale", locale.Locale);
 					READATTRIBUTE(std::string, "value", locale.Name);
 					productInfo.Names.push_back(locale);
+				}
+				else if (parserMode == "unity" && element->ElementName() == "unity_original_runtime_version") {
+					READATTRIBUTE(std::string, "value", this->UnityRuntimeVersion);
+				}
+				else if (parserMode == "unity" && element->ElementName() == "app_ver") {
+					READATTRIBUTE(std::string, "value", this->UnityApplicationVer);
 				}
 				else if (element->ElementName() == "parental_control") {
 					READATTRIBUTE(int, "lock_level", this->LockLevel);

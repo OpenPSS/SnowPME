@@ -1,14 +1,14 @@
 #ifndef LIB_PSS_TEXTURE_2D_H
 #define LIB_PSS_TEXTURE_2D_H 1
 
-#include <Sce/Pss/Core/Graphics/ImageImpl.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
+#include <Sce/Pss/Core/Imaging/Impl/Image.hpp>
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
 	class Texture2D : public Texture {
 	private:
-		ImageImpl image;
+		Sce::Pss::Core::Imaging::Impl::Image image;
 
 	public:
 		Texture2D(std::string* fileName, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);

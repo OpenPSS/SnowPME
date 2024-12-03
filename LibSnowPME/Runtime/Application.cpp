@@ -6,7 +6,6 @@
 #include <LibCXML.hpp>
 
 #include <Callback/WindowImpl.hpp>
-#include <Callback/AudioImpl.hpp>
 
 #include <string>
 #include <thread>
@@ -32,26 +31,19 @@ namespace SnowPME::Runtime {
 			Callback::WindowImpl::WasMinimized,
 			Callback::WindowImpl::YesNoMessageBox);
 
-		Callback::AudioImpl::Init();
-		Sce::Pss::Core::Callback::AudioCallbacks::Init(
-			Callback::AudioImpl::OpenMP3,
-			Callback::AudioImpl::CloseMP3,
-			Callback::AudioImpl::PlayMP3,
-			Callback::AudioImpl::PauseMP3,
-			Callback::AudioImpl::ResumeMP3,
-			Callback::AudioImpl::StopMP3,
-			Callback::AudioImpl::IsMP3Paused,
-			Callback::AudioImpl::IsMP3Playing,
-			Callback::AudioImpl::IsMP3Stopped,
-			Callback::AudioImpl::SetLoop);
 
 		return PSM_ERROR_NO_ERROR;
 	}
-
+	
 
 	Application::Application(const std::string& gameFolder, Graphics::Window* window) {
 		this->appWindow = window;
 		this->appMainDirectory = gameFolder;
+	}
+
+	void Application::WaitForExit() {
+		Application::psmGameThread->join();
+		Application::psmGameThread = nullptr;
 	}
 
 	void Application::RunPssMain() {
@@ -69,11 +61,14 @@ namespace SnowPME::Runtime {
 		}
 
 		if (Application::psmGameThread != nullptr) {
-			Application::psmGameThread->join();
-			Application::psmGameThread = nullptr;
+			Application::WaitForExit();
 		}
 		
 		Application::runningApplication = new Application(gameFolder, window);
+#ifndef NO_MULTITHREAD
 		Application::runningApplication->RunPssMain();
+#else
+		psmGameThread = new std::thread(&Application::RunPssMain, Application::runningApplication);
+#endif
 	}
 }

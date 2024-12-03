@@ -52,8 +52,11 @@ namespace SnowPME::Graphics {
 		onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
+
+		
 	}
-	
+
+
 	SDL_Window* Window::GetSdlWindow() {
 		return this->sdlWindow;
 	}

@@ -1,7 +1,7 @@
 .vs/*
 Win32/*
 Debug/*
-build/
+build/*
 
 External/Win32/lib/*/LibPSM.idb
 External/Win32/lib/*/LibPSM.lib
@@ -32,7 +32,6 @@ External/Win32/lib/*/LibImGui.lib
 External/Win32/lib/*/LibImGui.pdb
 
 *.cfg
-
 *.aps
 *.obj
 *.user
