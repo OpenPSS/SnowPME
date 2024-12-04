@@ -7,11 +7,16 @@
 namespace Sce::Pss::Core::Audio::Impl {
 
 	void Audio::dataCallback(ma_device* device, void* output, const void* input, ma_uint32 frameCount) {
-		ma_decoder* decoder = (ma_decoder*)device->pUserData;
-		if (decoder == nullptr) return;
+		Impl::Audio* audioObj = (Impl::Audio*)device->pUserData;
+		if (audioObj == nullptr) return;
+		if (audioObj->audioDecoder == nullptr) return;
 
-		ma_decoder_read_pcm_frames(decoder, output, frameCount, nullptr);
-		(void*)input;
+		uint64_t framesRead = 0;
+		ma_decoder_read_pcm_frames(audioObj->audioDecoder, output, frameCount, &framesRead);
+
+		if (audioObj->Looping() && audioObj->Time() >= audioObj->LoopEnd()) {
+			audioObj->SetTime(audioObj->LoopStart());
+		}
 	}
 
 	Audio::Audio(uint8_t* buf, size_t sz) {
@@ -31,7 +36,8 @@ namespace Sce::Pss::Core::Audio::Impl {
 			this->audioDeviceCfg->playback.channels = this->audioDecoder->outputChannels;
 			this->audioDeviceCfg->sampleRate = this->audioDecoder->outputSampleRate;
 			this->audioDeviceCfg->dataCallback = Audio::dataCallback;
-			this->audioDeviceCfg->pUserData = this->audioDecoder;
+			this->audioDeviceCfg->pUserData = this;
+			ma_context ctx;
 
 			this->audioDevice = new ma_device();
 			if (ma_device_init(NULL, this->audioDeviceCfg, this->audioDevice) != MA_SUCCESS) {
@@ -41,6 +47,9 @@ namespace Sce::Pss::Core::Audio::Impl {
 		else {
 			this->SetError(PSM_ERROR_AUDIO_SYSTEM);
 		}
+
+		this->sndLoopStart.store(0);
+		this->sndLoopEnd.store(this->Duration());
 	}
 
 	int Audio::Play() {
@@ -69,7 +78,13 @@ namespace Sce::Pss::Core::Audio::Impl {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	
+	uint64_t Audio::LoopStart() {
+		return this->sndLoopStart.load();
+	}
+	uint64_t Audio::LoopEnd() {
+		return this->sndLoopEnd.load();
+	}
+
 	bool Audio::Paused() {
 		return this->sndPaused.load();
 	}
@@ -90,10 +105,55 @@ namespace Sce::Pss::Core::Audio::Impl {
 	bool Audio::Looping() {
 		return this->sndLooping.load();
 	}
-	void Audio::SetLooping(bool val) {
+	int Audio::SetLooping(bool val) {
 		this->sndLooping.store(val);
+		return PSM_ERROR_NO_ERROR;
 	}
 
+	float Audio::Volume() {
+		float output = 1.0f;
+		ma_device_get_master_volume(this->audioDevice, &output);
+		return output;
+	}
+
+	int Audio::SetVolume(float val) {
+		if (ma_device_set_master_volume(this->audioDevice, val) == MA_SUCCESS) return PSM_ERROR_NO_ERROR;
+		return PSM_ERROR_AUDIO_SYSTEM;
+	}
+
+	int Audio::SetTime(uint64_t val) {
+		uint64_t frame = (uint64_t)((double)val * ((double)this->audioDecoder->outputSampleRate * (double)1000.0));
+		if (ma_decoder_seek_to_pcm_frame(this->audioDecoder, frame) == MA_SUCCESS) return PSM_ERROR_NO_ERROR;
+		return PSM_ERROR_AUDIO_SYSTEM;
+	}
+
+	int Audio::SetLoopStart(uint64_t val) {
+		this->sndLoopStart.store(val);
+		return PSM_ERROR_NO_ERROR;
+	}
+	int Audio::SetLoopEnd(uint64_t val) {
+		this->sndLoopEnd.store(val);
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	uint64_t Audio::Duration() {
+		uint64_t pcmFrames = 0;
+		uint64_t duration = 0;
+
+		if (ma_decoder_get_length_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+			duration = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
+		}
+		return duration;
+	}
+
+	uint64_t Audio::Time() {
+		uint64_t pcmFrames = 0;
+		uint64_t time = 0;
+		if (ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+			time = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
+		}
+		return time;
+	}
 
 	Audio::~Audio() {
 		if(this->audioDevice != nullptr) ma_device_uninit(this->audioDevice);
@@ -109,6 +169,5 @@ namespace Sce::Pss::Core::Audio::Impl {
 		this->audioDeviceCfg = nullptr;
 		this->audioDecoderCfg = nullptr;
 
-		this->audioData = nullptr; // cleaned up by callee ?
 	}
 }

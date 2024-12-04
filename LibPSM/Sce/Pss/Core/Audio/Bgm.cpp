@@ -165,7 +165,6 @@ namespace Sce::Pss::Core::Audio {
 		else {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
-
 		return PSM_ERROR_NO_ERROR;
 	}
 }

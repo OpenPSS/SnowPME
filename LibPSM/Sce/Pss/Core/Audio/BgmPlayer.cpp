@@ -11,6 +11,7 @@ namespace Sce::Pss::Core::Audio {
 		this->audioBgm = bgm;
 	}
 	BgmPlayer::~BgmPlayer() {
+		this->audioBgm = nullptr;
 	}
 
 	int BgmPlayer::ReleaseNative(int handle){
@@ -73,12 +74,28 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::SetVolumeNative(int handle, float volume){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			return player->audioBgm->AudioImplObject->SetVolume(volume);
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetVolumeNative(int handle, float *volume){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (volume == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			*volume = player->audioBgm->AudioImplObject->Volume();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLoopNative(int handle, bool *pan){
 		Logger::Debug(__FUNCTION__);
@@ -113,23 +130,76 @@ namespace Sce::Pss::Core::Audio {
 		return 0;
 	}
 	int BgmPlayer::GetPosition(int handle, unsigned long *milisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (milisecond == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			*milisecond = player->audioBgm->AudioImplObject->Time();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetPosition(int handle, unsigned long milisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			return player->audioBgm->AudioImplObject->SetTime(milisecond);
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLength(int handle, unsigned long *milisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (milisecond == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			*milisecond = player->audioBgm->AudioImplObject->Duration();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLoopPosition(int handle, unsigned long *msStart, unsigned long *msEnd){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		if (msEnd == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (msStart == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			*msStart = player->audioBgm->AudioImplObject->LoopStart();
+			*msEnd = player->audioBgm->AudioImplObject->LoopEnd();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetLoopPosition(int handle, unsigned long msStart, unsigned long msEnd){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			// check msStart & msEnd are not outside the range
+			if (msStart > player->audioBgm->AudioImplObject->Duration()) return PSM_ERROR_OUT_OF_RANGE;
+			if (msEnd > player->audioBgm->AudioImplObject->Duration()) return PSM_ERROR_OUT_OF_RANGE;
+
+			if (player->audioBgm->AudioImplObject->SetLoopStart(msStart) != PSM_ERROR_NO_ERROR) return PSM_ERROR_COMMON_INVALID_OPERATION;
+			if (player->audioBgm->AudioImplObject->SetLoopEnd(msStart) != PSM_ERROR_NO_ERROR) return PSM_ERROR_COMMON_INVALID_OPERATION;
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 }

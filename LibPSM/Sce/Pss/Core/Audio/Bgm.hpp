@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 #include <mono/mono.h>
-
+#include <atomic>
 namespace Sce::Pss::Core::Audio {
 	class Bgm : public PsmObject<Bgm> {
 		uint8_t* audioData = nullptr;
