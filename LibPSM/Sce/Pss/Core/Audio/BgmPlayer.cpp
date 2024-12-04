@@ -123,12 +123,29 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::GetPlaybackRateNative(int handle, float *rate){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+		
+		if (rate == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+			
+			*rate = player->audioBgm->AudioImplObject->PlaybackSpeed();
+
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetPlaybackRateNative(int handle, float rate){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Logger::Debug(__FUNCTION__);
+
+		if (Handles::IsValid(handle)) {
+			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
+
+			return player->audioBgm->AudioImplObject->SetPlaybackSpeed(rate);
+		}
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 
 	int BgmPlayer::GetPosition(int handle, unsigned long *milisecond){

@@ -1,6 +1,5 @@
 #ifndef LIB_PSS_IMPL_AUDIO_H
 #define LIB_PSS_IMPL_AUDIO_H 1
-#define MA_NO_FLAC // PSM doesnt support FLAC, only mp3 and wav
 #include <miniaudio.h>
 #include <Sce/Pss/Core/Errorable.hpp>
 #include <cstdint>
@@ -21,6 +20,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 		std::atomic<bool> sndLooping;
 		
 		std::atomic<float> sndPlaybackSpeed;
+
 		std::atomic<uint64_t> sndLoopStart;
 		std::atomic<uint64_t> sndLoopEnd;
 
@@ -43,6 +43,9 @@ namespace Sce::Pss::Core::Audio::Impl {
 		uint64_t LoopEnd();
 		int SetLoopStart(uint64_t val);
 		int SetLoopEnd(uint64_t val);
+
+		float PlaybackSpeed();
+		int SetPlaybackSpeed(float val);
 
 		uint64_t Time();
 		int SetTime(uint64_t val);

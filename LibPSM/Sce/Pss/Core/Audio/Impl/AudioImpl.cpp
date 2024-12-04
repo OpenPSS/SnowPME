@@ -25,6 +25,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 		this->sndLooping.store(false);
 		this->sndPaused.store(false);
+		this->sndPlaybackSpeed.store(1.0f);
 
 		this->audioDecoder = new ma_decoder();
 
@@ -37,10 +38,9 @@ namespace Sce::Pss::Core::Audio::Impl {
 			this->audioDeviceCfg->sampleRate = this->audioDecoder->outputSampleRate;
 			this->audioDeviceCfg->dataCallback = Audio::dataCallback;
 			this->audioDeviceCfg->pUserData = this;
-			ma_context ctx;
 
 			this->audioDevice = new ma_device();
-			if (ma_device_init(NULL, this->audioDeviceCfg, this->audioDevice) != MA_SUCCESS) {
+			if (ma_device_init(nullptr, this->audioDeviceCfg, this->audioDevice) != MA_SUCCESS) {
 				this->SetError(PSM_ERROR_AUDIO_SYSTEM);
 			}
 		}
@@ -54,27 +54,27 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 	int Audio::Play() {
 		this->sndPaused.store(false);
-		if (ma_decoder_seek_to_pcm_frame(this->audioDecoder, 0) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
-		if (ma_device_start(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDevice != nullptr && ma_decoder_seek_to_pcm_frame(this->audioDecoder, 0) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDevice != nullptr && ma_device_start(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	int Audio::Stop() {
 		this->sndPaused.store(false);
-		if (ma_device_stop(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
-		if (ma_decoder_seek_to_pcm_frame(this->audioDecoder, 0) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDevice != nullptr && ma_device_stop(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDecoder != nullptr && ma_decoder_seek_to_pcm_frame(this->audioDecoder, 0) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	int Audio::Pause() {
 		this->sndPaused.store(true);
-		if (ma_device_stop(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDevice != nullptr && ma_device_stop(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	int Audio::Resume() {
 		this->sndPaused.store(false);
-		if (ma_device_start(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
+		if (this->audioDevice != nullptr && ma_device_start(this->audioDevice) != MA_SUCCESS) return PSM_ERROR_AUDIO_SYSTEM;
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -91,6 +91,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 	bool Audio::Stopped() {
 		if (this->Paused()) return false;
+		if (this->audioDevice == nullptr) return true;
 
 		ma_device_state state = ma_device_get_state(this->audioDevice);
 
@@ -112,7 +113,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 	float Audio::Volume() {
 		float output = 1.0f;
-		ma_device_get_master_volume(this->audioDevice, &output);
+		if(this->audioDevice != nullptr) ma_device_get_master_volume(this->audioDevice, &output);
 		return output;
 	}
 
@@ -123,7 +124,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 	int Audio::SetTime(uint64_t val) {
 		uint64_t frame = (uint64_t)((double)val * ((double)this->audioDecoder->outputSampleRate * (double)1000.0));
-		if (ma_decoder_seek_to_pcm_frame(this->audioDecoder, frame) == MA_SUCCESS) return PSM_ERROR_NO_ERROR;
+		if (this->audioDecoder != nullptr && ma_decoder_seek_to_pcm_frame(this->audioDecoder, frame) == MA_SUCCESS) return PSM_ERROR_NO_ERROR;
 		return PSM_ERROR_AUDIO_SYSTEM;
 	}
 
@@ -140,7 +141,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 		uint64_t pcmFrames = 0;
 		uint64_t duration = 0;
 
-		if (ma_decoder_get_length_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
 			duration = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
 		}
 		return duration;
@@ -149,10 +150,33 @@ namespace Sce::Pss::Core::Audio::Impl {
 	uint64_t Audio::Time() {
 		uint64_t pcmFrames = 0;
 		uint64_t time = 0;
-		if (ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+		if (this->audioDecoder != nullptr && ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
 			time = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
 		}
 		return time;
+	}
+
+	float Audio::PlaybackSpeed() {
+		return this->sndPlaybackSpeed.load();
+	}
+
+	int Audio::SetPlaybackSpeed(float val) {
+		this->Pause(); 
+
+		if (this->audioDevice != nullptr) {
+			ma_device_uninit(this->audioDevice); // unitalize the device 
+
+			// change the sample rate to be sample rate * speed factor 
+			this->audioDeviceCfg->sampleRate = (uint32_t)((float)this->audioDecoder->outputSampleRate * (float)val);
+			this->sndPlaybackSpeed.store(val);
+
+			// initalize the device again
+			if(ma_device_init(nullptr, this->audioDeviceCfg, this->audioDevice) != MA_SUCCESS)
+				return PSM_ERROR_AUDIO_SYSTEM;
+		}
+
+		this->Resume(); 
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	Audio::~Audio() {
