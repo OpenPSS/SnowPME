@@ -67,7 +67,7 @@ namespace Sce::Pss::Core::Audio {
 				ICall::PsmClose(file);
 
 				if (this->audioSz == bytesRead) {
-					if (!this->isMp3()) { // ensure file is an mp3
+					if (this->isMp3()) { // ensure file is an mp3
 						this->AudioImplObject = new Impl::Audio(this->audioData, this->audioSz); // send it to the audio engine !
 						this->SetError(this->AudioImplObject->GetError());
 					}
