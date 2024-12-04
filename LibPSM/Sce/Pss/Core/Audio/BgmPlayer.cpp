@@ -121,6 +121,7 @@ namespace Sce::Pss::Core::Audio {
 		}
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
+
 	int BgmPlayer::GetPlaybackRateNative(int handle, float *rate){
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
@@ -129,6 +130,7 @@ namespace Sce::Pss::Core::Audio {
 		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
 		return 0;
 	}
+
 	int BgmPlayer::GetPosition(int handle, unsigned long *milisecond){
 		Logger::Debug(__FUNCTION__);
 		if (milisecond == nullptr)
@@ -185,6 +187,7 @@ namespace Sce::Pss::Core::Audio {
 		}
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
+
 	int BgmPlayer::SetLoopPosition(int handle, unsigned long msStart, unsigned long msEnd){
 		Logger::Debug(__FUNCTION__);
 

@@ -13,7 +13,6 @@
 using namespace Sce::Pss::Core::Mono;
 using namespace Shared::Debug;
 using namespace Shared;
-using namespace LibCXML;
 
 
 namespace SnowPME::Runtime {

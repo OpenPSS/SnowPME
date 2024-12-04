@@ -62,7 +62,7 @@ namespace Sce::Pss::Core::Mono {
 		InitalizeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
 
 		// run profiler and debug if needed
-		if (strlen(Config::ProfilerSettings) <= 0)
+		if (strlen(Config::ProfilerSettings) > 0)
 			mono_profiler_load(Config::ProfilerSettings);
 		if (Config::MonoDebugger)
 			mono_debug_init(MONO_DEBUG_FORMAT_MONO);
