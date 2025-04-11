@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sce\Pss\Core\Audio\Bgm.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Audio\BgmPlayer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Audio\Impl\AudioImpl.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Audio\Sound.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\AesCbc.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha1.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Md5Hash.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Device\Camera.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\CommonDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\Log.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\NetworkInformation.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\PersistentMemory.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\Shell.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\SystemEvents.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\SystemMemory.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\SystemParameters.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Environment\TextInputDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Error.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Event\PsmEvent.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Event\PsmEventQueue.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmFrameBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmGraphicsContext.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmPixelBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmShaderProgram.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmTexture.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmVertexBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Imaging\Font.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Imaging\Image.cpp" />
+    <ClCompile Include="Sce\Pss\Core\InitializeCsharp.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Input\GamePad.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Input\Motion.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Input\Touch.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp" />
+    <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\Network.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\NetworkRequest.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.c" />
+    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha256.c" />
+    <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
+    <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\FrameBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PixelBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Memory\HeapAllocator.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\OpenGL.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Callback\WindowCallbacks.cpp" />
+    <ClCompile Include="Sce\Pss\Core\System\Handles.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\ICall.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Io\Sandbox.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Metadata\AppInfo.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Resources.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\Security.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\MonoUtil.cpp" />
+    <ClCompile Include="Sce\Pss\Core\System\PlatformSpecific.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\UniqueId.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LibPSM.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\BgmPlayer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\BgmStatus.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\Sound.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\SoundPlayer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\AesCbc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha1.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Md5Hash.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\Camera.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraFacing.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraImageFormat.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraImportDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraInfo.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraSize.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\CameraState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\Location.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\LocationData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\LocationDeviceType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\Callbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\ActionType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\Clipboard.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogArguments.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogResult.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogResults.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\CommonDialogType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\InternalData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\Log.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\NetworkInformation.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\ParameterKey.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\PersistentMemory.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\Shell.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\SystemEvents.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\SystemMemory.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\SystemParameters.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\TextInputDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Environment\TextInputMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Error.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEvent.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEventQueue.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Event\PsmEventType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\BlendFunc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncFactor.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ClearMask.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ColorMask.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CullFace.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CullFaceDirection.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\DepthFunc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\DepthFuncMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\DrawMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ElementType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\EnableMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsCapsState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsExtension.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsUpdate.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\Image.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ImportDialogEnum.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\InternalOption.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\MultiSampleMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelBufferOption.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelBufferType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormat.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PolygonOffset.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\Primitive.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmFrameBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmGraphicsContext.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmPixelBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmShaderProgram.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmTexture.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmVertexBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderAttributeType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderUniformType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\StencilFunc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\StencilFuncMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\StencilOp.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\StencilOpMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureCubeFace.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureFilter.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureFilterMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureWrap.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureWrapMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\VertexFormat.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\CharMetrics.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Font.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\FontAlias.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\FontMetrics.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\FontStyle.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Image.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\ImageColor.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\ImageMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\ImagePosition.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\ImageRect.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\ImageSize.hpp" />
+    <ClInclude Include="Sce\Pss\Core\InitializeCsharp.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\GamePad.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\GamePadButtons.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\GamePadData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\Motion.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\MotionData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\Touch.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\TouchData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Input\TouchStatus.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataHeader.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrm.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrmLicense.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\PsmFileDescriptor.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\CommandResults.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommand.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\Network.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\NetworkRequest.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Vector2.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Vector3.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Vector4.hpp" />
+    <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Bool.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\aes.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\CryptoLibrary.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha256.h" />
+    <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />
+    <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\FrameBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ProgramAttribute.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ProgramUniform.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgramOption.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\Texture2D.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\TextureCube.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Memory\HeapAllocator.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsContext.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsObject.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\OpenGL.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\Texture.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Callback\WindowCallbacks.hpp" />
+    <ClInclude Include="Sce\Pss\Core\System\Handles.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\ICall.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Io\Sandbox.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Metadata\AppInfo.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Resources.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\Security.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\MonoUtil.hpp" />
+    <ClInclude Include="Sce\Pss\Core\System\PlatformSpecific.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\UniqueId.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Threading\Thread.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{557a07d6-202e-476c-bdb8-6506289c76ff}</ProjectGuid>
+    <RootNamespace>LibPSM</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\External\$(Platform)\lib\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)-$(Configuration)\inter</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\External\$(Platform)\lib\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)-$(Configuration)\inter</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)-$(Configuration)\inter</IntDir>
+    <OutDir>$(SolutionDir)\External\$(Platform)\lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Platform)-$(Configuration)\inter</IntDir>
+    <OutDir>$(SolutionDir)\External\$(Platform)\lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(SolutionDir)LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
