@@ -14,6 +14,9 @@
 
 #include <LibShared.hpp>
 
+#include <cstring>
+#include <cstdint>
+
 using namespace Shared;
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Metadata;
