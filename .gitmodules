@@ -11,3 +11,6 @@
 [submodule "subprojects/LibCXML"]
 	path = subprojects/LibCXML
 	url = https://github.com/OpenPSS/LibCXML.git
+[submodule "subprojects/LibMonoBridge"]
+	path = subprojects/LibMonoBridge
+	url = https://github.com/OpenPSS/LibMonoBridge.git
