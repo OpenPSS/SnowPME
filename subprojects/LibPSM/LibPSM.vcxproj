@@ -341,7 +341,7 @@
       <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -369,7 +369,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;MonoPosixHelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

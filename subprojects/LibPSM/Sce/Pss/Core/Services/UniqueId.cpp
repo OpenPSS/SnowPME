@@ -8,9 +8,9 @@
 #include <LibShared.hpp>
 #include <cstring>
 
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Services {
-	using namespace Shared::Debug;
 	
 	int UniqueId::getUniqueIDWindows(uint8_t* id) {
 		std::string username = Shared::Config::Username;
