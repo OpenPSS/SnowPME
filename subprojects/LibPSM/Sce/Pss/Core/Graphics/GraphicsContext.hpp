@@ -18,19 +18,19 @@
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
 #include <Sce/Pss/Core/Timing/DeltaTime.hpp>
-#include <Sce/Pss/Core/Errorable.hpp>
+#include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
 #include <LibShared.hpp>
 #include <mono/mono.h>
 #include <glad/glad.h>
+using namespace Sce::Pss::Core::Imaging;
+using namespace Sce::Pss::Core::Timing;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core::Imaging;
-	using namespace Sce::Pss::Core::Timing;
+
 	
-	class GraphicsContext : public GraphicsObject {
+	class GraphicsContext : public GraphicsObject, public PsmUniqueObject<GraphicsContext> {
 	private:
-		static GraphicsContext* activeGraphicsContext;
 		const int shaderProgramHandleOffset = 0;
 		const int frameBufferHandleOffset = 1;
 		const int vertexBufferHandleOffset = 4;
@@ -120,8 +120,6 @@ namespace Sce::Pss::Core::Graphics {
 		void UpdateHandles(GraphicsUpdate notifyFlag);
 		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
 		void UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
-
-		static GraphicsContext* GetGraphicsContext();
 	};
 }
 

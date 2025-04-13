@@ -5,13 +5,14 @@
 #include <string>
 #include <mutex>
 
+#include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/PsmUniqueObject.hpp>
+
 namespace Sce::Pss::Core::Memory {
 
-	class HeapAllocator {
+	class HeapAllocator : public PsmObject<HeapAllocator>, public PsmUniqueObject<HeapAllocator> {
 	private:
-		static HeapAllocator* resourceHeapAllocator;
 		std::map<uintptr_t, std::vector<uint8_t>*> heapAllocations;
-		std::mutex allocMutex = std::mutex();
 	public:
 		HeapAllocator(size_t heapSize, const std::string& heapName);
 		~HeapAllocator();

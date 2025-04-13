@@ -8,8 +8,6 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Memory {
 
-	HeapAllocator* HeapAllocator::resourceHeapAllocator = nullptr;
-
 	HeapAllocator::HeapAllocator(size_t heapSize, const std::string& heapName) {
 		this->HeapName = heapName;
 		this->TotalHeapSize = heapSize;
@@ -18,7 +16,7 @@ namespace Sce::Pss::Core::Memory {
 	}
 	HeapAllocator::~HeapAllocator()
 	{
-		this->allocMutex.lock();
+		LOCK_GUARD();
 
 		for (std::map<uintptr_t, std::vector<uint8_t>*>::iterator i = heapAllocations.begin(); i != heapAllocations.end(); ++i)
 		{
@@ -26,11 +24,9 @@ namespace Sce::Pss::Core::Memory {
 			delete vec;
 		}
 
-		HeapAllocator::resourceHeapAllocator = nullptr;
-		this->allocMutex.unlock();
 	}
 	uint8_t* HeapAllocator::sce_psm_malloc(int sz) {
-		this->allocMutex.lock();
+		LOCK_GUARD();
 
 		if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
@@ -49,11 +45,10 @@ namespace Sce::Pss::Core::Memory {
 		// make a note of this allocation in the heapAllocations map.
 		this->heapAllocations[(uintptr_t)buffer] = vec;
 
-		this->allocMutex.unlock();
 		return buffer;
 	}
 	void HeapAllocator::sce_psm_free(uint8_t* buffer) {
-		this->allocMutex.lock();
+		LOCK_GUARD();
 
 		// lookup the vector from this map
 		std::vector<uint8_t>* vec = this->heapAllocations[(uintptr_t)buffer];
@@ -67,20 +62,14 @@ namespace Sce::Pss::Core::Memory {
 		// remove the buffer from the map
 		this->heapAllocations.erase((uintptr_t)buffer);
 
-		this->allocMutex.unlock();
 	}
 	HeapAllocator* HeapAllocator::GetResourceHeapAllocator() {
-		if (HeapAllocator::resourceHeapAllocator == nullptr)
-			throw std::runtime_error("resource heap allocator is not yet initalized.");
-
-		return HeapAllocator::resourceHeapAllocator;
+		LOCK_GUARD_STATIC();
+		return HeapAllocator::GetUniqueObject();
 	}
 	HeapAllocator* HeapAllocator::CreateResourceHeapAllocator(size_t resourceHeapSize) {
-		if (HeapAllocator::resourceHeapAllocator != nullptr)
-			delete HeapAllocator::resourceHeapAllocator;
-
-		HeapAllocator::resourceHeapAllocator = new HeapAllocator(resourceHeapSize, "ScePsmResourceHeap");
-		return HeapAllocator::resourceHeapAllocator;
+		LOCK_GUARD_STATIC();
+		return new HeapAllocator(resourceHeapSize, "ScePsmResourceHeap");
 	}
 
 }

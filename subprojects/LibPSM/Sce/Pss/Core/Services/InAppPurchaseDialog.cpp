@@ -1,32 +1,89 @@
+#include <Sce/Pss/Core/Environment/CommonDialog.hpp>
+#include <Sce/Pss/Core/Environment/CommonDialogArguments.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogState.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogResult.hpp>
+
 #include <Sce/Pss/Core/Services/InAppPurchaseDialog.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseCommand.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseProductData.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseTicketType.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseCommandResults.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseCommandArguments.hpp>
+
+#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
+
+#include <LibShared.hpp>
+
+using namespace Shared;
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Metadata;
+using namespace Sce::Pss::Core::Environment;
 
 namespace Sce::Pss::Core::Services {
-	using namespace Sce::Pss::Core::Environment;
 
-	int InAppPurchaseDialog::NewNative(int type, int* handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int InAppPurchaseDialog::GetProductInfo() {
+		AppInfo* appInfo = AppInfo::GetUniqueObject();
+		for (Metadata::ProductInfo product : appInfo->ProductList) {
+			InAppPurchaseProductData productData = { 0 };
+
+			std::strncpy(productData.Label, product.Label.c_str(), sizeof(InAppPurchaseProductData::Label)-1);
+			std::strncpy(productData.Name, product.GetName(Config::SystemLanguage).c_str(), sizeof(productData.Name)-1);
+			std::strncpy(productData.Price, "$0.00", sizeof(InAppPurchaseProductData::Price) - 1);
+			productData.TicketType = (product.Type == "normal") ? InAppPurchaseTicketType::Normal : InAppPurchaseTicketType::Consumable;
+
+			this->productList.push_back(productData);
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
-	int InAppPurchaseDialog::ReleaseNative(int type, int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+
+	int InAppPurchaseDialog::Open(CommonDialogArguments* cmdArg) {
+		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
+		InAppPurchaseCommandArguments* iapArgs = (InAppPurchaseCommandArguments*)cmdArg;
+
+		if (iapArgs->Arguments == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		
+		InAppPurchaseProductData* pData = (InAppPurchaseProductData*)mono_array_addr_with_size(iapArgs->Arguments, 4, 0);
+		uintptr_t pCount = mono_array_length(iapArgs->Arguments);
+		
+		// initalize the state of this dialog
+		this->command = iapArgs->Command;
+		this->state = CommonDialogState::Running;
+		this->aborted = false;
+
+		switch (iapArgs->Command) {
+			case InAppPurchaseCommand::GetProductInfo:
+				Logger::Debug("InAppPurchaseCommand::GetProductInfo");
+
+				if (pCount <= MAX_PRODUCT_COUNT) {
+					return this->GetProductInfo();
+					this->infoStatus |= (int32_t)InAppPurchaseCommand::GetProductInfo;
+				}
+
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			case InAppPurchaseCommand::GetTicketInfo:
+				Logger::Debug("InAppPurchaseCommand::GetTicketInfo");
+				this->infoStatus |= (int32_t)InAppPurchaseCommand::GetTicketInfo;
+
+				return PSM_ERROR_NOT_IMPLEMENTED;
+			case InAppPurchaseCommand::Purchase:
+				Logger::Debug("InAppPurchaseCommand::Purchase");
+				return PSM_ERROR_NOT_IMPLEMENTED;
+			case InAppPurchaseCommand::Consume:
+				Logger::Debug("InAppPurchaseCommand::Consume");
+				return PSM_ERROR_NOT_IMPLEMENTED;
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
-	int InAppPurchaseDialog::OpenNative(int type, int handle, CommandArguments* cmdArg) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int InAppPurchaseDialog::AbortNative(int type, int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int InAppPurchaseDialog::GetState(int type, int handle, CommonDialogState* state) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
-	}
-	int InAppPurchaseDialog::GetResult(int type, int handle, CommonDialogResult* result, CommandResults* results) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+	int InAppPurchaseDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
+		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
+		
+		InAppPurchaseCommandResults* iapResults = (InAppPurchaseCommandResults*)results;
+		Logger::Error("TODO: Implement InAppPurchaseDialog::Result.");
+
+		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 }

@@ -6,6 +6,7 @@
 #include <Sce/Pss/Core/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Edata/PsmDrm.hpp>
 #include <Sce/Pss/Core/Edata/EdataList.hpp>
+#include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
 #include <vector>
 #include <fstream>
@@ -15,7 +16,7 @@
 namespace Sce::Pss::Core::Io {
 
 
-	class Sandbox {	
+	class Sandbox : public PsmUniqueObject<Sandbox> {
 	private:
 		std::string currentWorkingDirectory;
 		std::vector<FileSystem*> filesystems;
@@ -26,7 +27,6 @@ namespace Sce::Pss::Core::Io {
 
 
 	public:
-		static Sandbox* ApplicationSandbox;
 		Edata::PsmDrm* GameDrmProvider = nullptr;
 		Sandbox(std::string gameFolder);
 		~Sandbox();

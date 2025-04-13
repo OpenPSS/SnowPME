@@ -1,26 +1,33 @@
 #ifndef LIB_PSS_INAPPPURCHASEDIALOG_H
 #define LIB_PSS_INAPPPURCHASEDIALOG_H 1
 #include <cstdint>
-
 #include <string>
 #include <iostream>
+
 #include <Sce/Pss/Core/Services/InAppPurchaseCommand.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseProductData.hpp>
-#include <Sce/Pss/Core/Services/CommandResults.hpp>
-#include <Sce/Pss/Core/Services/CommandArguments.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseTicketType.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseCommandResults.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseCommandArguments.hpp>
+
+#include <Sce/Pss/Core/Environment/CommonDialogArguments.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogState.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogResult.hpp>
+#include <Sce/Pss/Core/Environment/CommonDialog.hpp>
+#include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
+#include <vector>
 
 namespace Sce::Pss::Core::Services {
-	class InAppPurchaseDialog {
+	class InAppPurchaseDialog : public Environment::CommonDialog, public PsmUniqueObject<InAppPurchaseDialog> {
+	private:
+		std::vector<InAppPurchaseProductData> productList;
+		InAppPurchaseCommand command = InAppPurchaseCommand::None;
+		int infoStatus = 0;
 	public:
-		static int NewNative(int type, int *handle);
-		static int ReleaseNative(int type, int handle);
-		static int OpenNative(int type, int handle, CommandArguments *cmdArg);
-		static int AbortNative(int type, int handle);
-		static int GetState(int type, int handle, Sce::Pss::Core::Environment::CommonDialogState *state);
-		static int GetResult(int type, int handle, Sce::Pss::Core::Environment::CommonDialogResult *result, CommandResults *results);
+		int GetProductInfo();
+		int Open(Environment::CommonDialogArguments* cmdArg);
+		int Result(Environment::CommonDialogResult* result, Environment::CommonDialogResults* results);
 	};
 }
 #endif

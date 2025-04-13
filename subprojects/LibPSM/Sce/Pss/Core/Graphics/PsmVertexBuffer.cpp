@@ -46,7 +46,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetGraphicsContext() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
 			VertexBuffer* buffer = Handles::Get<VertexBuffer>(handle);
 			if (buffer == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 

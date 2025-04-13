@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 #include <LibCXML.hpp>
+
+#include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/PsmUniqueObject.hpp>
+
 namespace Sce::Pss::Core::Metadata {
 	#define READATTRIBUTE(TYPE, VALUE, SET) { \
 		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<LibCXML::CXMLAttribute<TYPE>*>(VALUE); \
@@ -20,6 +24,8 @@ namespace Sce::Pss::Core::Metadata {
 		std::string Type;
 		std::string Label;
 		std::vector<LocaleInfo> Names;
+
+		std::string GetName(std::string locale); 
 	} ProductInfo;
 
 
@@ -30,12 +36,11 @@ namespace Sce::Pss::Core::Metadata {
 		int Value;
 	} RatingInfo;
 
-	class AppInfo {
+	class AppInfo : public PsmObject<AppInfo>, public PsmUniqueObject<AppInfo> {
 	private:
 		LibCXML::CXMLElement* element;
 		bool nextElement();
 	public:
-		static AppInfo* CurrentApplication;
 		AppInfo(LibCXML::CXMLElement* elem);
 		~AppInfo();
 		// <application>

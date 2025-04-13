@@ -29,6 +29,12 @@ namespace Sce::Pss::Core {
 			x = nullptr; \
 			return false; \
 		}
+    
+	#define SetErrorAndReturn(x) \
+		{ \
+		this->SetError(x); \
+		return; \
+		}
 
 	class Errorable {
 	private:

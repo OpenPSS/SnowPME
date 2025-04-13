@@ -18,7 +18,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetGraphicsContext() != nullptr) {
+			if (GraphicsContext::GetUniqueObject() != nullptr) {
 				switch (type) {
 				case PixelBufferType::Texture2D:
 					Logger::Error("PixelBufferType::Texture2D unimplemented.");

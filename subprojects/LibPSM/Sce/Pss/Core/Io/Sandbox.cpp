@@ -10,19 +10,16 @@
 #include <LibShared.hpp>
 
 
-namespace Sce::Pss::Core::Io {
-	using namespace Shared;
-	using namespace Shared::Debug;
-	using namespace Shared::String;
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Edata;
+using namespace Shared;
+using namespace Shared::Debug;
+using namespace Shared::String;
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Edata;
 
-	Sandbox* Sandbox::ApplicationSandbox = nullptr;
+namespace Sce::Pss::Core::Io {
+
 
 	Sandbox::Sandbox(std::string gameFolder) {
-		if (Sandbox::ApplicationSandbox != nullptr) {
-			delete Sandbox::ApplicationSandbox;
-		}
 
 		std::filesystem::path gamePath = std::filesystem::path(gameFolder);
 		
@@ -72,7 +69,6 @@ namespace Sce::Pss::Core::Io {
 
 
 		this->currentWorkingDirectory = "/";
-		Sandbox::ApplicationSandbox = this;
 
 		this->readLicenseData();
 	}

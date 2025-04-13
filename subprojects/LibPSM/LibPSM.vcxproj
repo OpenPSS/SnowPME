@@ -58,6 +58,7 @@
     <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp" />
     <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
+    <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\Network.cpp" />
@@ -224,9 +225,10 @@
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
+    <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Services\CommandResults.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandArguments.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandResults.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommand.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp" />
@@ -339,7 +341,7 @@
       <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;MonoPosixHelper.lib;monosgen-2.0.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

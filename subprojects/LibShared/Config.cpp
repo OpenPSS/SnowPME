@@ -39,6 +39,8 @@ namespace Shared
 	char Config::RuntimeConfigPath[0x1028] = "./RUNTIME";
 
 	char Config::Username[0x1028] = "SnowPME";
+	char Config::SystemLanguage[0x1028] = "en-US";
+
 	uint64_t Config::AccountId = 0x123456789ABCDEF0ull;
 	RuntimeImplementation Config::TargetImplementation = RuntimeImplementation::PSVita;
 
@@ -59,6 +61,7 @@ namespace Shared
 
 		GET_CFG_KEY_STR(Config::ProfilerSettings);
 		GET_CFG_KEY_BOOL(Config::MonoDebugger);
+		GET_CFG_KEY_STR(Config::SystemLanguage);
 
 		GET_CFG_KEY_STR(Config::PsmApps);
 
@@ -112,6 +115,7 @@ namespace Shared
 			SET_CFG_COMMENT(cfgStream, "- SnowPME -");
 			SET_CFG_KEY_STR(cfgStream, Config::PsmApps);
 			SET_CFG_KEY_ENUM(cfgStream, Config::TargetImplementation);
+			SET_CFG_KEY_STR(cfgStream, Config::SystemLanguage);
 
 			cfgStream.close();
 		}

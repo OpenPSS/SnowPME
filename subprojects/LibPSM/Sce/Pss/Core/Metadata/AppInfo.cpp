@@ -6,10 +6,20 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Metadata {
 
+	std::string ProductInfo::GetName(std::string locale) {
+		for (LocaleInfo Name : Names) {
+			if (Name.Locale == locale)
+				return Name.Name;
+		}
 
-	AppInfo* AppInfo::CurrentApplication = nullptr;
+		if (Names.size() > 0)
+			return Names.at(0).Name;
+
+		return "SnowPME Entitlement";
+	}
 
 	AppInfo::~AppInfo() {
+		LOCK_GUARD();
 		delete element;
 	}
 
@@ -37,22 +47,22 @@ namespace Sce::Pss::Core::Metadata {
 	}
 
 	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
-		if (AppInfo::CurrentApplication != nullptr) {
-			delete AppInfo::CurrentApplication;
-			AppInfo::CurrentApplication = nullptr;
-		}
-
+		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
 
 		this->element = elem;
 		std::string parserMode = "";
-		ProductInfo productInfo = ProductInfo();
+		ProductInfo* productInfo = nullptr;
+
 
 		if (elem != nullptr) {
 			do {
-				if (element->ElementName() == "name") parserMode = element->ElementName();
+				if (parserMode != "product_list" && element->ElementName() == "name") parserMode = element->ElementName();
 				else if (element->ElementName() == "short_name") parserMode = element->ElementName();
-				else if (element->ElementName() == "product") parserMode = element->ElementName();
 				else if (element->ElementName() == "unity") parserMode = element->ElementName();
+				else if (element->ElementName() == "runtime_config") parserMode = element->ElementName();
+				else if (element->ElementName() == "feature_list") parserMode = element->ElementName();
+				else if (element->ElementName() == "product_list") parserMode = element->ElementName();
 				else if (element->ElementName() == "application") {
 					READATTRIBUTE(std::string, "default_locale", this->DefaultLocale);
 					READATTRIBUTE(std::string, "sdk_version", this->TargetSdkVerison);
@@ -76,11 +86,13 @@ namespace Sce::Pss::Core::Metadata {
 					READATTRIBUTE(std::string, "value", locale.Name);
 					ShortNames.push_back(locale);
 				}
-				else if (parserMode == "product" && element->ElementName() == "localized_item") {
+				else if (parserMode == "product_list" && element->ElementName() == "localized_item") {
 					LocaleInfo locale;
+					if (productInfo == nullptr) productInfo = new ProductInfo();
+
 					READATTRIBUTE(std::string, "locale", locale.Locale);
 					READATTRIBUTE(std::string, "value", locale.Name);
-					productInfo.Names.push_back(locale);
+					productInfo->Names.push_back(locale);
 				}
 				else if (parserMode == "unity" && element->ElementName() == "unity_original_runtime_version") {
 					READATTRIBUTE(std::string, "value", this->UnityRuntimeVersion);
@@ -146,12 +158,16 @@ namespace Sce::Pss::Core::Metadata {
 					READATTRIBUTE(LibCXML::CXMLStream*, "text", this->CopyrightText);
 					READATTRIBUTE(std::string, "author", this->Author);
 				}
-				else if (element->ElementName() == "product") {
-					if (!productInfo.Label.empty())
-						this->ProductList.push_back(productInfo);
-					productInfo = ProductInfo();
-					READATTRIBUTE(std::string, "label", productInfo.Label);
-					READATTRIBUTE(std::string, "type", productInfo.Type);
+				else if (element->ElementName() == "product" && parserMode == "product_list") {
+					if (productInfo != nullptr) {
+						this->ProductList.push_back(*productInfo);
+						delete productInfo;
+						productInfo = nullptr;
+					}
+
+					productInfo = new ProductInfo();
+					READATTRIBUTE(std::string, "label", productInfo->Label);
+					READATTRIBUTE(std::string, "type", productInfo->Type);
 				}
 				else if (element->ElementName() == "memory") {
 					READATTRIBUTE(int, "managed_heap_size", this->ManagedHeapSize);
@@ -168,16 +184,19 @@ namespace Sce::Pss::Core::Metadata {
 					READATTRIBUTE(std::string, "value", featureName);
 					this->FeatureList.push_back(featureName);
 				}
-				else if (element->ElementName() == "runtime_config" || element->ElementName() == "feature_list") {
-					Logger::Debug("Skipping reading: " + element->ElementName());
-				}
 				else {
 					Logger::Warn("app.info contains unknown element name: " + element->ElementName());
 				}
-				
 
 			}while (this->nextElement());
+
 		}
-		AppInfo::CurrentApplication = this;
+
+		// add remaining product info
+		if (productInfo != nullptr) {
+			this->ProductList.push_back(*productInfo);
+			delete productInfo;
+			productInfo = nullptr;
+		}
 	}
 }

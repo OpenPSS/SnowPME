@@ -15,6 +15,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	Texture2D::Texture2D(std::string* fileName, bool mipmap, PixelFormat format) {
 		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
 
 		if (fileName != nullptr) {
 			this->Filename = std::string(fileName->c_str(), strlen(fileName->c_str()));
@@ -40,6 +41,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	int Texture2D::LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, PixelFormat format) {
 		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
 
 		int err;
 		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();

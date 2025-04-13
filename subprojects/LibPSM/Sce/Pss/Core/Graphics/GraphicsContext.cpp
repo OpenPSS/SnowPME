@@ -23,13 +23,6 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
 
-
-	GraphicsContext* GraphicsContext::activeGraphicsContext = nullptr;
-
-	GraphicsContext* GraphicsContext::GetGraphicsContext() {
-		return GraphicsContext::activeGraphicsContext;
-	}
-
 	int GraphicsContext::ActiveStateChanged(bool state) {
 		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
@@ -548,8 +541,6 @@ namespace Sce::Pss::Core::Graphics {
 			delete this->CapsState;
 		if(this->minFrameDelta != nullptr)
 			delete this->minFrameDelta;
-
-		GraphicsContext::activeGraphicsContext = nullptr;
 	}
 	void GraphicsContext::ErrorCallback(
 		GLenum source,
@@ -563,10 +554,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
-		if (this->GetGraphicsContext() != nullptr) { 
-			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			return;
-		}
+
 		if (Thread::IsMainThread()) {
 			this->Width = width;
 			this->Height = height;
@@ -751,8 +739,6 @@ namespace Sce::Pss::Core::Graphics {
 													GraphicsExtension::TextureNPot2DMipMap | 
 													GraphicsExtension::DrawInstanced | 
 													GraphicsExtension::InstancedArrays));
-
-			activeGraphicsContext = this;
 
 			// set internal state to nulls
 

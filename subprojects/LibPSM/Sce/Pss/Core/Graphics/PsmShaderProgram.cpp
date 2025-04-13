@@ -14,15 +14,16 @@
 #include <string>
 #include <LibShared.hpp>
 
+using namespace Shared::Debug;
+
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Shared::Debug;
 
-	using namespace Sce::Pss::Core;
-	using namespace Sce::Pss::Core::Threading;
-	using namespace Sce::Pss::Core::Graphics;
-	using namespace Sce::Pss::Core::Io;
-	using namespace Sce::Pss::Core::System;
 
 	#define MAIN_THREAD() \
 		if(!Thread::IsMainThread()) { \

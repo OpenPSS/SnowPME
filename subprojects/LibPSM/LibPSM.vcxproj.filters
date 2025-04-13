@@ -267,6 +267,9 @@
     <ClCompile Include="Sce\Pss\Core\Audio\Impl\AudioImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -752,10 +755,10 @@
     <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Services\CommandResults.hpp">
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandResults.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Services\CommandArguments.hpp">
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandArguments.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp">
@@ -798,6 +801,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
