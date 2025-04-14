@@ -15,6 +15,8 @@ jobs:
         run: git submodule update --init --recursive
       - name: Setup MSVC Developer Command Prompt
         uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
-      - name: build with msvc
-        run: msbuild SnowPME.sln -p:Configuration=Release -p:Platform=Win32
+        with:
+          arch: x86
+      - name: msbuild
+        run: msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
               
