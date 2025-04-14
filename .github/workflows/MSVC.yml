@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_msvc:
+    name: run msvc build
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: get submodules
+        run: git submodule update --init --recursive
+      - name: Setup MSVC Developer Command Prompt
+        uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
+      - name: build with msvc
+        run: msbuild SnowPME.sln -p:Configuration=Release -p:Platform=Win32
+              
