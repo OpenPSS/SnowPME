@@ -372,7 +372,7 @@ namespace Sce::Pss::Core::Io {
 		}
 		
 		if (openRw) {
-			// handle NOCREATE
+			// handle ALWAYS_CREATE
 			if ((flags & SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE) == 0) {
 				if (!this->PathExist(sandboxedPath, false)) {
 					handle->opened = false;

@@ -7,7 +7,6 @@
 
 using namespace Shared::Debug;
 using namespace Shared::String;
-
 using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Environment {
@@ -40,7 +39,7 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug("Writing " + std::string(PM_DAT_FILE) + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t _ = 0;
-		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
 			ICall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
 			ICall::PsmClose(fileHandle);
 		}

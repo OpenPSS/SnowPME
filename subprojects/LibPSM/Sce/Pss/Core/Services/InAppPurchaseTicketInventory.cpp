@@ -63,7 +63,7 @@ namespace Sce::Pss::Core::Services {
 
 	bool InAppPurchaseTicketInventory::ticketFileExist() {
 		uint64_t handle = 0;
-		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH, SCE_PSS_FILE_FLAG_READONLY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE  | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
+		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH,  SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
 		if (err == PSM_ERROR_NO_ERROR) ICall::PsmClose(handle);
 
 		if (err == PSM_ERROR_NOT_FOUND) return false;
