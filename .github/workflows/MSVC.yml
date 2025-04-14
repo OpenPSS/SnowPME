@@ -13,10 +13,6 @@ jobs:
           fetch-depth: 0
       - name: get submodules
         run: git submodule update --init --recursive
-      - name: setup msvc developer command prompt
-        uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
-        with:
-          arch: x86
       - name: add windows xp support
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
@@ -33,5 +29,14 @@ jobs:
             Write-Host "components were not installed"
             exit 1
           }
+      - name: setup msvc developer command prompt
+        uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
+        with:
+          arch: x86
       - name: msbuild
         run: msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
+      - name: upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: SnowPME-MSVC
+          path: build/SnowPME/bin
