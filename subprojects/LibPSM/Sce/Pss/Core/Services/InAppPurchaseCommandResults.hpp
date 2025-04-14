@@ -1,8 +1,6 @@
 #ifndef LIB_PSS_COMMANDRESULTS_H
 #define LIB_PSS_COMMANDRESULTS_H 1
 #include <Sce/Pss/Core/Services/InAppPurchaseCommand.hpp>
-#include <Sce/Pss/Core/Services/InAppPurchaseProductData.hpp>
-
 #include <Sce/Pss/Core/Environment/CommonDialogResults.hpp>
 #include <mono/mono.h>
 

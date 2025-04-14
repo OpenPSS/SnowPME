@@ -273,6 +273,9 @@
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -515,7 +518,7 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp">
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProduct.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\Network.hpp">
@@ -810,6 +813,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductMonoData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,9 +3,10 @@
 
 namespace Sce::Pss::Core::Mono {
 
+
 	size_t MonoUtil::MonoArrayLength(MonoArray* ar) {
 		if (ar == nullptr)
-			return NULL;
+			return 0;
 
 		MonoClass* cls = mono_object_get_class((MonoObject*)ar);
 		size_t elmSize = mono_array_element_size(cls);
@@ -58,8 +59,11 @@ namespace Sce::Pss::Core::Mono {
 
 	MonoString* MonoUtil::StdStringToMonoString(const std::string& str) {
 		MonoDomain* domain = mono_domain_get();
-		MonoString* monoStr = mono_string_new_len(domain, str.c_str(), str.length());
-		return monoStr;
+		if (domain != nullptr) {
+			MonoString* monoStr = mono_string_new_len(domain, str.c_str(), str.length());
+			return monoStr;
+		}
+		return nullptr;
 	}
 
 	MonoAssembly* MonoUtil::MonoAssemblyOpenFull(MonoDomain* domain, const char* exePath) {

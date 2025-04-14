@@ -13,9 +13,9 @@ namespace Sce::Pss::Core::Metadata {
 		}
 
 		if (Names.size() > 0)
-			return Names.at(0).Name;
+			return Names.front().Name;
 
-		return "SnowPME Entitlement";
+		return "Unknown";
 	}
 
 	AppInfo::~AppInfo() {

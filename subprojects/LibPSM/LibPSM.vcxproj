@@ -61,6 +61,7 @@
     <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseProduct.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\NetworkRequest.cpp" />
@@ -232,7 +233,8 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandResults.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommand.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductData.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProduct.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductMonoData.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\Network.hpp" />

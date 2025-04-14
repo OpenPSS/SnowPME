@@ -1,6 +1,7 @@
 #include <Sce/Pss/Core/Io/ICall.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#include <Sce/Pss/Core/Services/InAppPurchaseTicketInventory.hpp>s
+#include <Sce/Pss/Core/Services/InAppPurchaseTicketInventory.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseProduct.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <vector>
 #include <string>
@@ -16,25 +17,25 @@ using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Services {
 
-	std::string InAppPurchaseTicketInventory::writeTicketLine(InAppPurchaseProductData data) {
+	std::string InAppPurchaseTicketInventory::writeTicketLine(InAppPurchaseProduct data) {
 		std::vector<std::string> serializer;
 		char _[0x128] = { 0 };
 
 		serializer.push_back(std::string(data.Label));
-		serializer.push_back(std::to_string(data.TicketIsOK));
+		serializer.push_back(std::to_string(data.HaveTicket));
 
-		snprintf(_, sizeof(_)-1, "%llx", data.TicketIssuedDate);
+		snprintf(_, sizeof(_)-1, "%llx", data.IssuedDate);
 		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 0x16));
 		
-		snprintf(_, sizeof(_)-1, "%llx", data.TicketExpireDate);
+		snprintf(_, sizeof(_)-1, "%llx", data.ExpireDate);
 		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 0x16));
 
-		serializer.push_back(std::to_string(data.TicketRemainingCount));
-		serializer.push_back(std::to_string(data.TicketConsumedCount));
+		serializer.push_back(std::to_string(data.RemainingCount));
+		serializer.push_back(std::to_string(data.ConsumedCount));
 
 		return StringUtil::Join(serializer, " ")+"\n";
 	}
-	void InAppPurchaseTicketInventory::readTicketLine(std::vector<InAppPurchaseProductData>&list, std::string line) {
+	void InAppPurchaseTicketInventory::readTicketLine(std::vector<InAppPurchaseProduct>&list, std::string line) {
 		line = StringUtil::Replace(line, "\r", "");
 		char* _;
 
@@ -43,17 +44,17 @@ namespace Sce::Pss::Core::Services {
 		
 		std::string label = deserializer.at(0);
 		for (size_t i = 0; i < list.size(); i++) {
-			InAppPurchaseProductData productData = list.at(i);
+			InAppPurchaseProduct productData = list.at(i);
 
 			// if it is the label for the entry specified here;
 			// then we update the data in the list.
 
-			if (strncmp(productData.Label, label.c_str(), sizeof(InAppPurchaseProductData::Label)) == 0) {
-				productData.TicketIsOK = strtoul(deserializer.at(1).c_str(), &_, 10);
-				productData.TicketIssuedDate = strtoull(deserializer.at(2).c_str(), &_, 16);
-				productData.TicketExpireDate = strtoull(deserializer.at(3).c_str(), &_, 16);
-				productData.TicketRemainingCount = strtoul(deserializer.at(4).c_str(), &_, 10);
-				productData.TicketConsumedCount = strtoul(deserializer.at(5).c_str(), &_, 10);
+			if (productData.Label == label) {
+				productData.HaveTicket = strtoul(deserializer.at(1).c_str(), &_, 10);
+				productData.IssuedDate = strtoull(deserializer.at(2).c_str(), &_, 16);
+				productData.ExpireDate = strtoull(deserializer.at(3).c_str(), &_, 16);
+				productData.RemainingCount = strtoul(deserializer.at(4).c_str(), &_, 10);
+				productData.ConsumedCount = strtoul(deserializer.at(5).c_str(), &_, 10);
 				list[i] = productData;
 				break;
 			}
@@ -71,12 +72,12 @@ namespace Sce::Pss::Core::Services {
 
 		return true;
 	}
-	void InAppPurchaseTicketInventory::saveTicketFile(std::vector<InAppPurchaseProductData> list) {
+	void InAppPurchaseTicketInventory::saveTicketFile(std::vector<InAppPurchaseProduct> list) {
 		uint64_t handle = 0;
 		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH, SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &handle, true);
 
 		if (err == PSM_ERROR_NO_ERROR) {
-			for (InAppPurchaseProductData prod : list) {
+			for (InAppPurchaseProduct prod : list) {
 				std::string ticketLine = writeTicketLine(prod);
 				uint32_t _ = 0;
 
@@ -88,7 +89,7 @@ namespace Sce::Pss::Core::Services {
 		}
 
 	}
-	void InAppPurchaseTicketInventory::loadTicketFile(std::vector<InAppPurchaseProductData>& list) {
+	void InAppPurchaseTicketInventory::loadTicketFile(std::vector<InAppPurchaseProduct>& list) {
 		uint64_t handle;
 		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH, SCE_PSS_FILE_FLAG_READONLY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
 
@@ -128,7 +129,7 @@ namespace Sce::Pss::Core::Services {
 		}
 		
 	}
-	void InAppPurchaseTicketInventory::UpdateProductFromInventory(std::vector<InAppPurchaseProductData>& list) {
+	void InAppPurchaseTicketInventory::UpdateProductFromInventory(std::vector<InAppPurchaseProduct>& list) {
 		Logger::Debug(__FUNCTION__);
 		if (InAppPurchaseTicketInventory::ticketFileExist()) {
 			InAppPurchaseTicketInventory::loadTicketFile(list);
