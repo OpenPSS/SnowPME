@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Services {
 	public:
 		std::string Label = "";
 		std::string Name = "";
-		std::string Price = "";
+		std::string Price = "$0.00";
 		InAppPurchaseTicketType TicketType = InAppPurchaseTicketType::Normal;
 		bool HaveTicket = false;
 		uint64_t IssuedDate = 0;

@@ -40,7 +40,6 @@ namespace Sce::Pss::Core::Services {
 
 			productData.Label = productMetadata.Label;
 			productData.Name = productMetadata.GetName(Config::SystemLanguage);
-			productData.Price = "$0.00";
 			productData.TicketType = (productMetadata.Type == "normal") ? InAppPurchaseTicketType::Normal : InAppPurchaseTicketType::Consumable;
 
 			this->productList.push_back(productData);
@@ -90,6 +89,7 @@ namespace Sce::Pss::Core::Services {
 				if (sz != expectedSz) {
 					return PSM_ERROR_COMMON_INVALID_OPERATION;
 				}
+
 				InAppPurchaseProductMonoData* purchaseMonoData = (InAppPurchaseProductMonoData*)mono_array_addr_with_size(iapResults->Results, sizeof(InAppPurchaseProductMonoData), 0);
 				memset(purchaseMonoData, 0x00, sz);
 				
