@@ -9,6 +9,7 @@
 #include <Sce/Pss/Core/Services/InAppPurchaseTicketType.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseCommandResults.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseCommandArguments.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseTicketInventory.hpp>
 
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 
@@ -23,6 +24,9 @@ using namespace Sce::Pss::Core::Metadata;
 using namespace Sce::Pss::Core::Environment;
 
 namespace Sce::Pss::Core::Services {
+	InAppPurchaseDialog::InAppPurchaseDialog() {
+		this->SetError(this->GetProductInfo());
+	}
 
 	int InAppPurchaseDialog::GetProductInfo() {
 		AppInfo* appInfo = AppInfo::GetUniqueObject();
@@ -53,20 +57,22 @@ namespace Sce::Pss::Core::Services {
 		// initalize the state of this dialog
 		this->command = iapArgs->Command;
 		this->state = CommonDialogState::Running;
-		this->aborted = false;
+		this->result = CommonDialogResult::OK;
 
 		switch (iapArgs->Command) {
 			case InAppPurchaseCommand::GetProductInfo:
 				Logger::Debug("InAppPurchaseCommand::GetProductInfo");
 
 				if (pCount <= MAX_PRODUCT_COUNT) {
-					return this->GetProductInfo();
 					this->infoStatus |= (int32_t)InAppPurchaseCommand::GetProductInfo;
+					InAppPurchaseTicketInventory::UpdateProductFromInventory(this->productList);
+					return PSM_ERROR_NO_ERROR;
 				}
 
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			case InAppPurchaseCommand::GetTicketInfo:
 				Logger::Debug("InAppPurchaseCommand::GetTicketInfo");
+				InAppPurchaseTicketInventory::UpdateProductFromInventory(this->productList);
 				this->infoStatus |= (int32_t)InAppPurchaseCommand::GetTicketInfo;
 
 				return PSM_ERROR_NOT_IMPLEMENTED;
@@ -79,14 +85,5 @@ namespace Sce::Pss::Core::Services {
 		}
 
 		return PSM_ERROR_NO_ERROR;
-	}
-	int InAppPurchaseDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
-		Logger::Debug(__FUNCTION__);
-		LOCK_GUARD();
-		
-		InAppPurchaseCommandResults* iapResults = (InAppPurchaseCommandResults*)results;
-		Logger::Error("TODO: Implement InAppPurchaseDialog::Result.");
-
-		return PSM_ERROR_NOT_IMPLEMENTED;
 	}
 }

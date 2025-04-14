@@ -4,11 +4,11 @@
 #include <iostream>
 #include <mono/mono.h>
 
+#define PM_DAT_FILE (char*)("/System/pm.dat")
 namespace Sce::Pss::Core::Environment {
 	class PersistentMemory {
 	private:
 		static uint8_t memoryBuffer[0x10000];
-		static std::string pmDatFile;
 	public:
 		static int WriteNative(MonoArray* fileImage);
 		static int ReadNative(MonoArray* fileImage);

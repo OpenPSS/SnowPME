@@ -270,6 +270,9 @@
     <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -804,6 +807,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,6 +2,14 @@
 
 namespace Shared::String {
 
+
+	std::string StringUtil::ZFill(std::string val, char pad, size_t fillSize) {
+		// add remaining pad bytes to the original string,
+		for (size_t i = val.length(); i < fillSize; i++)
+			val = std::string(&pad, 1) + val;
+		return val;
+	}
+
 	std::string StringUtil::Reverse(const std::string& str) {
 		std::string littleEndainStr = str;
 		std::string bigEndianStr = "";

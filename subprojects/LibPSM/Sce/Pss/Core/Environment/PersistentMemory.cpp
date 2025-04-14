@@ -12,7 +12,6 @@ using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Environment {
 	uint8_t PersistentMemory::memoryBuffer[0x10000] = { 0 };
-	std::string PersistentMemory::pmDatFile = "/System/pm.dat";
 
 	int PersistentMemory::Read(uint8_t* persistantMemory, size_t persistantMemSize) {
 		if (persistantMemory == nullptr)
@@ -37,12 +36,12 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_COMMON_ARGUMENT;
 	}
 
-	int PersistentMemory::Initalize() { // runs when the program exits.
-		Logger::Debug("Writing " + pmDatFile + " from disk.");
+	int PersistentMemory::Flush() { // runs when the program exits.
+		Logger::Debug("Writing " + std::string(PM_DAT_FILE) + " from disk.");
 		uint64_t fileHandle = 0;
-		uint32_t bytesWritten = 0;
-		if (ICall::PsmFileOpenSystem((char*)pmDatFile.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
-			ICall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &bytesWritten);
+		uint32_t _ = 0;
+		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+			ICall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
 			ICall::PsmClose(fileHandle);
 		}
 		else {
@@ -55,12 +54,12 @@ namespace Sce::Pss::Core::Environment {
 		return PersistentMemory::Flush();
 	}
 
-	int PersistentMemory::Flush() { 
-		Logger::Debug("Reading " + pmDatFile + " from disk.");
+	int PersistentMemory::Initalize() { 
+		Logger::Debug("Reading " + std::string(PM_DAT_FILE) + " from disk.");
 		uint64_t fileHandle = 0;
-		uint32_t bytesRead = 0;
-		if (ICall::PsmFileOpenSystem((char*)pmDatFile.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
-			ICall::PsmFileRead(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &bytesRead);
+		uint32_t _ = 0;
+		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+			ICall::PsmFileRead(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
 			ICall::PsmClose(fileHandle);
 		}
 		else {

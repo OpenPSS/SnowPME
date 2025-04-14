@@ -62,7 +62,7 @@ namespace Sce::Pss::Core::Io {
 
 		// system directories
 		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(licensePath).string(), "/License", false, false, true));
-		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(systemPath).string(), "/System", false, false, true));
+		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(systemPath).string(), "/System", true, false, true));
 
 		// emulated dir
 		this->filesystems.push_back(new FileSystem(std::filesystem::absolute(gamePath).string(), "/", false, true, false));

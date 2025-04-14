@@ -18,12 +18,11 @@ namespace Sce::Pss::Core::Environment {
 	protected:
 		CommonDialogState state = CommonDialogState::None;
 		CommonDialogResult result = CommonDialogResult::OK;
-		bool aborted = false;
 	public:
 		virtual int Open(CommonDialogArguments* cmdArg) = 0;
 		virtual int Abort();
 		virtual int State(CommonDialogState* state);
-		virtual int Result(CommonDialogResult* result, CommonDialogResults* results) = 0;
+		virtual int Result(CommonDialogResult* result, CommonDialogResults* results);
 
 		static int NewNative(CommonDialogType type, int* handle);
 		static int ReleaseNative(CommonDialogType type, int handle);

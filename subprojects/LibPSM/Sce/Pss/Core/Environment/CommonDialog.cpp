@@ -24,7 +24,18 @@ namespace Sce::Pss::Core::Environment {
 	int CommonDialog::Abort() {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
-		this->aborted = true;
+		this->result = CommonDialogResult::Aborted;
+		return PSM_ERROR_NO_ERROR;
+	}
+	int CommonDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
+		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
+		Logger::Warn("Using default CommonDialog::Result implemenation.");
+		
+		if (result != nullptr) {
+			*result = this->result;
+		}
+
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -136,24 +147,12 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD_STATIC();
 
-		switch (type) {
-		case CommonDialogType::Reserved0:
-			Logger::Error("CommonDialogType::Reserved0 Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::TextInput:
-			Logger::Error("CommonDialogType::TextInput Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::InAppPurchaseDialog:
-			Logger::Debug("CommonDialogType::InAppPurchaseDialog");
-			return Handles::Get<InAppPurchaseDialog>(handle)->Result(result, (InAppPurchaseCommandResults*)results);
-		case CommonDialogType::CameraImportDialog:
-			Logger::Error("CommonDialogType::CameraImportDialog Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::PhotoImportDialog:
-			Logger::Error("CommonDialogType::PhotoImportDialog Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		}
+		if (result == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		if (results == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
 
-		return PSM_ERROR_NO_ERROR;
+		return Handles::Get<CommonDialog>(handle)->Result(result, results);
+
 	}
 }

@@ -25,9 +25,9 @@ namespace Sce::Pss::Core::Services {
 		InAppPurchaseCommand command = InAppPurchaseCommand::None;
 		int infoStatus = 0;
 	public:
+		InAppPurchaseDialog();
 		int GetProductInfo();
 		int Open(Environment::CommonDialogArguments* cmdArg);
-		int Result(Environment::CommonDialogResult* result, Environment::CommonDialogResults* results);
 	};
 }
 #endif

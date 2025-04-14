@@ -13,10 +13,10 @@ namespace Sce::Pss::Core::Services {
 		char Price[0x40];
 		InAppPurchaseTicketType TicketType;
 		bool TicketIsOK;
-		unsigned long TicketIssuedDate;
-		unsigned long TicketExpireDate;
+		uint64_t TicketIssuedDate;
+		uint64_t TicketExpireDate;
 		int TicketRemainingCount;
-		unsigned int TicketConsumedCount;
+		uint32_t TicketConsumedCount;
 	} InAppPurchaseProductData;
 }
 
