@@ -54,7 +54,6 @@ namespace Sce::Pss::Core::Metadata {
 		std::string parserMode = "";
 		ProductInfo* productInfo = nullptr;
 
-
 		if (elem != nullptr) {
 			do {
 				if (parserMode != "product_list" && element->ElementName() == "name") parserMode = element->ElementName();
@@ -183,6 +182,9 @@ namespace Sce::Pss::Core::Metadata {
 					std::string featureName;
 					READATTRIBUTE(std::string, "value", featureName);
 					this->FeatureList.push_back(featureName);
+				}
+				else if (parserMode != "product_list" && element->ElementName() == "name") {
+					Logger::Debug("skipping app.info entry: " + element->ElementName());
 				}
 				else {
 					Logger::Warn("app.info contains unknown element name: " + element->ElementName());

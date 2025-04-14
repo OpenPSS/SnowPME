@@ -3,7 +3,7 @@ on:
     branches:
       - main
 jobs:
-  build_msvc:
+  msvc_build:
     name: run msvc build
     runs-on: windows-latest
     steps:
