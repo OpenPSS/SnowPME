@@ -13,10 +13,11 @@ jobs:
           fetch-depth: 0
       - name: get submodules
         run: git submodule update --init --recursive
-      - name: Setup MSVC Developer Command Prompt
+      - name: setup MSVC Developer Command Prompt
         uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
         with:
           arch: x86
+      - name: add Windows XP Support
+        run: '"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\2022\Preview" --add Microsoft.VisualStudio.Component.WinXP --quiet --norestart --nocache'
       - name: msbuild
         run: msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
-              
