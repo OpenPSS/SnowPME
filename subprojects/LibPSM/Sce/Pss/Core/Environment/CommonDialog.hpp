@@ -25,6 +25,12 @@ namespace Sce::Pss::Core::Environment {
 		virtual int State(CommonDialogState* state);
 		virtual int Result(CommonDialogResult* result, CommonDialogResults* results);
 
+		virtual int CheckOpen();
+		virtual int CheckResult();
+		virtual int CheckState();
+		virtual int CheckAbort();
+
+
 		static int NewNative(CommonDialogType type, int* handle);
 		static int ReleaseNative(CommonDialogType type, int handle);
 		static int OpenNative(CommonDialogType type, int handle, CommonDialogArguments* cmdArg);

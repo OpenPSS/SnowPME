@@ -27,22 +27,30 @@ namespace Sce::Pss::Core::Services {
 
 		switch (this->TicketType) {
 		case InAppPurchaseTicketType::Normal:
-			this->ExpireDate = 0x0000000000000000ull;
-			this->IssuedDate = Time::scePssTimeGetMicroTickCount();
-			this->HaveTicket = true;
-			break;
+			if (!this->HaveTicket) {
+				this->ExpireDate = 0x0000000000000000ull;
+				this->IssuedDate = Time::scePssTimeGetMicroTickCount();
+				this->HaveTicket = true;
+				return PSM_ERROR_NO_ERROR;
+			}
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		case InAppPurchaseTicketType::Consumable:
 			this->RemainingCount++;
-			break;
+			return PSM_ERROR_NO_ERROR;
 		default:
-			break;
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseProduct::Consume() {
 		Logger::Debug(__FUNCTION__);
 
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		if (this->TicketType == InAppPurchaseTicketType::Consumable) {
+			this->RemainingCount--;
+			this->ConsumedCount++;
+			return PSM_ERROR_NO_ERROR;
+		}
+
+		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
 	int InAppPurchaseProduct::Reset() {
 		Logger::Debug(__FUNCTION__);

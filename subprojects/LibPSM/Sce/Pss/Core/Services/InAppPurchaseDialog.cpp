@@ -16,6 +16,7 @@
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
+#include <Sce/Pss/Core/Threading/Thread.hpp>
 
 #include <LibShared.hpp>
 #include <cstring>
@@ -29,7 +30,7 @@ using namespace Sce::Pss::Core::Callback;
 using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Metadata;
 using namespace Sce::Pss::Core::Environment;
-
+using namespace Sce::Pss::Core::Threading;
 
 namespace Sce::Pss::Core::Services {
 
@@ -39,9 +40,9 @@ namespace Sce::Pss::Core::Services {
 			InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(idx);
 			if (prod == nullptr) continue;
 			msg += "\n("+prod->Label + ")\t"+prod->Name;
-			if (showPrice)
-				msg += "\t" + prod->Price;
+			if (showPrice == true) msg += "\t (" + prod->Price + ")";
 		}
+		Logger::Debug(msg);
 		return msg;
 	}
 
@@ -49,22 +50,17 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to purchase this item?", productIndicies, true), "Purchase Item?")) {
+		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to purchase the following item?", productIndicies, true), "Purchase Item?")) {
 
-			// if yes, call consume on all of them
-			for (int idx : productIndicies) {
-				InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(idx);
-				if (prod == nullptr) continue;
+			InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(productIndicies.front());
+			if (prod == nullptr) res = CommonDialogResult::Error;
 
-				int err = prod->Purchase();
-				if (err != PSM_ERROR_NO_ERROR) {
-					res = CommonDialogResult::Error;
-					break;
-				}
-			}
+			// purchase item
+			if (prod->Purchase() != PSM_ERROR_NO_ERROR) res = CommonDialogResult::Error;
 
 			// save inventory cache.
-			this->inventory.SyncInventoryToDisk();
+			if (this->inventory.SyncInventoryToDisk() != PSM_ERROR_NO_ERROR) res = CommonDialogResult::Error;
+
 
 			res = CommonDialogResult::OK;
 
@@ -85,22 +81,16 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to consume this item?", productIndicies, true), "Consume item?")) {
+		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to consume the following item?", productIndicies, false), "Consume Item?")) {
+			// get first argument.
+			InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(productIndicies.front());
+			if (prod == nullptr) res = CommonDialogResult::Error;
 
-			// if yes, call purchase on all of them.
-			for (int idx : productIndicies) {
-				InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(idx);
-				if (prod == nullptr) continue;
-
-				int err = prod->Consume();
-				if (err != PSM_ERROR_NO_ERROR) {
-					res = CommonDialogResult::Error;
-					break;
-				}
-			}
+			// consume item
+			if(prod->Consume() != PSM_ERROR_NO_ERROR) res = CommonDialogResult::Error;
 
 			// save inventory cache.
-			this->inventory.SyncInventoryToDisk();
+			if(this->inventory.SyncInventoryToDisk() != PSM_ERROR_NO_ERROR) res = CommonDialogResult::Error;
 
 			res = CommonDialogResult::OK;
 
@@ -171,12 +161,12 @@ namespace Sce::Pss::Core::Services {
 		if (productIndicies.size() != 1) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		InAppPurchaseProduct* product = this->inventory.GetItemByIndex(productIndicies.front());
 
-		// check product is not null, && GetProductInfo was run
-		if (product == nullptr || (this->commandsRun & InAppPurchaseCommand::GetProductInfo) == InAppPurchaseCommand::None) {
+		// check GetProductInfo was run
+		if ((this->commandsRun & InAppPurchaseCommand::GetProductInfo) == InAppPurchaseCommand::None) {
 			ExceptionInfo::AddMessage("Product information is invalid or not retrieved");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-		// check product is not null, && GetTicketInfo was run
+		// check GetTicketInfo was run
 		if ((this->commandsRun & InAppPurchaseCommand::GetTicketInfo) == InAppPurchaseCommand::None) {
 			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
@@ -194,7 +184,29 @@ namespace Sce::Pss::Core::Services {
 	}
 	int InAppPurchaseDialog::doConsume(std::vector<int> productIndicies) {
 		Logger::Debug(__FUNCTION__);
-		return PSM_ERROR_NOT_IMPLEMENTED;
+
+		// only ever consume one item at a time ...
+		if (productIndicies.size() != 1) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		InAppPurchaseProduct* product = this->inventory.GetItemByIndex(productIndicies.front());
+
+		if ((this->commandsRun & InAppPurchaseCommand::GetTicketInfo) == InAppPurchaseCommand::None) {
+			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (product->TicketType != InAppPurchaseTicketType::Consumable) {
+			ExceptionInfo::AddMessage("Ticket type is not consumable");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (product->RemainingCount <= 0) {
+			ExceptionInfo::AddMessage("Ticket is already consumed or not purchased");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		std::thread(&InAppPurchaseDialog::consumeRequestThread, this, productIndicies).detach(); // start purchase thread
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseDialog::doGetTicketInfo(std::vector<int> productIndicies) {
 		Logger::Debug(__FUNCTION__);
@@ -273,8 +285,8 @@ namespace Sce::Pss::Core::Services {
 
 		// initalize the state of this dialog
 		this->command = iapArgs->Command;
-		this->state = CommonDialogState::Running;
-		this->result = CommonDialogResult::OK;
+		this->state.store(CommonDialogState::Running);
+		this->result.store(CommonDialogResult::OK);
 
 		switch (iapArgs->Command) {
 			case InAppPurchaseCommand::GetProductInfo:

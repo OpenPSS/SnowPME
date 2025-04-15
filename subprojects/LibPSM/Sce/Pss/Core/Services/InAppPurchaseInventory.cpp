@@ -42,10 +42,10 @@ namespace Sce::Pss::Core::Services {
 		serializer.push_back(std::to_string(data->HaveTicket));
 
 		snprintf(_, sizeof(_)-1, "%llx", data->IssuedDate);
-		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 0x16));
+		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 16));
 		
 		snprintf(_, sizeof(_)-1, "%llx", data->ExpireDate);
-		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 0x16));
+		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 16));
 
 		serializer.push_back(std::to_string(data->RemainingCount));
 		serializer.push_back(std::to_string(data->ConsumedCount));
