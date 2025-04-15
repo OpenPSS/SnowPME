@@ -11,7 +11,6 @@ namespace SnowPME::Runtime
 		std::string appMainDirectory;
 		Graphics::Window* appWindow;
 
-		static std::thread* psmGameThread;
 		static Application* runningApplication;
 
 		static int initCallbacks(Graphics::Window* window);
@@ -20,7 +19,6 @@ namespace SnowPME::Runtime
 	public:
 		Application(const std::string& gameFolder, Graphics::Window* window);
 		void RunPssMain();
-		static void WaitForExit();
 		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);
 	};
 }

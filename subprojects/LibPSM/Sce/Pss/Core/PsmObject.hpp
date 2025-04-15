@@ -3,16 +3,11 @@
 #include <Sce/Pss/Core/Errorable.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
 #include <mutex>
 
-#define LOCK_GUARD() std::lock_guard<std::mutex> lock(this->psmObjectLock)
-#define LOCK_GUARD_STATIC() std::lock_guard<std::mutex> lock(psmObjectLockStatic)
-
 namespace Sce::Pss::Core {
-	template<typename T> class PsmObject : public Errorable {
-	protected:
-		std::mutex psmObjectLock;
-		static std::mutex psmObjectLockStatic;
+	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<T> {
 	public:
 		PsmObject() {
 			this->Handle = System::Handles::Create(static_cast<T*>(this));
@@ -28,12 +23,11 @@ namespace Sce::Pss::Core {
 			this->Handle = System::Handles::NoHandle;
 		};
 
-
 		bool IsDisposed = false;
 		int Handle = System::Handles::NoHandle;
+
 	};
 
-	template<typename T> std::mutex PsmObject<T>::psmObjectLockStatic;
 }
 
 #endif

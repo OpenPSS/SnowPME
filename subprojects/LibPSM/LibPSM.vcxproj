@@ -62,7 +62,7 @@
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseProduct.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseInventory.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\NetworkRequest.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes.c" />
@@ -98,6 +98,7 @@
     <ClCompile Include="Sce\Pss\Core\System\PlatformSpecific.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\UniqueId.cpp" />
     <ClCompile Include="Sce\Pss\Core\Threading\Thread.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Timing\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LibPSM.hpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp" />
+    <ClInclude Include="Sce\Pss\Core\PsmMutexObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
@@ -235,10 +237,11 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProduct.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductMonoData.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseInventory.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\Network.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\NetworkRequest.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Timing\Time.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector2.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector3.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector4.hpp" />

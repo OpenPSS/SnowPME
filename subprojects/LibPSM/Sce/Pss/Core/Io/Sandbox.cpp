@@ -128,7 +128,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		throw std::runtime_error("FileSystem not found ?? ??");
+		return nullptr;
 	}
 
 	size_t Sandbox::ReadFile(PsmFileDescriptor* handle, size_t numbBytes, char* buffer) {
@@ -272,8 +272,8 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	void Sandbox::CloseDirectory(PsmFileDescriptor* handle) {
-		if (handle != NULL) {
-			if (handle->opened && handle->directoryFd != NULL) {
+		if (handle != nullptr) {
+			if (handle->opened && handle->directoryFd != nullptr) {
 				delete handle->directoryFd;
 			}
 			handle->opened = false;
@@ -299,8 +299,8 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	void Sandbox::CloseFile(PsmFileDescriptor* handle) {
-		if (handle != NULL) {
-			if (handle->opened && handle->edataStream != NULL) {
+		if (handle != nullptr) {
+			if (handle->opened && handle->edataStream != nullptr) {
 				delete handle->edataStream;
 			}
 			handle->opened = false;
@@ -331,7 +331,7 @@ namespace Sce::Pss::Core::Io {
 		handle->rw = openRw;
 
 		handle->directory = false;
-		handle->directoryFd = NULL;
+		handle->directoryFd = nullptr;
 
 		if (openRw && !filesystem->IsWritable()) {
 			handle->opened = false;

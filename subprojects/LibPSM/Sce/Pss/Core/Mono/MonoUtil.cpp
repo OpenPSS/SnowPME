@@ -1,10 +1,12 @@
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
+#include <Sce/Pss/Core/Error.hpp>
+
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Mono {
 
 
-	size_t MonoUtil::MonoArrayLength(MonoArray* ar) {
+	size_t MonoUtil::MonoArrayBytesLength(MonoArray* ar) {
 		if (ar == nullptr)
 			return 0;
 
@@ -46,15 +48,16 @@ namespace Sce::Pss::Core::Mono {
 
 		return false;
 	}
-	std::string* MonoUtil::MonoStringToStdString(MonoString* mstr, std::string& string) {
+	int MonoUtil::MonoStringToStdString(MonoString* mstr, std::string& string) {
 		if (!mstr)
-			return &string;
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		char* str = mono_string_to_utf8(mstr);
 		if (str != nullptr) {
 			string = std::string(str);
 			mono_free(str);
+			return PSM_ERROR_NO_ERROR;
 		}
-		return &string;
+		return PSM_ERROR_OUT_OF_MEMORY;
 	}
 
 	MonoString* MonoUtil::StdStringToMonoString(const std::string& str) {

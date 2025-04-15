@@ -4,11 +4,11 @@
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Services/InAppPurchaseTicketType.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseProductMonoData.hpp>
+#include <Sce/Pss/Core/Errorable.hpp>
 
-#define MAX_PRODUCT_COUNT (0x100)
 
 namespace Sce::Pss::Core::Services {
-	class InAppPurchaseProduct{
+	class InAppPurchaseProduct : public Errorable {
 	public:
 		std::string Label = "";
 		std::string Name = "";
@@ -19,9 +19,16 @@ namespace Sce::Pss::Core::Services {
 		uint64_t ExpireDate = 0;
 		int RemainingCount = 0;
 		uint32_t ConsumedCount = 0;
+
 		InAppPurchaseProduct();
-		~InAppPurchaseProduct();
-		int FillInMonoData(InAppPurchaseProductMonoData* data);
+		InAppPurchaseProduct(InAppPurchaseProductMonoData monoProductData);
+
+		int Purchase();
+		int Consume();
+		int Reset();
+
+		int ImportMonoData(InAppPurchaseProductMonoData data);
+		int ExportMonoData(InAppPurchaseProductMonoData* data);
 	};
 }
 

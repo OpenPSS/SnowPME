@@ -15,7 +15,6 @@ namespace SnowPME {
 	void Program::startMonoApplication(const std::string& gamePath) {
 		// run program
 		Application::LoadApplication(gamePath, this->window);
-		Application::WaitForExit();
 	}
 
 

@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Environment {
 	int CommonDialog::Abort() {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
-		this->result = CommonDialogResult::Aborted;
+		this->result.store(CommonDialogResult::Aborted);
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Warn("Using default CommonDialog::Result implemenation.");
 		
 		if (result != nullptr) {
-			*result = this->result;
+			*result = this->result.load();
 		}
 
 		return PSM_ERROR_NO_ERROR;
@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		*state = this->state;
+		*state = this->state.load();
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -105,26 +105,8 @@ namespace Sce::Pss::Core::Environment {
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT; 
 		if (cmdArg == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-
-		switch (type) {
-		case CommonDialogType::Reserved0:
-			Logger::Error("CommonDialogType::Reserved0 Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::TextInput:
-			Logger::Error("CommonDialogType::TextInput Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::InAppPurchaseDialog:
-			Logger::Debug("CommonDialogType::InAppPurchaseDialog");
-			return Handles::Get<InAppPurchaseDialog>(handle)->Open((InAppPurchaseCommandArguments*)cmdArg);
-		case CommonDialogType::CameraImportDialog:
-			Logger::Error("CommonDialogType::CameraImportDialog Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		case CommonDialogType::PhotoImportDialog:
-			Logger::Error("CommonDialogType::PhotoImportDialog Unimplemented");
-			return PSM_ERROR_NOT_IMPLEMENTED;
-		}
-
-		return PSM_ERROR_NO_ERROR;
+		
+		return Handles::Get<CommonDialog>(handle)->Open(cmdArg);
 	}
 	int CommonDialog::AbortNative(CommonDialogType type, int handle) {
 		Logger::Debug(__FUNCTION__);

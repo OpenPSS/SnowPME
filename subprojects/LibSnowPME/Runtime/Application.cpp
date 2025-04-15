@@ -17,7 +17,6 @@ using namespace Shared;
 
 namespace SnowPME::Runtime {
 	Application* Application::runningApplication = nullptr;
-	std::thread* Application::psmGameThread = nullptr;
 
 	int Application::initCallbacks(Graphics::Window* window) {
 		Callback::WindowImpl::Init(window);
@@ -40,11 +39,6 @@ namespace SnowPME::Runtime {
 		this->appMainDirectory = gameFolder;
 	}
 
-	void Application::WaitForExit() {
-		Application::psmGameThread->join();
-		Application::psmGameThread = nullptr;
-	}
-
 	void Application::RunPssMain() {
 		this->appWindow->MakeCurrent();
 		InitalizeMono::ScePssMain(this->appMainDirectory.c_str());
@@ -58,16 +52,8 @@ namespace SnowPME::Runtime {
 			delete Application::runningApplication;
 			Application::runningApplication = nullptr;
 		}
-
-		if (Application::psmGameThread != nullptr) {
-			Application::WaitForExit();
-		}
 		
 		Application::runningApplication = new Application(gameFolder, window);
-//#ifndef NO_MULTITHREAD
 		Application::runningApplication->RunPssMain();
-//#else
-//		psmGameThread = new std::thread(&Application::RunPssMain, Application::runningApplication);
-//#endif
 	}
 }

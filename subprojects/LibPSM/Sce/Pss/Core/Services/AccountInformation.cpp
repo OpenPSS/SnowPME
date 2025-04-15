@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Services {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		
 		uint8_t* idBuffer = (uint8_t*)mono_array_addr_with_size(id, 1, 0);
-		int idLen = MonoUtil::MonoArrayLength(id);
+		int idLen = MonoUtil::MonoArrayBytesLength(id);
 
 		if (idLen != 0x10)
 			return PSM_ERROR_COMMON_INVALID_OPERATION;

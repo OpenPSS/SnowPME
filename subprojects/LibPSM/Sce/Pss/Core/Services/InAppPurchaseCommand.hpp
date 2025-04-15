@@ -1,5 +1,6 @@
 #ifndef LIB_PSS_INAPPPURCHSAECOMMAND_H
 #define LIB_PSS_INAPPPURCHSAECOMMAND_H
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
 
 namespace Sce::Pss::Core::Services {
 	enum class InAppPurchaseCommand : unsigned int {
@@ -9,6 +10,8 @@ namespace Sce::Pss::Core::Services {
 		Purchase = 3,
 		Consume = 4
 	};
+
+	DEFINE_BITWISE_OPERATORS(InAppPurchaseCommand, unsigned int);
 }
 
 #endif

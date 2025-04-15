@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Graphics {
 		All = 7
 	};
 
-	DefineBitwiseOperators(ClearMask, unsigned int);
+	DEFINE_BITWISE_OPERATORS(ClearMask, unsigned int);
 
 }
 

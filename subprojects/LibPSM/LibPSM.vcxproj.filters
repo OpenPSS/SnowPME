@@ -270,10 +270,13 @@
     <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.cpp">
+    <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseInventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Timing\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -812,10 +815,16 @@
     <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketInventory.hpp">
+    <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseInventory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseProductMonoData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\PsmMutexObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Timing\Time.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

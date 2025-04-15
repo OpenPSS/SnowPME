@@ -1,11 +1,13 @@
 #ifndef LIB_PSS_CGX_H
 #define LIB_PSS_CGX_H 1
 #include <string>
+#include <cstdint>
 #include <Sce/Pss/Core/Errorable.hpp>
-
-namespace Sce::Pss::Core::Graphics {
 #define CGX_MAX_LEN (0x10000)
 #define CGX_MAGIC_LEN (0x4)
+
+namespace Sce::Pss::Core::Graphics {
+
 
 	enum class CGXVariantType : uint32_t {
 		Vertex = 0x1,

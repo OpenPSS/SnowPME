@@ -1,11 +1,13 @@
 #ifndef SHARED_LOGGER_H
 #define SHARED_LOGGER_H 1
 #include <string>
+#include <mutex>
 
 namespace Shared::Debug
 {
 	class Logger {
 	private:
+		static std::mutex logMutex;
 		static void logMultiline(const std::string& channel, const std::string& msg);
 	public:
 		static void Debug(const std::string& msg);

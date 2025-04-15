@@ -2,19 +2,83 @@
 #include <Sce/Pss/Core/Services/InAppPurchaseProduct.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/Error.hpp>
+#include <Sce/Pss/Core/Timing/Time.hpp>
+
+#include <LibShared.hpp>
 #include <mono/mono.h>
 
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Timing;
 using namespace Sce::Pss::Core::Mono;
 
 namespace Sce::Pss::Core::Services {
+
 	InAppPurchaseProduct::InAppPurchaseProduct() {
+		Logger::Debug(__FUNCTION__);
+	}
+
+	InAppPurchaseProduct::InAppPurchaseProduct(InAppPurchaseProductMonoData monoProductData) {
+		Logger::Debug(__FUNCTION__);
+		this->SetError(this->ImportMonoData(monoProductData));
+	}
+
+	int InAppPurchaseProduct::Purchase() {
+		Logger::Debug(__FUNCTION__);
+
+		switch (this->TicketType) {
+		case InAppPurchaseTicketType::Normal:
+			this->ExpireDate = 0x0000000000000000ull;
+			this->IssuedDate = Time::scePssTimeGetMicroTickCount();
+			this->HaveTicket = true;
+			break;
+		case InAppPurchaseTicketType::Consumable:
+			this->RemainingCount++;
+			break;
+		default:
+			break;
+		}
+		return PSM_ERROR_NO_ERROR;
+	}
+	int InAppPurchaseProduct::Consume() {
+		Logger::Debug(__FUNCTION__);
+
+		return PSM_ERROR_NOT_IMPLEMENTED;
+	}
+	int InAppPurchaseProduct::Reset() {
+		Logger::Debug(__FUNCTION__);
+
+		this->IssuedDate = 0;
+		this->ExpireDate = 0;
+
+		this->ConsumedCount = 0;
+		this->RemainingCount = 0;
+
+		this->HaveTicket = false;
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	int InAppPurchaseProduct::ImportMonoData(InAppPurchaseProductMonoData data) {
+		int res = MonoUtil::MonoStringToStdString(data.Label, this->Label);
+		if (res != PSM_ERROR_NO_ERROR) return res;
+
+		res = MonoUtil::MonoStringToStdString(data.Name, this->Name);
+		if (res != PSM_ERROR_NO_ERROR) return res;
+
+		res = MonoUtil::MonoStringToStdString(data.Price, this->Price);
+		if (res != PSM_ERROR_NO_ERROR) return res;
 		
-	}
-	InAppPurchaseProduct::~InAppPurchaseProduct() {
+		this->TicketType = data.TicketType;
+		this->HaveTicket = (data.TicketIsOK == 0x1);
+		this->IssuedDate = data.TicketIssuedDate;
+		this->ExpireDate = data.TicketExpireDate;
+		this->RemainingCount = data.TicketRemainingCount;
+		this->ConsumedCount = data.TicketConsumedCount;
 
+		return PSM_ERROR_NO_ERROR;
 	}
 
-	int InAppPurchaseProduct::FillInMonoData(InAppPurchaseProductMonoData* data) {
+	int InAppPurchaseProduct::ExportMonoData(InAppPurchaseProductMonoData* data) {
 		memset(data, 0x00, sizeof(InAppPurchaseProductMonoData));
 		
 		data->Label = MonoUtil::StdStringToMonoString(this->Label);
@@ -27,7 +91,7 @@ namespace Sce::Pss::Core::Services {
 		if (data->Price == nullptr) return PSM_ERROR_COMMON_OUT_OF_MEMORY;
 
 		data->TicketType = this->TicketType;
-		data->TicketIsOK = (int)this->HaveTicket;
+		data->TicketIsOK = this->HaveTicket ? 0x1 : 0x0;
 		data->TicketIssuedDate = this->IssuedDate;
 		data->TicketExpireDate = this->ExpireDate;
 		data->TicketRemainingCount = this->RemainingCount;

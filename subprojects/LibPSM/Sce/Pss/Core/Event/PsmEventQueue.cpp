@@ -1,6 +1,8 @@
 #include <Sce/Pss/Core/Event/PsmEventQueue.hpp>
 #include <Sce/Pss/Core/Event/PsmEvent.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
+
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -14,26 +16,35 @@ namespace Sce::Pss::Core::Event {
 	PsmEventQueue PsmEventQueue::OutgoingEventQueue;
 
 	void PsmEventQueue::Push(PsmEvent* evt) {
-		std::scoped_lock<std::mutex> lock(evtLock);
 		Logger::Debug(__FUNCTION__);
-		evtQueue.push(evt);
+		LOCK_GUARD();
+
+		this->evtQueue.push(evt);
 	}
 	PsmEvent* PsmEventQueue::Pop() {
-		std::scoped_lock<std::mutex> lock(evtLock);
 		Logger::Debug(__FUNCTION__);
+		LOCK_GUARD();
 
-		while (evtQueue.empty()) { Thread::Sleep(10.0); }
-		PsmEvent* evt = evtQueue.front();
-		evtQueue.pop();
+		while (this->evtQueue.empty()) { return nullptr; }
+		PsmEvent* evt = this->evtQueue.front();
+		this->evtQueue.pop();
 
 		return evt;
 	}
 
-	PsmEventQueue::~PsmEventQueue() {
-		std::scoped_lock<std::mutex> lock(evtLock);
-
-		for (; !evtQueue.empty(); evtQueue.pop())
-			delete evtQueue.front();
+	PsmEventQueue::PsmEventQueue() {
 
 	}
+
+	PsmEventQueue::~PsmEventQueue() {
+		LOCK_GUARD();
+		size_t queueSz = this->evtQueue.size();
+		
+		for (int i = 0; i < queueSz; i++) {
+			PsmEvent* evt = this->evtQueue.front();
+			if (evt != nullptr) delete evt;
+			this->evtQueue.pop();
+		}
+	}
+
 }

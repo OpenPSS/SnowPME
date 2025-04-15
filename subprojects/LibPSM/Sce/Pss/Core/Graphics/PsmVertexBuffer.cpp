@@ -58,7 +58,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			void* verticesBuffer = (void*)mono_array_addr_with_size(vertices, 1, 0);
-			size_t arrayLen = Sce::Pss::Core::Mono::MonoUtil::MonoArrayLength(vertices);
+			size_t arrayLen = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vertices);
 
 			// if count < 0, set the count to the vertex count
 			if (count < 0) {

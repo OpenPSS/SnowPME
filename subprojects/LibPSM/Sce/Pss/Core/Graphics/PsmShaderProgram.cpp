@@ -63,8 +63,8 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 		MAIN_THREAD();
 
-		size_t vertexShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayLength(vpFileImage);
-		size_t fragmentShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayLength(fpFileImage);
+		size_t vertexShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vpFileImage);
+		size_t fragmentShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(fpFileImage);
 		uint8_t* vertexShaderBuf = nullptr;
 		uint8_t* fragmentShaderBuf = nullptr;
 

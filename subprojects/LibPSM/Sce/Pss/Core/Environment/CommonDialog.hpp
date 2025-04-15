@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <atomic>
 
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogType.hpp>
@@ -16,8 +17,8 @@
 namespace Sce::Pss::Core::Environment {
 	class CommonDialog : public PsmObject<CommonDialog> {
 	protected:
-		CommonDialogState state = CommonDialogState::None;
-		CommonDialogResult result = CommonDialogResult::OK;
+		std::atomic<CommonDialogState> state = std::atomic<CommonDialogState>(CommonDialogState::None);
+		std::atomic<CommonDialogResult> result = std::atomic<CommonDialogResult>(CommonDialogResult::OK);
 	public:
 		virtual int Open(CommonDialogArguments* cmdArg) = 0;
 		virtual int Abort();
