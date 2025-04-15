@@ -10,26 +10,20 @@ namespace Sce::Pss::Core {
 	std::string ExceptionInfo::param = "";
 
 	std::string& ExceptionInfo::GetMessage() {
-		Logger::Debug(__FUNCTION__);
-
 		return message;
 	}
 	
 	std::string& ExceptionInfo::GetParam() {
-		Logger::Debug(__FUNCTION__);
-
 		return param;
 	}
 
 	void ExceptionInfo::SetMessage(const std::string& str) {
-		Logger::Debug(__FUNCTION__);
 		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		ExceptionInfo::message = str + "\n";
 	}
 
 	void ExceptionInfo::SetMessage(const char* str) {
-		Logger::Debug(__FUNCTION__);
 		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
 
 		if (str != nullptr) {
@@ -41,14 +35,12 @@ namespace Sce::Pss::Core {
 	}
 
 	void ExceptionInfo::SetParam(const std::string& str) {
-		Logger::Debug(__FUNCTION__);
 		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		ExceptionInfo::param = str;
 	}
 
 	void ExceptionInfo::SetParam(const char* str) {
-		Logger::Debug(__FUNCTION__);
 		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
 
 		if (str != nullptr) {
@@ -60,7 +52,6 @@ namespace Sce::Pss::Core {
 	}
 
 	void ExceptionInfo::AddMessage(const std::string& str) {
-		Logger::Debug(__FUNCTION__);
 		Logger::Debug("ExceptionInfo::AddMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		if (ExceptionInfo::message.empty())

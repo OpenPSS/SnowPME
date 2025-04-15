@@ -154,7 +154,6 @@ namespace Sce::Pss::Core::Services {
 	}
 
 	int InAppPurchaseDialog::doPurchase(std::vector<int> productIndicies) {
-		Logger::Debug(__FUNCTION__);
 		
 		// only ever purchase one item at a time ...
 		if (productIndicies.size() != 1) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
@@ -183,7 +182,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseDialog::doConsume(std::vector<int> productIndicies) {
-		Logger::Debug(__FUNCTION__);
 
 		// only ever consume one item at a time ...
 		if (productIndicies.size() != 1) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
@@ -210,7 +208,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseDialog::doGetTicketInfo(std::vector<int> productIndicies) {
-		Logger::Debug(__FUNCTION__);
 
 		this->state.store(CommonDialogState::Running);
 		std::thread(&InAppPurchaseDialog::ticketInfoRequestThread, this, productIndicies).detach(); // start ticket info thread
@@ -218,7 +215,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseDialog::doGetProductInfo(std::vector<int> productIndicies) {
-		Logger::Debug(__FUNCTION__);
 
 		if (productIndicies.size() <= MAX_PRODUCT_COUNT) {
 			this->state.store(CommonDialogState::Running);
@@ -231,7 +227,6 @@ namespace Sce::Pss::Core::Services {
 	}
 
 	int InAppPurchaseDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 		InAppPurchaseCommandResults* iapResults = (InAppPurchaseCommandResults*)results;
 		if (result == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -269,7 +264,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 	int InAppPurchaseDialog::Open(CommonDialogArguments* cmdArg) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 		InAppPurchaseCommandArguments* iapArgs = (InAppPurchaseCommandArguments*)cmdArg;
 
@@ -291,16 +285,16 @@ namespace Sce::Pss::Core::Services {
 
 		switch (iapArgs->Command) {
 			case InAppPurchaseCommand::GetProductInfo:
-				Logger::Debug("InAppPurchaseCommand::GetProductInfo");
+				Logger::Debug("iapArgs->Command = InAppPurchaseCommand::GetProductInfo");
 				return this->doGetProductInfo(argVector);
 			case InAppPurchaseCommand::GetTicketInfo:
-				Logger::Debug("InAppPurchaseCommand::GetTicketInfo");
+				Logger::Debug("iapArgs->Command = InAppPurchaseCommand::GetTicketInfo");
 				return this->doGetTicketInfo(argVector);
 			case InAppPurchaseCommand::Purchase:
-				Logger::Debug("InAppPurchaseCommand::Purchase");
+				Logger::Debug("iapArgs->Command = InAppPurchaseCommand::Purchase");
 				return this->doPurchase(argVector);
 			case InAppPurchaseCommand::Consume:
-				Logger::Debug("InAppPurchaseCommand::Consume");
+				Logger::Debug("iapArgs->Command = InAppPurchaseCommand::Consume");
 				return this->doConsume(argVector);
 			default:
 				return PSM_ERROR_COMMON_ARGUMENT;

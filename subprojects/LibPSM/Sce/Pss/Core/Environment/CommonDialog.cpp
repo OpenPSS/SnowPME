@@ -50,7 +50,6 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int CommonDialog::Abort() {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		// seriouisly ..?
@@ -62,7 +61,6 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		Logger::Warn("Using default CommonDialog::Result implemenation.");
@@ -77,7 +75,6 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int CommonDialog::State(CommonDialogState* state) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;

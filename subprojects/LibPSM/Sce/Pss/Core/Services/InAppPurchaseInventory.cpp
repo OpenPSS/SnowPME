@@ -73,7 +73,6 @@ namespace Sce::Pss::Core::Services {
 	}
 
 	bool InAppPurchaseInventory::ticketFileExist() {
-		Logger::Debug(__FUNCTION__);
 
 		uint64_t handle = 0;
 		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH,  SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
@@ -88,7 +87,6 @@ namespace Sce::Pss::Core::Services {
 	// saves the ASCII file "/System/ticket.dat",
 	// which is the emulated inventory, (same as in PSM Dev)
 	int InAppPurchaseInventory::saveTicketFile() {
-		Logger::Debug(__FUNCTION__);
 
 		uint64_t handle = 0;
 		uint32_t _ = 0;
@@ -115,7 +113,6 @@ namespace Sce::Pss::Core::Services {
 		return err;
 	}
 	int InAppPurchaseInventory::loadTicketFile() {
-		Logger::Debug(__FUNCTION__);
 
 		uint64_t handle;
 		int err = ICall::PsmFileOpenSystem(TICKET_INVENTORY_FILE_PATH, SCE_PSS_FILE_FLAG_READONLY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
@@ -162,7 +159,6 @@ namespace Sce::Pss::Core::Services {
 	}
 
 	int InAppPurchaseInventory::SyncInventoryToDisk() {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		if (!this->loadedTicketFile && this->ticketFileExist()) {
@@ -173,7 +169,6 @@ namespace Sce::Pss::Core::Services {
 		return this->saveTicketFile();
 	}
 	InAppPurchaseProduct* InAppPurchaseInventory::GetItemByLabel(std::string label) {
-		Logger::Debug(__FUNCTION__);
 
 		for (InAppPurchaseProduct* product : this->productList) {
 			if (product->Label == label) return product;
@@ -182,7 +177,6 @@ namespace Sce::Pss::Core::Services {
 	}
 
 	InAppPurchaseProduct* InAppPurchaseInventory::GetItemByIndex(int index) {
-		Logger::Debug(__FUNCTION__);
 
 		if (index > this->GetProductCount()) return nullptr;
 		if (index < 0) return nullptr;
@@ -191,7 +185,6 @@ namespace Sce::Pss::Core::Services {
 	}
 	
 	size_t InAppPurchaseInventory::GetProductCount() {
-		Logger::Debug(__FUNCTION__);
 		return this->productList.size();
 	}
 
