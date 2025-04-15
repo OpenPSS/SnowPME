@@ -104,7 +104,7 @@ namespace Sce::Pss::Core::Environment {
 
 				// check an in app purchase dialog has not already been created.
 				if (InAppPurchaseDialog::GetUniqueObject() != nullptr) {
-					ExceptionInfo::AddMessage("InAppPurchaseDialog can have one instance at same time");
+					ExceptionInfo::AddMessage("InAppPurchaseDialog can have one instance at same time\n");
 					return PSM_ERROR_COMMON_INVALID_OPERATION;
 				}
 

@@ -2,6 +2,7 @@
 #include <LibShared.hpp>
 
 using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core {
 
@@ -22,14 +23,14 @@ namespace Sce::Pss::Core {
 
 	void ExceptionInfo::SetMessage(const std::string& str) {
 		Logger::Debug(__FUNCTION__);
-		Logger::Debug("ExceptionInfo::SetMessage(\"" + str + "\");");
+		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		ExceptionInfo::message = str + "\n";
 	}
 
 	void ExceptionInfo::SetMessage(const char* str) {
 		Logger::Debug(__FUNCTION__);
-		Logger::Debug("ExceptionInfo::SetMessage(\"" + std::string(str) + "\");");
+		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
 
 		if (str != nullptr) {
 			ExceptionInfo::message = std::string(str, strlen(str)) + "\n";
@@ -41,14 +42,14 @@ namespace Sce::Pss::Core {
 
 	void ExceptionInfo::SetParam(const std::string& str) {
 		Logger::Debug(__FUNCTION__);
-		Logger::Debug("ExceptionInfo::SetParam(\"" + str + "\");");
+		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		ExceptionInfo::param = str;
 	}
 
 	void ExceptionInfo::SetParam(const char* str) {
 		Logger::Debug(__FUNCTION__);
-		Logger::Debug("ExceptionInfo::SetParam(\"" + std::string(str) + "\");");
+		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
 
 		if (str != nullptr) {
 			ExceptionInfo::param = std::string(param, strlen(str));
@@ -60,11 +61,11 @@ namespace Sce::Pss::Core {
 
 	void ExceptionInfo::AddMessage(const std::string& str) {
 		Logger::Debug(__FUNCTION__);
-		Logger::Debug("ExceptionInfo::AddMessage(\"" + str + "\");");
+		Logger::Debug("ExceptionInfo::AddMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
 
 		if (ExceptionInfo::message.empty())
 			ExceptionInfo::message += "\n";
 
-		ExceptionInfo::message += (str + "\n");
+		ExceptionInfo::message += str;
 	}
 }

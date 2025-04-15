@@ -5,6 +5,7 @@
 #include <mono/mono.h>
 
 using namespace Shared::Debug;
+
 namespace Sce::Pss::Core {
 	int Error::GetExceptionInfoNative(MonoString* message, MonoString* param) {
 		Logger::Debug(__FUNCTION__);
@@ -16,7 +17,7 @@ namespace Sce::Pss::Core {
 		MonoString* monoStrParam = nullptr;
 
 		// add exception message;
-		if (exceptionParam[0] != 0x00) {
+		if (exceptionMessage[0] != 0x00) {
 			MonoDomain* domain = mono_domain_get();
 			monoStrMessage = mono_string_new(domain, exceptionMessage);
 		}

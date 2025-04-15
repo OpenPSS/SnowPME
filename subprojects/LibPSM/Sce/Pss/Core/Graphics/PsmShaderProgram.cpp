@@ -27,7 +27,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	#define MAIN_THREAD() \
 		if(!Thread::IsMainThread()) { \
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads."); \
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n"); \
 			return PSM_ERROR_COMMON_INVALID_OPERATION; \
 		}
 

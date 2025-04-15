@@ -235,7 +235,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Frame buffer is not available");
+			ExceptionInfo::AddMessage("Frame buffer is not available\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -753,7 +753,7 @@ namespace Sce::Pss::Core::Graphics {
 #endif
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
 	}

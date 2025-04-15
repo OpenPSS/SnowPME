@@ -709,7 +709,7 @@ namespace Sce::Pss::Core::Graphics {
 		translationScaleNormalize(streamCurrentFormat, &format, &trans, &scale);
 		
 		if (format == VertexFormat::None) {
-			ExceptionInfo::AddMessage("Incompatible format with vertex stream");
+			ExceptionInfo::AddMessage("Incompatible format with vertex stream\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 		// get the format size
@@ -723,13 +723,13 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		// check vertex array is big enough
 		if (vertexBufferSz < (formatVectorSize + offset + (count + from - 1) * stride)) {
-			ExceptionInfo::AddMessage("Vertex array is smaller than required");
+			ExceptionInfo::AddMessage("Vertex array is smaller than required\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 		// check the offset is properly aligned to the element size
 		int elmSz = GetFormatElementSize(format) - 1;
 		if ((elmSz & offset) != 0 || (elmSz & stride) != 0) {
-			ExceptionInfo::AddMessage("Offset or stride is not aligned properly");
+			ExceptionInfo::AddMessage("Offset or stride is not aligned properly\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
@@ -780,7 +780,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			int extensions = graphicsContext->CapsState->Extension;
 			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
-				ExceptionInfo::AddMessage("Unsupported extension on this device");
+				ExceptionInfo::AddMessage("Unsupported extension on this device\n");
 				this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 				return;
 			}
@@ -825,7 +825,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
 	}

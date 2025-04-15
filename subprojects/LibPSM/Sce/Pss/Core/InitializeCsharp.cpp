@@ -51,7 +51,7 @@ namespace Sce::Pss::Core {
 			return installFunctions(GraphicsFunctions);
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}

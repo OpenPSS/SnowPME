@@ -64,7 +64,7 @@ namespace Sce::Pss::Core::Graphics {
 		if (cgxSz < sizeof(CGXHeader) ||
 			cgxSz > CGX_MAX_LEN) {
 
-			ExceptionInfo::AddMessage("Unsupported shader file");
+			ExceptionInfo::AddMessage("Unsupported shader file\n");
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 			return;
 		}
@@ -84,13 +84,13 @@ namespace Sce::Pss::Core::Graphics {
 			this->cgVer == "0.95" &&
 			this->glesVer == "ES20")) {
 
-			ExceptionInfo::AddMessage("Unsupported shader file");
+			ExceptionInfo::AddMessage("Unsupported shader file\n");
 			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 			return;
 		}
 
 		if (!this->headerIsValid()) {
-			ExceptionInfo::AddMessage("Corrupted shader file");
+			ExceptionInfo::AddMessage("Corrupted shader file\n");
 			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 			return;
 		}
@@ -136,7 +136,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 		}
-		ExceptionInfo::AddMessage("Vertex shader not found");
+		ExceptionInfo::AddMessage("Vertex shader not found\n");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 		return "";
 	}
@@ -153,7 +153,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 		}
 
-		ExceptionInfo::AddMessage("Fragment shader not found");
+		ExceptionInfo::AddMessage("Fragment shader not found\n");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 		return "";
 	}

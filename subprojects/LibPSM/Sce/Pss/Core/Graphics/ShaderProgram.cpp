@@ -115,7 +115,7 @@ namespace Sce::Pss::Core::Graphics {
 			glDeleteProgram(this->GLReference);
 
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			ExceptionInfo::AddMessage("Compile failed; " + std::string(log));
+			Logger::Error("Shader compile failed; " + std::string(log));
 			return 0;
 		}
 

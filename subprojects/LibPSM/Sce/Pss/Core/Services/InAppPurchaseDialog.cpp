@@ -153,7 +153,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-
 	int InAppPurchaseDialog::doPurchase(std::vector<int> productIndicies) {
 		Logger::Debug(__FUNCTION__);
 		
@@ -163,21 +162,22 @@ namespace Sce::Pss::Core::Services {
 
 		// check GetProductInfo was run
 		if ((this->commandsRun & InAppPurchaseCommand::GetProductInfo) == InAppPurchaseCommand::None) {
-			ExceptionInfo::AddMessage("Product information is invalid or not retrieved");
+			ExceptionInfo::AddMessage("Product information is invalid or not retrieved\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 		// check GetTicketInfo was run
 		if ((this->commandsRun & InAppPurchaseCommand::GetTicketInfo) == InAppPurchaseCommand::None) {
-			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved");
+			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
 		// check product not already owned.
 		if (product->TicketType == InAppPurchaseTicketType::Normal && product->HaveTicket) {
-			ExceptionInfo::AddMessage("Product is already purchased");
+			ExceptionInfo::AddMessage("Product is already purchased\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
+		this->state.store(CommonDialogState::Running);
 		std::thread(&InAppPurchaseDialog::purchaseRequestThread, this, productIndicies).detach(); // start purchase thread
 
 		return PSM_ERROR_NO_ERROR;
@@ -190,26 +190,29 @@ namespace Sce::Pss::Core::Services {
 		InAppPurchaseProduct* product = this->inventory.GetItemByIndex(productIndicies.front());
 
 		if ((this->commandsRun & InAppPurchaseCommand::GetTicketInfo) == InAppPurchaseCommand::None) {
-			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved");
+			ExceptionInfo::AddMessage("Ticket information is invalid or not retrieved\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
 		if (product->TicketType != InAppPurchaseTicketType::Consumable) {
-			ExceptionInfo::AddMessage("Ticket type is not consumable");
+			ExceptionInfo::AddMessage("Ticket type is not consumable\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
 		if (product->RemainingCount <= 0) {
-			ExceptionInfo::AddMessage("Ticket is already consumed or not purchased");
+			ExceptionInfo::AddMessage("Ticket is already consumed or not purchased\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-
+		
+		this->state.store(CommonDialogState::Running);
 		std::thread(&InAppPurchaseDialog::consumeRequestThread, this, productIndicies).detach(); // start purchase thread
 
 		return PSM_ERROR_NO_ERROR;
 	}
 	int InAppPurchaseDialog::doGetTicketInfo(std::vector<int> productIndicies) {
 		Logger::Debug(__FUNCTION__);
+
+		this->state.store(CommonDialogState::Running);
 		std::thread(&InAppPurchaseDialog::ticketInfoRequestThread, this, productIndicies).detach(); // start ticket info thread
 
 		return PSM_ERROR_NO_ERROR;
@@ -218,6 +221,7 @@ namespace Sce::Pss::Core::Services {
 		Logger::Debug(__FUNCTION__);
 
 		if (productIndicies.size() <= MAX_PRODUCT_COUNT) {
+			this->state.store(CommonDialogState::Running);
 			std::thread(&InAppPurchaseDialog::productInfoRequestThread, this, productIndicies).detach(); // start product info thread
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -236,7 +240,6 @@ namespace Sce::Pss::Core::Services {
 			*result = this->result.load();
 			return PSM_ERROR_NO_ERROR;
 		}
-
 
 		if (iapResults != nullptr) {
 			iapResults->Command = this->command;
@@ -265,7 +268,6 @@ namespace Sce::Pss::Core::Services {
 		}
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
-
 	int InAppPurchaseDialog::Open(CommonDialogArguments* cmdArg) {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
@@ -285,7 +287,6 @@ namespace Sce::Pss::Core::Services {
 
 		// initalize the state of this dialog
 		this->command = iapArgs->Command;
-		this->state.store(CommonDialogState::Running);
 		this->result.store(CommonDialogResult::OK);
 
 		switch (iapArgs->Command) {
@@ -304,6 +305,8 @@ namespace Sce::Pss::Core::Services {
 			default:
 				return PSM_ERROR_COMMON_ARGUMENT;
 		}
+
+
 
 		return PSM_ERROR_NO_ERROR;
 	}
