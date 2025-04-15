@@ -183,7 +183,7 @@ namespace Sce::Pss::Core::Metadata {
 					READATTRIBUTE(std::string, "value", featureName);
 					this->FeatureList.push_back(featureName);
 				}
-				else if (parserMode != "product_list" && element->ElementName() == "name") {
+				else if (element->ElementName() == "name") {
 					Logger::Debug("skipping app.info entry: " + element->ElementName());
 				}
 				else {
