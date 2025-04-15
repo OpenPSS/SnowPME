@@ -66,15 +66,12 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	ConfigurationWindow::ConfigurationWindow() {
-		Logger::Debug(__FUNCTION__);
 		Config::ReloadConfig();
 	}
 	ConfigurationWindow::~ConfigurationWindow() {
-		Logger::Debug(__FUNCTION__);
 		this->onWindowClose();
 	}
 	void ConfigurationWindow::onWindowClose() {
-		Logger::Debug(__FUNCTION__);
 		Config::SaveConfig();
 	}
 }

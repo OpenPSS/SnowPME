@@ -178,7 +178,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	void GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
-		Logger::Debug(__FUNCTION__);
 		// check notifyFlag is ShaderProgram .
 		if ((notifyFlag & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::ShaderProgram");
@@ -300,8 +299,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
-		Logger::Debug(__FUNCTION__);
-
 		// check notify flag is Scissor, Viewport, Depthrange, ClearColor, ClearDepth, or ClearStencil
 		if ((notifyFlag & 
 			(GraphicsUpdate::Scissor |
@@ -505,7 +502,9 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	void GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
-		Logger::Debug(__FUNCTION__);
+		// TODO: add multi screen thing
+		Logger::Error("Tried to update multiple screens, but multiple screens are not yet Implemented.");
+
 	}
 
 

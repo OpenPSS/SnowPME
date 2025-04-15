@@ -16,13 +16,11 @@ namespace Sce::Pss::Core::Event {
 	PsmEventQueue PsmEventQueue::OutgoingEventQueue;
 
 	void PsmEventQueue::Push(PsmEvent* evt) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		this->evtQueue.push(evt);
 	}
 	PsmEvent* PsmEventQueue::Pop() {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		while (this->evtQueue.empty()) { return nullptr; }

@@ -47,7 +47,6 @@ namespace Sce::Pss::Core::Metadata {
 	}
 
 	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
-		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
 		this->element = elem;

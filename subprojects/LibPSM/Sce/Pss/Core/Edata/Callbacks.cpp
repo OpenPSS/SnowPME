@@ -12,8 +12,7 @@ using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Edata {
 	int Callbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
-		Logger::Debug(__FUNCTION__);
-		Logger::Debug("file: " + std::string(path));
+		Logger::Debug("edata open file: " + std::string(path));
 
 		if (handle != nullptr && type != nullptr) {
 			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::GetUniqueObject()->GameDrmProvider, nullptr);
@@ -32,8 +31,6 @@ namespace Sce::Pss::Core::Edata {
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 	int Callbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
-		Logger::Debug(__FUNCTION__);
-
 		if (Handles::IsValid(handle) && totalRead != nullptr) {
 			EdataStream* stream = Handles::Get<EdataStream>(handle);
 

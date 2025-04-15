@@ -13,7 +13,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void ImGuiWindow::onWindowClose() {
-		Logger::Debug(__FUNCTION__);
+
 	}
 
 	void ImGuiWindow::Show() {

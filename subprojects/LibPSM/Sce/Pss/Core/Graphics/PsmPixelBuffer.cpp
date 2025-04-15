@@ -10,10 +10,12 @@
 
 #include <LibShared.hpp>
 
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Threading;
+using namespace Shared::Debug;
+
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Threading;
-	using namespace Shared::Debug;
+
 
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
 		Logger::Debug(__FUNCTION__);

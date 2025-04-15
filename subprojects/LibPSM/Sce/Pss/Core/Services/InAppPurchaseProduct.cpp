@@ -15,17 +15,13 @@ using namespace Sce::Pss::Core::Mono;
 namespace Sce::Pss::Core::Services {
 
 	InAppPurchaseProduct::InAppPurchaseProduct() {
-		Logger::Debug(__FUNCTION__);
 	}
 
 	InAppPurchaseProduct::InAppPurchaseProduct(InAppPurchaseProductMonoData monoProductData) {
-		Logger::Debug(__FUNCTION__);
 		this->SetError(this->ImportMonoData(monoProductData));
 	}
 
 	int InAppPurchaseProduct::Purchase() {
-		Logger::Debug(__FUNCTION__);
-
 		switch (this->TicketType) {
 		case InAppPurchaseTicketType::Normal:
 			if (!this->HaveTicket) {
@@ -48,8 +44,6 @@ namespace Sce::Pss::Core::Services {
 		}
 	}
 	int InAppPurchaseProduct::Consume() {
-		Logger::Debug(__FUNCTION__);
-
 		if (this->TicketType == InAppPurchaseTicketType::Consumable) {
 			this->RemainingCount--;
 			this->ConsumedCount++;
@@ -59,8 +53,6 @@ namespace Sce::Pss::Core::Services {
 		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
 	int InAppPurchaseProduct::Reset() {
-		Logger::Debug(__FUNCTION__);
-
 		this->IssuedDate = 0;
 		this->ExpireDate = 0;
 
