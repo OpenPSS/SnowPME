@@ -16,6 +16,7 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 
+using namespace Shared;
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Services;
 using namespace Sce::Pss::Core::System;
@@ -52,7 +53,12 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug(__FUNCTION__);
 		LOCK_GUARD();
 
+		// seriouisly ..?
+		if (Config::TargetImplementation == RuntimeImplementation::Windows) return PSM_ERROR_NOT_SUPPORTED;
+
+		this->state.store(CommonDialogState::Finished);
 		this->result.store(CommonDialogResult::Aborted);
+
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {

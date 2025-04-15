@@ -9,6 +9,6 @@ namespace Sce::Pss::Core {
 
 	void ExceptionInfo::AddMessage(const std::string& message) {
 		Logger::Error("EXCEPTION OCCURED: " + message);
-		messages.push_back(message);
+		messages.push_back(message + "\n");
 	}
 }
