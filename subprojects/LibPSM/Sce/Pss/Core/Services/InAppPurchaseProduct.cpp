@@ -7,6 +7,7 @@
 #include <LibShared.hpp>
 #include <mono/mono.h>
 
+using namespace Shared;
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Timing;
 using namespace Sce::Pss::Core::Mono;
@@ -29,7 +30,12 @@ namespace Sce::Pss::Core::Services {
 		case InAppPurchaseTicketType::Normal:
 			if (!this->HaveTicket) {
 				this->ExpireDate = 0x0000000000000000ull;
-				this->IssuedDate = Time::scePssTimeGetMicroTickCount();
+	
+				if (Config::TargetImplementation == RuntimeImplementation::Windows)
+					this->IssuedDate = 0x0000000000000000ull;
+				else 
+					this->IssuedDate = Time::scePssTimeGetMicroTickCount();
+				
 				this->HaveTicket = true;
 				return PSM_ERROR_NO_ERROR;
 			}
