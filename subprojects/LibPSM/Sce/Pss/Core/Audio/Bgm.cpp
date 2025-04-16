@@ -19,7 +19,15 @@ using namespace Shared::Debug;
 namespace Sce::Pss::Core::Audio {
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
-			if (memcmp(this->audioData, "ID3", 3) == 0) {
+			char mp3Magic[0x2]  = { 0xFF, 0xFA };
+			char mp3Magic2[0x2] = { 0xFF, 0xFB };
+			char mp3Magic3[0x2] = { 0xFF, 0xFE };
+			char id3Magic[0x3]  = { 0x49, 0x44, 0x33 };
+
+			if (memcmp(this->audioData, mp3Magic, sizeof(mp3Magic)) == 0 || 
+				memcmp(this->audioData, mp3Magic2, sizeof(mp3Magic2)) == 0 ||
+				memcmp(this->audioData, mp3Magic3, sizeof(mp3Magic3)) == 0 ||
+				memcmp(this->audioData, id3Magic, sizeof(id3Magic)) == 0) {
 				return true;
 			}
 		}
@@ -90,7 +98,7 @@ namespace Sce::Pss::Core::Audio {
 
 	}
 
-	int Bgm::NewFromFilename(MonoString* filename, int * handle){
+	int Bgm::NewFromFilename(MonoString* filename, int* handle){
 		Logger::Debug(__FUNCTION__);
 
 		if (filename == nullptr || handle == nullptr)
