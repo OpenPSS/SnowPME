@@ -4,16 +4,17 @@
 #include <vector>
 #include <mutex>
 
+using namespace Shared::String;
 namespace Shared::Debug
 {
 	std::mutex Logger::logMutex;
 	void inline Logger::logMultiline(const std::string& channel, const std::string& msg) {
 		std::scoped_lock<std::mutex> lock(Logger::logMutex);
-		std::string fixedStr = String::StringUtil::Replace(msg, "\r", "");
-		std::vector<std::string> lines = String::StringUtil::Split(fixedStr, "\n");
+		std::string fixedStr = StringUtil::Replace(msg, "\r", "");
+		std::vector<std::string> lines = StringUtil::Split(fixedStr, "\n");
 
 		for (std::string line : lines) {
-			line = String::StringUtil::Replace(line, "\n", "");
+			line = StringUtil::Replace(line, "\n", "");
 
 			if (line.empty()) continue;
 
@@ -26,7 +27,6 @@ namespace Shared::Debug
 	}
 
 	void Logger::Debug(const std::string& msg) {
-		
 #ifdef _DEBUG
 		logMultiline("DEBUG", msg);
 #endif

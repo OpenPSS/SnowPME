@@ -41,7 +41,6 @@ namespace Sce::Pss::Core::Graphics {
 
 	int Texture2D::LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, PixelFormat format) {
 		Logger::Debug(__FUNCTION__);
-		LOCK_GUARD();
 
 		int err;
 		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();

@@ -41,7 +41,7 @@ namespace Sce::Pss::Core::Io {
 			if(psmDrm != nullptr)
 				str = new EdataStream(psseListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
 
-			if (str->GetError() == PSM_ERROR_NOT_FOUND) { // if that not exist, open edata.list
+			if (str == nullptr || str->GetError() == PSM_ERROR_NOT_FOUND) { // if that not exist, open edata.list
 				if(str != nullptr)
 					delete str;
 

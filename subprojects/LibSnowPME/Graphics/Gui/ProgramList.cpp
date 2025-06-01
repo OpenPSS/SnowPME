@@ -34,9 +34,9 @@ namespace SnowPME::Graphics::Gui {
 
 					if (std::filesystem::exists(appInfoPath)) {
 						AppInfo appInfo(new CXMLElement(appInfoPath, "PSMA"));
-						std::string* shortName = appInfo.GetLocaleValue(appInfo.ShortNames, appInfo.DefaultLocale);
-						if (shortName != nullptr) {
-							this->addMenuItem(*shortName, programPath); 
+						std::string shortName = appInfo.GetLocaleValue(appInfo.Names, Config::SystemLanguage);
+						if (shortName != "") {
+							this->addMenuItem(shortName, programPath);
 							continue;
 						}
 					}

@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Metadata {
 	public:
 		AppInfo(LibCXML::CXMLElement* elem);
 		~AppInfo();
-		std::string* GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale);
+		std::string GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale);
 
 		// <application>
 		std::string DefaultLocale;

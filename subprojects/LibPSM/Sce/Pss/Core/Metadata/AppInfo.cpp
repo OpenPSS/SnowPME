@@ -46,13 +46,21 @@ namespace Sce::Pss::Core::Metadata {
 		return false;
 	}
 
-	std::string* AppInfo::GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale) {
+	std::string AppInfo::GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale) {
+		if (localeInfos.empty()) return "";
+
 		for (LocaleInfo localeInfo : localeInfos) {
 			if (localeInfo.Locale == locale) {
-				return &localeInfo.Name;
+				return localeInfo.Name;
 			}
 		}
-		return nullptr;
+
+		std::string name = AppInfo::GetLocaleValue(localeInfos, this->DefaultLocale);
+		if (name.empty()) {
+			return localeInfos.at(0).Name;
+		}
+
+		return name;
 	}
 
 	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
@@ -62,7 +70,7 @@ namespace Sce::Pss::Core::Metadata {
 		std::string parserMode = "";
 		ProductInfo* productInfo = nullptr;
 
-		if (elem != nullptr) {
+		if (this->element != nullptr) {
 			do {
 				if (parserMode != "product_list" && element->ElementName() == "name") parserMode = element->ElementName();
 				else if (element->ElementName() == "short_name") parserMode = element->ElementName();
@@ -198,7 +206,7 @@ namespace Sce::Pss::Core::Metadata {
 					Logger::Warn("app.info contains unknown element name: " + element->ElementName());
 				}
 
-			}while (this->nextElement());
+			} while (this->nextElement());
 
 		}
 

@@ -141,6 +141,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			if (uniform.Name.find(']') != std::string::npos) {
 				Logger::Error(uniform.Name + " has a [], theres some special processing for these, but i dunno what it is.");
+				static_assert(true);
 			}
 
 			this->Uniforms.push_back(uniform);
@@ -165,13 +166,14 @@ namespace Sce::Pss::Core::Graphics {
 
 			if (attribute.Name.find(']') != std::string::npos) {
 				Logger::Error(attribute.Name + "  has a [], theres some special processing for these, but i dunno what it is.");
+				static_assert(true);
 			}
 
 			this->Attributes.push_back(attribute);
 		}
 		
-		//TODO: temp
-		printf("%s\n", this->vertexSrc.c_str());
+		Logger::Debug("CGX : fragment source code : \n" + this->vertexSrc);
+		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
 
 		return this->GLReference;
 	}
@@ -256,11 +258,6 @@ namespace Sce::Pss::Core::Graphics {
 		this->vertexCgxLen = vertexShaderSz;
 		this->fragmentCgxLen = fragmentShaderSz;
 
-		// ignore, this is for debugger breakpoint
-		if(fragmentShaderSz == 0x224) {
-			printf("a");
-		}
-
 		this->GLReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 
 	}
@@ -334,6 +331,7 @@ namespace Sce::Pss::Core::Graphics {
 			case GL_UNSIGNED_BYTE:
 			case GL_SHORT:
 				Logger::Error("GL Params is not implemented type; " + std::to_string(params));
+				static_assert(true);
 				return 0; // TODO
 			case GL_FLOAT:
 				*attributeType = ShaderAttributeType::Float;
