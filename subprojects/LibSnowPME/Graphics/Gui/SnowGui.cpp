@@ -33,6 +33,10 @@ namespace SnowPME::Graphics::Gui {
 				this->done = true;
 		}
 
+		if (!ImGuiWindow::HasOpenWindows()) {
+			this->done = true;
+		}
+
 	}
 
 	void SnowGui::renderGui() {

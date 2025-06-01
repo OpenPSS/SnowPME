@@ -52,17 +52,18 @@ namespace SnowPME {
 				this->gui = new Graphics::Gui::SnowGui(this->window);
 
 				Logger::Debug("Initalizing main window.");
-				Graphics::Gui::MainWindow* mainWindow = new Graphics::Gui::MainWindow();
+				Graphics::Gui::ProgramSelectWindow* mainWindow = new Graphics::Gui::ProgramSelectWindow();
 				mainWindow->Register();
-
+				
 				Logger::Debug("Running GUI main loop.");
 				this->gui->RunMainLoop();
+
 			}
 		}
 	}
 
 	Program::~Program() {
-		delete this->window;
-		delete this->gui;
+		if (this->window != nullptr) delete this->window;
+		if(this->gui != nullptr) delete this->gui;
 	}
 }

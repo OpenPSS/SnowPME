@@ -1,8 +1,7 @@
 #ifndef SNOW_PME_SNOWGUI_H
 #define SNOW_PME_SNOWGUI_H 1
-
 #include <Graphics/Window.hpp>
-#include <Graphics/Gui/MainWindow.hpp>
+
 namespace SnowPME::Graphics::Gui {
 	class SnowGui {
 	private:

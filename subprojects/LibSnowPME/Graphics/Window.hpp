@@ -8,6 +8,7 @@
 namespace SnowPME::Graphics {
 	class Window {
 	private:
+		static Window* mainWindow;
 		SDL_Window* sdlWindow = nullptr;
 		SDL_GLContext glCtx = nullptr;
 		std::string openGlVersion;
@@ -24,11 +25,13 @@ namespace SnowPME::Graphics {
 		void MakeCurrent();
 		bool IsMinimized();
 		bool ShouldClose();
-		bool MessageBox(const std::string& message, const std::string&  caption);
+		bool ShowMessageBox(const std::string& message, const std::string&  caption);
 
 		SDL_Window* GetSdlWindow();
 		SDL_GLContext GetGlCtx();
 		
+		static Window* GetMainWindow();
+
 		~Window();
 	};
 }

@@ -22,7 +22,7 @@ namespace SnowPME::Callback {
 
 	bool WindowImpl::YesNoMessageBox(const char* message, const char* caption) {
 		WindowImpl::Impl::ErrorOnNotInit();
-		return WindowImpl::mainWindow->MessageBox(message, caption);
+		return WindowImpl::mainWindow->ShowMessageBox(message, caption);
 	}
 
 	bool WindowImpl::WasMinimized() {

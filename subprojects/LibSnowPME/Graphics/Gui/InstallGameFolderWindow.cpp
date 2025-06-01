@@ -9,32 +9,36 @@ namespace SnowPME::Graphics::Gui {
 
 	void InstallGameFolderWindow::installGame() {
 		std::string rootDirectory = this->gameFile;
+		std::string applicationFolder = Path::Combine(rootDirectory, "Application");
+		if(!std::filesystem::exists(applicationFolder)) applicationFolder = Path::Combine(Path::Combine(rootDirectory, "RO"), "Application");
 		std::string installDirectory = Shared::Config::PsmApps;
 
-		// first calculate how many files
-		int total = 0;
-		std::filesystem::recursive_directory_iterator iter(rootDirectory);		
-		for (std::filesystem::directory_entry ent : iter) total++;
+		if (std::filesystem::exists(applicationFolder)) {
+			// first calculate how many files
+			int total = 0;
 
-		// reset the progress bar
-		this->progress.Reset(total);
-		this->progress.SetShowProgress(true);
-
-		// do the actual copy of files to new directory
-		iter = std::filesystem::recursive_directory_iterator(rootDirectory);
-		for (std::filesystem::directory_entry ent : iter) {
-			std::string srcFile = ent.path().string().substr(rootDirectory.length());
-			std::string dstFile = Path::Combine(installDirectory, srcFile);
-
-			if (ent.is_directory()) {
-				std::filesystem::create_directories(dstFile);
-			}
-			else if(ent.is_regular_file()) {
-				std::filesystem::copy_file(srcFile, dstFile);
+			for (const std::filesystem::directory_entry& ent : std::filesystem::recursive_directory_iterator(rootDirectory)) { 
+				total++;
 			}
 
-			this->progress.Increment();
-		}
+			// reset the progress bar
+			this->progress.Reset(total);
+			this->progress.SetShowProgress(true);
 
+			// do the actual copy of files to new directory
+			for (const std::filesystem::directory_entry& ent : std::filesystem::recursive_directory_iterator(rootDirectory)) {
+				std::string relFile = ent.path().string().substr(std::filesystem::path(rootDirectory).parent_path().string().length());
+				std::string dstFile = Path::Combine(installDirectory, relFile);
+
+				if (ent.is_directory()) {
+					std::filesystem::create_directories(dstFile);
+				}
+				else if (ent.is_regular_file()) {
+					std::filesystem::copy_file(ent.path().string(), dstFile);
+				}
+
+				this->progress.Increment();
+			}
+		}		
 	}
 }

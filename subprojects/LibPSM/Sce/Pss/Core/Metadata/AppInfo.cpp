@@ -46,6 +46,15 @@ namespace Sce::Pss::Core::Metadata {
 		return false;
 	}
 
+	std::string* AppInfo::GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale) {
+		for (LocaleInfo localeInfo : localeInfos) {
+			if (localeInfo.Locale == locale) {
+				return &localeInfo.Name;
+			}
+		}
+		return nullptr;
+	}
+
 	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
 		LOCK_GUARD();
 

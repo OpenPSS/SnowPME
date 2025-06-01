@@ -17,6 +17,7 @@ using namespace Sce::Pss::Core::Memory;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Audio {
+
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
 			char mp3Magic[0x2]  = { 0xFF, 0xFA };

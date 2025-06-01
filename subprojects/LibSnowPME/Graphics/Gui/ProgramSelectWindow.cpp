@@ -1,14 +1,17 @@
 #include <Graphics/Gui/SnowGui.hpp>
-#include <Graphics/Gui/MainWindow.hpp>
+#include <Graphics/Gui/ProgramSelectWindow.hpp>
 #include <Graphics/Gui/RuntimeLibsWindow.hpp>
 #include <Graphics/Gui/InstallGamePackageWindow.hpp>
 #include <Graphics/Gui/InstallGameFolderWindow.hpp>
 #include <Graphics/Gui/ConfigurationWindow.hpp>
 #include <LibImGui.hpp>
+#include <LibShared.hpp>
+#include <Runtime/Application.hpp>
+
+using namespace SnowPME::Runtime;
 
 namespace SnowPME::Graphics::Gui {
-
-	void MainWindow::createMenuBar() {
+	void ProgramSelectWindow::createMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Install")) {
 				if (ImGui::MenuItem("Install Runtime Package")) {
@@ -46,14 +49,25 @@ namespace SnowPME::Graphics::Gui {
 			ImGui::EndMainMenuBar();
 		}
 	}
-	void MainWindow::renderWindow() {
+
+	void ProgramSelectWindow::updateWindow() {
+		if (this->Programs.HasSelectedProgram()) {
+			ProgramEntry entry = this->Programs.SelectedProgram();
+			this->Close();
+
+			Application::LoadApplication(entry.programPath, Window::GetMainWindow());
+		}
+
+	}
+
+	void ProgramSelectWindow::renderWindow() {
 		this->createMenuBar();
 
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
 
 		ImGui::Begin(this->createWindowTitle("Game Selector").c_str() , &this->windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing);
-		ImGui::Text("No games installed.");
+		Programs.RenderProgramList();
 		ImGui::End();
 	}
 

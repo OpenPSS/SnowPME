@@ -7,7 +7,7 @@
 
 // windows
 #include <Graphics/Gui/ImGuiWindow.hpp>
-#include <Graphics/Gui/MainWindow.hpp>
+#include <Graphics/Gui/ProgramSelectWindow.hpp>
 #include <Graphics/Gui/MsgBox.hpp>
 #include <Graphics/Gui/DemoWindow.hpp>
 

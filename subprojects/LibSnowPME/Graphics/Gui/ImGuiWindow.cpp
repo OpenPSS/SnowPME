@@ -1,9 +1,11 @@
 #include <Graphics/Gui/ImGuiWindow.hpp>
 #include <LibImGui.hpp>
-#include <mutex>
 #include <LibShared.hpp>
+#include <mutex>
+
 using namespace Shared::String;
 using namespace Shared::Debug;
+
 namespace SnowPME::Graphics::Gui {
 
 	std::list<ImGuiWindow*> ImGuiWindow::registeredWindows = std::list<ImGuiWindow*>();
@@ -78,6 +80,10 @@ namespace SnowPME::Graphics::Gui {
 	void ImGuiWindow::UnregisterWindow(ImGuiWindow* registeredWindow) {
 		if (registeredWindow != nullptr)
 			ImGuiWindow::registeredWindows.remove(registeredWindow);
+	}
+
+	bool ImGuiWindow::HasOpenWindows() {
+		return !ImGuiWindow::registeredWindows.empty();
 	}
 
 	void ImGuiWindow::ProcessWindows() {

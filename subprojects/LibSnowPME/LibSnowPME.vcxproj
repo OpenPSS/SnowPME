@@ -15,10 +15,11 @@
     <ClInclude Include="Callback\WindowImpl.hpp" />
     <ClInclude Include="Graphics\Gui\ConfigurationWindow.hpp" />
     <ClInclude Include="Graphics\Gui\DemoWindow.hpp" />
+    <ClInclude Include="Graphics\Gui\ProgramList.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGameFolderWindow.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGamePackageWindow.hpp" />
     <ClInclude Include="Graphics\Gui\InstallGameWindow.hpp" />
-    <ClInclude Include="Graphics\Gui\MainWindow.hpp" />
+    <ClInclude Include="Graphics\Gui\ProgramSelectWindow.hpp" />
     <ClInclude Include="Graphics\Gui\MsgBox.hpp" />
     <ClInclude Include="Graphics\Gui\RuntimeLibsWindow.hpp" />
     <ClInclude Include="Graphics\Gui\SnowGui.hpp" />
@@ -36,8 +37,9 @@
     <ClCompile Include="Graphics\Gui\InstallGameFolderWindow.cpp" />
     <ClCompile Include="Graphics\Gui\InstallGamePackageWindow.cpp" />
     <ClCompile Include="Graphics\Gui\InstallGameWindow.cpp" />
-    <ClCompile Include="Graphics\Gui\MainWindow.cpp" />
+    <ClCompile Include="Graphics\Gui\ProgramSelectWindow.cpp" />
     <ClCompile Include="Graphics\Gui\MsgBox.cpp" />
+    <ClCompile Include="Graphics\Gui\ProgramList.cpp" />
     <ClCompile Include="Graphics\Gui\RuntimeLibsWindow.cpp" />
     <ClCompile Include="Graphics\Gui\SnowGui.cpp" />
     <ClCompile Include="Graphics\Window.cpp" />

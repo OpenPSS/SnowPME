@@ -31,6 +31,7 @@ namespace SnowPME::Graphics::Gui {
 		static void ProcessWindows();
 		static void RegisterWindow(ImGuiWindow* windowToRegister);
 		static void UnregisterWindow(ImGuiWindow* registeredWindow);
+		static bool HasOpenWindows();
 	};
 
 }

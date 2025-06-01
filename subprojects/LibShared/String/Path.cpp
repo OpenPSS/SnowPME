@@ -18,9 +18,9 @@ namespace Shared::String {
 
 	std::string Path::Combine(const std::string& path, const std::string& newPart) {
 		if (path == "")
-			return newPart;
+			return ChangeSlashesToPsmStyle(newPart);
 
-		return path + PSM_PATH_SEPERATOR + newPart; // Append /newPart
+		return ChangeSlashesToPsmStyle(path + PSM_PATH_SEPERATOR + newPart); // Append /newPart
 	}
 
 	std::string Path::GetFilename(const std::string& fullPath) {
