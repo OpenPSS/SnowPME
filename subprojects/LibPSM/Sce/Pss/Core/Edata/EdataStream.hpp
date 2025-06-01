@@ -9,6 +9,10 @@
 #include <fstream>
 #include <mono/mono.h>
 
+#define PSSE_BLOCK_SIZE (0x8000)
+#define PSSE_SIGNATURE_BLOCK_SIZE (0x80000)
+#define PSSE_SIGNATURE_SIZE (0x400)
+
 namespace Sce::Pss::Core::Edata {
 	class EdataStream : public PsmObject<EdataStream> {
 	private:
@@ -40,10 +44,7 @@ namespace Sce::Pss::Core::Edata {
 		uint64_t absFileOffsetToDecryptedFileOffset(uint64_t offset);
 		uint64_t getBlockAbsFileOffset(uint64_t blockNo);
 		uint64_t getBlockDecryptedFileOffset(uint64_t blockNo);
-
 		uint64_t getBlockIdForOffset(uint64_t offset);
-
-		
 
 	public:
 

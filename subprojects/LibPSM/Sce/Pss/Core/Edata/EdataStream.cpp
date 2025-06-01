@@ -18,11 +18,6 @@ using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Edata {
-
-	static const int PsseBlockSize = 0x8000;
-	static const int PsseSignatureBlockSize = 0x80000;
-	static const int PsseSignatureSize = 0x400;
-
 	void EdataStream::rollIv(uint64_t blockNo, uint8_t blockIv[0x10]) {
 		memset(blockIv, 0x00, sizeof(EdataStream::fileIv));
 		memcpy(blockIv, &blockNo, sizeof(uint64_t));
@@ -31,13 +26,13 @@ namespace Sce::Pss::Core::Edata {
 	}
 
 	uint64_t EdataStream::getBlockAbsFileOffset(uint64_t blockNo) {
-		uint64_t blockPosition = blockNo * PsseBlockSize;
+		uint64_t blockPosition = blockNo * PSSE_BLOCK_SIZE;
 
 		if (blockNo == 0) {
 			blockPosition = sizeof(EdataHeader);
 		}
-		else if (blockPosition % PsseSignatureBlockSize == 0) {
-			blockPosition += PsseSignatureSize;
+		else if (blockPosition % PSSE_SIGNATURE_BLOCK_SIZE == 0) {
+			blockPosition += PSSE_SIGNATURE_SIZE;
 		}
 
 		return blockPosition;
@@ -49,10 +44,10 @@ namespace Sce::Pss::Core::Edata {
 
 	uint64_t EdataStream::absFileOffsetToDecryptedFileOffset(uint64_t offset) {
 
-		uint64_t totalSignatures = (offset / PsseSignatureBlockSize);
+		uint64_t totalSignatures = (offset / PSSE_SIGNATURE_BLOCK_SIZE);
 
 		uint64_t decryptedOffset = offset;
-		decryptedOffset -= (PsseSignatureSize * totalSignatures);
+		decryptedOffset -= (PSSE_SIGNATURE_SIZE * totalSignatures);
 		decryptedOffset -= sizeof(EdataHeader);
 
 		return decryptedOffset;
@@ -61,16 +56,16 @@ namespace Sce::Pss::Core::Edata {
 		uint64_t absfileLocation = offset;
 		absfileLocation += sizeof(EdataHeader);
 
-		uint64_t totalSignatures = (absfileLocation / PsseSignatureBlockSize);
-		absfileLocation += (PsseSignatureSize * totalSignatures);
+		uint64_t totalSignatures = (absfileLocation / PSSE_SIGNATURE_BLOCK_SIZE);
+		absfileLocation += (PSSE_SIGNATURE_SIZE * totalSignatures);
 
 		return absfileLocation;
 	}
 
 	uint64_t EdataStream::getBlockIdForOffset(uint64_t offset) {
 		uint64_t absFileOffset = this->decryptedOffsetToAbsFileOffset(offset);
-		absFileOffset -= (absFileOffset % PsseBlockSize);
-		return absFileOffset / PsseBlockSize;
+		absFileOffset -= (absFileOffset % PSSE_BLOCK_SIZE);
+		return absFileOffset / PSSE_BLOCK_SIZE;
 	}
 
 	void EdataStream::decryptBlock(uint64_t blockNo) {
@@ -85,8 +80,8 @@ namespace Sce::Pss::Core::Edata {
 
 		this->block = blockNo;
 
-		uint64_t blockPosition = blockNo * PsseBlockSize;
-		size_t totalRead = PsseBlockSize;
+		uint64_t blockPosition = blockNo * PSSE_BLOCK_SIZE;
+		size_t totalRead = PSSE_BLOCK_SIZE;
 		uint64_t trimTo = totalRead;
 
 		// Handle special processing ...
@@ -95,14 +90,14 @@ namespace Sce::Pss::Core::Edata {
 			totalRead -= sizeof(EdataHeader);
 			trimTo = totalRead;
 		}
-		else if (blockPosition % PsseSignatureBlockSize == 0) {
-			blockPosition += PsseSignatureSize;
-			totalRead -= PsseSignatureSize;
+		else if (blockPosition % PSSE_SIGNATURE_BLOCK_SIZE == 0) {
+			blockPosition += PSSE_SIGNATURE_SIZE;
+			totalRead -= PSSE_SIGNATURE_SIZE;
 			trimTo = totalRead;
 		}
 
 		// total amount of bytes read so far
-		uint64_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PsseSignatureSize * (blockPosition / PsseSignatureBlockSize)));
+		uint64_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PSSE_SIGNATURE_SIZE * (blockPosition / PSSE_SIGNATURE_BLOCK_SIZE)));
 
 		if (blockNo >= this->totalBlocks) { // Is this the last block?
 			totalRead = this->header.FileSize - readAmount;
@@ -160,7 +155,7 @@ namespace Sce::Pss::Core::Edata {
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
-			this->totalBlocks = (this->totalFileSize / PsseBlockSize);
+			this->totalBlocks = (this->totalFileSize / PSSE_BLOCK_SIZE);
 		}
 		this->osHandle = new std::fstream(file, mode);
 
