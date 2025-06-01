@@ -115,7 +115,7 @@ namespace Sce::Pss::Core::Audio {
 		mono_free(fname);
 
 		Bgm* bgm = new Bgm(audioFileName);
-		ReturnErrorable(bgm);
+		RETURN_ERRORABLE(bgm);
 		*handle = bgm->Handle;
 
 		return PSM_ERROR_NO_ERROR;
@@ -135,7 +135,7 @@ namespace Sce::Pss::Core::Audio {
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);
 			Bgm* bgm = new Bgm(musicData, fSz);
-			ReturnErrorable(bgm);
+			RETURN_ERRORABLE(bgm);
 			*handle = bgm->Handle;
 
 			return PSM_ERROR_NO_ERROR;

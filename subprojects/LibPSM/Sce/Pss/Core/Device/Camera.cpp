@@ -3,60 +3,60 @@
 
 namespace Sce::Pss::Core::Device {
 	int Camera::GetNumberOfCamerasNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetCameraFacingNative(int cameraId, CameraFacing* info) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetSupportedPreviewSizeCountNative(int cameraId){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetSupportedPreviewSizeNative(int cameraId, int sizeId, CameraSize *size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetSupportedPictureSizeCountNative(int cameraId){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetSupportedPictureSizeNative(int cameraId, int sizeId, CameraSize *size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::NewFromIndex(int cameraId, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::ReleaseNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetCameraStateNative(int handle, CameraState *state){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::HasTakenPictureNative(int handle, PictureState *taken){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::OpenNative(int handle, CameraSize size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::CloseNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetPreviewSizeNative(int handle, CameraSize *size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetPreviewImageFormatNative(int handle, CameraImageFormat *format){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::StartNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::StopNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::ReadNative(int handle, uint8_t* frameBuffer, int bufferSize, long * frameCount){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::TakePictureNative(int handle, CameraSize size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Camera::GetPictureFilenameNative(int handle, std::string *filename){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

@@ -4,6 +4,6 @@
 
 namespace Sce::Pss::Core::Input {
 	int GamePad::GetDataNative(int deviceIndex, GamePadData* gamePadData) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

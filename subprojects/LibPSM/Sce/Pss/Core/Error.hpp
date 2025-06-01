@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+
 #include <mono/mono.h>
 
 enum PsmError : unsigned int {
@@ -80,21 +81,17 @@ enum PsmError : unsigned int {
 };
 
 #ifndef _DEBUG
-#define _BODY_UNIMPLEMENTED(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
 #else
-#define _BODY_UNIMPLEMENTED(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR;
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR;
 #endif
 
-#define UnimplementedMsg(msg) do { \
-							_BODY_UNIMPLEMENTED(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
+#define UNIMPLEMENTED_MSG(msg) do { \
+							_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
 						} while (0)
 
-#define Unimplemented()	UnimplementedMsg("")
+#define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
 
-#define Assert(cond, msg) do { \
-							Shared::Debug::Logger::Error("ASSERT: "+#cond+" : "msg); \
-							static_assert(cond); \
-						} while(0);
 
 namespace Sce::Pss::Core {
 	class Error {

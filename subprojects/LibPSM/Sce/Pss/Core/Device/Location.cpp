@@ -3,15 +3,15 @@
 
 namespace Sce::Pss::Core::Device {
 	int Location::StartNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Location::StopNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Location::GetDataNative(LocationData * locationData){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Location::GetEnableDevicesNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

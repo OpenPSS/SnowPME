@@ -76,7 +76,7 @@ namespace Sce::Pss::Core::Io {
 	int Sandbox::readLicenseData() {
 		if (this->PathExist(FakeRifLocation, true)) {
 			this->GameDrmProvider = new PsmDrm(FakeRifLocation);
-			ReturnErrorable(this->GameDrmProvider);
+			RETURN_ERRORABLE(this->GameDrmProvider);
 		}
 		else {
 			Logger::Warn("No " + FakeRifLocation + " found.");

@@ -3,21 +3,21 @@
 
 namespace Sce::Pss::Core::Device {
 	int PhotoImportDialog::NewNative(int type, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PhotoImportDialog::ReleaseNative(int type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PhotoImportDialog::OpenNative(int type, int handle, DialogArguments *dialogArguments){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PhotoImportDialog::AbortNative(int type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PhotoImportDialog::GetState(int type, int handle, CommonDialogState *commonDialogState){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PhotoImportDialog::GetResult(int type, int handle, CommonDialogResult *commonDialogState, DialogResults *dialogResults){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

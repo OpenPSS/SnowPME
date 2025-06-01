@@ -3,15 +3,15 @@
 
 namespace Sce::Pss::Core::Audio {
 	int Sound::NewFromFilename(MonoString* filename, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Sound::NewFromFileImage(MonoArray* fileImage, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Sound::ReleaseNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Sound::CreatePlayerNative(int handle, int *playerHandle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

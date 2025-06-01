@@ -23,13 +23,13 @@ namespace Sce::Pss::Core::Graphics {
 			if (GraphicsContext::GetUniqueObject() != nullptr) {
 				switch (type) {
 				case PixelBufferType::Texture2D:
-					UnimplementedMsg("PixelBufferType::Texture2D");
+					UNIMPLEMENTED_MSG("PixelBufferType::Texture2D");
 				case PixelBufferType::TextureCube:
-					UnimplementedMsg("PixelBufferType::TextureCube");
+					UNIMPLEMENTED_MSG("PixelBufferType::TextureCube");
 				case PixelBufferType::ColorBuffer:
-					UnimplementedMsg("PixelBufferType::ColorBuffer");
+					UNIMPLEMENTED_MSG("PixelBufferType::ColorBuffer");
 				case PixelBufferType::DepthBuffer:
-					UnimplementedMsg("PixelBufferType::DepthBuffer");
+					UNIMPLEMENTED_MSG("PixelBufferType::DepthBuffer");
 				}
 				return PSM_ERROR_COMMON_ARGUMENT;
 			}
@@ -59,7 +59,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmPixelBuffer::AddRef(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
 		Logger::Debug(__FUNCTION__);

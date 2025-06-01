@@ -3,6 +3,6 @@
 
 namespace Sce::Pss::Core::Input {
 	int Motion::GetDataNative(int deviceIndex, MotionData *gamePadData){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

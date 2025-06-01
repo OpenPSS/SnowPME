@@ -17,7 +17,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	GLenum TextureCube::GlTextureType() {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int TextureCube::ActiveStateChanged(bool state) {

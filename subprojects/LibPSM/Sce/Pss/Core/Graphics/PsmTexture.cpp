@@ -35,12 +35,12 @@ namespace Sce::Pss::Core::Graphics {
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
 				tex = new Texture2D(&filename, mipmap, format);
-				ReturnErrorable(tex);
+				RETURN_ERRORABLE(tex);
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
 				tex = new TextureCube(&filename, mipmap, format);
-				ReturnErrorable(tex);
+				RETURN_ERRORABLE(tex);
 			}
 			
 			if (tex != nullptr) {
@@ -57,21 +57,21 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmTexture::FromImage(PixelBufferType type, MonoArray* fileImage, bool mipmap, PixelFormat format, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmTexture::SetFilter(int handle, TextureFilter* filter) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmTexture::SetWrap(int handle, TextureWrap* filter) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmTexture::SetMaxAnisotropy(int handle, float anisotropy) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmTexture::SetPixels(int handle, int level, TextureCubeFace cubeFace, int* pixels, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmTexture::GenerateMipmap(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

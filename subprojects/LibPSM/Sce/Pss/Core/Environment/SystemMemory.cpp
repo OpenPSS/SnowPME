@@ -3,6 +3,6 @@
 
 namespace Sce::Pss::Core::Environment {
 	int SystemMemory::GetMemoryUsage(bool details){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

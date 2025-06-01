@@ -3,21 +3,21 @@
 
 namespace Sce::Pss::Core::Environment {
 	int TextInputDialog::NewNative(CommonDialogType type, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int TextInputDialog::ReleaseNative(CommonDialogType type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int TextInputDialog::OpenNative(CommonDialogType type, int handle, Arguments *arguments){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int TextInputDialog::AbortNative(CommonDialogType type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int TextInputDialog::GetState(CommonDialogType type, int handle, CommonDialogState *state){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int TextInputDialog::GetResult(CommonDialogType type, int handle, CommonDialogResult *result, Results *results){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

@@ -3,21 +3,21 @@
 
 namespace Sce::Pss::Core::Device {
 	int CameraImportDialog::NewNative(int type, int *handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int CameraImportDialog::ReleaseNative(int type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int CameraImportDialog::OpenNative(int type, int handle, DialogArguments *dialogArguments){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int CameraImportDialog::AbortNative(int type, int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int CameraImportDialog::GetState(int type, int handle, CommonDialogState* commonDialogState){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int CameraImportDialog::GetResult(int type, int handle, CommonDialogResult* commonDialogResult, DialogResults* dialogResults){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

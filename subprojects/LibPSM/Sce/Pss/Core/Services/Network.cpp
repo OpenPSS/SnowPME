@@ -3,27 +3,27 @@
 
 namespace Sce::Pss::Core::Services {
 	int Network::CheckStateNative(uint32_t* state){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::GetOnlineIdNative(std::string* id) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::GetAccountIdNative(unsigned long* id){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::SetWebRequestDelegate(uintptr_t handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::SetAuthServer(bool useAuth){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::GetAuthTicketDataNative(std::string* data) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::ResetAuthTicketNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Network::SetAppIdNative(std::string appId){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

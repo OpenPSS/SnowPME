@@ -8,18 +8,18 @@ using namespace Shared::Debug;
 namespace Sce::Pss::Core::Graphics {
 
 	int PsmFrameBuffer::Create(int *result){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmFrameBuffer::Delete(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmFrameBuffer::AddRef(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmFrameBuffer::SetColorTarget(int handle, int colorBuffer, int level, TextureCubeFace cubeFace, int *result){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmFrameBuffer::SetDepthTarget(int handle, int depthBuffer, int level, TextureCubeFace cubeFace, int *result){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

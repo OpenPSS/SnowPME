@@ -3,57 +3,57 @@
 
 namespace Sce::Pss::Core::Imaging {
 	int Image::NewFromFilename(std::string filename, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::NewFromFileImage(uint8_t* fileImage, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::NewFromModeSizeColor(ImageMode mode, ImageSize* size, ImageColor* color, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::NewFromModeSizeBuffer(ImageMode mode, ImageSize* size, uint8_t* buffer, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::AddRefNative(int handle){
-		Unimplemented();;
+		UNIMPLEMENTED();;
 	}
 	int Image::ReleaseNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::GetSize(int handle, ImageSize* size){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::SetDecodeSize(int handle, ImageSize* size) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::DecodeNative(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::GetPixelData(int handle, uint8_t* buffer, uint32_t bufferSize) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::GetPixelDataSize(int handle, uint32_t* bufferSize) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::ResizeNative(int handle, ImageSize* size, int* resizedImageHandle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::CropNative(int handle, ImageRect* rect, int* croppedImageHandle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::DrawImageNative(int handle, int source_handle, ImagePosition* position) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::DrawRectangleNative(int handle, ImageColor* color, ImageRect* rect) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::DrawTextNative(int handle, std::string text, int offset, int len, ImageColor* color, int font_handle, ImagePosition* position) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::ExportNative(int handle, std::string albumname, std::string filename) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Image::SaveAsNative(int handle, std::string filename) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

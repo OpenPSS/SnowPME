@@ -8,6 +8,7 @@
 #include <LibShared.hpp>
 #include <glad/glad.h>
 #include <string.h>
+#include <cassert>
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
@@ -16,6 +17,7 @@ using namespace Sce::Pss::Core::Memory;
 namespace Sce::Pss::Core::Graphics {
 
 	int ShaderProgram::compileShader(int type, char* source) {
+		
 		int shader = glCreateShader(type);
 		glShaderSource(shader, 1, &source, 0);
 		glCompileShader(shader);
@@ -47,15 +49,15 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (vertexShaderBuf != nullptr) {
 			CGX* cgxFile = new CGX(vertexShaderBuf, vertexShaderSz);
-			ReturnErrorable(cgxFile);
+			RETURN_ERRORABLE(cgxFile);
 
 			std::string src = cgxFile->FindVertexShader("GLSL");
-			ReturnErrorable(cgxFile);
+			RETURN_ERRORABLE(cgxFile);
 			this->vertexSrc = src;
 
 			if(fragmentShaderBuf == nullptr) {
 				std::string src = cgxFile->FindFragmentShader("GLSL");
-				ReturnErrorable(cgxFile);
+				RETURN_ERRORABLE(cgxFile);
 				this->fragmentSrc = src;
 			}
 
@@ -64,10 +66,10 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (fragmentShaderBuf != nullptr) {
 			CGX* cgxFile = new CGX(fragmentShaderBuf, fragmentShaderSz);
-			ReturnErrorable(cgxFile);
+			RETURN_ERRORABLE(cgxFile);
 
 			std::string src = cgxFile->FindFragmentShader("GLSL");
-			ReturnErrorable(cgxFile);
+			RETURN_ERRORABLE(cgxFile);
 			this->fragmentSrc = src;
 			delete cgxFile;
 		}
@@ -139,11 +141,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			Logger::Debug("Uniform: " + uniform.Name + " location: " + std::to_string(uniform.Location));
 
-			if (uniform.Name.find(']') != std::string::npos) {
-				Logger::Error(uniform.Name + " has a [], theres some special processing for these, but i dunno what it is.");
-				static_assert(true);
-			}
-
+			assert(std::string(uniform.Name + " contains [], PSM has some special processing for these, but i havent been able to find  what it is.").c_str(), uniform.Name.find(']') != std::string::npos);
 			this->Uniforms.push_back(uniform);
 		}
 
@@ -164,11 +162,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			Logger::Debug("Attribute: " + attribute.Name + " location: " + std::to_string(attribute.Location));
 
-			if (attribute.Name.find(']') != std::string::npos) {
-				Logger::Error(attribute.Name + "  has a [], theres some special processing for these, but i dunno what it is.");
-				static_assert(true);
-			}
-
+			assert(std::string(attribute.Name + " contains [], PSM has some special processing for these, but i havent been able to find  what it is.").c_str(), attribute.Name.find(']') != std::string::npos);
 			this->Attributes.push_back(attribute);
 		}
 		
@@ -179,12 +173,10 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int ShaderProgram::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	uint8_t* ShaderProgram::LoadFile(char* shaderPath, int* shaderLen) {
-
 		if (shaderLen != nullptr)
 			*shaderLen = 0;
 
@@ -241,6 +233,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	ShaderProgram::ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
+		LOCK_GUARD();
 		if (vertexShaderBuf != nullptr) {
 			this->vertexCgx = this->CopyFile(vertexShaderBuf, vertexShaderSz);
 		}
@@ -263,6 +256,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	ShaderProgram::ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath) {
+		LOCK_GUARD();
 		if (vertexShaderPath != nullptr) {
 			this->vertexCgx = this->LoadFile(vertexShaderPath, &this->vertexCgxLen);
 		}
@@ -282,6 +276,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	ShaderProgram::~ShaderProgram() {
+		LOCK_GUARD();
 		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 
 		if(this->vertexCgx != nullptr)
@@ -330,7 +325,7 @@ namespace Sce::Pss::Core::Graphics {
 			case GL_BYTE:
 			case GL_UNSIGNED_BYTE:
 			case GL_SHORT:
-				UnimplementedMsg(std::to_string(params));
+				UNIMPLEMENTED_MSG(std::to_string(params));
 			case GL_FLOAT:
 				*attributeType = ShaderAttributeType::Float;
 				return PSM_ERROR_NO_ERROR;

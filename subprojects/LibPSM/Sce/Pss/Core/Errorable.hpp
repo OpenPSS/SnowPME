@@ -2,11 +2,13 @@
 #define LIB_PSS_ERRORABLE_H 1
 #include <vector>
 #include <string>
+#include <cassert>
+
 #include <LibShared.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
-#define ReturnErrorable(x) \
+#define RETURN_ERRORABLE(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			delete x; \
@@ -14,7 +16,7 @@
 			return error; \
 		}
 
-#define PassErrorable(x) \
+#define PASS_ERRORABLE(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			this->SetError(error); \
@@ -23,7 +25,7 @@
 			return PSM_ERROR_NO_ERROR; \
 		} 
 
-#define ReturnErrorableAsBool(x) \
+#define RETURN_ERRORABLE_AS_BOOL(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			delete x; \
@@ -31,17 +33,18 @@
 			return false; \
 		}
 
-#define SetErrorAndReturn(x) \
+#define SET_ERROR_AND_RETURN(x) \
 		do { \
 			this->SetError(x); \
 			return; \
 		} while(0)
 
 
-#define ErrorableUnimplemented(msg) \
+#define UNIMPLEMENTED_ERRORABLE(msg) \
 		do { \
 			Sce::Pss::Core::ExceptionInfo::AddMessage(std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n")); \
 			this->SetError(PSM_ERROR_NOT_IMPLEMENTED); \
+			assert(true); \
 			return; \
 		} while (0)
 

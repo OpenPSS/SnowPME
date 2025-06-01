@@ -3,33 +3,33 @@
 
 namespace Sce::Pss::Core::Imaging {
 	int Font::NewFromFilenameSizeStyle(std::string filename, int size, FontStyle style, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::NewFromAliasSizeStyle(FontAlias alias, int size, FontStyle style, int* handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::AddRefNative(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::ReleaseNative(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetName(int handle, std::string* name) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetSize(int handle, int* size) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetTextWidthNative(int handle, std::string text, int offset, int len, int* width) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Font::GetTextMetricsNative(int handle, std::string text, int offset, int len, CharMetrics* charMetrics) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

@@ -3,9 +3,9 @@
 
 namespace Sce::Pss::Core::Environment {
 	int Clipboard::SetTextNative(const std::string& text) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Clipboard::GetTextNative(std::string& text){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

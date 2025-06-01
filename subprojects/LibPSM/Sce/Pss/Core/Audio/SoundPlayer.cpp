@@ -3,48 +3,48 @@
 
 namespace Sce::Pss::Core::Audio {
 	int SoundPlayer::ReleaseNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::PlayNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::StopNative(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetStatusNative(int handle, SoundStatus *status){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetVolumeNative(int handle, float *volume){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::SetVolumeNative(int handle, float volume){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetPanNative(int handle, float *pan){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::SetPanNative(int handle, float pan){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetLoopNative(int handle, bool *pan){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::SetLoopNative(int handle, bool pan){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetPlaybackRateNative(int handle, float *rate){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::SetPlaybackRateNative(int handle, float rate){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetPosition(int handle, unsigned long * millisecond){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::SetPosition(int handle, unsigned long millisecond){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SoundPlayer::GetLength(int handle, unsigned long *millisecond){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

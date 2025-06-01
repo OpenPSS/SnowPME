@@ -90,9 +90,9 @@ namespace Sce::Pss::Core::Environment {
 
 		switch (type) {
 			case CommonDialogType::Reserved0:
-				UnimplementedMsg("CommonDialogType::Reserved0");
+				UNIMPLEMENTED_MSG("CommonDialogType::Reserved0");
 			case CommonDialogType::TextInput:
-				UnimplementedMsg("CommonDialogType::TextInput");
+				UNIMPLEMENTED_MSG("CommonDialogType::TextInput");
 			case CommonDialogType::InAppPurchaseDialog:
 			{
 				Logger::Debug("CommonDialogType::InAppPurchaseDialog");
@@ -105,7 +105,7 @@ namespace Sce::Pss::Core::Environment {
 
 				// create in app purchase common dialog,
 				InAppPurchaseDialog* commonIapDialog = new InAppPurchaseDialog();
-				ReturnErrorable(commonIapDialog);
+				RETURN_ERRORABLE(commonIapDialog);
 
 				// set handle to the new in app purchase
 				*handle = commonIapDialog->Handle;
@@ -113,9 +113,9 @@ namespace Sce::Pss::Core::Environment {
 				return PSM_ERROR_NO_ERROR;
 			}
 			case CommonDialogType::CameraImportDialog:
-				UnimplementedMsg("CommonDialogType::CameraImportDialog");
+				UNIMPLEMENTED_MSG("CommonDialogType::CameraImportDialog");
 			case CommonDialogType::PhotoImportDialog:
-				UnimplementedMsg("CommonDialogType::CameraImportDialog");
+				UNIMPLEMENTED_MSG("CommonDialogType::CameraImportDialog");
 		}
 
 		return PSM_ERROR_NO_ERROR;

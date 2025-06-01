@@ -3,21 +3,21 @@
 
 namespace Sce::Pss::Core::Services {
 	int NetworkRequest::CreateRequestNative(int type, std::string function, std::string json, int* requestHandle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int NetworkRequest::QueueRequestNative(int type, std::string function, std::string json, int* requestHandle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int NetworkRequest::DestroyRequestNative(int requestHandle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int NetworkRequest::GetResponseNative(int requestHandle, std::string* response) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int NetworkRequest::RegisterThreadNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int NetworkRequest::UnregisterThreadNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

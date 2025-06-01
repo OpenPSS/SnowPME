@@ -30,7 +30,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		GraphicsContext* graphicsContext = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
-		ReturnErrorable(graphicsContext);
+		RETURN_ERRORABLE(graphicsContext);
 
 		*result = Handles::Create(graphicsContext);
 		
@@ -98,19 +98,19 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::DrawArrays(int handle, DrawMode mode, int first, int count, int repeat){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::DrawArrays2(int handle, Primitive* primitives, int first, int count){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::DrawArraysInstanced(int handle, DrawMode mode, int first, int count, int instFirst, int instCount){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::ReadPixels(int handle, uint8_t* pixels, PixelFormat format, int sx, int sy, int sw, int sh){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::ReadPixels2(int handle, int texture, int level, TextureCubeFace cubeFace, int dx, int dy, int sx, int sy, int sw, int sh) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
 		Logger::Debug(__FUNCTION__);
@@ -187,9 +187,9 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::SetActiveScreen(int handle, int x, int y, int w, int h) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::SetVirtualScreen(int handle, int x, int y, int w, int h) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

@@ -24,7 +24,7 @@ using namespace Shared::Debug;
 namespace Sce::Pss::Core::Graphics {
 
 	int GraphicsContext::ActiveStateChanged(bool state) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int GraphicsContext::setCurrentObject(ShaderProgram* shaderProgram) {
@@ -166,7 +166,7 @@ namespace Sce::Pss::Core::Graphics {
 			{
 				Logger::Debug("update & GraphicsUpdate::Texture");
 				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
-				Unimplemented("update & GraphicsUpdate::Texture is not implemented");
+				UNIMPLEMENTED("update & GraphicsUpdate::Texture is not implemented");
 			}
 
 		}
@@ -190,12 +190,12 @@ namespace Sce::Pss::Core::Graphics {
 
 		// check notifyFlag is VertexBuffer
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
-			ErrorableUnimplemented("notifyFlag & GraphicsUpdate::VertexBuffer");
+			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::VertexBuffer");
 		}
 
 		// check notifyFlag is Texture
 		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
-			ErrorableUnimplemented("notifyFlag & GraphicsUpdate::Texture");
+			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::Texture");
 		}
 
 		// check notifyFlag is FrameBuffer
@@ -493,7 +493,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 

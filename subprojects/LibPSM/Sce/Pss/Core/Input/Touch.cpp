@@ -3,9 +3,9 @@
 
 namespace Sce::Pss::Core::Input {
 	int Touch::GetDataNative(int deviceIndex, TouchData* touchData, int numElements, int* numFinger) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int Touch::GetRearTouchDataNative(int deviceIndex, TouchData* touchData, int numElements, int* numFinger) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

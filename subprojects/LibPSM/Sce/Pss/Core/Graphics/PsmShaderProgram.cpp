@@ -25,7 +25,7 @@ using namespace Sce::Pss::Core::System;
 namespace Sce::Pss::Core::Graphics {
 
 
-	#define MAIN_THREAD() \
+	#define CHECK_MAIN_THREAD() \
 		if(!Thread::IsMainThread()) { \
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n"); \
 			return PSM_ERROR_COMMON_INVALID_OPERATION; \
@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	#define GET_PROG() \
 		Logger::Debug(__FUNCTION__); \
-		MAIN_THREAD() \
+		CHECK_MAIN_THREAD() \
 		ShaderProgram* prog = Handles::Get<ShaderProgram>(handle); \
 		if (prog == NULL) { \
 			Logger::Error("handle was null."); \
@@ -42,12 +42,12 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmShaderProgram::FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result) {
 		Logger::Debug(__FUNCTION__);
-		MAIN_THREAD();
+		CHECK_MAIN_THREAD();
 		char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
 		char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
 
 		ShaderProgram* shdrPrg = new ShaderProgram(vertexProgramFileName, fragmentProgramFileName);
-		ReturnErrorable(shdrPrg);
+		RETURN_ERRORABLE(shdrPrg);
 
 		*result = shdrPrg->Handle;
 
@@ -61,7 +61,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileImage, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
 		Logger::Debug(__FUNCTION__);
-		MAIN_THREAD();
+		CHECK_MAIN_THREAD();
 
 		size_t vertexShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vpFileImage);
 		size_t fragmentShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(fpFileImage);
@@ -74,18 +74,18 @@ namespace Sce::Pss::Core::Graphics {
 			fragmentShaderBuf = (uint8_t*)mono_array_addr_with_size(fpFileImage, 1, 0);
 
 		ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
-		ReturnErrorable(shdrPrg);
+		RETURN_ERRORABLE(shdrPrg);
 
 		*result = shdrPrg->Handle;
 		return PSM_ERROR_NO_ERROR;
 	}
 	
 	int PsmShaderProgram::Delete(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int PsmShaderProgram::AddRef(int handle){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
@@ -101,7 +101,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int PsmShaderProgram::FindAttribute(int handle, MonoString* name, int* result) {
@@ -120,7 +120,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoString** result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
@@ -174,7 +174,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformType(int handle, int index, ShaderUniformType* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 
 	int PsmShaderProgram::GetAttributeType(int handle, int index, ShaderAttributeType* result) {
@@ -184,33 +184,33 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoString** result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetUniformSize(int handle, int index, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetAttributeSize(int handle, int index, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::SetUniformValue(int handle, int index, int offset, void* value, ShaderUniformType type) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::SetUniformValue2(int handle, int index, void* value, ShaderUniformType type, int to, int from, int count) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::SetAttributeValue2(int handle, int index, float* value) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetUniformTexture(int handle, int index, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetAttributeStream(int handle, int index, int* result) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::SetAttributeStream(int handle, int index, int stream) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

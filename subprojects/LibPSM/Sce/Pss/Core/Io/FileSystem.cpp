@@ -47,7 +47,7 @@ namespace Sce::Pss::Core::Io {
 
 				Logger::Debug("reading edata.list.");
 				str = new EdataStream(edataListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
-				ReturnErrorable(str);
+				RETURN_ERRORABLE(str);
 			}
 			// allocate memory for the full psse.list file 
 			char* psseLstData = new char[str->Filesize()];

@@ -3,12 +3,12 @@
 
 namespace Sce::Pss::Core::Environment {
 	int SystemParameters::GetInt(ParameterKey key, int *value){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SystemParameters::GetFloat(ParameterKey key, float *value){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int SystemParameters::GetString(ParameterKey key, MonoString** value){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

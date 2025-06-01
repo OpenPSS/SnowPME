@@ -3,6 +3,6 @@
 
 namespace Sce::Pss::Core::Environment {
 	int NetworkInformation::GetNetworkInterfaceTypeNative(){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

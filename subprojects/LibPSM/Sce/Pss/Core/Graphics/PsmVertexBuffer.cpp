@@ -26,20 +26,20 @@ namespace Sce::Pss::Core::Graphics {
 		int vertexFormatsLen = mono_array_length(formats);
 
 		VertexBuffer* vertxBuffer = new VertexBuffer(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
-		ReturnErrorable(vertxBuffer);
+		RETURN_ERRORABLE(vertxBuffer);
 
 		*result = vertxBuffer->Handle;
 
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmVertexBuffer::Delete(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmVertexBuffer::AddRef(int handle) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmVertexBuffer::SetVertices(int handle, int* vertices, int to, int from, int count) {
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
 		Logger::Debug(__FUNCTION__);
@@ -84,6 +84,6 @@ namespace Sce::Pss::Core::Graphics {
 		
 	}
 	int PsmVertexBuffer::SetIndices(int handle, uint16_t* indices, int to, int from, int count){
-		Unimplemented();
+		UNIMPLEMENTED();
 	}
 }

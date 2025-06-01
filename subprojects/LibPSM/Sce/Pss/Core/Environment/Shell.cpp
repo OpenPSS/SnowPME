@@ -55,7 +55,7 @@ namespace Sce::Pss::Core::Environment {
 		case Shared::RuntimeImplementation::Android:
 			return this->executeBrowserVita(url);
 		default:
-			Unimplemented();
+			UNIMPLEMENTED();
 		}
 
 	}

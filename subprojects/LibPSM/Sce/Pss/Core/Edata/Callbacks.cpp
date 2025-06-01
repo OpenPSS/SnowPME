@@ -16,7 +16,7 @@ namespace Sce::Pss::Core::Edata {
 
 		if (handle != nullptr && type != nullptr) {
 			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::GetUniqueObject()->GameDrmProvider, nullptr);
-			ReturnErrorable(stream);
+			RETURN_ERRORABLE(stream);
 
 			*handle = stream->Handle;
 
