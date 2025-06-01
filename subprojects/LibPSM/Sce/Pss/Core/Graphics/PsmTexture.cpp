@@ -57,27 +57,21 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmTexture::FromImage(PixelBufferType type, MonoArray* fileImage, bool mipmap, PixelFormat format, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmTexture::SetFilter(int handle, TextureFilter* filter) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmTexture::SetWrap(int handle, TextureWrap* filter) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmTexture::SetMaxAnisotropy(int handle, float anisotropy) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmTexture::SetPixels(int handle, int level, TextureCubeFace cubeFace, int* pixels, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmTexture::GenerateMipmap(int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

@@ -1,28 +1,23 @@
-#include "NetworkRequest.hpp"
+#include <Sce/Pss/Core/Services/NetworkRequest.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Services {
 	int NetworkRequest::CreateRequestNative(int type, std::string function, std::string json, int* requestHandle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int NetworkRequest::QueueRequestNative(int type, std::string function, std::string json, int* requestHandle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int NetworkRequest::DestroyRequestNative(int requestHandle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int NetworkRequest::GetResponseNative(int requestHandle, std::string* response) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int NetworkRequest::RegisterThreadNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int NetworkRequest::UnregisterThreadNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

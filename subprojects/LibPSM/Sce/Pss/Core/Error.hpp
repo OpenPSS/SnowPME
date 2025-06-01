@@ -1,5 +1,7 @@
 #ifndef LIB_PSS_ERROR_H
 #define LIB_PSS_ERROR_H 1
+#include <LibShared.hpp>
+#include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <cstdint>
 #include <string>
 #include <iostream>
@@ -39,6 +41,7 @@ enum PsmError : unsigned int {
 	PSM_ERROR_READ_FAILED = 0x80010027,
 	PSM_ERROR_WRITE_FAILED = 0x80010028,
 	PSM_ERROR_BUSY = 0x80010029,
+
 	/* COMMON */
 	PSM_ERROR_COMMON_ARGUMENT = 0x80580001,
 	PSM_ERROR_COMMON_ARGUMENT_NULL = 0x80580002,
@@ -52,22 +55,46 @@ enum PsmError : unsigned int {
 	PSM_ERROR_COMMON_FILE_NOT_FOUND = 0x80580011,
 	PSM_ERROR_COMMON_FILE_LOAD = 0x80580012,
 	PSM_ERROR_COMMON_OUT_OF_MEMORY = 0x80580013,
+
 	/* GRAPHICS*/
 	PSM_ERROR_GRAPHICS_SYSTEM = 0x80580021,
+	
 	/* AUDIO */
 	PSM_ERROR_AUDIO_SYSTEM = 0x80580022,
+	
 	/* IMAGE */
 	PSM_ERROR_IMAGE_SYSTEM = 0x80580023,
+	
 	/* FONT */
 	PSM_ERROR_FONT_SYSTEM = 0x80580024,
+	
 	/* INPUT */
 	PSM_ERROR_INPUT_SYSTEM = 0x80580025,
+	
 	/* CAMERA */
 	PSM_ERROR_CAMERA_SYSTEM = 0x80580027,
+	
 	/* LOCATION */
 	PSM_ERROR_LOCATION_SYSTEM = 0x80580028
 
 };
+
+#ifndef _DEBUG
+#define _BODY_UNIMPLEMENTED(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
+#else
+#define _BODY_UNIMPLEMENTED(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR;
+#endif
+
+#define UnimplementedMsg(msg) do { \
+							_BODY_UNIMPLEMENTED(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
+						} while (0)
+
+#define Unimplemented()	UnimplementedMsg("")
+
+#define Assert(cond, msg) do { \
+							Shared::Debug::Logger::Error("ASSERT: "+#cond+" : "msg); \
+							static_assert(cond); \
+						} while(0);
 
 namespace Sce::Pss::Core {
 	class Error {

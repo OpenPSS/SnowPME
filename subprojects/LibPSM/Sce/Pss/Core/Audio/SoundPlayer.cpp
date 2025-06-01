@@ -1,64 +1,50 @@
 #include <Sce/Pss/Core/Audio/SoundPlayer.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Audio {
 	int SoundPlayer::ReleaseNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::PlayNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::StopNative(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetStatusNative(int handle, SoundStatus *status){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetVolumeNative(int handle, float *volume){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::SetVolumeNative(int handle, float volume){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetPanNative(int handle, float *pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::SetPanNative(int handle, float pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetLoopNative(int handle, bool *pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::SetLoopNative(int handle, bool pan){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetPlaybackRateNative(int handle, float *rate){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::SetPlaybackRateNative(int handle, float rate){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetPosition(int handle, unsigned long * millisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::SetPosition(int handle, unsigned long millisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int SoundPlayer::GetLength(int handle, unsigned long *millisecond){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

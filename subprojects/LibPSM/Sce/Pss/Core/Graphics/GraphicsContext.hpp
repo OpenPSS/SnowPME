@@ -119,7 +119,7 @@ namespace Sce::Pss::Core::Graphics {
 		void CheckUpdate(GraphicsState* state);
 		void UpdateHandles(GraphicsUpdate notifyFlag);
 		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
-		void UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
+		int UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
 	};
 }
 

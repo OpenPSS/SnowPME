@@ -12,6 +12,7 @@ namespace Shared::Debug
 	public:
 		static void Debug(const std::string& msg);
 		static void Error(const std::string& msg);
+		static void Todo(const std::string& msg);
 		static void Warn(const std::string& msg);
 		static void Info(const std::string& msg);
 		static void Game(const std::string& msg);

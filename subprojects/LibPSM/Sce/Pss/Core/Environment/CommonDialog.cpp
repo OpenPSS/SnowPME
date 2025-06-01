@@ -90,11 +90,9 @@ namespace Sce::Pss::Core::Environment {
 
 		switch (type) {
 			case CommonDialogType::Reserved0:
-				Logger::Error("CommonDialogType::Reserved0 Unimplemented");
-				return PSM_ERROR_NOT_IMPLEMENTED;
+				UnimplementedMsg("CommonDialogType::Reserved0");
 			case CommonDialogType::TextInput:
-				Logger::Error("CommonDialogType::TextInput Unimplemented");
-				return PSM_ERROR_NOT_IMPLEMENTED;
+				UnimplementedMsg("CommonDialogType::TextInput");
 			case CommonDialogType::InAppPurchaseDialog:
 			{
 				Logger::Debug("CommonDialogType::InAppPurchaseDialog");
@@ -115,11 +113,9 @@ namespace Sce::Pss::Core::Environment {
 				return PSM_ERROR_NO_ERROR;
 			}
 			case CommonDialogType::CameraImportDialog:
-				Logger::Error("CommonDialogType::CameraImportDialog Unimplemented");
-				return PSM_ERROR_NOT_IMPLEMENTED;
+				UnimplementedMsg("CommonDialogType::CameraImportDialog");
 			case CommonDialogType::PhotoImportDialog:
-				Logger::Error("CommonDialogType::PhotoImportDialog Unimplemented");
-				return PSM_ERROR_NOT_IMPLEMENTED;
+				UnimplementedMsg("CommonDialogType::CameraImportDialog");
 		}
 
 		return PSM_ERROR_NO_ERROR;

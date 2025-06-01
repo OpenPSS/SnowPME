@@ -50,7 +50,7 @@ namespace Sce::Pss::Core::Graphics {
 			return err;
 		}
 
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Unimplemented();
 	}
 
 	Texture2D::~Texture2D() {

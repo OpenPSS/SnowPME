@@ -23,17 +23,13 @@ namespace Sce::Pss::Core::Graphics {
 			if (GraphicsContext::GetUniqueObject() != nullptr) {
 				switch (type) {
 				case PixelBufferType::Texture2D:
-					Logger::Error("PixelBufferType::Texture2D unimplemented.");
-					return PSM_ERROR_NOT_IMPLEMENTED;
+					UnimplementedMsg("PixelBufferType::Texture2D");
 				case PixelBufferType::TextureCube:
-					Logger::Error("PixelBufferType::TextureCube unimplemented.");
-					return PSM_ERROR_NOT_IMPLEMENTED;
+					UnimplementedMsg("PixelBufferType::TextureCube");
 				case PixelBufferType::ColorBuffer:
-					Logger::Error("PixelBufferType::TextureCube unimplemented.");
-					return PSM_ERROR_NOT_IMPLEMENTED;
+					UnimplementedMsg("PixelBufferType::ColorBuffer");
 				case PixelBufferType::DepthBuffer:
-					Logger::Error("PixelBufferType::TextureCube unimplemented.");
-					return PSM_ERROR_NOT_IMPLEMENTED;
+					UnimplementedMsg("PixelBufferType::DepthBuffer");
 				}
 				return PSM_ERROR_COMMON_ARGUMENT;
 			}
@@ -63,8 +59,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmPixelBuffer::AddRef(int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
 		Logger::Debug(__FUNCTION__);

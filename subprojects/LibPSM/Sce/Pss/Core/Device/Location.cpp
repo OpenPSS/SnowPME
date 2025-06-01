@@ -1,20 +1,17 @@
-#include "Location.hpp"
+#include <Sce/Pss/Core/Device/Location.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Device {
 	int Location::StartNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Location::StopNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Location::GetDataNative(LocationData * locationData){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Location::GetEnableDevicesNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

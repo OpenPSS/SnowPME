@@ -1,36 +1,29 @@
-#include "Network.hpp"
+#include <Sce/Pss/Core/Services/Network.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Services {
 	int Network::CheckStateNative(uint32_t* state){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::GetOnlineIdNative(std::string* id) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::GetAccountIdNative(unsigned long* id){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::SetWebRequestDelegate(uintptr_t handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::SetAuthServer(bool useAuth){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::GetAuthTicketDataNative(std::string* data) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::ResetAuthTicketNative(){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int Network::SetAppIdNative(std::string appId){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

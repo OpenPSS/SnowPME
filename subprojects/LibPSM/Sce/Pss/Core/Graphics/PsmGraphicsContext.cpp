@@ -98,24 +98,19 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::DrawArrays(int handle, DrawMode mode, int first, int count, int repeat){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::DrawArrays2(int handle, Primitive* primitives, int first, int count){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::DrawArraysInstanced(int handle, DrawMode mode, int first, int count, int instFirst, int instCount){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::ReadPixels(int handle, uint8_t* pixels, PixelFormat format, int sx, int sy, int sw, int sh){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::ReadPixels2(int handle, int texture, int level, TextureCubeFace cubeFace, int dx, int dy, int sx, int sy, int sw, int sh) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
 		Logger::Debug(__FUNCTION__);
@@ -192,11 +187,9 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::SetActiveScreen(int handle, int x, int y, int w, int h) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmGraphicsContext::SetVirtualScreen(int handle, int x, int y, int w, int h) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

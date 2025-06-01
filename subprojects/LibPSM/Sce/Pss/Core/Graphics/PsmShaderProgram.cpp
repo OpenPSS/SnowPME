@@ -81,13 +81,11 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	
 	int PsmShaderProgram::Delete(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 
 	int PsmShaderProgram::AddRef(int handle){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
@@ -103,8 +101,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 
 	int PsmShaderProgram::FindAttribute(int handle, MonoString* name, int* result) {
@@ -123,8 +120,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoString** result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 
 	int PsmShaderProgram::SetUniformBinding(int handle, int index, MonoString* name) {
@@ -178,8 +174,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformType(int handle, int index, ShaderUniformType* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 
 	int PsmShaderProgram::GetAttributeType(int handle, int index, ShaderAttributeType* result) {
@@ -189,43 +184,33 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoString** result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::GetUniformSize(int handle, int index, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::GetAttributeSize(int handle, int index, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::SetUniformValue(int handle, int index, int offset, void* value, ShaderUniformType type) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::SetUniformValue2(int handle, int index, void* value, ShaderUniformType type, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::SetAttributeValue2(int handle, int index, float* value) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::GetUniformTexture(int handle, int index, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::GetAttributeStream(int handle, int index, int* result) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmShaderProgram::SetAttributeStream(int handle, int index, int stream) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

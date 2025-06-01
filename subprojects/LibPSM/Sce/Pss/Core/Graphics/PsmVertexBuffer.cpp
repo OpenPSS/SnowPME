@@ -10,13 +10,14 @@
 
 #include <LibShared.hpp>
 
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Threading;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Shared::Debug;
-	using namespace Sce::Pss::Core;
-	using namespace Sce::Pss::Core::Graphics;
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Threading;
+
 
 	int PsmVertexBuffer::Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray* formats, int* result) {
 		Logger::Debug(__FUNCTION__);
@@ -32,16 +33,13 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmVertexBuffer::Delete(int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmVertexBuffer::AddRef(int handle) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmVertexBuffer::SetVertices(int handle, int* vertices, int to, int from, int count) {
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
 		Logger::Debug(__FUNCTION__);
@@ -86,7 +84,6 @@ namespace Sce::Pss::Core::Graphics {
 		
 	}
 	int PsmVertexBuffer::SetIndices(int handle, uint16_t* indices, int to, int from, int count){
-		std::cout << __FUNCTION__ << " Unimplemented" << std::endl;
-		return 0;
+		Unimplemented();
 	}
 }

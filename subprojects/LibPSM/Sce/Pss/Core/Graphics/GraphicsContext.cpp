@@ -24,7 +24,7 @@ using namespace Shared::Debug;
 namespace Sce::Pss::Core::Graphics {
 
 	int GraphicsContext::ActiveStateChanged(bool state) {
-		return PSM_ERROR_NOT_IMPLEMENTED;
+		Unimplemented();
 	}
 
 	int GraphicsContext::setCurrentObject(ShaderProgram* shaderProgram) {
@@ -166,8 +166,7 @@ namespace Sce::Pss::Core::Graphics {
 			{
 				Logger::Debug("update & GraphicsUpdate::Texture");
 				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
-				Logger::Error("update & GraphicsUpdate::Texture is not implemented");
-				return PSM_ERROR_NOT_IMPLEMENTED;
+				Unimplemented("update & GraphicsUpdate::Texture is not implemented");
 			}
 
 		}
@@ -191,20 +190,12 @@ namespace Sce::Pss::Core::Graphics {
 
 		// check notifyFlag is VertexBuffer
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
-			Logger::Debug("notifyFlag & GraphicsUpdate::VertexBuffer");
-
-			Logger::Error("notifyFlag VertexBuffer part is not yet implemented;");
-			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-			return;
+			ErrorableUnimplemented("notifyFlag & GraphicsUpdate::VertexBuffer");
 		}
 
 		// check notifyFlag is Texture
 		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
-			Logger::Debug("notifyFlag & GraphicsUpdate::Texture");
-
-			Logger::Error("notifyFlag Texture part is not yet implemented;");
-			this->SetError(PSM_ERROR_NOT_IMPLEMENTED);
-			return;
+			ErrorableUnimplemented("notifyFlag & GraphicsUpdate::Texture");
 		}
 
 		// check notifyFlag is FrameBuffer
@@ -501,10 +492,8 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	void GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
-		// TODO: add multi screen thing
-		Logger::Error("Tried to update multiple screens, but multiple screens are not yet Implemented.");
-
+	int GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
+		Unimplemented();
 	}
 
 
@@ -541,14 +530,7 @@ namespace Sce::Pss::Core::Graphics {
 		if(this->minFrameDelta != nullptr)
 			delete this->minFrameDelta;
 	}
-	void GraphicsContext::ErrorCallback(
-		GLenum source,
-		GLenum type,
-		GLuint id,
-		GLenum severity,
-		GLsizei length,
-		const GLchar* message,
-		const void* userParam) {
+	void GraphicsContext::ErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
 	}
 

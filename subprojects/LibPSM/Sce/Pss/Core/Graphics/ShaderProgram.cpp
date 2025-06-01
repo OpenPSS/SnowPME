@@ -9,12 +9,12 @@
 #include <glad/glad.h>
 #include <string.h>
 
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Shared::Debug;
-	using namespace Sce::Pss::Core::Io;
-	using namespace Sce::Pss::Core::Memory;
-	
+
 	int ShaderProgram::compileShader(int type, char* source) {
 		int shader = glCreateShader(type);
 		glShaderSource(shader, 1, &source, 0);
@@ -330,14 +330,12 @@ namespace Sce::Pss::Core::Graphics {
 			case GL_BYTE:
 			case GL_UNSIGNED_BYTE:
 			case GL_SHORT:
-				Logger::Error("GL Params is not implemented type; " + std::to_string(params));
-				static_assert(true);
-				return 0; // TODO
+				UnimplementedMsg(std::to_string(params));
 			case GL_FLOAT:
 				*attributeType = ShaderAttributeType::Float;
-				return 0;
+				return PSM_ERROR_NO_ERROR;
 		}
-		return 0;
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int ShaderProgram::GetUniformName(int index, std::string& name) const {
