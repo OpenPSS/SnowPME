@@ -3,19 +3,19 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
-
+#include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {
 	class Network {
 	public:
 		static int CheckStateNative(uint32_t * state);
-		static int GetOnlineIdNative(std::string *id);
+		static int GetOnlineIdNative(MonoString *id);
 		static int GetAccountIdNative(unsigned long * id);
 		static int SetWebRequestDelegate(uintptr_t handle);
 		static int SetAuthServer(bool useAuth);
-		static int GetAuthTicketDataNative(std::string *data);
+		static int GetAuthTicketDataNative(MonoString *data);
 		static int ResetAuthTicketNative();
-		static int SetAppIdNative(std::string appId);
+		static int SetAppIdNative(MonoString* appId);
 	};
 }
 #endif

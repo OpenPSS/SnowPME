@@ -1,11 +1,12 @@
 #include <Sce/Pss/Core/Services/Network.hpp>
 #include <Sce/Pss/Core/Error.hpp>
+#include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {
 	int Network::CheckStateNative(uint32_t* state){
 		UNIMPLEMENTED();
 	}
-	int Network::GetOnlineIdNative(std::string* id) {
+	int Network::GetOnlineIdNative(MonoString* id) {
 		UNIMPLEMENTED();
 	}
 	int Network::GetAccountIdNative(unsigned long* id){
@@ -17,13 +18,13 @@ namespace Sce::Pss::Core::Services {
 	int Network::SetAuthServer(bool useAuth){
 		UNIMPLEMENTED();
 	}
-	int Network::GetAuthTicketDataNative(std::string* data) {
+	int Network::GetAuthTicketDataNative(MonoString* data) {
 		UNIMPLEMENTED();
 	}
 	int Network::ResetAuthTicketNative(){
 		UNIMPLEMENTED();
 	}
-	int Network::SetAppIdNative(std::string appId){
+	int Network::SetAppIdNative(MonoString* appId){
 		UNIMPLEMENTED();
 	}
 }

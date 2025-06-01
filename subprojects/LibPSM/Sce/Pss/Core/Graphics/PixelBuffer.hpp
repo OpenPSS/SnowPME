@@ -1,10 +1,10 @@
 #ifndef LIB_PSS_PIXELBUFFER
 #define LIB_PSS_PIXELBUFFER 1
+
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
-
 
 namespace Sce::Pss::Core::Graphics {
 	class PixelBuffer : public GraphicsObject {

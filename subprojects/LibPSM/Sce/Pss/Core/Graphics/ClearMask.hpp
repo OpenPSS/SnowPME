@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Graphics {
 		All = 7
 	};
 
-	DEFINE_BITWISE_OPERATORS(ClearMask, unsigned int);
+	DEFINE_BITWISE_ENUM_OPERATOR(ClearMask, unsigned int);
 
 }
 

@@ -11,7 +11,7 @@ namespace Sce::Pss::Core::Services {
 		Consume = 4
 	};
 
-	DEFINE_BITWISE_OPERATORS(InAppPurchaseCommand, unsigned int);
+	DEFINE_BITWISE_ENUM_OPERATOR(InAppPurchaseCommand, unsigned int);
 }
 
 #endif

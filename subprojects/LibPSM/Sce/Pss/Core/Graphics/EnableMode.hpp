@@ -15,7 +15,7 @@ namespace Sce::Pss::Core::Graphics {
 		All = 0x7F
 	};
 
-	DEFINE_BITWISE_OPERATORS(EnableMode, unsigned int);
+	DEFINE_BITWISE_ENUM_OPERATOR(EnableMode, unsigned int);
 }
 
 #endif

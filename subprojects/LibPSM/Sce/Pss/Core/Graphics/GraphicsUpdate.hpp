@@ -30,7 +30,7 @@ namespace Sce::Pss::Core::Graphics {
 		TextureN = 2147483648
 	};
 
-	DEFINE_BITWISE_OPERATORS(GraphicsUpdate, unsigned int);
+	DEFINE_BITWISE_ENUM_OPERATOR(GraphicsUpdate, unsigned int);
 }
 
 #endif

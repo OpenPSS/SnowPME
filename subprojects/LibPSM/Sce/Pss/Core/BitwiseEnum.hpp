@@ -1,32 +1,32 @@
 #ifndef LIB_PSS_BITWISE_ENUM_H
 #define LIB_PSS_BITWISE_ENUM_H 1
 
-#define DEFINE_BITWISE_OPERATORS(BT, UT) \
-inline BT operator&(BT l, BT r) { return (BT)((UT) l & (UT) r); }; \
-inline BT operator&(BT l, UT r) { return (BT)((UT) l & (UT) r); }; \
-inline BT operator&(UT l, BT r) { return (BT)((UT) l & (UT) r); }; \
+#define DEFINE_BITWISE_ENUM_OPERATOR(BaseType, UnderlyingType) \
+inline BaseType operator&(BaseType l, BaseType r) { return (BaseType)((UnderlyingType) l & (UnderlyingType) r); }; \
+inline BaseType operator&(BaseType l, UnderlyingType r) { return (BaseType)((UnderlyingType) l & (UnderlyingType) r); }; \
+inline BaseType operator&(UnderlyingType l, BaseType r) { return (BaseType)((UnderlyingType) l & (UnderlyingType) r); }; \
 \
-inline BT operator|(BT l, BT r) { return (BT)((UT) l | (UT) r); }; \
-inline BT operator|(UT l, BT r) { return (BT)((UT) l | (UT) r); }; \
-inline BT operator|(BT l, UT r) { return (BT)((UT) l | (UT) r); } \
+inline BaseType operator|(BaseType l, BaseType r) { return (BaseType)((UnderlyingType) l | (UnderlyingType) r); }; \
+inline BaseType operator|(UnderlyingType l, BaseType r) { return (BaseType)((UnderlyingType) l | (UnderlyingType) r); }; \
+inline BaseType operator|(BaseType l, UnderlyingType r) { return (BaseType)((UnderlyingType) l | (UnderlyingType) r); } \
 \
-inline BT operator^(BT l, BT r) { return (BT)((UT)l ^ (UT)r); }; \
-inline BT operator^(UT l, BT r) { return (BT)((UT)l ^ (UT)r); }; \
-inline BT operator^(BT l, UT r) { return (BT)((UT)l ^ (UT)r); } \
+inline BaseType operator^(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l ^ (UnderlyingType)r); }; \
+inline BaseType operator^(UnderlyingType l, BaseType r) { return (BaseType)((UnderlyingType)l ^ (UnderlyingType)r); }; \
+inline BaseType operator^(BaseType l, UnderlyingType r) { return (BaseType)((UnderlyingType)l ^ (UnderlyingType)r); } \
 \
-inline BT operator>>(BT l, BT r) { return (BT)((UT)l >> (UT)r); }; \
-inline BT operator>>(UT l, BT r) { return (BT)((UT)l >> (UT)r); }; \
-inline BT operator>>(BT l, UT r) { return (BT)((UT)l >> (UT)r); } \
+inline BaseType operator>>(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l >> (UnderlyingType)r); }; \
+inline BaseType operator>>(UnderlyingType l, BaseType r) { return (BaseType)((UnderlyingType)l >> (UnderlyingType)r); }; \
+inline BaseType operator>>(BaseType l, UnderlyingType r) { return (BaseType)((UnderlyingType)l >> (UnderlyingType)r); } \
 \
-inline BT operator<<(BT l, BT r) { return (BT)((UT)l << (UT)r); }; \
-inline BT operator<<(UT l, BT r) { return (BT)((UT)l << (UT)r); }; \
-inline BT operator<<(BT l, UT r) { return (BT)((UT)l << (UT)r); }; \
+inline BaseType operator<<(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l << (UnderlyingType)r); }; \
+inline BaseType operator<<(UnderlyingType l, BaseType r) { return (BaseType)((UnderlyingType)l << (UnderlyingType)r); }; \
+inline BaseType operator<<(BaseType l, UnderlyingType r) { return (BaseType)((UnderlyingType)l << (UnderlyingType)r); }; \
 \
-inline BT operator|=(BT& l, BT r) { return l = (BT)((UT)l | (UT)r); }; \
-inline BT operator&=(BT& l, BT r) { return l = (BT)((UT)l & (UT)r); }; \
-inline BT operator^=(BT& l, BT r) { return l = (BT)((UT)l ^ (UT)r); }; \
-inline BT operator>>=(BT& l, BT r) { return l = (BT)((UT)l >> (UT)r); }; \
-inline BT operator<<=(BT& l, BT r) { return l = (BT)((UT)l << (UT)r); }; 
+inline BaseType operator|=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l | (UnderlyingType)r); }; \
+inline BaseType operator&=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l & (UnderlyingType)r); }; \
+inline BaseType operator^=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l ^ (UnderlyingType)r); }; \
+inline BaseType operator>>=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l >> (UnderlyingType)r); }; \
+inline BaseType operator<<=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l << (UnderlyingType)r); }
 
 
 #endif

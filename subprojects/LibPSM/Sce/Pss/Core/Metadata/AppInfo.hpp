@@ -8,13 +8,14 @@
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
-namespace Sce::Pss::Core::Metadata {
-	#define READATTRIBUTE(TYPE, VALUE, SET) { \
+#define READ_CXML_ATTRIBUTE(TYPE, VALUE, SET) { \
 		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<LibCXML::CXMLAttribute<TYPE>*>(VALUE); \
 		if (attribute != nullptr) { \
 			SET = attribute->AttributeValue(); \
 		} \
 	}
+
+namespace Sce::Pss::Core::Metadata {
 	typedef struct LocaleInfo {
 		std::string Locale;
 		std::string Name;

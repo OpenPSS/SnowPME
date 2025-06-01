@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
-
 #include <mono/mono.h>
 
 enum PsmError : unsigned int {
@@ -16,7 +15,6 @@ enum PsmError : unsigned int {
 	PSM_ERROR_INVALID_PARAMETER = 0x80010003,
 	PSM_ERROR_PATH_NOT_FOUND = 0x80010004,
 	PSM_ERROR_PATH_ALREADY_EXISTS = 0x80010005,
-
 	PSM_ERROR_FILE_NOT_FOUND = 0x80010006,
 
 	PSM_ERROR_TIMEOUT = 0x80010007,
@@ -80,15 +78,15 @@ enum PsmError : unsigned int {
 
 };
 
-#ifndef _DEBUG
-#define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
-#else
+#ifndef UNIMPLEMENTED_AS_ERROR
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR;
+#else
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
 #endif
 
 #define UNIMPLEMENTED_MSG(msg) do { \
-							_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
-						} while (0)
+									_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
+								} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
 

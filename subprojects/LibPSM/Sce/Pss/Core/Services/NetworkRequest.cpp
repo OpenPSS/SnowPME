@@ -1,17 +1,18 @@
 #include <Sce/Pss/Core/Services/NetworkRequest.hpp>
 #include <Sce/Pss/Core/Error.hpp>
+#include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {
-	int NetworkRequest::CreateRequestNative(int type, std::string function, std::string json, int* requestHandle) {
+	int NetworkRequest::CreateRequestNative(int type, MonoString* function, MonoString* json, int* requestHandle) {
 		UNIMPLEMENTED();
 	}
-	int NetworkRequest::QueueRequestNative(int type, std::string function, std::string json, int* requestHandle) {
+	int NetworkRequest::QueueRequestNative(int type, MonoString* function, MonoString* json, int* requestHandle) {
 		UNIMPLEMENTED();
 	}
 	int NetworkRequest::DestroyRequestNative(int requestHandle) {
 		UNIMPLEMENTED();
 	}
-	int NetworkRequest::GetResponseNative(int requestHandle, std::string* response) {
+	int NetworkRequest::GetResponseNative(int requestHandle, MonoString* response) {
 		UNIMPLEMENTED();
 	}
 	int NetworkRequest::RegisterThreadNative(){

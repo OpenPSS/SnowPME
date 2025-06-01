@@ -16,7 +16,7 @@ namespace Sce::Pss::Core::Graphics {
 		Rgba = 0xF,
 	};
 
-	DEFINE_BITWISE_OPERATORS(ColorMask, uint8_t);
+	DEFINE_BITWISE_ENUM_OPERATOR(ColorMask, uint8_t);
 }
 
 #endif
