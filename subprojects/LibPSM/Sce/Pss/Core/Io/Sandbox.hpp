@@ -47,7 +47,7 @@ namespace Sce::Pss::Core::Io {
 		int CopyFile(std::string sandboxedSrcPath, std::string sandboxDestPath, bool move);
 		std::string GetCurrentDirectory();
 		int SetCurrentDirectory(std::string sandboxedPath);
-		int CreateDirectory(std::string sandboxedPath);
+		int MakeDirectory(std::string sandboxedPath);
 		int DeleteDirectory(std::string sandboxedPath);
 		int ReadDirectory(PsmFileDescriptor* handle, ScePssFileInformation_t* fileInfo);
 		int SetAttributes(std::string sandboxedPath, uint32_t attributes);

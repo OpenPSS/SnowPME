@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdint>
 #include <Sce/Pss/Core/Errorable.hpp>
+
 #define CGX_MAX_LEN (0x10000)
 #define CGX_MAGIC_LEN (0x4)
 

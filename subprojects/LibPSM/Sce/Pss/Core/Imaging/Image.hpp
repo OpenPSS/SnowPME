@@ -4,11 +4,11 @@
 #include <string>
 #include <iostream>
 #include <cstdint>
-#include "ImageSize.hpp"
-#include "ImageColor.hpp"
-#include "ImageRect.hpp"
-#include "ImagePosition.hpp"
-#include "ImageMode.hpp"
+#include <Sce/Pss/Core/Imaging/ImageSize.hpp>
+#include <Sce/Pss/Core/Imaging/ImageColor.hpp>
+#include <Sce/Pss/Core/Imaging/ImageRect.hpp>
+#include <Sce/Pss/Core/Imaging/ImagePosition.hpp>
+#include <Sce/Pss/Core/Imaging/ImageMode.hpp>
 
 namespace Sce::Pss::Core::Imaging {
 	class Image {

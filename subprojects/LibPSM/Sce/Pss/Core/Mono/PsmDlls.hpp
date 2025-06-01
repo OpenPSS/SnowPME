@@ -3,8 +3,9 @@
 #include <cstdint>
 #include <string>
 
+#define DLL_BUFFER_ALLOC_SIZE (0x300000)
+
 namespace Sce::Pss::Core::Mono::PsmDlls {
-	const uint32_t MscorlibSize = 0x0028FA80;
 
 	static std::string PsmDllFilenameList[3]{
 		"mscorlib.dll",

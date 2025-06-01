@@ -9,7 +9,6 @@
 
 #include <LibShared.hpp>
 
-
 using namespace Shared;
 using namespace Shared::Debug;
 using namespace Shared::String;
@@ -343,8 +342,6 @@ namespace Sce::Pss::Core::Io {
 
 		std::fstream::ios_base::openmode openmode = static_cast<std::ios::openmode>(0);
 
-
-
 		if ((flags & SCE_PSS_FILE_OPEN_FLAG_READ) != 0) {
 			openmode |= std::ios::in;
 		}
@@ -431,7 +428,7 @@ namespace Sce::Pss::Core::Io {
 		// Crate the directory if it does not exist.
 		std::string parentDirectory = Shared::String::Path::UpDirectory(sandboxDstPath);
 		if (!this->PathExist(parentDirectory, false))
-			this->CreateDirectory(parentDirectory);
+			this->MakeDirectory(parentDirectory);
 
 		// Locate real location of src and dst.
 		std::string realSrc = this->LocateRealPath(absSrc, false);
@@ -573,7 +570,7 @@ namespace Sce::Pss::Core::Io {
 
 	}
 
-	int Sandbox::CreateDirectory(std::string sandboxedPath) {
+	int Sandbox::MakeDirectory(std::string sandboxedPath) {
 		std::string absPath = this->AbsolutePath(sandboxedPath);
 
 		// Return success if directory already exists.
@@ -735,7 +732,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		std::string absolutePath = startDir + Shared::String::StringUtil::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
+		std::string absolutePath = startDir + StringUtil::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
 		return absolutePath;
 	}
 

@@ -6,14 +6,13 @@
 #include <filesystem>
 #include <string.h>
 
+using namespace Shared::String;
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Mono::PsmDlls;
+using namespace Sce::Pss::Core::Crypto;
 
 namespace Sce::Pss::Core::Mono
 {
-	using namespace Shared::String;
-	using namespace Shared::Debug;
-
-	using namespace Sce::Pss::Core::Mono::PsmDlls;
-
 	PssSystemFileEnum Security::nameToEnum(std::string name) {
 		for (int i = 0; i < (sizeof(PsmDllFilenameList) / sizeof(std::string)); i++) {
 			if (StringUtil::ToLower(PsmDllFilenameList[i]) == StringUtil::ToLower(name)) {
@@ -32,18 +31,18 @@ namespace Sce::Pss::Core::Mono
 		// check the DLL file exists :
 		if ( std::filesystem::exists(std::filesystem::path(dllFullPath)) ) {
 			// get the filesize of the DLL
-			uint8_t* buffer = new uint8_t[MscorlibSize]; // Allocate memory for the DLL
+			uint8_t* buffer = new uint8_t[DLL_BUFFER_ALLOC_SIZE]; // Allocate memory for the DLL
 			std::ifstream* dllStream = new std::ifstream(dllFullPath, std::ios::in | std::ios::binary); // Open the DLL File 
 
 			if (dllStream->is_open() && !dllStream->fail()) { // Check if open  was successful
 				// Read DLL Contents
-				dllStream->read((char*)buffer, MscorlibSize);
+				dllStream->read((char*)buffer, DLL_BUFFER_ALLOC_SIZE);
 				uint64_t readSz = dllStream->gcount();
 				dllStream->close();
 
 				// Hash the DLLs
 				uint8_t gotHash[0x14];
-				Crypto::CryptoLibrary::Sha1Sum(buffer, (uint32_t)readSz, gotHash);
+				CryptoLibrary::Sha1Sum(buffer, (uint32_t)readSz, gotHash);
 
 				// Check hash matches whats expected.
 				switch (whatDll) {

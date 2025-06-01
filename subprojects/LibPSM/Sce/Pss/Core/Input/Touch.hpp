@@ -4,8 +4,7 @@
 
 #include <string>
 #include <iostream>
-#include "TouchData.hpp"
-
+#include <Sce/Pss/Core/Input/TouchData.hpp>
 
 namespace Sce::Pss::Core::Input {
 	class Touch {

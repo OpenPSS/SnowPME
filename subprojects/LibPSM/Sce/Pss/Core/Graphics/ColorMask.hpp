@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <Sce/Pss/Core/BitwiseEnum.hpp>
 
-
 namespace Sce::Pss::Core::Graphics {
 	enum class ColorMask : uint8_t {
 		None = 0x0,

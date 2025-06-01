@@ -38,18 +38,18 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectoryCreate(char* pszDirectoryPath) {
 		Logger::Debug(__FUNCTION__);
-		if (pszDirectoryPath == NULL)
+		if (pszDirectoryPath == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = Sandbox::GetUniqueObject()->AbsolutePath(relativePath);
 
-		return Sandbox::GetUniqueObject()->CreateDirectory(absolutePath);
+		return Sandbox::GetUniqueObject()->MakeDirectory(absolutePath);
 	}
 
 	int ICall::PsmDirectoryRemove(char* pszDirectoryPath) {
 		Logger::Debug(__FUNCTION__);
-		if (pszDirectoryPath == NULL)
+		if (pszDirectoryPath == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
@@ -63,11 +63,10 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
 		Logger::Debug(__FUNCTION__);
-		if (pszDirectoryPath == NULL || pDirectory == NULL)
+		if (pszDirectoryPath == nullptr || pDirectory == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		if (pszFileExtension != NULL)
-			Logger::Debug("Oh oh- pszFileExtension is not null.");
+		assert("pszFileExtension is not null.", pszFileExtension != nullptr);
 
 		std::string relativePath = std::string(pszDirectoryPath);
 		std::string absolutePath = Sandbox::GetUniqueObject()->AbsolutePath(relativePath);
@@ -97,7 +96,7 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
 		Logger::Debug(__FUNCTION__);
-		if (pFileInfo == NULL || !Handles::IsValid(directory))
+		if (pFileInfo == nullptr || !Handles::IsValid(directory))
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
@@ -116,7 +115,7 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectoryGetWorking(char* pszDirectoryPath, uint32_t uBufferSize) {
 		Logger::Debug(__FUNCTION__);
-		if (pszDirectoryPath == NULL || uBufferSize == NULL)
+		if (pszDirectoryPath == nullptr || uBufferSize == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		if (uBufferSize < PSM_PATH_MAX)
@@ -130,7 +129,7 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmDirectorySetWorking(char* pszDirectoryPath) {
 		Logger::Debug(__FUNCTION__);
-		if (pszDirectoryPath == NULL)
+		if (pszDirectoryPath == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string relativePath = std::string(pszDirectoryPath);
@@ -189,7 +188,7 @@ namespace Sce::Pss::Core::Io {
 	int ICall::PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo) { 
 		Logger::Debug(__FUNCTION__);
 
-		if (!Handles::IsValid(file) || pFileInfo == NULL)
+		if (!Handles::IsValid(file) || pFileInfo == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
 		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
@@ -209,7 +208,7 @@ namespace Sce::Pss::Core::Io {
 	int ICall::PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead) {
 		Logger::Debug(__FUNCTION__);
 
-		if (!Handles::IsValid(file) || buffer == NULL || uBytesToRead == NULL || puBytesRead == NULL)
+		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToRead == nullptr || puBytesRead == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
@@ -221,8 +220,6 @@ namespace Sce::Pss::Core::Io {
 		if (handle->directory)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-
-		
 		*puBytesRead = Sandbox::GetUniqueObject()->ReadFile(handle, uBytesToRead, (char*)buffer);
 
 		return PSM_ERROR_NO_ERROR;
@@ -230,7 +227,7 @@ namespace Sce::Pss::Core::Io {
 
 	int ICall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
 		Logger::Debug(__FUNCTION__);
-		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToWrite == NULL || puBytesWritten == nullptr)
+		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToWrite == nullptr || puBytesWritten == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
@@ -277,7 +274,7 @@ namespace Sce::Pss::Core::Io {
 	
 	int ICall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
 		Logger::Debug(__FUNCTION__);
-		if (puSize == NULL || !Handles::IsValid(file))
+		if (puSize == nullptr || !Handles::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
 		PsmFileDescriptor* handle = Handles::Get<PsmFileDescriptor>(file);
@@ -312,7 +309,7 @@ namespace Sce::Pss::Core::Io {
 	}
 	int ICall::PsmFileCopy(const char* pszOldName, const char* pszNewName, int32_t bMove) {
 		Logger::Debug(__FUNCTION__);
-		if (pszOldName == NULL || pszNewName == NULL)
+		if (pszOldName == nullptr || pszNewName == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string srcRelativePath = std::string(pszOldName);
@@ -326,7 +323,7 @@ namespace Sce::Pss::Core::Io {
 	}
 	int ICall::PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags) {
 		Logger::Debug(__FUNCTION__);
-		if (pszFileName == NULL)
+		if (pszFileName == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string relativePath = std::string(pszFileName);
@@ -339,7 +336,7 @@ namespace Sce::Pss::Core::Io {
 	}
 	int ICall::PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime) {
 		Logger::Debug(__FUNCTION__);
-		if (pszFileName == NULL || pCreationTime == NULL || pLastAccessTime == NULL || pLastWriteTime == NULL)
+		if (pszFileName == nullptr || pCreationTime == nullptr || pLastAccessTime == nullptr || pLastWriteTime == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string relativePath = std::string(pszFileName);
@@ -355,7 +352,7 @@ namespace Sce::Pss::Core::Io {
 	int ICall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {
 		Logger::Debug(__FUNCTION__);
 
-		if (pFileInfo == NULL || pszFileName == NULL)
+		if (pFileInfo == nullptr || pszFileName == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		memset(pFileInfo, 0, sizeof(ScePssFileInformation_t));
