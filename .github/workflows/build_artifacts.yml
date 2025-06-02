@@ -3,8 +3,30 @@ on:
     branches:
       - main
 jobs:
-  msvc_build:
-    name: run msvc build
+  ubuntu_meson_build:
+    name: Ubuntu meson; GCC
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: get submodules
+        run: git submodule update --init --recursive
+      - name: install dependencies
+        run: sudo apt install libsdl2-dev build-essential meson -y
+      - name: compile
+        run: |
+            meson setup build
+            cd build
+            ninja
+      - name: upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: SnowPME-Ubuntu
+          path: build
+  windows_msvc_build:
+    name: Windows msbuild; Microsoft Visual C++
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -13,7 +35,7 @@ jobs:
           fetch-depth: 0
       - name: get submodules
         run: git submodule update --init --recursive
-      - name: add windows xp support
+      - name: install windows xp sdk
         run: |
           Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
           $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
@@ -38,5 +60,5 @@ jobs:
       - name: upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: SnowPME-MSVC
+          name: SnowPME-Windows
           path: build/SnowPME/bin

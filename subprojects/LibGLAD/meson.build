@@ -8,6 +8,4 @@ dirbase = meson.current_source_dir()
 
 libGLAD = static_library('GLAD',
         'glad.c',
-        install  true)
-		
-libGLAD_dep = declare_dependency(link_with libGLAD)
+        install: true)

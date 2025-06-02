@@ -22,6 +22,4 @@ libSnowPME = static_library('SnowPME',
 	'Graphics/Gui/SnowGui.cpp',
 	'Graphics/Window.cpp',
 	'Runtime/Application.cpp',
-	install  true)
-	
-libSnowPME_dep = declare_dependency(link_with libSnowPME)
+	install: true)

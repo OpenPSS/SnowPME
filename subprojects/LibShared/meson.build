@@ -8,10 +8,8 @@ dirbase = meson.current_source_dir()
 
 libShared = static_library('Shared',
 	'Config.cpp',
+	'ProgressTracker.cpp',
 	'Debug/Logger.cpp',
 	'String/Path.cpp',
 	'String/StringUtil.cpp',
-	'ProgressTracker.cpp',
-	install  true)
-	
-libShared_dep = declare_dependency(link_with libShared)
+	install: true)
