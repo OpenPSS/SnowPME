@@ -21,8 +21,8 @@ namespace Sce::Pss::Core::Audio::Impl {
 		
 		std::atomic<float> sndPlaybackSpeed;
 
-		std::atomic<uint64_t> sndLoopStart;
-		std::atomic<uint64_t> sndLoopEnd;
+		std::atomic<uint32_t> sndLoopStart;
+		std::atomic<uint32_t> sndLoopEnd;
 
 		static void dataCallback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
 	public:
@@ -39,18 +39,17 @@ namespace Sce::Pss::Core::Audio::Impl {
 		float Volume();
 		int SetVolume(float val);
 
-		uint64_t LoopStart();
-		uint64_t LoopEnd();
-		int SetLoopStart(uint64_t val);
-		int SetLoopEnd(uint64_t val);
+		uint32_t LoopStart();
+		uint32_t LoopEnd();
+		int SetLoopStart(uint32_t val);
+		int SetLoopEnd(uint32_t val);
 
 		float PlaybackSpeed();
 		int SetPlaybackSpeed(float val);
 
-		uint64_t Time();
-		int SetTime(uint64_t val);
-
-		uint64_t Duration();
+		uint32_t Time();
+		int SetTime(uint32_t val);
+		uint32_t Duration();
 
 		bool Looping();
 		int SetLooping(bool val);

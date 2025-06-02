@@ -38,7 +38,7 @@ namespace Sce::Pss::Core::Event {
 		LOCK_GUARD();
 		size_t queueSz = this->evtQueue.size();
 		
-		for (int i = 0; i < queueSz; i++) {
+		for (size_t i = 0; i < queueSz; i++) {
 			PsmEvent* evt = this->evtQueue.front();
 			if (evt != nullptr) delete evt;
 			this->evtQueue.pop();

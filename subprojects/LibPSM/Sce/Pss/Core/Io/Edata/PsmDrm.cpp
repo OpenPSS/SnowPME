@@ -1,10 +1,10 @@
-#include <Sce/Pss/Core/Edata/PsmDrm.hpp>
+#include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <LibShared.hpp>
 #include <string.h>
 
-namespace Sce::Pss::Core::Edata {
+namespace Sce::Pss::Core::Io::Edata {
 	using namespace Sce::Pss::Core::Io;
 	using namespace Shared::Debug;
 
@@ -14,9 +14,9 @@ namespace Sce::Pss::Core::Edata {
 		uint32_t wasRead = 0;
 		Logger::Debug("Reading FAKE.rif ...");
 
-		int err = ICall::PsmFileOpenSystem((char*)licenseFile.c_str(), SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
+		int err = IoCall::PsmFileOpen((char*)licenseFile.c_str(), SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
 		if (err == PSM_ERROR_NO_ERROR) {
-			err = ICall::PsmFileRead(handle, &rifData, sizeof(ScePsmDrmLicense), &wasRead);
+			err = IoCall::PsmFileRead(handle, &rifData, sizeof(ScePsmDrmLicense), &wasRead);
 			
 			if (err == PSM_ERROR_NO_ERROR) {
 				this->psmContentId = std::string(rifData.ContentId, sizeof(rifData.ContentId));
@@ -29,7 +29,7 @@ namespace Sce::Pss::Core::Edata {
 				this->SetError(err);
 			}
 
-			ICall::PsmClose(handle);
+			IoCall::PsmClose(handle);
 		}
 		else {
 			this->SetError(err);

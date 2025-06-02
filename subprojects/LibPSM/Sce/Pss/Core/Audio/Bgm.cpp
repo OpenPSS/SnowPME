@@ -2,7 +2,7 @@
 #include <Sce/Pss/Core/Audio/BgmPlayer.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
 
@@ -20,10 +20,10 @@ namespace Sce::Pss::Core::Audio {
 
 	bool Bgm::isMp3() {
 		if (this->audioSz >= 3) {
-			char mp3Magic[0x2]  = { 0xFF, 0xFA };
-			char mp3Magic2[0x2] = { 0xFF, 0xFB };
-			char mp3Magic3[0x2] = { 0xFF, 0xFE };
-			char id3Magic[0x3]  = { 0x49, 0x44, 0x33 };
+			uint8_t mp3Magic[0x2]  = { 0xFF, 0xFA };
+			uint8_t mp3Magic2[0x2] = { 0xFF, 0xFB };
+			uint8_t mp3Magic3[0x2] = { 0xFF, 0xFE };
+			uint8_t id3Magic[0x3]  = { 0x49, 0x44, 0x33 };
 
 			if (memcmp(this->audioData, mp3Magic, sizeof(mp3Magic)) == 0 || 
 				memcmp(this->audioData, mp3Magic2, sizeof(mp3Magic2)) == 0 ||
@@ -61,9 +61,9 @@ namespace Sce::Pss::Core::Audio {
 	Bgm::Bgm(const std::string& filename) {
 		uint64_t file = NULL;
 		// Open the file specified
-		if (ICall::PsmFileOpen((char*)filename.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ, &file) == PSM_ERROR_NO_ERROR) {
+		if (IoCall::PsmFileOpen((char*)filename.c_str(), SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ, &file) == PSM_ERROR_NO_ERROR) {
 			// get total file sie..
-			ICall::PsmFileGetSize(file, &this->audioSz);
+			IoCall::PsmFileGetSize(file, &this->audioSz);
 			
 			// allocate enough space in memory for this audio file
 			HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
@@ -72,8 +72,8 @@ namespace Sce::Pss::Core::Audio {
 			if (this->audioData != nullptr) {
 				// read the audio file into memory
 				uint32_t bytesRead = 0;
-				ICall::PsmFileRead(file, this->audioData, this->audioSz, &bytesRead);
-				ICall::PsmClose(file);
+				IoCall::PsmFileRead(file, this->audioData, this->audioSz, &bytesRead);
+				IoCall::PsmClose(file);
 
 				if (this->audioSz == bytesRead) {
 					if (this->isMp3()) { // ensure file is an mp3
@@ -89,7 +89,7 @@ namespace Sce::Pss::Core::Audio {
 				}
 			}
 			else {
-				ICall::PsmClose(file);
+				IoCall::PsmClose(file);
 				this->SetError(PSM_ERROR_OUT_OF_MEMORY);
 			}
 		}

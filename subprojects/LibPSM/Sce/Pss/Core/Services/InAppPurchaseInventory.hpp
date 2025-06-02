@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Services {
 	public:
 		InAppPurchaseProduct* GetItemByLabel(std::string label);
 		InAppPurchaseProduct* GetItemByIndex(int index);
-		size_t GetProductCount();
+		int GetProductCount();
 
 		int PurchaseItemByLabel(std::string label);
 		int PurchaseItemById(int index);

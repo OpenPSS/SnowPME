@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Environment/PersistentMemory.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
 
@@ -39,9 +39,9 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug("Writing " + std::string(PM_DAT_FILE) + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t _ = 0;
-		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
-			ICall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
-			ICall::PsmClose(fileHandle);
+		if (IoCall::PsmFileOpen(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+			IoCall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
+			IoCall::PsmClose(fileHandle);
 		}
 		else {
 			memset(PersistentMemory::memoryBuffer, 0, sizeof(PersistentMemory::memoryBuffer));
@@ -57,9 +57,9 @@ namespace Sce::Pss::Core::Environment {
 		Logger::Debug("Reading " + std::string(PM_DAT_FILE) + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t _ = 0;
-		if (ICall::PsmFileOpenSystem(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
-			ICall::PsmFileRead(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
-			ICall::PsmClose(fileHandle);
+		if (IoCall::PsmFileOpen(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+			IoCall::PsmFileRead(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
+			IoCall::PsmClose(fileHandle);
 		}
 		else {
 			memset(PersistentMemory::memoryBuffer, 0, sizeof(PersistentMemory::memoryBuffer));

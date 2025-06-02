@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-namespace Sce::Pss::Core::Edata {
+namespace Sce::Pss::Core::Io::Edata {
 	class EdataList {
 	private:
 		std::vector<std::string> edataFilesList;

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdint>
 
-namespace Sce::Pss::Core::Edata {
+namespace Sce::Pss::Core::Io::Edata {
 	typedef struct ScePsmDrmLicense {
 		char Magic[0x8];
 		uint32_t Unk1;

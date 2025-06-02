@@ -7,7 +7,7 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 
 #include <iostream>

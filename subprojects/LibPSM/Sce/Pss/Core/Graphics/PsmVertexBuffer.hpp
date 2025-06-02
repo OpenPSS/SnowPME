@@ -11,8 +11,6 @@
 
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core;
-
 	class PsmVertexBuffer {
 	public:
 		static int Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray *formats, int *result);

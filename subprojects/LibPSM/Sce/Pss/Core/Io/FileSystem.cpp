@@ -1,23 +1,23 @@
 #include <Sce/Pss/Core/Io/FileSystem.hpp>
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
-#include <Sce/Pss/Core/Edata/EdataList.hpp>
-#include <Sce/Pss/Core/Edata/PsmDrm.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
+#include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 #include <LibShared.hpp>
 
 #include <vector>
 #include <filesystem>
 
+using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Io::Edata;
 
 namespace Sce::Pss::Core::Io {
-	using namespace Shared::Debug;
-	using namespace Sce::Pss::Core::Edata;
-	 
-	FileSystem::FileSystem(const std::string& pathOnDisk, const std::string& sandboxPathName, bool rewritable, bool emulated, bool system) {
-		this->sandboxPath = sandboxPathName;
+
+	FileSystem::FileSystem(const std::string& pathOnDisk, const std::string& sandboxPathName, bool rewritable, bool root, bool system) {
+		this->pathInSandbox = sandboxPathName;
 		this->pathOnDisk = pathOnDisk;
-		this->rw = rewritable;
+		this->rewritable = rewritable;
 		this->system = system;
-		this->emulated = emulated;
+		this->root = root;
 
 		std::filesystem::create_directories(std::filesystem::path(pathOnDisk));
 	}
@@ -50,13 +50,13 @@ namespace Sce::Pss::Core::Io {
 				RETURN_ERRORABLE(str);
 			}
 			// allocate memory for the full psse.list file 
-			char* psseLstData = new char[str->Filesize()];
+			char* psseLstData = new char[str->Length()];
 
 			// read the psse.list into the memory just allocated.
-			int totalRead = str->Read(psseLstData, str->Filesize());
+			int totalRead = str->Read(psseLstData, str->Length());
 
-			if (totalRead == str->Filesize()) { // if the total bytes read is the same as the filesize
-				std::string edataList = std::string(psseLstData, str->Filesize()); // create a std::string from the psse.list data
+			if (totalRead == str->Length()) { // if the total bytes read is the same as the filesize
+				std::string edataList = std::string(psseLstData, str->Length()); // create a std::string from the psse.list data
 				this->edataList = new EdataList(edataList); // create a psse.list object.
 			}
 			else {
@@ -84,19 +84,21 @@ namespace Sce::Pss::Core::Io {
 		return this->edataList;
 	}
 	std::string FileSystem::SandboxPath() {
-		return this->sandboxPath;
+		return this->pathInSandbox;
 	}
 	std::string FileSystem::PathOnDisk() {
 		return this->pathOnDisk;
 	}
+	
 	bool FileSystem::IsSystem() {
 		return this->system;
 	}
+	
 	bool FileSystem::IsWritable() {
-		return this->rw && !this->IsEmulated();
+		return this->rewritable && !this->IsRoot();
 	}
 
-	bool FileSystem::IsEmulated() {
-		return this->emulated;
+	bool FileSystem::IsRoot() {
+		return this->root;
 	}
 }

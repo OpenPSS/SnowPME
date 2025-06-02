@@ -39,7 +39,6 @@
 			return; \
 		} while(0)
 
-
 #define UNIMPLEMENTED_ERRORABLE(msg) \
 		do { \
 			Sce::Pss::Core::ExceptionInfo::AddMessage(std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n")); \

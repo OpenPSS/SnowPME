@@ -697,7 +697,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// is selected stream actually in the stream set?
-		if (stream < 0 || stream >= this->VertexFormats.size())
+		if (stream < 0 || stream >= static_cast<int>(this->VertexFormats.size()))
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		// is the format valid?

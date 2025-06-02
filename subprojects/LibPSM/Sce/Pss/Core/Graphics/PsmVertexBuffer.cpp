@@ -44,9 +44,9 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (GraphicsContext::GetUniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 			VertexBuffer* buffer = Handles::Get<VertexBuffer>(handle);
-			if (buffer == NULL) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 			MonoType* type = Sce::Pss::Core::Mono::MonoUtil::MonoArrayElementsType(vertices);
 			
@@ -64,7 +64,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			// Check the stream number is valid
-			if (stream < 0 || stream >= buffer->VertexFormats.size()) {
+			if (stream < 0 || stream >= static_cast<int>(buffer->VertexFormats.size())) {
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
 

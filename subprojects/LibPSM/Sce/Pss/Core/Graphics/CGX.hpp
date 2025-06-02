@@ -19,11 +19,11 @@ namespace Sce::Pss::Core::Graphics {
 		uint32_t nullSeperatorListPtr;
 		uint32_t VariantListPtr;
 		uint32_t VariantCount;
-		int unk0;
-		int unk1;
-		int unk2;
+		uint32_t unk0;
+		uint32_t unk1;
+		uint32_t unk2;
 		CGXVariantType VariantType;
-		int unk4;
+		uint32_t unk4;
 	} CGXVariantTableEntry;
 
 	typedef struct CGXVariant {

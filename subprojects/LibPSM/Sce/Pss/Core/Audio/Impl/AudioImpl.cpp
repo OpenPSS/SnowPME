@@ -78,10 +78,10 @@ namespace Sce::Pss::Core::Audio::Impl {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	uint64_t Audio::LoopStart() {
+	uint32_t Audio::LoopStart() {
 		return this->sndLoopStart.load();
 	}
-	uint64_t Audio::LoopEnd() {
+	uint32_t Audio::LoopEnd() {
 		return this->sndLoopEnd.load();
 	}
 
@@ -122,36 +122,36 @@ namespace Sce::Pss::Core::Audio::Impl {
 		return PSM_ERROR_AUDIO_SYSTEM;
 	}
 
-	int Audio::SetTime(uint64_t val) {
-		uint64_t frame = (uint64_t)((double)val * ((double)this->audioDecoder->outputSampleRate * (double)1000.0));
+	int Audio::SetTime(uint32_t val) {
+		uint64_t frame = (uint64_t)(static_cast<double>(val) * (static_cast<double>(this->audioDecoder->outputSampleRate) * 1000.0));
 		if (this->audioDecoder != nullptr && ma_decoder_seek_to_pcm_frame(this->audioDecoder, frame) == MA_SUCCESS) return PSM_ERROR_NO_ERROR;
 		return PSM_ERROR_AUDIO_SYSTEM;
 	}
 
-	int Audio::SetLoopStart(uint64_t val) {
+	int Audio::SetLoopStart(uint32_t val) {
 		this->sndLoopStart.store(val);
 		return PSM_ERROR_NO_ERROR;
 	}
-	int Audio::SetLoopEnd(uint64_t val) {
+	int Audio::SetLoopEnd(uint32_t val) {
 		this->sndLoopEnd.store(val);
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	uint64_t Audio::Duration() {
+	uint32_t Audio::Duration() {
 		uint64_t pcmFrames = 0;
-		uint64_t duration = 0;
+		uint32_t duration = 0;
 
 		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
-			duration = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
+			duration = static_cast<uint32_t>((static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0)));
 		}
 		return duration;
 	}
 
-	uint64_t Audio::Time() {
+	uint32_t Audio::Time() {
 		uint64_t pcmFrames = 0;
-		uint64_t time = 0;
+		uint32_t time = 0;
 		if (this->audioDecoder != nullptr && ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
-			time = (uint64_t)(((double)pcmFrames / ((double)this->audioDecoder->outputSampleRate / (double)1000.0)));
+			time = static_cast<uint32_t>((static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0)));
 		}
 		return time;
 	}
@@ -167,7 +167,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 			ma_device_uninit(this->audioDevice); // unitalize the device 
 
 			// change the sample rate to be sample rate * speed factor 
-			this->audioDeviceCfg->sampleRate = (uint32_t)((float)this->audioDecoder->outputSampleRate * (float)val);
+			this->audioDeviceCfg->sampleRate = static_cast<uint32_t>(static_cast<float>(this->audioDecoder->outputSampleRate) * static_cast<float>(val));
 			this->sndPlaybackSpeed.store(val);
 
 			// initalize the device again

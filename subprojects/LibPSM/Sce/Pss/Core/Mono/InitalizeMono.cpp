@@ -5,8 +5,8 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Mono/Security.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
-#include <Sce/Pss/Core/Edata/Callbacks.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataCallbacks.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 #include <Sce/Pss/Core/InitializeCsharp.hpp>
@@ -69,26 +69,26 @@ namespace Sce::Pss::Core::Mono {
 
 		// PSM Icalls
 		pss_io_icall_install_functions(
-			Sce::Pss::Core::Io::ICall::PsmClose,
-			Sce::Pss::Core::Io::ICall::PsmDirectoryCreate,
-			Sce::Pss::Core::Io::ICall::PsmDirectoryRemove,
-			Sce::Pss::Core::Io::ICall::PsmDirectoryOpen,
-			Sce::Pss::Core::Io::ICall::PsmDirectoryRead,
-			Sce::Pss::Core::Io::ICall::PsmDirectoryGetWorking,
-			Sce::Pss::Core::Io::ICall::PsmDirectorySetWorking,
-			Sce::Pss::Core::Io::ICall::PsmFileOpen,
-			Sce::Pss::Core::Io::ICall::PsmFileDelete,
-			Sce::Pss::Core::Io::ICall::PsmFileGetInformation,
-			Sce::Pss::Core::Io::ICall::PsmFileRead,
-			Sce::Pss::Core::Io::ICall::PsmFileWrite,
-			Sce::Pss::Core::Io::ICall::PsmFileSeek,
-			Sce::Pss::Core::Io::ICall::PsmFileFlush,
-			Sce::Pss::Core::Io::ICall::PsmFileGetSize,
-			Sce::Pss::Core::Io::ICall::PsmFileTruncate,
-			Sce::Pss::Core::Io::ICall::PsmFileCopy,
-			Sce::Pss::Core::Io::ICall::PsmFileSetAttributes,
-			Sce::Pss::Core::Io::ICall::PsmFileSetTimes,
-			Sce::Pss::Core::Io::ICall::PsmFileGetPathInformation);
+			Sce::Pss::Core::Io::IoCall::PsmClose,
+			Sce::Pss::Core::Io::IoCall::PsmDirectoryCreate,
+			Sce::Pss::Core::Io::IoCall::PsmDirectoryRemove,
+			Sce::Pss::Core::Io::IoCall::PsmDirectoryOpen,
+			Sce::Pss::Core::Io::IoCall::PsmDirectoryRead,
+			Sce::Pss::Core::Io::IoCall::PsmDirectoryGetWorking,
+			Sce::Pss::Core::Io::IoCall::PsmDirectorySetWorking,
+			Sce::Pss::Core::Io::IoCall::PsmFileOpen,
+			Sce::Pss::Core::Io::IoCall::PsmFileDelete,
+			Sce::Pss::Core::Io::IoCall::PsmFileGetInformation,
+			Sce::Pss::Core::Io::IoCall::PsmFileRead,
+			Sce::Pss::Core::Io::IoCall::PsmFileWrite,
+			Sce::Pss::Core::Io::IoCall::PsmFileSeek,
+			Sce::Pss::Core::Io::IoCall::PsmFileFlush,
+			Sce::Pss::Core::Io::IoCall::PsmFileGetSize,
+			Sce::Pss::Core::Io::IoCall::PsmFileTruncate,
+			Sce::Pss::Core::Io::IoCall::PsmFileCopy,
+			Sce::Pss::Core::Io::IoCall::PsmFileSetAttributes,
+			Sce::Pss::Core::Io::IoCall::PsmFileSetTimes,
+			Sce::Pss::Core::Io::IoCall::PsmFileGetPathInformation);
 
 
 		// setup all C# side psm related functions ...
@@ -180,10 +180,10 @@ namespace Sce::Pss::Core::Mono {
 
 		// setup Edata ... for DRM..
 		PssCryptoCallbacks callbacks;
-		callbacks.eOpen = Pss::Core::Edata::Callbacks::EdataOpen;
-		callbacks.eRead = Pss::Core::Edata::Callbacks::EdataRead;
-		callbacks.eSeek = Pss::Core::Edata::Callbacks::EdataSeek;
-		callbacks.eClose = Pss::Core::Edata::Callbacks::EdataClose;
+		callbacks.eOpen  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataOpen;
+		callbacks.eRead  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataRead;
+		callbacks.eSeek  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataSeek;
+		callbacks.eClose = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataClose;
 		ScePsmEdataMonoInit(&callbacks);
 
 		// setup limits 

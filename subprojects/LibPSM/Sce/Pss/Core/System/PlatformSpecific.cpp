@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::System {
 
         return PSM_ERROR_NO_ERROR;
 #else
-        return PSM_ERROR_NOT_SUPPORTED;
+#error platform not supported
 #endif
     }
 
@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::System {
         CloseHandle(fd);
         return PSM_ERROR_NO_ERROR;
 #else
-		return PSM_ERROR_NOT_SUPPORTED;
+#error platform not supported
 #endif
 	}
     std::string PlatformSpecific::escapeShellArgument(std::string arg) {
@@ -93,7 +93,7 @@ namespace Sce::Pss::Core::System {
 #elif __linux__
         std::string command = "xdg-open " + url;
 #else
-        return PSM_ERROR_NOT_SUPPORTED;
+#error platform not supported
 #endif
         
         // execute the command 

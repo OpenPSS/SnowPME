@@ -8,8 +8,8 @@ namespace Sce::Pss::Core::Io {
 		std::filesystem::directory_iterator* iterator = nullptr;
 		int positionInFolder = 0;
 
-		std::string sandboxPath;
-		std::string realPath;
+		std::string pathInSandbox;
+		std::string pathOnDisk;
 		std::string relativePath = "";
 	} StackItem;
 }

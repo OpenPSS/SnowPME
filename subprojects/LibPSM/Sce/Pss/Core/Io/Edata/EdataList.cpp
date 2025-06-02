@@ -1,11 +1,13 @@
-#include <Sce/Pss/Core/Edata/EdataList.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 #include <string>
 
-namespace Sce::Pss::Core::Edata {
-	using namespace Shared::String;
-	using namespace Shared::Debug;
+using namespace Shared::String;
+using namespace Shared::Debug;
+
+namespace Sce::Pss::Core::Io::Edata {
+
 
 	bool EdataList::IsFileInEdata(const std::string& path) {
 		for (const std::string& edataFile : this->edataFilesList) {
@@ -20,6 +22,8 @@ namespace Sce::Pss::Core::Edata {
 		std::vector<std::string> psseFilesList = StringUtil::Split(StringUtil::Replace(psseListData, "\r", ""), "\n");
 
 		for (const std::string& psseFile : psseFilesList) {
+			if (psseFile.empty()) continue;
+
 			Logger::Debug("Registering file: " + psseFile);
 			this->edataFilesList.push_back(psseFile);
 		}

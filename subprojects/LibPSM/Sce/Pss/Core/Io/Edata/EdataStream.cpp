@@ -1,14 +1,12 @@
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
-
-#include <Sce/Pss/Core/Edata/EdataList.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Crypto/Keys.hpp>
 #include <Sce/Pss/Core/Crypto/CryptoLibrary.hpp>
-
 #include <Sce/Pss/Core/Crypto/Md5Hash.hpp>
-#include <Sce/Pss/Core/Edata/EdataHeader.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataHeader.hpp>
 #include <Sce/Pss/Core/Crypto/AesCbc.hpp>
+#include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 
-#include <Sce/Pss/Core/Edata/PsmDrm.hpp>
 #include <LibShared.hpp>
 #include <filesystem>
 #include <errno.h>
@@ -17,7 +15,7 @@
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Crypto;
 
-namespace Sce::Pss::Core::Edata {
+namespace Sce::Pss::Core::Io::Edata {
 	void EdataStream::rollIv(uint64_t blockNo, uint8_t blockIv[0x10]) {
 		memset(blockIv, 0x00, sizeof(EdataStream::fileIv));
 		memcpy(blockIv, &blockNo, sizeof(uint64_t));
@@ -81,7 +79,7 @@ namespace Sce::Pss::Core::Edata {
 		this->block = blockNo;
 
 		uint64_t blockPosition = blockNo * PSSE_BLOCK_SIZE;
-		size_t totalRead = PSSE_BLOCK_SIZE;
+		uint64_t totalRead = PSSE_BLOCK_SIZE;
 		uint64_t trimTo = totalRead;
 
 		// Handle special processing ...
@@ -136,7 +134,8 @@ namespace Sce::Pss::Core::Edata {
 	int EdataStream::bytesLeftInBlock() {
 		return this->currentBlock.size() - this->blockPosition();
 	}
-	size_t EdataStream::getRemainLength(size_t length, size_t totalRead) {
+
+	uint64_t EdataStream::getRemainLength(uint64_t length, uint64_t totalRead) {
 		return length - totalRead;
 	}
 
@@ -252,14 +251,14 @@ namespace Sce::Pss::Core::Edata {
 		}
 	}
 
-	uint64_t EdataStream::Filesize() {
+	uint64_t EdataStream::Length() {
 		if (this->FileEncrypted)
 			return this->header.FileSize;
 		else
 			return this->totalFileSize;
 	}
 
-	int EdataStream::Read(char* buffer, size_t length) {
+	uint32_t EdataStream::Read(void* buffer, uint32_t length) {
 		if (this->FileEncrypted) {
 
 			uint64_t blockNo = this->getBlockIdForOffset(this->position);
@@ -267,18 +266,18 @@ namespace Sce::Pss::Core::Edata {
 				this->decryptBlock(blockNo);
 			}
 
-			size_t totalRead = 0;
-			if (length > this->getRemainLength(this->Filesize(), this->position))
-				length = this->getRemainLength(this->Filesize(), this->position);
+			uint64_t totalRead = 0;
+			if (length > this->getRemainLength(this->Length(), this->position))
+				length = this->getRemainLength(this->Length(), this->position);
 			if (length < 0)
 				return 0;
 
 			while (this->getRemainLength(length, totalRead) > this->bytesLeftInBlock()) {
-				totalRead += this->Read(buffer + totalRead, this->bytesLeftInBlock());
+				totalRead += this->Read(static_cast<uint8_t*>(buffer) + totalRead, this->bytesLeftInBlock());
 			}
 
 			if (this->getRemainLength(length, totalRead) <= bytesLeftInBlock()) {
-				memcpy(buffer + totalRead, this->currentBlock.data(), this->getRemainLength(length, totalRead));
+				memcpy(static_cast<uint8_t*>(buffer) + totalRead, this->currentBlock.data(), this->getRemainLength(length, totalRead));
 
 				this->position += this->getRemainLength(length, totalRead);
 
@@ -288,15 +287,25 @@ namespace Sce::Pss::Core::Edata {
 			return 0;
 		}
 		else {
-			this->osHandle->read(buffer, length);
+			this->osHandle->read(static_cast<char*>(buffer), length);
 
-			uint64_t read = this->osHandle->gcount();
+			std::streamsize read = this->osHandle->gcount();
 			this->position += read;
 			
-			return (int)read;
+			return (uint32_t)read;
 		}
 	}
-	int EdataStream::Seek(int position, ScePssFileSeekType_t pos) {
+
+	uint32_t EdataStream::Write(void* buffer, uint32_t length) {
+		if (!this->FileEncrypted) {
+			this->osHandle->write(static_cast<const char*>(buffer), length);
+			this->position += length;
+			return length;
+		}
+		return PSM_ERROR_WRITE_FAILED;
+	}
+
+	int EdataStream::Seek(uint64_t position, ScePssFileSeekType_t pos) {
 		if (this->FileEncrypted) {
 
 			switch (pos) {
@@ -307,7 +316,7 @@ namespace Sce::Pss::Core::Edata {
 				this->position += position;
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->Filesize() - position;
+				this->position = this->Length() - position;
 				break;
 			default:
 				return PSM_ERROR_INVALID_PARAMETER;
@@ -326,7 +335,7 @@ namespace Sce::Pss::Core::Edata {
 				this->osHandle->seekg(position, std::ios::cur);
 				break;
 			case SCE_PSS_FILE_SEEK_TYPE_END:
-				this->position = this->Filesize() - position;
+				this->position = this->Length() - position;
 				this->osHandle->clear();
 				this->osHandle->seekg(position, std::ios::end);
 				break;
@@ -336,8 +345,8 @@ namespace Sce::Pss::Core::Edata {
 		}
 
 
-		if (this->position > this->Filesize())
-			this->position = this->Filesize();
+		if (this->position > this->Length())
+			this->position = this->Length();
 
 		if (this->position < 0)
 			this->position = 0;
@@ -356,18 +365,18 @@ namespace Sce::Pss::Core::Edata {
 		return this->osHandle->is_open();
 	}
 
+	bool EdataStream::IsDirectory() {
+		return false;
+	}
+
+	bool EdataStream::IsEncrypted() {
+		return this->FileEncrypted;
+	}
+
 	uint64_t EdataStream::Tell() {
 		return this->position;
 	}
 
-	int EdataStream::Write(char* buffer, size_t length) {
-		if (!this->FileEncrypted) {
-			this->osHandle->write(buffer, length);
-			this->position += length;
-			return length;
-		}
-		return PSM_ERROR_WRITE_FAILED;
-	}
 	void EdataStream::Flush() {
 		if (!this->FileEncrypted) {
 			this->osHandle->flush();
@@ -391,10 +400,10 @@ namespace Sce::Pss::Core::Edata {
 		if (this->FileEncrypted) {
 			uint64_t oldPosition = this->position;
 
-			std::vector<uint8_t> data = std::vector<uint8_t>(this->Filesize());
+			std::vector<uint8_t> data(this->Length());
 			uint8_t gotMd5[CryptoLibrary::Md5HashSize];
 
-			this->Read((char*)data.data(), this->Filesize());
+			this->Read(data.data(), this->Length());
 			CryptoLibrary::Md5Sum(data.data(), data.size(), gotMd5);
 
 			bool isValid = memcmp(this->header.Md5Hash, gotMd5, CryptoLibrary::Md5HashSize) == 0;

@@ -11,6 +11,9 @@ namespace Sce::Pss::Core::System {
 		static int lastHandle;
 	public:
 		static const int NoHandle = 0x0;
+		static bool IsValid(uint64_t handle) {
+			return IsValid(static_cast<int>(handle));
+		}
 		static bool IsValid(int handle) {
 			return handles.contains(handle);
 		}
@@ -22,16 +25,21 @@ namespace Sce::Pss::Core::System {
 			handles.emplace(handle, address);
 			return handle;
 		}
+
+		template<typename T> static T* Get(uint64_t handle) {
+			return Get<T>(static_cast<int>(handle));
+		}
+
 		template<typename T> static T* Get(int handle) {
 			auto it = handles.find(handle);
-			if(it == handles.end()) return NULL;
+			if(it == handles.end()) return nullptr;
 			return reinterpret_cast<T*>(handles[handle]);
 		}
 		static void Delete(int handle) {
 			if (!IsValid(handle))
 				return;
 			handles.erase(handle);
-		};
+		}
 	};
 }
 

@@ -1,12 +1,12 @@
-#ifndef LIB_PSS_ICALL_H
-#define LIB_PSS_ICALL_H 1
+#ifndef LIB_PSS_IOCALL_H
+#define LIB_PSS_IOCALL_H 1
 
 #include <mono/mono.h>
 #include <iostream>
 
 namespace Sce::Pss::Core::Io {
 
-	class ICall
+	class IoCall
 	{
 	public:
 		static int PsmClose(uint64_t handle);
@@ -21,6 +21,7 @@ namespace Sce::Pss::Core::Io {
 		static int PsmDirectorySetWorking(char* pszDirectoryPath);
 
 		static int PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile);
+		static int PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem);
 		static int PsmFileDelete(char* pszFileName);
 		static int PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo);
 		static int PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead);
@@ -35,7 +36,6 @@ namespace Sce::Pss::Core::Io {
 		static int PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime);
 		static int PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo);
 	
-		static int PsmFileOpenSystem(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile, bool includeSystem);
 
 	};
 }

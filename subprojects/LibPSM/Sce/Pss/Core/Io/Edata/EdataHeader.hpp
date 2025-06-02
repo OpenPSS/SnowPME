@@ -2,7 +2,7 @@
 #define LIB_PSS_EDATAHEADER_H 1
 #include <iostream>
 
-namespace Sce::Pss::Core::Edata {
+namespace Sce::Pss::Core::Io::Edata {
 	typedef struct _EdataHeader {
 		char     Magic[0x4];
 		uint32_t Version;

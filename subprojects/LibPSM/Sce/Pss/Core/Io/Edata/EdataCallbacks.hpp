@@ -1,8 +1,8 @@
 #ifndef LIB_PSS_EDATA_HEADER_H
 #define LIB_PSS_EDATA_HEADER_H 1
 
-namespace Sce::Pss::Core::Edata {
-	class Callbacks {
+namespace Sce::Pss::Core::Io::Edata {
+	class EdataCallbacks {
 	public:
 		static int EdataOpen(const char* path, int flags, int mode, int* handle, int* type);
 		static int EdataRead(int handle, void* buffer, int toRead, int* totalRead);

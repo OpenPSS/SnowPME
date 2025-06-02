@@ -1,5 +1,5 @@
-#include <Sce/Pss/Core/Edata/Callbacks.hpp>
-#include <Sce/Pss/Core/Edata/EdataStream.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataCallbacks.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 
@@ -10,10 +10,8 @@ using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::System;
 
-namespace Sce::Pss::Core::Edata {
-	int Callbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
-		Logger::Debug("edata open file: " + std::string(path));
-
+namespace Sce::Pss::Core::Io::Edata {
+	int EdataCallbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
 		if (handle != nullptr && type != nullptr) {
 			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::GetUniqueObject()->GameDrmProvider, nullptr);
 			RETURN_ERRORABLE(stream);
@@ -30,7 +28,7 @@ namespace Sce::Pss::Core::Edata {
 
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
-	int Callbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
+	int EdataCallbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
 		if (Handles::IsValid(handle) && totalRead != nullptr) {
 			EdataStream* stream = Handles::Get<EdataStream>(handle);
 
@@ -41,7 +39,7 @@ namespace Sce::Pss::Core::Edata {
 
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
-	int Callbacks::EdataSeek(int handle, long offset, int whence, long* totalSeeked) {
+	int EdataCallbacks::EdataSeek(int handle, long offset, int whence, long* totalSeeked) {
 		if (Handles::IsValid(handle) && totalSeeked != nullptr) {
 			EdataStream* stream = Handles::Get<EdataStream>(handle);
 
@@ -74,7 +72,7 @@ namespace Sce::Pss::Core::Edata {
 
 		return PSM_ERROR_NO_ERROR;
 	}
-	void Callbacks::EdataClose(int handle) {
+	void EdataCallbacks::EdataClose(int handle) {
 		if (Handles::IsValid(handle)) {
 			EdataStream* str = Handles::Get<EdataStream>(handle);
 			delete str;

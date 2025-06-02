@@ -1,7 +1,7 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
-#include <Sce/Pss/Core/Io/ICall.hpp>
+#include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 
 #include <Sce/Pss/Core/Error.hpp>
@@ -140,8 +140,10 @@ namespace Sce::Pss::Core::Graphics {
 
 
 			Logger::Debug("Uniform: " + uniform.Name + " location: " + std::to_string(uniform.Location));
-
-			assert(std::string(uniform.Name + " contains [], PSM has some special processing for these, but i havent been able to find  what it is.").c_str(), uniform.Name.find(']') != std::string::npos);
+			
+			//PSM has some special processing for these, but i havent been able to find what it is.
+			assert(uniform.Name.find(']') != std::string::npos);
+			
 			this->Uniforms.push_back(uniform);
 		}
 
@@ -161,8 +163,8 @@ namespace Sce::Pss::Core::Graphics {
 			attribute.Name = std::string(name, nameLen);
 
 			Logger::Debug("Attribute: " + attribute.Name + " location: " + std::to_string(attribute.Location));
-
-			assert(std::string(attribute.Name + " contains [], PSM has some special processing for these, but i havent been able to find  what it is.").c_str(), attribute.Name.find(']') != std::string::npos);
+			//PSM has some special processing for these, but i havent been able to find what it is.
+			assert(attribute.Name.find(']') != std::string::npos);
 			this->Attributes.push_back(attribute);
 		}
 		
@@ -182,18 +184,18 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (shaderPath != nullptr) {
 			uint64_t file;
-			ICall::PsmFileOpen(shaderPath, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
+			IoCall::PsmFileOpen(shaderPath, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE, &file);
 			if (file) {
 				uint32_t cgxLen = 0;
-				ICall::PsmFileGetSize(file, &cgxLen);
+				IoCall::PsmFileGetSize(file, &cgxLen);
 
 				HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 				uint8_t* cgxData = resourceHeap->sce_psm_malloc(cgxLen);
 
 				if (cgxData != nullptr) {
 					uint32_t totalRead;
-					ICall::PsmFileRead(file, cgxData, cgxLen, &totalRead);
-					ICall::PsmClose(file);
+					IoCall::PsmFileRead(file, cgxData, cgxLen, &totalRead);
+					IoCall::PsmClose(file);
 					
 					if (shaderLen != nullptr)
 						*shaderLen = cgxLen;
@@ -201,7 +203,7 @@ namespace Sce::Pss::Core::Graphics {
 					return cgxData;
 				}
 				else {
-					ICall::PsmClose(file);
+					IoCall::PsmClose(file);
 					this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 					return nullptr;
 				}

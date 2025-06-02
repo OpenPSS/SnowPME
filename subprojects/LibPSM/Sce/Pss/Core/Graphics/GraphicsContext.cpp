@@ -166,7 +166,7 @@ namespace Sce::Pss::Core::Graphics {
 			{
 				Logger::Debug("update & GraphicsUpdate::Texture");
 				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
-				UNIMPLEMENTED("update & GraphicsUpdate::Texture is not implemented");
+				UNIMPLEMENTED_MSG("update & GraphicsUpdate::Texture is not implemented");
 			}
 
 		}
@@ -367,14 +367,14 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::LineWidth) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::LineWidth");
 
-				float lnAdd = state->LineWidth + 0.5;
+				float lnAdd = state->LineWidth + 0.5f;
 				float lnFloor = floor(lnAdd);
-				float lnBase = 1.0;
-				if (lnFloor >= 1.0)
+				float lnBase = 1.0f;
+				if (lnFloor >= 1.0f)
 				{
 					lnBase = lnFloor;
-					if (lnFloor > 8.0)
-						lnBase = 8.0;
+					if (lnFloor > 8.0f)
+						lnBase = 8.0f;
 				}
 				glLineWidth(lnBase);
 			}

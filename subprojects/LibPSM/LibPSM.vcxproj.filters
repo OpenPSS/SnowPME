@@ -117,7 +117,7 @@
     <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Io\ICall.cpp">
+    <ClCompile Include="Sce\Pss\Core\Io\IoCall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Io\Sandbox.cpp">
@@ -216,10 +216,10 @@
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Edata\EdataStream.cpp">
+    <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Edata\PsmDrm.cpp">
+    <ClCompile Include="Sce\Pss\Core\Io\Edata\PsmDrm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c">
@@ -237,13 +237,13 @@
     <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Edata\EdataList.cpp">
+    <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Edata\Callbacks.cpp">
+    <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp">
@@ -277,6 +277,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Timing\Time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Io\PsmFileHandle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Io\EmulatedDirectory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -581,7 +587,7 @@
     <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Io\ICall.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\IoCall.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Io\Sandbox.hpp">
@@ -722,16 +728,16 @@
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\EdataStream.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataStream.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\EdataHeader.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataHeader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrm.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\PsmDrm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\PsmDrmLicense.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\PsmDrmLicense.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h">
@@ -743,7 +749,7 @@
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Io\PsmFileDescriptor.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\PsmFileHandle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp">
@@ -761,7 +767,7 @@
     <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\EdataList.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandResults.hpp">
@@ -773,7 +779,7 @@
     <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Edata\Callbacks.hpp">
+    <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp">
@@ -825,6 +831,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Timing\Time.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Io\IUnderlying.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Io\EmulatedDirectory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
