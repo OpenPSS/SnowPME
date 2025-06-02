@@ -15,9 +15,9 @@ jobs:
         run: git submodule update --init --recursive
       - name: install dependencies
         run: |
-            apt update
-            apt upgrade -y
-            apt install -y build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
+            sudo apt update
+            sudo apt upgrade -y
+            sudo apt install -y build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
       - name: compile
         run: |
             meson setup build
