@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		for (const std::string& psseFile : psseFilesList) {
 			if (psseFile.empty()) continue;
 
-			Logger::Debug("Registering file: " + psseFile);
+			Logger::Debug("EdataList // Registering file: " + psseFile);
 			this->edataFilesList.push_back(psseFile);
 		}
 	}
