@@ -12,7 +12,7 @@ namespace SnowPME::Graphics::Gui {
 		bool windowOpen = true;
 		bool windowShown = true;
 		std::string createWindowTitle(const std::string& windowTitle);
-		virtual void renderWindow() = NULL;
+		virtual void renderWindow() = 0;
 		virtual void updateWindow();
 		virtual void onWindowClose();
 	public:

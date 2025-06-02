@@ -2,7 +2,7 @@
 
 #include <LibShared.hpp>
 #include <glad/glad.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <thread>
 #include <string>
 #include <LibPSM.hpp>

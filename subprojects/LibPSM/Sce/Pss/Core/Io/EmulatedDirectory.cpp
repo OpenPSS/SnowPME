@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/Io/EmulatedDirectory.hpp>
 #include <LibShared.hpp>
+#include <cstring>
 
 using namespace Shared;
 using namespace Shared::String;

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <mono/mono.h>
 
-enum PsmError : unsigned int {
+enum PsmError : uint32_t {
 	PSM_ERROR_NO_ERROR = 0,
 	PSM_ERROR_BASE_ERROR = 0x80010000,
 	PSM_ERROR_ERROR = 0x80010001,

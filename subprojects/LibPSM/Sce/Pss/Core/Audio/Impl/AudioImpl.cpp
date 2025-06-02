@@ -1,6 +1,7 @@
 #define MINIAUDIO_IMPLEMENTATION
 #define MA_NO_FLAC // PSM doesnt support FLAC, only mp3 and wav
 #include <miniaudio.h>
+#include <cstdint>
 #include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
@@ -12,7 +13,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 		if (audioObj->audioDecoder == nullptr) return;
 
 		uint64_t framesRead = 0;
-		ma_decoder_read_pcm_frames(audioObj->audioDecoder, output, frameCount, &framesRead);
+		ma_decoder_read_pcm_frames(audioObj->audioDecoder, output, frameCount, reinterpret_cast<ma_uint64*>(&framesRead));
 
 		if (audioObj->Looping() && audioObj->Time() >= audioObj->LoopEnd()) {
 			audioObj->SetTime(audioObj->LoopStart());
@@ -141,7 +142,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 		uint64_t pcmFrames = 0;
 		uint32_t duration = 0;
 
-		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder, reinterpret_cast<ma_uint64*>(&pcmFrames)) == MA_SUCCESS) {
 			duration = static_cast<uint32_t>((static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0)));
 		}
 		return duration;
@@ -150,7 +151,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 	uint32_t Audio::Time() {
 		uint64_t pcmFrames = 0;
 		uint32_t time = 0;
-		if (this->audioDecoder != nullptr && ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, &pcmFrames) == MA_SUCCESS) {
+		if (this->audioDecoder != nullptr && ma_decoder_get_cursor_in_pcm_frames(this->audioDecoder, reinterpret_cast<ma_uint64*>(&pcmFrames)) == MA_SUCCESS) {
 			time = static_cast<uint32_t>((static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0)));
 		}
 		return time;

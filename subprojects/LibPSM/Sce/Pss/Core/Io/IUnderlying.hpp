@@ -9,13 +9,13 @@ namespace Sce::Pss::Core::Io {
 		public:
 			IUnderlying() = default;
 			~IUnderlying() = default;
-			virtual uint64_t Tell() = NULL;
-			virtual void Close() = NULL;
-			virtual uint32_t Read(void* buffer, uint32_t length) = NULL;
+			virtual uint64_t Tell() = 0;
+			virtual void Close() = 0;
+			virtual uint32_t Read(void* buffer, uint32_t length) = 0;
 
-			virtual bool IsDirectory() = NULL;
-			virtual bool IsEncrypted() = NULL;
-			virtual bool IsOpen() = NULL;
+			virtual bool IsDirectory() = 0;
+			virtual bool IsEncrypted() = 0;
+			virtual bool IsOpen() = 0;
 
 	};
 }

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <thread>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 namespace SnowPME::Graphics {
 	class Window {

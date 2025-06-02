@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <LibShared.hpp>
+#include <cstring>
 
 using namespace Shared::Debug;
 using namespace Shared::String;

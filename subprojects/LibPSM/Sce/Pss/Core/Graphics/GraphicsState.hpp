@@ -17,24 +17,24 @@
 namespace Sce::Pss::Core::Graphics {
 
 	typedef struct GraphicsState {
-		EnableMode Enable; 
-		Imaging::ImageRect Scissor;
-		Imaging::ImageRect Viewport;
-		Vector2 DepthRange;
-		Vector4 ClearColor;
-		float ClearDepth;
-		int ClearStencil;
-		CullFace CullFace;
-		BlendFunc BlendFuncRgb;
-		BlendFunc BlendFuncAlpha;
-		DepthFunc DepthFunc;
-		PolygonOffset PolygonOffset;
-		StencilFunc StencilFuncFront;
-		StencilOp StencilOpFront;
-		StencilFunc StencilFuncBack;
-		StencilOp StencilOpBack;
-		ColorMask ColorMask;
-		float LineWidth;
+		EnableMode enable; 
+		Sce::Pss::Core::Imaging::ImageRect scissor;
+		Sce::Pss::Core::Imaging::ImageRect viewport;
+		Vector2 depthRange;
+		Vector4 clearColor;
+		float clearDepth;
+		int clearStencil;
+		CullFace cullFace;
+		BlendFunc blendFuncRgb;
+		BlendFunc blendFuncAlpha;
+		DepthFunc depthFunc;
+		PolygonOffset polygonOffset;
+		StencilFunc stencilFuncFront;
+		StencilOp stencilOpFront;
+		StencilFunc stencilFuncBack;
+		StencilOp stencilOpBack;
+		ColorMask colorMask;
+		float lineWidth;
 	} GraphicsState;
 }
 

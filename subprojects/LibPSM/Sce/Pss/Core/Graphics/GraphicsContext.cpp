@@ -301,7 +301,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			if ((notifyFlag & GraphicsUpdate::Scissor) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::Scissor");
-				glScissor(state->Scissor.X, state->Scissor.Y, state->Scissor.Width, state->Scissor.Y);
+				glScissor(state->scissor.X, state->scissor.Y, state->scissor.Width, state->scissor.Y);
 			}
 
 			if ((notifyFlag & GraphicsUpdate::Viewport) != GraphicsUpdate::None) {
@@ -311,10 +311,10 @@ namespace Sce::Pss::Core::Graphics {
 				// if the width or height is less than 0, then the height/width is set to 0.
 
 				glViewport(
-					state->Viewport.X,
-					state->Viewport.Y,
-					state->Viewport.Width < 0 ? 0 : state->Viewport.Width,
-					state->Viewport.Height < 0 ? 0 : state->Viewport.Height);
+					state->viewport.X,
+					state->viewport.Y,
+					state->viewport.Width < 0 ? 0 : state->viewport.Width,
+					state->viewport.Height < 0 ? 0 : state->viewport.Height);
 
 
 			}
@@ -323,7 +323,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("notifyFlag & GraphicsUpdate::DepthRange");
 				// Set OpenGL Depth Range
 				
-				glDepthRangef(state->DepthRange.X, state->DepthRange.Y);
+				glDepthRangef(state->depthRange.X, state->depthRange.Y);
 
 			}
 
@@ -331,21 +331,21 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ClearColor");
 				// Set OpenGL Clear Color
 
-				glClearColor(state->ClearColor.X, state->ClearColor.Y, state->ClearColor.Z, state->ClearColor.W);
+				glClearColor(state->clearColor.X, state->clearColor.Y, state->clearColor.Z, state->clearColor.W);
 			}
 
 			if ((notifyFlag & GraphicsUpdate::ClearDepth) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ClearDepth");
 				// Set OpenGL Clear Depth
 
-				glClearDepthf(state->ClearDepth);
+				glClearDepthf(state->clearDepth);
 			}
 
 			if ((notifyFlag & GraphicsUpdate::ClearStencil) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ClearStencil");
 				// Set OpenGL Clear Stencil
 
-				glClearStencil(state->ClearStencil);
+				glClearStencil(state->clearStencil);
 			}
 
 		}
@@ -357,17 +357,17 @@ namespace Sce::Pss::Core::Graphics {
 				using namespace Sce::Pss::Core::Graphics;
 
 				glColorMask(
-					(state->ColorMask & ColorMask::R) != Sce::Pss::Core::Graphics::ColorMask::None,
-					(state->ColorMask & ColorMask::G) != Sce::Pss::Core::Graphics::ColorMask::None,
-					(state->ColorMask & ColorMask::B) != Sce::Pss::Core::Graphics::ColorMask::None,
-					(state->ColorMask & ColorMask::A) != Sce::Pss::Core::Graphics::ColorMask::None);
+					(state->colorMask & ColorMask::R) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->colorMask & ColorMask::G) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->colorMask & ColorMask::B) != Sce::Pss::Core::Graphics::ColorMask::None,
+					(state->colorMask & ColorMask::A) != Sce::Pss::Core::Graphics::ColorMask::None);
 
 			}
 
 			if ((notifyFlag & GraphicsUpdate::LineWidth) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::LineWidth");
 
-				float lnAdd = state->LineWidth + 0.5f;
+				float lnAdd = state->lineWidth + 0.5f;
 				float lnFloor = floor(lnAdd);
 				float lnBase = 1.0f;
 				if (lnFloor >= 1.0f)
@@ -391,10 +391,10 @@ namespace Sce::Pss::Core::Graphics {
 
 			if ((notifyFlag & GraphicsUpdate::CullFace) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::CullFace");
-				glCullFace(this->glCullModes[state->CullFace.bits & 3]);
-				glFrontFace(this->glCullFrontFaceModes[(state->CullFace.bits >> 8) & 1]);
+				glCullFace(this->glCullModes[state->cullFace.bits & 3]);
+				glFrontFace(this->glCullFrontFaceModes[(state->cullFace.bits >> 8) & 1]);
 
-				if (state->CullFace.bits & 0xFF)
+				if (state->cullFace.bits & 0xFF)
 					this->cullFaceBits |=  2;
 				else
 					this->cullFaceBits |= 0xFFFFFFFD;
@@ -403,43 +403,43 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::BlendFunc) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::BlendFunc");
 				glBlendEquationSeparate(
-					this->glBlendModes[state->BlendFuncRgb.bits & 3],
-					this->glBlendModes[state->BlendFuncAlpha.bits & 3]);
+					this->glBlendModes[state->blendFuncRgb.bits & 3],
+					this->glBlendModes[state->blendFuncAlpha.bits & 3]);
 				glBlendFuncSeparate(
-					this->glBlendSFactor[(state->BlendFuncRgb.bits >> 8) & 0xF],
-					this->glBlendDFactor[(state->BlendFuncRgb.bits & 0x0000FFFF) & 0xF],
-					this->glBlendSFactor[(state->BlendFuncAlpha.bits >> 8) & 0xF],
-					this->glBlendDFactor[(state->BlendFuncAlpha.bits & 0x0000FFFF) & 0xF]);
+					this->glBlendSFactor[(state->blendFuncRgb.bits >> 8) & 0xF],
+					this->glBlendDFactor[(state->blendFuncRgb.bits & 0x0000FFFF) & 0xF],
+					this->glBlendSFactor[(state->blendFuncAlpha.bits >> 8) & 0xF],
+					this->glBlendDFactor[(state->blendFuncAlpha.bits & 0x0000FFFF) & 0xF]);
 			}
 
 			if ((notifyFlag & GraphicsUpdate::DepthFunc) != GraphicsUpdate::None)
 			{
 				Logger::Debug("notifyFlag & GraphicsUpdate::DepthFunc");
-				glDepthFunc(glDepthFuncs[state->DepthFunc.bits & 7]);
-				glDepthMask((state->DepthFunc.bits >> 8) & 0xFF);
+				glDepthFunc(glDepthFuncs[state->depthFunc.bits & 7]);
+				glDepthMask((state->depthFunc.bits >> 8) & 0xFF);
 			}
 			if ((notifyFlag & GraphicsUpdate::PolygonOffset) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::PolygonOffset");
-				glPolygonOffset(state->PolygonOffset.Factor, state->PolygonOffset.Units);
+				glPolygonOffset(state->polygonOffset.Factor, state->polygonOffset.Units);
 			}
 			if ((notifyFlag & GraphicsUpdate::StencilFunc) != GraphicsUpdate::None)
 			{
 				Logger::Debug("notifyFlag & GraphicsUpdate::StencilFunc");
 				
 				glStencilFuncSeparate(GL_FRONT, 
-									glDepthFuncs[state->StencilFuncFront.bits & 7],
-									(state->StencilFuncFront.bits >> 8) & 0xFF,
-									(state->StencilFuncFront.bits >> 16) & 0xFF
+									glDepthFuncs[state->stencilFuncFront.bits & 7],
+									(state->stencilFuncFront.bits >> 8) & 0xFF,
+									(state->stencilFuncFront.bits >> 16) & 0xFF
 				);
 
 				glStencilFuncSeparate(GL_BACK,
-									glDepthFuncs[state->StencilFuncBack.bits & 7],
-									(state->StencilFuncBack.bits >> 8) & 0xFF,
-									(state->StencilFuncBack.bits >> 16) & 0xFF
+									glDepthFuncs[state->stencilFuncBack.bits & 7],
+									(state->stencilFuncBack.bits >> 8) & 0xFF,
+									(state->stencilFuncBack.bits >> 16) & 0xFF
 				);
 
-				glStencilMaskSeparate(GL_FRONT, (state->StencilFuncFront.bits >> 24) & 0xFF);
-				glStencilMaskSeparate(GL_BACK, (state->StencilFuncBack.bits >> 24) & 0xFF);
+				glStencilMaskSeparate(GL_FRONT, (state->stencilFuncFront.bits >> 24) & 0xFF);
+				glStencilMaskSeparate(GL_BACK, (state->stencilFuncBack.bits >> 24) & 0xFF);
 
 			}
 			if ((notifyFlag & GraphicsUpdate::StencilOp) != GraphicsUpdate::None)
@@ -448,15 +448,15 @@ namespace Sce::Pss::Core::Graphics {
 
 				glStencilOpSeparate(
 					GL_FRONT,
-					glStencilOps[state->StencilOpFront.bits & 7],
-					glStencilOps[(state->StencilOpFront.bits >> 8) & 7],
-					glStencilOps[((state->StencilOpFront.bits >> 16) & 0xFFFF) & 7]
+					glStencilOps[state->stencilOpFront.bits & 7],
+					glStencilOps[(state->stencilOpFront.bits >> 8) & 7],
+					glStencilOps[((state->stencilOpFront.bits >> 16) & 0xFFFF) & 7]
 				);
 				glStencilOpSeparate(
 					GL_BACK,
-					glStencilOps[state->StencilOpBack.bits & 7],
-					glStencilOps[(state->StencilOpBack.bits >> 8) & 7],
-					glStencilOps[((state->StencilOpBack.bits >> 16) & 0xFFFF) & 7]
+					glStencilOps[state->stencilOpBack.bits & 7],
+					glStencilOps[(state->stencilOpBack.bits >> 8) & 7],
+					glStencilOps[((state->stencilOpBack.bits >> 16) & 0xFFFF) & 7]
 				);
 			}
 
@@ -464,7 +464,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		if ((notifyFlag & GraphicsUpdate::Enable) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::Enable");
-			EnableMode enableModeToggleFlags = (state->Enable & this->cullFaceBits);
+			EnableMode enableModeToggleFlags = (state->enable & this->cullFaceBits);
 			EnableMode enableModeBitlist = (enableModeToggleFlags ^ this->currentEnableModes) & EnableMode::All;
 			
 			if (this->currentEnableModes == (EnableMode)0xFF) {

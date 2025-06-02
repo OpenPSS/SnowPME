@@ -2,17 +2,12 @@
 #define LIB_PSS_INITALIZECSHARP_H 1
 #include <string>
 #include <mono/mono.h>
+#include <Sce/Pss/Core/Mono/PsmMonoFunc.hpp>
+
 namespace Sce::Pss::Core {
-
-	typedef struct PsmMonoFunc {
-		const char* functionSignature;
-		void* functionPointer;
-	} PsmMonoFunc;
-
-
 	class InitalizeCsharp {
 	private:
-		static int installFunctions(PsmMonoFunc* functions);
+		static int installFunctions(Sce::Pss::Core::Mono::PsmMonoFunc* functions);
 		static int registerErrors();
 		static int registerServices();
 		static int registerCamera();

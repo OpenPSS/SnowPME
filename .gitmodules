@@ -1,11 +1,8 @@
-[submodule "pss-mono"]
-	path = External/src/pss-mono
-	url = https://github.com/OpenPSS/pss-mono.git
 [submodule "External/Src/pss-mono"]
-	path = External/Src/pss-mono
+	path = subprojects/External/Src/pss-mono
 	url = https://github.com/OpenPSS/pss-mono.git
 [submodule "External/Src/SDL"]
-	path = External/Src/SDL
+	path = subprojects/External/Src/SDL
 	url = https://github.com/OpenPSS/SDL.git
 	branch = SDL2
 [submodule "subprojects/LibCXML"]

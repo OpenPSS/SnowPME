@@ -3,6 +3,7 @@
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/Timing/Time.hpp>
+#include <cstring>
 
 #include <LibShared.hpp>
 #include <mono/mono.h>

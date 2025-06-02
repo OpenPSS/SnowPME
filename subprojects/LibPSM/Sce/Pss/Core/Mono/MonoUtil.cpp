@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-
+#include <cstring>
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Mono {

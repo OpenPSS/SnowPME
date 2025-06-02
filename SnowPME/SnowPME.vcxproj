@@ -85,7 +85,7 @@
       <PreprocessorDefinitions>WIN32;HAVE_LIBC;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\$(Platform)\include\sdl\;$(SolutionDir)External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibMonoBridge\;$(SolutionDir)subprojects\LibSnowPME\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibMonoBridge\;$(SolutionDir)subprojects\LibSnowPME\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;HAVE_LIBC ;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\$(Platform)\include\sdl\;$(SolutionDir)External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibMonoBridge\;$(SolutionDir)subprojects\LibSnowPME\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibMonoBridge\;$(SolutionDir)subprojects\LibSnowPME\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)\LibSnowPME\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)\$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)\LibSnowPME\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -147,7 +147,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\$(Platform)\include\sdl\;$(SolutionDir)\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)\LibSnowPME\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)\$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)LibPSM\;$(SolutionDir)LibCXML\;$(SolutionDir)LibShared\;$(SolutionDir)\LibMonoBridge\;$(SolutionDir)\LibSnowPME\;$(SolutionDir)LibImGui\;$(SolutionDir)LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>

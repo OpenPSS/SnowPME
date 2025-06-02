@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_EDATAHEADER_H
 #define LIB_PSS_EDATAHEADER_H 1
 #include <iostream>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Io::Edata {
 	typedef struct _EdataHeader {

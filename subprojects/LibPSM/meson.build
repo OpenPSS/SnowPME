@@ -1,0 +1,132 @@
+project('PSM', 
+  ['cpp', 'c'],
+  version: '0.1',
+  default_options:  {
+    'warning_level': '3',
+    'cpp_std': 'c++20',
+    'c_std': 'c11'
+  }
+)
+cpp = meson.get_compiler('cpp')
+c = meson.get_compiler('c')
+
+dirbase = meson.current_source_dir()
+
+include_libs = include_directories('.')
+
+# external include folder
+External = subproject('External')
+external_dep = External.get_variable('external_dep')
+
+# required subprojects
+LibShared = subproject('LibShared')
+libShared_dep = LibShared.get_variable('libShared_dep')
+LibGLAD = subproject('LibGLAD')
+libGLAD_dep = LibGLAD.get_variable('libGLAD_dep')
+LibCXML = subproject('LibCXML')
+libCXML_dep = LibCXML.get_variable('libCXML_dep')
+LibMonoBridge = subproject('LibMonoBridge')
+libMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
+
+libPSM = static_library('PSM',
+	'Sce/Pss/Core/Audio/Bgm.cpp',
+	'Sce/Pss/Core/Audio/BgmPlayer.cpp',
+	'Sce/Pss/Core/Audio/Impl/AudioImpl.cpp',
+	'Sce/Pss/Core/Audio/Sound.cpp',
+	'Sce/Pss/Core/Audio/SoundPlayer.cpp',
+	'Sce/Pss/Core/Callback/CallbackBase.cpp',
+	'Sce/Pss/Core/Crypto/AesEcb.cpp',
+	'Sce/Pss/Core/Crypto/AesCbc.cpp',
+	'Sce/Pss/Core/Crypto/Algorithms/md5.c',
+	'Sce/Pss/Core/Crypto/Algorithms/sha1.c',
+	'Sce/Pss/Core/Crypto/Md5Hash.cpp',
+	'Sce/Pss/Core/Device/Camera.cpp',
+	'Sce/Pss/Core/Device/CameraImportDialog.cpp',
+	'Sce/Pss/Core/Device/Location.cpp',
+	'Sce/Pss/Core/Device/PhotoImportDialog.cpp',
+	'Sce/Pss/Core/Io/Edata/EdataCallbacks.cpp',
+	'Sce/Pss/Core/Io/Edata/EdataList.cpp',
+	'Sce/Pss/Core/Environment/Clipboard.cpp',
+	'Sce/Pss/Core/Environment/CommonDialog.cpp',
+	'Sce/Pss/Core/Environment/Log.cpp',
+	'Sce/Pss/Core/Environment/NetworkInformation.cpp',
+	'Sce/Pss/Core/Environment/PersistentMemory.cpp',
+	'Sce/Pss/Core/Environment/Shell.cpp',
+	'Sce/Pss/Core/Environment/SystemEvents.cpp',
+	'Sce/Pss/Core/Environment/SystemMemory.cpp',
+	'Sce/Pss/Core/Environment/SystemParameters.cpp',
+	'Sce/Pss/Core/Environment/TextInputDialog.cpp',
+	'Sce/Pss/Core/Error.cpp',
+	'Sce/Pss/Core/Event/PsmEvent.cpp',
+	'Sce/Pss/Core/Event/PsmEventQueue.cpp',
+	'Sce/Pss/Core/Imaging/Impl/ImageImpl.cpp',
+	'Sce/Pss/Core/Graphics/PsmFrameBuffer.cpp',
+	'Sce/Pss/Core/Graphics/PsmGraphicsContext.cpp',
+	'Sce/Pss/Core/Graphics/PsmPixelBuffer.cpp',
+	'Sce/Pss/Core/Graphics/PsmShaderProgram.cpp',
+	'Sce/Pss/Core/Graphics/PsmTexture.cpp',
+	'Sce/Pss/Core/Graphics/PsmVertexBuffer.cpp',
+	'Sce/Pss/Core/Imaging/Font.cpp',
+	'Sce/Pss/Core/Imaging/Image.cpp',
+	'Sce/Pss/Core/InitializeCsharp.cpp',
+	'Sce/Pss/Core/Input/GamePad.cpp',
+	'Sce/Pss/Core/Input/Motion.cpp',
+	'Sce/Pss/Core/Input/Touch.cpp',
+	'Sce/Pss/Core/Io/Edata/EdataStream.cpp',
+	'Sce/Pss/Core/Io/Edata/PsmDrm.cpp',
+	'Sce/Pss/Core/Io/EmulatedDirectory.cpp',
+	'Sce/Pss/Core/Io/PsmFileHandle.cpp',
+	'Sce/Pss/Core/Mono/InitalizeMono.cpp',
+	'Sce/Pss/Core/PsmObject.cpp',
+	'Sce/Pss/Core/PsmUniqueObject.cpp',
+	'Sce/Pss/Core/Services/AccountInformation.cpp',
+	'Sce/Pss/Core/Services/InAppPurchaseDialog.cpp',
+	'Sce/Pss/Core/Services/InAppPurchaseProduct.cpp',
+	'Sce/Pss/Core/Services/InAppPurchaseInventory.cpp',
+	'Sce/Pss/Core/Services/Network.cpp',
+	'Sce/Pss/Core/Services/NetworkRequest.cpp',
+	'Sce/Pss/Core/Crypto/Algorithms/aes.c',
+	'Sce/Pss/Core/Crypto/CryptoLibrary.cpp',
+	'Sce/Pss/Core/Crypto/Algorithms/hmac_sha256.c',
+	'Sce/Pss/Core/Crypto/Algorithms/sha256.c',
+	'Sce/Pss/Core/Errorable.cpp',
+	'Sce/Pss/Core/ExceptionInfo.cpp',
+	'Sce/Pss/Core/Graphics/CGX.cpp',
+	'Sce/Pss/Core/Graphics/FrameBuffer.cpp',
+	'Sce/Pss/Core/Graphics/PixelBuffer.cpp',
+	'Sce/Pss/Core/Graphics/ShaderProgramOption.cpp',
+	'Sce/Pss/Core/Graphics/Texture2D.cpp',
+	'Sce/Pss/Core/Graphics/TextureCube.cpp',
+	'Sce/Pss/Core/Memory/HeapAllocator.cpp',
+	'Sce/Pss/Core/Timing/DeltaTime.cpp',
+	'Sce/Pss/Core/Graphics/GraphicsContext.cpp',
+	'Sce/Pss/Core/Graphics/GraphicsObject.cpp',
+	'Sce/Pss/Core/Graphics/OpenGL.cpp',
+	'Sce/Pss/Core/Graphics/ShaderProgram.cpp',
+	'Sce/Pss/Core/Graphics/Texture.cpp',
+	'Sce/Pss/Core/Graphics/VertexBuffer.cpp',
+	'Sce/Pss/Core/Callback/WindowCallbacks.cpp',
+	'Sce/Pss/Core/System/Handles.cpp',
+	'Sce/Pss/Core/Io/DirectoryIterator.cpp',
+	'Sce/Pss/Core/Io/FileSystem.cpp',
+	'Sce/Pss/Core/Io/IoCall.cpp',
+	'Sce/Pss/Core/Io/Sandbox.cpp',
+	'Sce/Pss/Core/Metadata/AppInfo.cpp',
+	'Sce/Pss/Core/Mono/Resources.cpp',
+	'Sce/Pss/Core/Mono/Security.cpp',
+	'Sce/Pss/Core/Mono/MonoUtil.cpp',
+	'Sce/Pss/Core/System/PlatformSpecific.cpp',
+	'Sce/Pss/Core/Services/UniqueId.cpp',
+	'Sce/Pss/Core/Threading/Thread.cpp',
+	'Sce/Pss/Core/Timing/Time.cpp',
+	include_directories: [ include_libs ],
+	dependencies: [
+		libGLAD_dep,
+		libShared_dep,
+		libMonoBridge_dep,
+		libCXML_dep,
+		external_dep
+	],
+	install: true)
+	
+libPSM_dep = declare_dependency(include_directories: include_libs, link_with: libPSM)

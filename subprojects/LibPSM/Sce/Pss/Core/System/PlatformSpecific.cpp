@@ -4,6 +4,7 @@
 #include <LibShared.hpp>
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 #endif
 
@@ -21,7 +22,9 @@ namespace Sce::Pss::Core::System {
 
         SetFileAttributesA(RealFilePath.c_str(), fileAttributes);
 
-        return PSM_ERROR_NO_ERROR;
+        return PSM_ERROR_NO_ERROR;  
+#elif __linux__
+        return PSM_ERROR_NOT_AVAILABLE;
 #else
 #error platform not supported
 #endif
@@ -47,6 +50,8 @@ namespace Sce::Pss::Core::System {
         // Close the file
         CloseHandle(fd);
         return PSM_ERROR_NO_ERROR;
+#elif __linux__
+        return PSM_ERROR_NOT_AVAILABLE;
 #else
 #error platform not supported
 #endif

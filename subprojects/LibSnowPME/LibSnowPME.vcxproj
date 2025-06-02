@@ -98,14 +98,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\$(Platform)\include\sdl\;$(SolutionDir)External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>LibImGui.lib;LibPSM.lib;SDL2.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\$(SolutionDir)subprojects\External\$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Lib>
@@ -126,7 +126,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\$(Platform)\include\sdl\;$(SolutionDir)External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>

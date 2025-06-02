@@ -144,7 +144,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		std::memcpy(pathInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
+		memcpy(pathInfo, &psmPathInformation, sizeof(ScePssFileInformation_t));
 		item.positionInFolder++;
 		this->iterPos++;
 		return PSM_ERROR_NO_ERROR;

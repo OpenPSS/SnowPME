@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Services {
 		if (length > 0x10)
 			length = 0x10;
 
-		std::memcpy(id, username.c_str(), length);
+		memcpy(id, username.c_str(), length);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -40,13 +40,13 @@ namespace Sce::Pss::Core::Services {
 		hashid[1] = ((uint64_t*)outhmac)[0];
 
 		CryptoLibrary::Aes128CbcEncrypt(Crypto::Keys::HashAccountIdAes128, Crypto::Keys::NullIv, (uint8_t*)hashid, 0x10);
-		std::memcpy(id, hashid, 0x10);
+		memcpy(id, hashid, 0x10);
 
 		return PSM_ERROR_NO_ERROR;
 	}
 	int UniqueId::GetUniqueIDForEmulatedPlatform(uint8_t* id) {		
 		// clear id
-		std::memset(id, 0x00, 0x10);
+		memset(id, 0x00, 0x10);
 
 		switch (Config::TargetImplementation) {
 		case RuntimeImplementation::PSVita:

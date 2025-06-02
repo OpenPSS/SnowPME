@@ -1,6 +1,7 @@
 #include <Graphics/Gui/InstallGamePackageWindow.hpp>
 #include <LibImGui.hpp>
 #include <pfd/portable-file-dialogs.h>
+#include <cassert>
 
 namespace SnowPME::Graphics::Gui {
 	
@@ -15,7 +16,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void InstallGamePackageWindow::installGame() {
-		std::exception("NOT IMPLEMENTED");
+		assert(true);
 	}
 
 }

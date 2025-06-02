@@ -4,6 +4,7 @@
 #include <Debug/Logger.hpp>
 #include <fstream>
 #include <string>
+#include <cstring>
 
 using namespace Shared::String;
 using namespace Shared::Debug;

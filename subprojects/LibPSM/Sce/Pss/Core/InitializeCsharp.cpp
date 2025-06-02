@@ -26,29 +26,29 @@ namespace Sce::Pss::Core {
 	}
 
 	int InitalizeCsharp::registerErrors() {
-		return installFunctions(ErrorFunctions);
+		return InitalizeCsharp::installFunctions(ErrorFunctions);
 	}
 	int InitalizeCsharp::registerServices() {
-		return installFunctions(ServiceFunctions);
+		return InitalizeCsharp::installFunctions(ServiceFunctions);
 	}
 	int InitalizeCsharp::registerCamera() {
-		return installFunctions(CameraFunctions);
+		return InitalizeCsharp::installFunctions(CameraFunctions);
 	}
 	int InitalizeCsharp::registerLocation() {
-		return installFunctions(LocationFunctions);
+		return InitalizeCsharp::installFunctions(LocationFunctions);
 	}
 	int InitalizeCsharp::registerImaging() {
-		return installFunctions(ImagingFunctions);
+		return InitalizeCsharp::installFunctions(ImagingFunctions);
 	}
 	int InitalizeCsharp::registerInput() {
-		return installFunctions(InputFunctions);
+		return InitalizeCsharp::installFunctions(InputFunctions);
 	}
 	int InitalizeCsharp::registerAudio() {
-		return installFunctions(AudioFunctions);
+		return InitalizeCsharp::installFunctions(AudioFunctions);
 	}
 	int InitalizeCsharp::registerGraphics() {
 		if (Thread::IsMainThread()) {
-			return installFunctions(GraphicsFunctions);
+			return InitalizeCsharp::installFunctions(GraphicsFunctions);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
@@ -57,7 +57,7 @@ namespace Sce::Pss::Core {
 	}
 	int InitalizeCsharp::registerEnvironment() {
 		PersistentMemory::Initalize();
-		return installFunctions(EnvironmentFunctions);
+		return InitalizeCsharp::installFunctions(EnvironmentFunctions);
 	}
 
 	int InitalizeCsharp::unregisterEnvironment() {

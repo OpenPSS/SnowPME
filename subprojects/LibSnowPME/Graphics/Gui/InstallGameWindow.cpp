@@ -1,6 +1,8 @@
 #include <Graphics/Gui/InstallGameWindow.hpp>
 #include <pfd/portable-file-dialogs.h>
 #include <LibImGui.hpp>
+#include <cstdlib>
+#include <cstring>
 
 namespace SnowPME::Graphics::Gui {
 
@@ -74,6 +76,6 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	InstallGameWindow::InstallGameWindow() {
-		std::memset(this->zRIF, 0, sizeof(InstallGameWindow::zRIF));
+		memset(this->zRIF, 0, sizeof(InstallGameWindow::zRIF));
 	}
 }

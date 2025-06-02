@@ -3,7 +3,8 @@
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
-
+#include <cstdlib>
+#include <cstring>
 
 using namespace Shared::Debug;
 using namespace Shared::String;

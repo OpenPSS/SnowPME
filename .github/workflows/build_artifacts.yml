@@ -4,7 +4,7 @@ on:
       - main
 jobs:
   ubuntu_meson_build:
-    name: Ubuntu meson; GCC
+    name: Linux (GCC)
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -17,7 +17,7 @@ jobs:
         run: |
             apt update
             apt upgrade -y
-            apt install -y libsdl2-dev build-essential meson
+            apt install -y build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
       - name: compile
         run: |
             meson setup build
@@ -29,7 +29,7 @@ jobs:
           name: SnowPME-Ubuntu
           path: build
   windows_msvc_build:
-    name: Windows msbuild; Microsoft Visual C++
+    name: Windows (Microsoft Visual C++)
     runs-on: windows-latest
     steps:
       - name: checkout
