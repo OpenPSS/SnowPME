@@ -16,7 +16,7 @@ jobs:
       - name: install dependencies
         run: |
             sudo apt update
-            sudo apt install -y build-essential meson ninja libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
+            sudo apt install -y build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
       - name: compile
         run: |
             meson setup build
