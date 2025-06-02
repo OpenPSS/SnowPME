@@ -14,7 +14,10 @@ jobs:
       - name: get submodules
         run: git submodule update --init --recursive
       - name: install dependencies
-        run: sudo apt install libsdl2-dev build-essential meson -y
+        run: |
+            apt update
+            apt upgrade -y
+            apt install -y libsdl2-dev build-essential meson
       - name: compile
         run: |
             meson setup build
