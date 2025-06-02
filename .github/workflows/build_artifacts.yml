@@ -16,8 +16,7 @@ jobs:
       - name: install dependencies
         run: |
             sudo apt update
-            sudo apt upgrade -y
-            sudo apt install -y build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
+            sudo apt install -y build-essential meson ninja libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
       - name: compile
         run: |
             meson setup build
@@ -54,11 +53,11 @@ jobs:
             Write-Host "components were not installed"
             exit 1
           }
-      - name: setup msvc developer command prompt
+      - name: run msvc developer command prompt
         uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
         with:
           arch: x86
-      - name: msbuild
+      - name: compile
         run: msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
       - name: upload binaries
         uses: actions/upload-artifact@v4
