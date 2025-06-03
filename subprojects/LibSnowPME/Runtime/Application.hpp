@@ -3,23 +3,23 @@
 #include <string>
 #include <Graphics/Window.hpp>
 #include <thread>
+#include <memory>
 
 namespace SnowPME::Runtime
 {
 	class Application {
 	private:
 		std::string appMainDirectory;
-		Graphics::Window* appWindow;
+		std::shared_ptr<Graphics::Window> appWindow;
+		static std::shared_ptr<Application> runningApplication;
 
-		static Application* runningApplication;
-
-		static int initCallbacks(Graphics::Window* window);
+		static int initCallbacks(std::shared_ptr<Graphics::Window> window);
 		
 
 	public:
-		Application(const std::string& gameFolder, Graphics::Window* window);
+		Application(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
 		void RunPssMain();
-		static void LoadApplication(const std::string& gameFolder, Graphics::Window* window);
+		static void LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
 	};
 }
 

@@ -2,14 +2,16 @@
 #define SNOW_PME_WINDOWIMPL_H 1
 #include <Graphics/Window.hpp>
 #include <Callback/Impl.hpp>
+#include <memory>
+
 namespace SnowPME::Callback {
 
-	class WindowImpl : public Impl{
+	class WindowImpl : public Impl {
 	private:
-		static Graphics::Window* mainWindow;
+		static std::shared_ptr<Graphics::Window> mainWindow;
 		
 	public:
-		static void Init(Graphics::Window* oglWindow);
+		static void Init(std::shared_ptr<Graphics::Window> oglWindow);
 		static void SwapBuffers();
 		static double GetTime();
 		static void PollEvents();

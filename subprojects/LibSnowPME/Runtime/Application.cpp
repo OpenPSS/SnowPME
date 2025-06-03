@@ -16,9 +16,9 @@ using namespace Shared;
 
 
 namespace SnowPME::Runtime {
-	Application* Application::runningApplication = nullptr;
+	std::shared_ptr<Application> Application::runningApplication = nullptr;
 
-	int Application::initCallbacks(Graphics::Window* window) {
+	int Application::initCallbacks(std::shared_ptr<Graphics::Window> window) {
 		Callback::WindowImpl::Init(window);
 
 		Sce::Pss::Core::Callback::WindowCallbacks::Init(
@@ -34,9 +34,10 @@ namespace SnowPME::Runtime {
 	}
 	
 
-	Application::Application(const std::string& gameFolder, Graphics::Window* window) {
+	Application::Application(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window) {
 		this->appWindow = window;
 		this->appMainDirectory = gameFolder;
+		Application::initCallbacks(window);
 	}
 
 	void Application::RunPssMain() {
@@ -44,16 +45,12 @@ namespace SnowPME::Runtime {
 		InitalizeMono::ScePssMain(this->appMainDirectory.c_str());
 	}
 
-	void Application::LoadApplication(const std::string& gameFolder, Graphics::Window* window) {
-		// setup window callbacks
-		Application::initCallbacks(window);
-
+	void Application::LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window) {
 		if (Application::runningApplication != nullptr) {
-			delete Application::runningApplication;
 			Application::runningApplication = nullptr;
 		}
 		
-		Application::runningApplication = new Application(gameFolder, window);
+		Application::runningApplication = std::make_shared<Application>(gameFolder, window);
 		Application::runningApplication->RunPssMain();
 	}
 }

@@ -1,11 +1,11 @@
 #include <Callback/WindowImpl.hpp>
+
 using namespace SnowPME::Graphics;
 
 namespace SnowPME::Callback {
+	std::shared_ptr<Window> WindowImpl::mainWindow;
 
-	Window* WindowImpl::mainWindow = nullptr;
-
-	void WindowImpl::Init(Window* window) {
+	void WindowImpl::Init(std::shared_ptr<Window> window) {
 		WindowImpl::mainWindow = window;
 		WindowImpl::Impl::isInitalized = true;
 	}
