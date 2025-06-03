@@ -4,18 +4,19 @@
 namespace Sce::Pss::Core::Crypto {
 
 	AesCbc::AesCbc(uint8_t key[0x10], uint8_t iv[0x10]) {
-		AES_init_ctx_iv(&this->ctx, key, iv);
+		aes128_init(&this->ctx_dec, key);
+		memcpy(this->iv, iv, sizeof(this->iv));
 	}
 
 	void AesCbc::SetIv(uint8_t iv[0x10]) {
-		AES_ctx_set_iv(&this->ctx, iv);
+		memcpy(this->iv, iv, sizeof(this->iv));
 	}
 	
 	void AesCbc::Decrypt(uint8_t* data, uint32_t dataSize) {
-		AES_CBC_decrypt_buffer(&this->ctx, data, dataSize);
+		aes128_cbc_decrypt(&this->ctx_dec, this->iv, data, dataSize);
 	}
 
 	void AesCbc::Decrypt(std::vector<uint8_t>& data) {
-		AES_CBC_decrypt_buffer(&this->ctx, data.data(), data.size());
+		aes128_cbc_decrypt(&this->ctx_dec, this->iv, data.data(), data.size());
 	}
 }

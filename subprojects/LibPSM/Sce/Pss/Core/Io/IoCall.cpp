@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #include <Debug/Logger.hpp>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <LibShared.hpp>
 

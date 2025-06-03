@@ -8,6 +8,7 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <LibShared.hpp>
 #include <glad/glad.h>

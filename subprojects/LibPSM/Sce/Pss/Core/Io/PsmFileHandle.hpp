@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Errorable.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <iostream>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 

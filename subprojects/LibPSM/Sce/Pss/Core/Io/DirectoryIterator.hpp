@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <filesystem>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Io/StackItem.hpp>
 #include <Sce/Pss/Core/Io/IUnderlying.hpp>

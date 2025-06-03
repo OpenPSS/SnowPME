@@ -30,3 +30,5 @@ executable('SnowPME',
 		External_dep
 	]
 )
+
+subproject('SnowPMEBenchmark')

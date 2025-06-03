@@ -14,12 +14,12 @@ namespace Sce::Pss::Core::Mono {
 		void* functionPointer;
 	} PsmMonoFunc;
 
-	static PsmMonoFunc ErrorFunctions[] {
+	inline PsmMonoFunc ErrorFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Error::GetExceptionInfoNative(string&,string&)", Sce::Pss::Core::Error::GetExceptionInfoNative ),
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc ServiceFunctions[] {
+	inline PsmMonoFunc ServiceFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Services.NetworkRequest::CreateRequestNative(int,string,string,int&)", Sce::Pss::Core::Services::NetworkRequest::CreateRequestNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Services.NetworkRequest::QueueRequestNative(int,string,string,int&)", Sce::Pss::Core::Services::NetworkRequest::QueueRequestNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Services.NetworkRequest::DestroyRequestNative(int)", Sce::Pss::Core::Services::NetworkRequest::DestroyRequestNative ),
@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc CameraFunctions[] {
+	inline PsmMonoFunc CameraFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Camera::GetNumberOfCamerasNative()", Sce::Pss::Core::Device::Camera::GetNumberOfCamerasNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Camera::GetCameraFacingNative(int,Sce.PlayStation.Core.Device.CameraFacing&)", Sce::Pss::Core::Device::Camera::GetCameraFacingNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Camera::GetSupportedPreviewSizeCountNative(int)", Sce::Pss::Core::Device::Camera::GetSupportedPreviewSizeCountNative ),
@@ -61,7 +61,7 @@ namespace Sce::Pss::Core::Mono {
 
 	};
 
-	static PsmMonoFunc LocationFunctions[] {
+	inline PsmMonoFunc LocationFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Location::StartNative()", Sce::Pss::Core::Device::Location::StartNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Location::StopNative()", Sce::Pss::Core::Device::Location::StopNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Device.Location::GetDataNative(Sce.PlayStation.Core.Device.LocationData&)", Sce::Pss::Core::Device::Location::GetDataNative ),
@@ -69,7 +69,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc ImagingFunctions[]{
+	inline PsmMonoFunc ImagingFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::NewFromFilename(string,int&)", Sce::Pss::Core::Imaging::Image::NewFromFilename ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::NewFromFileImage(byte[],int&)", Sce::Pss::Core::Imaging::Image::NewFromFileImage ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::NewFromModeSizeColor(Sce.PlayStation.Core.Imaging.ImageMode,Sce.PlayStation.Core.Imaging.ImageSize&,Sce.PlayStation.Core.Imaging.ImageColor&,int&)", Sce::Pss::Core::Imaging::Image::NewFromModeSizeColor ),
@@ -101,7 +101,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc InputFunctions[] {
+	inline PsmMonoFunc InputFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.Touch::GetDataNative(int,Sce.PlayStation.Core.Input.TouchData[],int,int&)", Sce::Pss::Core::Input::Touch::GetDataNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.Touch::GetRearTouchDataNative(int,Sce.PlayStation.Core.Input.TouchData[],int,int&)", Sce::Pss::Core::Input::Touch::GetRearTouchDataNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.GamePad::GetDataNative(int,Sce.PlayStation.Core.Input.GamePadData&)", Sce::Pss::Core::Input::GamePad::GetDataNative ),
@@ -109,7 +109,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc AudioFunctions[]{
+	inline PsmMonoFunc AudioFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Audio.Sound::NewFromFilename(string,int&)", Sce::Pss::Core::Audio::Sound::NewFromFilename ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Audio.Sound::NewFromFileImage(byte[],int&)", Sce::Pss::Core::Audio::Sound::NewFromFileImage ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Audio.Sound::ReleaseNative(int)", Sce::Pss::Core::Audio::Sound::ReleaseNative ),
@@ -153,7 +153,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc GraphicsFunctions[]{
+	inline PsmMonoFunc GraphicsFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::Create(int,int,Sce.PlayStation.Core.Graphics.PixelFormat,Sce.PlayStation.Core.Graphics.PixelFormat,Sce.PlayStation.Core.Graphics.MultiSampleMode,int&)", Sce::Pss::Core::Graphics::PsmGraphicsContext::Create ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::Delete(int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::Delete ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::Update(int,Sce.PlayStation.Core.Graphics.GraphicsUpdate,Sce.PlayStation.Core.Graphics.GraphicsState&,int[])", Sce::Pss::Core::Graphics::PsmGraphicsContext::Update ),
@@ -229,7 +229,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNC_END()
 	};
 
-	static PsmMonoFunc EnvironmentFunctions[] {
+	inline PsmMonoFunc EnvironmentFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Environment.Log::WriteNative(string)", Sce::Pss::Core::Environment::Log::WriteNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Environment.Log::GetNeedsRedirection()", Sce::Pss::Core::Environment::Log::GetNeedsRedirection ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Environment.SystemEvents::CheckEventsNative(Sce.PlayStation.Core.Environment.SystemEvents/InternalData&)", Sce::Pss::Core::Environment::SystemEvents::CheckEventsNative ),

@@ -14,7 +14,7 @@ namespace SnowPME {
 
 	void Program::startMonoApplication(const std::string& gamePath) {
 		// run program
-		Application::LoadApplication(gamePath, this->window);
+		Application::LoadApplication(gamePath, Graphics::Window::GetMainWindow());
 	}
 
 
@@ -37,7 +37,7 @@ namespace SnowPME {
 		}
 
 		Logger::Debug("Opening Window.");
-		this->window = new Graphics::Window(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
+		Graphics::Window::create(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
 
 		auto gamePath = opts["path"].as_optional<std::string>();
 		if(gamePath.has_value()) {
@@ -49,21 +49,17 @@ namespace SnowPME {
 			}
 			if(showGui) {
 				Logger::Debug("Setting up Gui.");
-				this->gui = new Graphics::Gui::SnowGui(this->window);
+				Graphics::Gui::SnowGui gui(Graphics::Window::GetMainWindow());
 
 				Logger::Debug("Initalizing main window.");
 				Graphics::Gui::ProgramSelectWindow* mainWindow = new Graphics::Gui::ProgramSelectWindow();
 				mainWindow->Register();
 				
 				Logger::Debug("Running GUI main loop.");
-				this->gui->RunMainLoop();
-
+				gui.RunMainLoop();
 			}
 		}
 	}
 
-	Program::~Program() {
-		if (this->window != nullptr) delete this->window;
-		if(this->gui != nullptr) delete this->gui;
-	}
+	Program::~Program() {}
 }

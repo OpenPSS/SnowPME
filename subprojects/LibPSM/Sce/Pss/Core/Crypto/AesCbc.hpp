@@ -6,7 +6,8 @@
 namespace Sce::Pss::Core::Crypto {
 	class AesCbc {
 	private:
-		struct AES_ctx ctx;
+		aes128_key ctx_dec;
+		uint8_t iv[0x10];
 	public:
 		AesCbc(uint8_t key[0x10], uint8_t iv[0x10]);
 		void SetIv(uint8_t iv[0x10]);

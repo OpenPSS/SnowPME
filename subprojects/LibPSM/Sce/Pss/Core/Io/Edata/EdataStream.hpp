@@ -7,6 +7,7 @@
 #include <Sce/Pss/Core/Io/IUnderlying.hpp>
 
 #include <fstream>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 #define PSSE_BLOCK_SIZE (0x8000)

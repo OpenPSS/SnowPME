@@ -2,6 +2,7 @@
 #define LIB_PSS_PERSISTENTMEMORY_H 1
 #include <string>
 #include <iostream>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 #define PM_DAT_FILE (char*)("/System/pm.dat")

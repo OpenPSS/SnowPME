@@ -3,12 +3,13 @@
 #include <cstdint>
 #include <string>
 #include <thread>
+#include <memory>
 #include <SDL2/SDL.h>
 
 namespace SnowPME::Graphics {
 	class Window {
 	private:
-		static Window* mainWindow;
+		static std::shared_ptr<Window> mainWindow;
 		SDL_Window* sdlWindow = nullptr;
 		SDL_GLContext glCtx = nullptr;
 		std::string openGlVersion;
@@ -30,7 +31,8 @@ namespace SnowPME::Graphics {
 		SDL_Window* GetSdlWindow();
 		SDL_GLContext GetGlCtx();
 		
-		static Window* GetMainWindow();
+		static std::shared_ptr<Window> GetMainWindow();
+		static void create(int height, int width, const std::string& title);
 
 		~Window();
 	};

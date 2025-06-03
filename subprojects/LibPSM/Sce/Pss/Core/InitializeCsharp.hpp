@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_INITALIZECSHARP_H
 #define LIB_PSS_INITALIZECSHARP_H 1
 #include <string>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Mono/PsmMonoFunc.hpp>
 

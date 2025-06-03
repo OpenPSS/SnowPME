@@ -7,10 +7,10 @@
         "name": "(gdb) Launch",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/build/debug/SnowPME/SnowPME",
-        "args": [],
+        "program": "${workspaceFolder}/builddir_debug/SnowPME",
+        "args": ["-p", "NPOA00006"],
         "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build/debug",
+        "cwd": "${workspaceFolder}",
         "environment": [],
         "externalConsole": false,
         "MIMode": "gdb",
@@ -25,7 +25,6 @@
                 "text": "-gdb-set disassembly-flavor intel",
                 "ignoreFailures": true
             }
-        ],
-        "preLaunchTask": "CMake: build"
+        ]
     }]
 }

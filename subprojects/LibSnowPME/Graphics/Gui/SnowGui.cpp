@@ -71,7 +71,7 @@ namespace SnowPME::Graphics::Gui {
 		}
 	}
 
-	SnowGui::SnowGui(Window* guiWindow) {
+	SnowGui::SnowGui(std::shared_ptr<Window> guiWindow) {
 		this->window = guiWindow;
 		this->setupImgui();
 	}

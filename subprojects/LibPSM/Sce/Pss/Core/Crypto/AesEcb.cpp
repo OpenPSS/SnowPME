@@ -5,22 +5,18 @@
 namespace Sce::Pss::Core::Crypto {
 
 	AesEcb::AesEcb(uint8_t key[0x10]) {
-		AES_init_ctx(&this->ctx, key);
+		aes128_init_dec(&this->ctx_dec, key);
 	}
 
 	void AesEcb::Decrypt(uint8_t* data, uint32_t dataSize) {
 		if (dataSize % AES_BLOCKLEN != 0)
 			throw std::runtime_error("dataSize not aligned to aes block size.");
-
-		for(int i = 0; i < dataSize / AES_BLOCKLEN; i++)
-			AES_ECB_decrypt(&this->ctx, data + (i * AES_BLOCKLEN));
+		aes128_ecb_encrypt(&this->ctx_dec, data, dataSize);
 	}
 
 	void AesEcb::Decrypt(std::vector<uint8_t>& data) {
 		if (data.size() % AES_BLOCKLEN != 0)
 			throw std::runtime_error("dataSize not aligned to aes block size.");
-
-		for (int i = 0; i < data.size() / AES_BLOCKLEN; i++)
-			AES_ECB_decrypt(&this->ctx, data.data() + (i * AES_BLOCKLEN));
+		aes128_ecb_decrypt(&this->ctx_dec, data.data(), data.size());
 	}
 }

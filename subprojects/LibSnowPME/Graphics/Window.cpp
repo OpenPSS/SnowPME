@@ -10,10 +10,11 @@
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
-	Window* Window::mainWindow = nullptr;
-	Window* Window::GetMainWindow() {
+	std::shared_ptr<Window> Window::mainWindow = nullptr;
+	std::shared_ptr<Window> Window::GetMainWindow() {
 		return Window::mainWindow;
 	}
+
 	Window::Window(int height, int width, const std::string& title) {
 		if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
 			Logger::Error("Failed to initalize SDL2.");
@@ -55,9 +56,7 @@ namespace SnowPME::Graphics {
 		onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
-		this->mainWindow = this;
 	}
-
 
 	SDL_Window* Window::GetSdlWindow() {
 		return this->sdlWindow;
@@ -138,8 +137,11 @@ namespace SnowPME::Graphics {
 
 	Window::~Window() {
 		if(this->glCtx != nullptr) SDL_GL_DeleteContext(this->glCtx);
-		if(this->sdlWindow != nullptr)	SDL_DestroyWindow(this->sdlWindow);
+		if(this->sdlWindow != nullptr) SDL_DestroyWindow(this->sdlWindow);
 		SDL_Quit();
 	}
 
+	void Window::create(int height, int width, const std::string& title) {
+		Window::mainWindow = std::make_shared<Graphics::Window>(height, width, title);
+	}
 }

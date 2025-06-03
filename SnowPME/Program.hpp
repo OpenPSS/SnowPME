@@ -2,11 +2,11 @@
 #define SNOW_PME_PROGRAM_H 1
 #include <string>
 #include <LibSnowPME.hpp>
+#include <memory>
+
 namespace SnowPME {
 	class Program {
 	private:
-		Graphics::Window* window = nullptr;
-		Graphics::Gui::SnowGui* gui = nullptr;
 		void startMonoApplication(const std::string& gamePath);
 		void startEventLoop();
 	public:

@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_INIT_H
 #define LIB_PSS_INIT_H 1
 #include <string>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 
@@ -12,6 +13,7 @@ namespace Sce::Pss::Core::Mono
 
 		static int scePsmExecute(const char* exeFile, int* resCode);
 		static int scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc);
+		static int exitCallback(int code);
 
 	public:
 		static int ScePsmInitalize(const char* assemblyPath, Sce::Pss::Core::Metadata::AppInfo* settings);

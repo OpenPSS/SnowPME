@@ -93,6 +93,7 @@ namespace SnowPME::Graphics::Gui {
 			}
 			else if(!win->IsOpen()) {
 				win->onWindowClose();
+				ImGuiWindow::UnregisterWindow(win);
 				delete win;
 				return;
 			}

@@ -6,7 +6,7 @@
 namespace Sce::Pss::Core::Crypto {
 	class AesEcb {
 	private:
-		struct AES_ctx ctx;
+		aes128_key ctx_dec;
 	public:
 		AesEcb(uint8_t key[0x10]);
 		void Decrypt(uint8_t* data, uint32_t dataSize);
