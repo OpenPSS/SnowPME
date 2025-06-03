@@ -24,7 +24,7 @@ CFLAGS="-DTARGET_PSS -DPSS_USE_CRYPTO" $PSS_MONO/configure \
 	--disable-boehm --with-sgen=yes --with-gc=sgen --with-mobile=yes --with-monotouch=yes --disable-shared --enable-static
 
 cat <<EOF > Makefile
-all: libeglib-static.a libmonosgen-static.a libmonoruntimesgen-static.a
+all: libeglib-static.a libmonosgen-static.a libmonoruntimesgen.a
 
 libeglib-static.a:
 	\$(MAKE) -C eglib
@@ -38,12 +38,12 @@ libmonosgen-static.a:
 	\$(MAKE) -C mono/mini libmonosgen-static.la
 	cp mono/mini/.libs/libmonosgen-static.a .
 
-libmonoruntimesgen-static.a:
+libmonoruntimesgen.a:
 	\$(MAKE) -C mono/metadata libmonoruntimesgen.la 
-	cp mono/metadata/.libs/libmonoruntimesgen-static.a .
+	cp mono/metadata/.libs/libmonoruntimesgen.a .
 
 clean:
-	rm -f libeglib-static.a libmonosgen-static.a libmonoruntimesgen-static.a
+	rm -f libeglib-static.a libmonosgen-static.a libmonoruntimesgen.a
 
 \${DESTDIR}${LIBDIR}:
 	mkdir -p \${DESTDIR}${LIBDIR}
@@ -54,8 +54,8 @@ clean:
 \${DESTDIR}${LIBDIR}/libmonosgen-static.a: libmonosgen-static.a | \${DESTDIR}${LIBDIR}
 	cp \$^ \$@
 
-\${DESTDIR}${LIBDIR}/libmonoruntimesgen-static.a: libmonoruntimesgen-static.a | \${DESTDIR}${LIBDIR}
+\${DESTDIR}${LIBDIR}/libmonoruntimesgen.a: libmonoruntimesgen.a | \${DESTDIR}${LIBDIR}
 	cp \$^ \$@
 
-install: \${DESTDIR}${LIBDIR}/libeglib-static.a \${DESTDIR}${LIBDIR}/libmonosgen-static.a \${DESTDIR}${LIBDIR}/libmonoruntimesgen-static.a
+install: \${DESTDIR}${LIBDIR}/libeglib-static.a \${DESTDIR}${LIBDIR}/libmonosgen-static.a \${DESTDIR}${LIBDIR}/libmonoruntimesgen.a
 EOF
