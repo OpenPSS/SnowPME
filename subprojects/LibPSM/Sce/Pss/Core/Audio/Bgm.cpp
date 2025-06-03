@@ -7,6 +7,7 @@
 #include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
 
 #include <LibShared.hpp>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <iostream>
 #include <string.h>

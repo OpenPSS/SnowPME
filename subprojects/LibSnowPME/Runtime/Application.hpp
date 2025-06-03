@@ -14,7 +14,6 @@ namespace SnowPME::Runtime
 		static std::shared_ptr<Application> runningApplication;
 
 		static int initCallbacks(std::shared_ptr<Graphics::Window> window);
-		
 
 	public:
 		Application(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);

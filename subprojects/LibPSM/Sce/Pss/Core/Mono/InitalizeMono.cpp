@@ -15,7 +15,11 @@
 #include <LibShared.hpp>
 #include <LibMonoBridge.hpp>
 
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
+
+#include <csetjmp>
+#include <format>
 
 using namespace LibCXML;
 
@@ -29,6 +33,8 @@ using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Mono {
 
+	std::jmp_buf exit_handler;
+	int exit_code;
 	MonoDomain* InitalizeMono::psmDomain = nullptr;
 
 	int InitalizeMono::ScePsmTerminate() {
@@ -199,6 +205,10 @@ namespace Sce::Pss::Core::Mono {
 		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
 		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
 
+		mono_set_exit_callback(InitalizeMono::exitCallback);
+		if(setjmp(exit_handler)) {
+			return exit_code;
+		}
 
 		if (InitalizeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo) != PSM_ERROR_NO_ERROR) {
 			return 1;
@@ -215,10 +225,20 @@ namespace Sce::Pss::Core::Mono {
 		mono_threadpool_set_max_threads(8, 8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		InitalizeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
+		if(!setjmp(exit_handler)) {
+			InitalizeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
+		} else {
+			resCode = exit_code;
+		}
 		InitalizeMono::ScePsmTerminate();
-
 		return resCode;
+	}
+
+	int InitalizeMono::exitCallback(int code) {
+		Logger::Info(std::format("game exited {}", code));
+		exit_code = code;
+		std::longjmp(exit_handler, true);
+		return 0;
 	}
 
 }

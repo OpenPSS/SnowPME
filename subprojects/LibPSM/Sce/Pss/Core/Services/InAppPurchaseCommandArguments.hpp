@@ -3,6 +3,7 @@
 #include <Sce/Pss/Core/Services/InAppPurchaseCommand.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogArguments.hpp>
 
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 namespace Sce::Pss::Core::Services {
 	typedef struct InAppPurchaseCommandArguments : Environment::CommonDialogArguments

@@ -10,6 +10,7 @@
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <LibShared.hpp>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 using namespace Sce::Pss::Core;

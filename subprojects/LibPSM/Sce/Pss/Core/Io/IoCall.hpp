@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_IOCALL_H
 #define LIB_PSS_IOCALL_H 1
 
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <iostream>
 

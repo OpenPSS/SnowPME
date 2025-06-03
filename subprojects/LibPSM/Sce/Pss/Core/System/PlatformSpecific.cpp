@@ -1,5 +1,6 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <LibShared.hpp>
 

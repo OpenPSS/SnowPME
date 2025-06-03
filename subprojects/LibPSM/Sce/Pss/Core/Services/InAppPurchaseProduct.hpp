@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_INAPPPURCHASEPRODUCT_H
 #define LIB_PSS_INAPPPURCHASEPRODUCT_H
 #include <string>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Services/InAppPurchaseTicketType.hpp>
 #include <Sce/Pss/Core/Services/InAppPurchaseProductMonoData.hpp>

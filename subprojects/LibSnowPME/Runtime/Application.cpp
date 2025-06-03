@@ -29,7 +29,6 @@ namespace SnowPME::Runtime {
 			Callback::WindowImpl::WasMinimized,
 			Callback::WindowImpl::YesNoMessageBox);
 
-
 		return PSM_ERROR_NO_ERROR;
 	}
 	

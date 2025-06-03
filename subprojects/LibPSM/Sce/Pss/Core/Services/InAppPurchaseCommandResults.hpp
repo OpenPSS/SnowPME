@@ -2,6 +2,7 @@
 #define LIB_PSS_COMMANDRESULTS_H 1
 #include <Sce/Pss/Core/Services/InAppPurchaseCommand.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialogResults.hpp>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {

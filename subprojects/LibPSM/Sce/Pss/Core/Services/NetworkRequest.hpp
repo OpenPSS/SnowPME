@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {

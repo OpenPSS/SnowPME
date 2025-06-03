@@ -11,8 +11,6 @@ LibSnowPME = subproject('LibSnowPME')
 LibPSSMono = subproject('LibPSSMono')
 External = subproject('External')
 
-subproject('SnowPMEBenchmark')
-
 LibPSM_dep = LibPSM.get_variable('LibPSM_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibShared_dep = LibShared.get_variable('LibShared_dep')
@@ -32,3 +30,5 @@ executable('SnowPME',
 		External_dep
 	]
 )
+
+subproject('SnowPMEBenchmark')
