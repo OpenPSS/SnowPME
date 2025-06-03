@@ -45,6 +45,9 @@
     <ClCompile Include="Graphics\Window.cpp" />
     <ClCompile Include="Runtime\Application.cpp" />
   </ItemGroup>
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
+  </PropertyGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -206,7 +206,7 @@ namespace Sce::Pss::Core::Io {
 		if (handle->IsDirectory())
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		if (!handle->IsEncrypted())
+		if (handle->IsEncrypted())
 			return PSM_ERROR_ACCESS_DENIED;
 
 		if (!handle->IsRewritable())

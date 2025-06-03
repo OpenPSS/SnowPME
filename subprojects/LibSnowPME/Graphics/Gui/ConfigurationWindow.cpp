@@ -54,6 +54,9 @@ namespace SnowPME::Graphics::Gui {
 			ImGui::Text("Target Implementation: ");
 			ImGui::SameLine();
 			ImGui::Combo("##targetImplEntry", reinterpret_cast<int*>(&Config::TargetImplementation), RUNTIME_IMPL_ENTRIES, IM_ARRAYSIZE(RUNTIME_IMPL_ENTRIES));
+			ImGui::Text("System Language: ");
+			ImGui::SameLine();
+			ImGui::InputTextWithHint("##systemLanguage", "en-US", Config::SystemLanguage, sizeof(Config::SystemLanguage));
 			ImGui::TreePop();
 		}
 

@@ -19,7 +19,7 @@ namespace Sce::Pss::Core::Io::Edata {
 			*handle = stream->Handle;
 
 			*type = SCE_PSS_FILE_FLAG_READONLY;
-			if (stream->FileEncrypted)
+			if (stream->IsEncrypted())
 				*type |= SCE_PSS_FILE_FLAG_ENCRYPTED;
 
 			return PSM_ERROR_NO_ERROR;

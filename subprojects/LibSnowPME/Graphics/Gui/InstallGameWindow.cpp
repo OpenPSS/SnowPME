@@ -43,9 +43,9 @@ namespace SnowPME::Graphics::Gui {
 		}
 		ImGui::PopID();
 
-		if ((this->useRif || this->useZrif) && !this->progress.ShowProgress()) {
+		if (!this->progress.ShowProgress()) {
 			if (ImGui::Button("Install Game")) {
-				std::thread installThread = std::thread(&InstallGameWindow::installGame, this);
+				this->installGame();
 			}
 		}
 		else if (this->progress.ShowProgress()) {

@@ -196,7 +196,7 @@ namespace Sce::Pss::Core::Io::Edata {
 				memcmp(this->header.Magic, "PSSE", sizeof(EdataHeader::Magic)) == 0 ||
 				memcmp(this->header.Magic, "PSME", sizeof(EdataHeader::Magic)) == 0) {
 
-				this->FileEncrypted = true;
+				this->fileEncrypted = true;
 
 				// check version & type is not 1
 				if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
@@ -230,7 +230,7 @@ namespace Sce::Pss::Core::Io::Edata {
 			}
 		}
 			
-		this->FileEncrypted = false;
+		this->fileEncrypted = false;
 		this->osHandle->clear();
 		this->osHandle->seekg(0, std::ios::beg);
 		return;
@@ -252,14 +252,14 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	uint64_t EdataStream::Length() {
-		if (this->FileEncrypted)
+		if (this->fileEncrypted)
 			return this->header.FileSize;
 		else
 			return this->totalFileSize;
 	}
 
 	uint32_t EdataStream::Read(void* buffer, uint32_t length) {
-		if (this->FileEncrypted) {
+		if (this->fileEncrypted) {
 
 			uint64_t blockNo = this->getBlockIdForOffset(this->position);
 			if (this->block != blockNo) {
@@ -292,12 +292,13 @@ namespace Sce::Pss::Core::Io::Edata {
 			std::streamsize read = this->osHandle->gcount();
 			this->position += read;
 			
-			return (uint32_t)read;
+			return static_cast<uint32_t>(read);
 		}
 	}
 
 	uint32_t EdataStream::Write(void* buffer, uint32_t length) {
-		if (!this->FileEncrypted) {
+		LOCK_GUARD();
+		if (!this->fileEncrypted) {
 			this->osHandle->write(static_cast<const char*>(buffer), length);
 			this->position += length;
 			return length;
@@ -306,7 +307,8 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	int EdataStream::Seek(uint64_t position, ScePssFileSeekType_t pos) {
-		if (this->FileEncrypted) {
+		LOCK_GUARD();
+		if (this->fileEncrypted) {
 
 			switch (pos) {
 			case SCE_PSS_FILE_SEEK_TYPE_BEGIN:
@@ -351,7 +353,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		if (this->position < 0)
 			this->position = 0;
 
- 		if (this->FileEncrypted) {
+ 		if (this->fileEncrypted) {
 			uint64_t blockNo = this->getBlockIdForOffset(this->position);
 			if (this->block != blockNo) {
 				this->decryptBlock(blockNo);
@@ -370,7 +372,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	bool EdataStream::IsEncrypted() {
-		return this->FileEncrypted;
+		return this->fileEncrypted;
 	}
 
 	uint64_t EdataStream::Tell() {
@@ -378,12 +380,13 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	void EdataStream::Flush() {
-		if (!this->FileEncrypted) {
+		if (!this->fileEncrypted) {
 			this->osHandle->flush();
 		}
 	}
 	void EdataStream::Close() {
-		if (this->FileEncrypted) {
+		LOCK_GUARD();
+		if (this->fileEncrypted) {
 			this->currentBlock.clear();
 			this->osHandle->close();
 		}
@@ -397,7 +400,8 @@ namespace Sce::Pss::Core::Io::Edata {
 		}
 	}
 	bool EdataStream::Verify() {
-		if (this->FileEncrypted) {
+		LOCK_GUARD();
+		if (this->fileEncrypted) {
 			uint64_t oldPosition = this->position;
 
 			std::vector<uint8_t> data(this->Length());

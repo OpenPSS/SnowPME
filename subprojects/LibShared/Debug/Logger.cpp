@@ -19,7 +19,7 @@ namespace Shared::Debug
 
 			if (line.empty()) continue;
 
-			if (channel != "ERROR" && channel != "WARN")
+			if (channel == "GAME")
 				std::cout << "[" << channel << "] " << line << std::endl;
 			else
 				std::cerr << "[" << channel << "] " << line << std::endl;

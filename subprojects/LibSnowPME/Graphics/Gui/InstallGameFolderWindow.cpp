@@ -3,42 +3,49 @@
 #include <filesystem>
 #include <vector>
 
-using namespace Shared::String;
+using namespace Shared::Debug;
 
 namespace SnowPME::Graphics::Gui {
 
 	void InstallGameFolderWindow::installGame() {
 		std::string rootDirectory = this->gameFile;
-		std::string applicationFolder = Path::Combine(rootDirectory, "Application");
-		if(!std::filesystem::exists(applicationFolder)) applicationFolder = Path::Combine(Path::Combine(rootDirectory, "RO"), "Application");
+		std::string applicationFolder = std::filesystem::path(rootDirectory).append("Application").string();
+		if (!std::filesystem::exists(applicationFolder)) applicationFolder = std::filesystem::path(rootDirectory).append("RO").append("Application").string();
 		std::string installDirectory = Shared::Config::PsmApps;
+		Logger::Debug("Recursive copying " + rootDirectory + " the to " + installDirectory);
 
 		if (std::filesystem::exists(applicationFolder)) {
 			// first calculate how many files
-			int total = 0;
-
-			for (const std::filesystem::directory_entry& ent : std::filesystem::recursive_directory_iterator(rootDirectory)) { 
-				total++;
-			}
 
 			// reset the progress bar
-			this->progress.Reset(total);
+			this->progress.Reset(1);
 			this->progress.SetShowProgress(true);
 
 			// do the actual copy of files to new directory
-			for (const std::filesystem::directory_entry& ent : std::filesystem::recursive_directory_iterator(rootDirectory)) {
-				std::string relFile = ent.path().string().substr(std::filesystem::path(rootDirectory).parent_path().string().length());
-				std::string dstFile = Path::Combine(installDirectory, relFile);
+			for (const std::filesystem::directory_entry& ent : std::filesystem::recursive_directory_iterator(rootDirectory, std::filesystem::directory_options::skip_permission_denied)) {
 
-				if (ent.is_directory()) {
+				std::string srcFile = ent.path().string();
+				std::string relFile = srcFile.substr(std::filesystem::path(rootDirectory).parent_path().string().length()+1);
+				std::string dstFile = std::filesystem::path(installDirectory).append(relFile).string();
+
+				Logger::Debug("dstFile: " + dstFile + " // " + relFile + " // " + srcFile);
+
+				if (std::filesystem::exists(dstFile)) {
+					continue;
+				}
+				else if (ent.is_directory()) {
+					Logger::Debug("Creating directory: " + dstFile);
 					std::filesystem::create_directories(dstFile);
 				}
 				else if (ent.is_regular_file()) {
-					std::filesystem::copy_file(ent.path().string(), dstFile);
+					
+					Logger::Debug("Copying: " + srcFile + " to " + dstFile);
+					std::filesystem::copy_file(srcFile, dstFile);
 				}
 
-				this->progress.Increment();
 			}
+
+			this->progress.Increment();
 		}		
 	}
 }
