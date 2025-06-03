@@ -1,4 +1,4 @@
-project('PSM', 
+project('LibPSM', 
   ['cpp', 'c'],
   version: '0.1',
   default_options:  {
@@ -14,21 +14,22 @@ dirbase = meson.current_source_dir()
 
 include_libs = include_directories('.')
 
-# external include folder
-External = subproject('External')
-external_dep = External.get_variable('external_dep')
-
 # required subprojects
 LibShared = subproject('LibShared')
-libShared_dep = LibShared.get_variable('libShared_dep')
 LibGLAD = subproject('LibGLAD')
-libGLAD_dep = LibGLAD.get_variable('libGLAD_dep')
 LibCXML = subproject('LibCXML')
-libCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibMonoBridge = subproject('LibMonoBridge')
-libMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
+LibPSSMono = subproject('LibPSSMono')
+External = subproject('External')
 
-libPSM = static_library('PSM',
+LibShared_dep = LibShared.get_variable('LibShared_dep')
+LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
+LibCXML_dep = LibCXML.get_variable('libCXML_dep')
+LibMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
+LibPSSMono_dep = LibPSSMono.get_variable('LibPSSMono_dep')
+External_dep = External.get_variable('External_dep')
+
+LibPSM = static_library('PSM',
 	'Sce/Pss/Core/Audio/Bgm.cpp',
 	'Sce/Pss/Core/Audio/BgmPlayer.cpp',
 	'Sce/Pss/Core/Audio/Impl/AudioImpl.cpp',
@@ -121,12 +122,15 @@ libPSM = static_library('PSM',
 	'Sce/Pss/Core/Timing/Time.cpp',
 	include_directories: [ include_libs ],
 	dependencies: [
-		libGLAD_dep,
-		libShared_dep,
-		libMonoBridge_dep,
-		libCXML_dep,
-		external_dep
-	],
-	install: true)
+		LibShared_dep,
+		LibGLAD_dep,
+		LibCXML_dep,
+		LibMonoBridge_dep,
+		LibPSSMono_dep,
+		External_dep
+	])
 	
-libPSM_dep = declare_dependency(include_directories: include_libs, link_with: libPSM)
+LibPSM_dep = declare_dependency(
+	include_directories: include_libs,
+	link_with: LibPSM
+)

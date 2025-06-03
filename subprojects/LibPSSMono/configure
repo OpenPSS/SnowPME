@@ -1,0 +1,61 @@
+#! /bin/bash
+set -e
+
+LIBDIR=""
+for arg in "$@"; do
+  case "$arg" in
+    --libdir=*) LIBDIR=${arg#*=} ;;
+    *)
+      ;;
+  esac
+done
+
+SOURCE_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+PSS_MONO=$SOURCE_DIR/pss-mono
+
+if [ -f Makefile ]; then
+	echo "Makefile exists, skipping rebuild"
+	exit 0
+fi
+
+autoreconf -i $PSS_MONO
+CFLAGS="-DTARGET_PSS -DPSS_USE_CRYPTO" $PSS_MONO/configure \
+	--disable-boehm --with-sgen=yes --with-gc=sgen --with-mobile=yes --with-monotouch=yes --disable-shared --enable-static
+
+cat <<EOF > Makefile
+all: libeglib-static.a libmonosgen-static.a libmonoruntimesgen-static.a
+
+libeglib-static.a:
+	\$(MAKE) -C eglib
+	cp eglib/src/.libs/libeglib-static.a .
+
+libmonosgen-static.a:
+	\$(MAKE) -C mono/io-layer
+	\$(MAKE) -C mono/metadata
+	\$(MAKE) -C mono/utils libmonoutils.la
+	\$(MAKE) -C mono/mini distdir="mono/mini" distdir
+	\$(MAKE) -C mono/mini libmonosgen-static.la
+	cp mono/mini/.libs/libmonosgen-static.a .
+
+libmonoruntimesgen-static.a:
+	\$(MAKE) -C mono/metadata libmonoruntimesgen.la 
+	cp mono/metadata/.libs/libmonoruntimesgen-static.a .
+
+clean:
+	rm -f libeglib-static.a libmonosgen-static.a libmonoruntimesgen-static.a
+
+\${DESTDIR}${LIBDIR}:
+	mkdir -p \${DESTDIR}${LIBDIR}
+
+\${DESTDIR}${LIBDIR}/libeglib-static.a: libeglib-static.a | \${DESTDIR}${LIBDIR}
+	cp \$^ \$@
+
+\${DESTDIR}${LIBDIR}/libmonosgen-static.a: libmonosgen-static.a | \${DESTDIR}${LIBDIR}
+	cp \$^ \$@
+
+\${DESTDIR}${LIBDIR}/libmonoruntimesgen-static.a: libmonoruntimesgen-static.a | \${DESTDIR}${LIBDIR}
+	cp \$^ \$@
+
+install: \${DESTDIR}${LIBDIR}/libeglib-static.a \${DESTDIR}${LIBDIR}/libmonosgen-static.a \${DESTDIR}${LIBDIR}/libmonoruntimesgen-static.a
+EOF

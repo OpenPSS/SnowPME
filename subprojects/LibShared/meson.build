@@ -16,4 +16,7 @@ libShared = static_library('Shared',
 	include_directories: [ include_libs ],
 	install: true)
 	
-libShared_dep = declare_dependency(include_directories: include_libs, link_with: libShared)
+LibShared_dep = declare_dependency(
+	include_directories: include_libs,
+	link_with: libShared
+)

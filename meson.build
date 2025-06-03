@@ -4,39 +4,29 @@ project('SnowPME', 'cpp',
 
 cpp = meson.get_compiler('cpp')
 
-# External libraries ...
-External = subproject('External')
-external_dep = External.get_variable('external_dep')
-
-# All static libraries
-LibCXML = subproject('LibCXML')
-LibGLAD = subproject('LibGLAD')
-LibImGui = subproject('LibImGui')
-LibMonoBridge = subproject('LibMonoBridge')
 LibPSM = subproject('LibPSM')
+LibCXML = subproject('LibCXML')
 LibShared = subproject('LibShared')
 LibSnowPME = subproject('LibSnowPME')
+LibPSSMono = subproject('LibPSSMono')
+External = subproject('External')
 
-libCXML_dep = LibCXML.get_variable('libCXML_dep')
-libGLAD_dep = LibGLAD.get_variable('libGLAD_dep')
-libImGui_dep = LibImGui.get_variable('libImGui_dep')
-libMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
-libPSM_dep = LibPSM.get_variable('libPSM_dep')
-libShared_dep = LibShared.get_variable('libShared_dep')
-libSnowPME_dep = LibSnowPME.get_variable('libSnowPME_dep')
-
+LibPSM_dep = LibPSM.get_variable('LibPSM_dep')
+LibCXML_dep = LibCXML.get_variable('libCXML_dep')
+LibShared_dep = LibShared.get_variable('LibShared_dep')
+LibSnowPME_dep = LibSnowPME.get_variable('LibSnowPME_dep')
+LibPSSMono_dep = LibPSSMono.get_variable('LibPSSMono_dep')
+External_dep = External.get_variable('External_dep')
 
 executable('SnowPME',
-            'SnowPME/SnowPME.cpp',
-            'SnowPME/Program.cpp',
-            dependencies: [
-				external_dep,
-                libCXML_dep,
-                libGLAD_dep,
-                libImGui_dep,
-                libMonoBridge_dep,
-                libShared_dep,
-                libPSM_dep,
-                libSnowPME_dep
-            ])
-
+	'SnowPME/SnowPME.cpp',
+	'SnowPME/Program.cpp',
+	dependencies : [
+		LibPSM_dep,
+		LibCXML_dep,
+		LibShared_dep,
+		LibSnowPME_dep,
+		LibPSSMono_dep,
+		External_dep
+	]
+)

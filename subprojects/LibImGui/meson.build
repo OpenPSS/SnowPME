@@ -1,4 +1,4 @@
-project('ImGui', 'cpp',
+project('LibImGui', 'cpp',
   version: '0.1',
   default_options: ['warning_level=3', 'cpp_std=c++20'])
 
@@ -25,4 +25,7 @@ libImGui = static_library('ImGui',
 	include_directories: [ include_libs ],
 	install: true)
 
-libImGui_dep = declare_dependency(include_directories: include_libs, link_with: libImGui)
+LibImGui_dep = declare_dependency(
+	include_directories: include_libs,
+	link_with: libImGui
+)

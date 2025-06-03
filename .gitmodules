@@ -1,5 +1,5 @@
 [submodule "External/Src/pss-mono"]
-	path = subprojects/External/Src/pss-mono
+	path = subprojects/LibPSSMono/pss-mono
 	url = https://github.com/OpenPSS/pss-mono.git
 [submodule "External/Src/SDL"]
 	path = subprojects/External/Src/SDL
