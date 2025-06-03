@@ -1,9 +1,9 @@
 ![logo](https://github.com/user-attachments/assets/e0f4cc30-6901-4ba4-aa4e-b8a494b60b71)
 
 
-[![.github/workflows/build_artifacts.yml](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml/badge.svg)](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml)
+[![.github/workflows/build_artifacts.yml](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml/badge.svg?branch=main)](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml)
 
-SnowPME is a emulator for [PlayStation Mobile](https://en.wikipedia.org/wiki/PlayStation_Mobile) software.
+SnowPME is a emulator for [PlayStation Mobile](https://en.wikipedia.org/wiki/PlayStation_Mobile).
 
 well actually, 'emulator' is maybe not the right term, PSM software is built targeting the [Common Intermediate Language](https://en.wikipedia.org/wiki/Common_Intermediate_Language);
 and the are very much _designed_ to work on multiple devices, it's built upon the [.NET CLR](https://en.wikipedia.org/wiki/Common_Language_Runtime) and even offically uses a fork of [Mono](https://www.mono-project.com/)
@@ -16,11 +16,11 @@ however, PSM also has quite alot of custom functionality built in as well, for g
 which is why you can't just run ``app.exe`` and have it work; the custom functionality is mostly what SnowPME tries to replicate;
 
 however, unlike Mono/.NET PSM makes some effort to isolate itself from the rest of your OS, (io sandbox, no p/invoke, managed code only) 
-and that it generally runs things made for one thing on a different thing; 
-the CLR is still a CPU architecture, just not one anyone ever made with electronics
-so- you could argue either way but honestly it's just semantics;
+and the CLR is still a CPU architecture, just not one anyone ever made with electronics;
+and an emulator is generlaly understood to run something made for one thing, on a different thing;
+and don't even get me started on 'server emulators'... so- you could argue either way; its just silly semantics anyway;
 
-i already chose the name SnowPME and "PME" was meant to mean "Playstation Mobile Emulator" so thats what we're going with;
+but- i already chose the name SnowPME and "PME" was meant to mean "Playstation Mobile Emulator" so thats what we're going with;
 
 # Notice 
 

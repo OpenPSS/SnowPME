@@ -75,8 +75,7 @@ namespace SnowPME::Graphics::Gui {
 
 	void ProgramList::RenderProgramList() {
 		if (this->programs.empty()) {
-			this->addMenuItem("No programs installed", "");
-			ImGui::MenuItem(this->programs.at(0).label.c_str(), nullptr, &this->programs.at(0).selected, false);
+			ImGui::MenuItem("No programs installed", nullptr, nullptr, false);
 		}
 		else {
 			for (ProgramEntry progEntry : this->programs) {

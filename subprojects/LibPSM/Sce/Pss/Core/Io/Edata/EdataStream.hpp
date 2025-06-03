@@ -33,6 +33,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		uint64_t block = 0;
 		uint64_t totalFileSize = 0;
 		uint64_t totalBlocks = 0;
+		bool fileEncrypted = false;
 
 		int blockPosition();
 		int bytesLeftInBlock();
@@ -47,8 +48,6 @@ namespace Sce::Pss::Core::Io::Edata {
 		uint64_t getBlockIdForOffset(uint64_t offset);
 
 	public:
-
-		bool FileEncrypted = false;
 		EdataList* EncryptedDataList = nullptr;
 
 		EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);

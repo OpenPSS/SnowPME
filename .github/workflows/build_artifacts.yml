@@ -12,22 +12,19 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext
           version: 1.0
-
       - name: compile
         run: |
             meson setup build
             cd build
             ninja
-
       - name: upload binaries
         uses: actions/upload-artifact@v4
         with:
-          name: SnowPME-Ubuntu
+          name: SnowPME-Linux
           path: build/SnowPME
   windows_msvc_build:
     name: Windows (Microsoft Visual C++)

@@ -163,8 +163,7 @@ namespace Sce::Pss::Core::Services {
 
 		if (!this->loadedTicketFile && this->ticketFileExist()) {
 			int err = this->loadTicketFile();
-			if (err != PSM_ERROR_NO_ERROR) return err;
-			this->loadedTicketFile = true;
+			if (err == PSM_ERROR_NO_ERROR) this->loadedTicketFile = true;
 		}
 		return this->saveTicketFile();
 	}

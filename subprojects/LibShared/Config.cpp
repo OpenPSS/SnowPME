@@ -23,8 +23,7 @@ using namespace Shared::Debug;
 namespace Shared
 {
 
-
-	static const std::string SEPERATOR = ":";
+	static const std::string SEPERATOR = "=";
 	static const std::string COMMENT = "#";
 
 	static int screenWidth = 960;
@@ -36,8 +35,8 @@ namespace Shared
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
 
-	char Config::RuntimeLibPath[0x1028] = "./RUNTIME";
-	char Config::RuntimeConfigPath[0x1028] = "./RUNTIME";
+	char Config::RuntimeLibPath[0x1028] = "./dll";
+	char Config::RuntimeConfigPath[0x1028] = "./dll";
 
 	char Config::Username[0x1028] = "SnowPME";
 	char Config::SystemLanguage[0x1028] = "en-US";
