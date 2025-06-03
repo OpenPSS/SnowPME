@@ -7,7 +7,6 @@
 namespace SnowPME {
 	class Program {
 	private:
-		std::shared_ptr<Graphics::Window> window;
 		void startMonoApplication(const std::string& gamePath);
 		void startEventLoop();
 	public:

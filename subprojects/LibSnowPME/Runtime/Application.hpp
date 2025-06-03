@@ -10,7 +10,7 @@ namespace SnowPME::Runtime
 	class Application {
 	private:
 		std::string appMainDirectory;
-		std::shared_ptr<Graphics::Window> appWindow;
+		std::shared_ptr<Graphics::Window> appWindow = nullptr;
 		static std::shared_ptr<Application> runningApplication;
 
 		static int initCallbacks(std::shared_ptr<Graphics::Window> window);

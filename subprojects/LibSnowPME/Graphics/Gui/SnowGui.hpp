@@ -5,7 +5,7 @@
 namespace SnowPME::Graphics::Gui {
 	class SnowGui {
 	private:
-		std::shared_ptr<Window> window;
+		std::shared_ptr<Window> window = nullptr;
 
 		// gui state 
 		bool done = false;

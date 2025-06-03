@@ -240,5 +240,4 @@ namespace Sce::Pss::Core::Mono {
 		std::longjmp(exit_handler, true);
 		return 0;
 	}
-
 }

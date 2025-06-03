@@ -3,7 +3,7 @@
 using namespace SnowPME::Graphics;
 
 namespace SnowPME::Callback {
-	std::shared_ptr<Window> WindowImpl::mainWindow;
+	std::shared_ptr<Window> WindowImpl::mainWindow = nullptr;
 
 	void WindowImpl::Init(std::shared_ptr<Window> window) {
 		WindowImpl::mainWindow = window;

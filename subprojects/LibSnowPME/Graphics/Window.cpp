@@ -10,7 +10,7 @@
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics {
-	std::shared_ptr<Window> Window::mainWindow;
+	std::shared_ptr<Window> Window::mainWindow = nullptr;
 	std::shared_ptr<Window> Window::GetMainWindow() {
 		return Window::mainWindow;
 	}
