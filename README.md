@@ -1,6 +1,24 @@
 ![logo](https://github.com/user-attachments/assets/e0f4cc30-6901-4ba4-aa4e-b8a494b60b71)
+[![Build Artifacts](https://github.com/OpenPSS/SnowPME/workflows/build_artifacts/badge.svg)](https://github.com/OpenPSS/SnowPME/actions?query=workflow%3Abuild_artifacts)
 
-a [PlayStation Mobile](https://en.wikipedia.org/wiki/PlayStation_Mobile) Emulator for Linux and Windows;
+SnowPME is a emulator for [PlayStation Mobile](https://en.wikipedia.org/wiki/PlayStation_Mobile) software.
+
+well actually, 'emulator' is maybe not the right term, PSM software is built targeting the [Common Intermediate Language](https://en.wikipedia.org/wiki/Common_Intermediate_Language);
+and the are very much _designed_ to work on multiple devices, it's built upon the [.NET CLR](https://en.wikipedia.org/wiki/Common_Language_Runtime) and even offically uses a fork of [Mono](https://www.mono-project.com/)
+
+PlayStation Mobile games were originally distributed on both the [PS Vita](https://en.wikipedia.org/wiki/PlayStation_Vita), 
+and some android phones such as the [Xperia Play](https://en.wikipedia.org/wiki/Xperia_Play) 
+a windows version of it also exists though explicitly for developers, included in the SDK;
+
+however, PSM also has quite alot of custom functionality built in as well, for graphics, music, leaderboards, controllers, etc 
+which is why you can't just run ``app.exe`` and have it work; the custom functionality is mostly what SnowPME tries to replicate;
+
+however, unlike Mono/.NET PSM makes some effort to isolate itself from the rest of your OS, (io sandbox, no p/invoke, managed code only) 
+and that it generally runs things made for one thing on a different thing; 
+the CLR is still a CPU architecture, just not one anyone ever made with electronics
+so- you could argue either way but honestly it's just semantics;
+
+i already chose the name SnowPME and "PME" was meant to mean "Playstation Mobile Emulator" so thats what we're going with;
 
 # Notice 
 
@@ -16,9 +34,10 @@ then running ``app.exe`` under the "PSM Simulator" from the PSM SDK.
 # Setup
 
 Before you can do anything; you need to extract the .NET Runtime Libraries ``System.dll`` ``mscorlib.dll`` and ``Sce.PlayStation.Core.dll``
-from the "PSM Runtime Package" (PCSI10011), the "PSM Developer Assistant" (PCSI10007), or from the "PlayStation Mobile SDK";
+from the "PSM Runtime Package" (PCSI10011), or "PSM Developer Assistant" (PCSI10007), on PS VITA, or from the "PlayStation Mobile SDK";
 
-these files have to be PFS decrypted- but do not have to be PSSE decrypted;
+if your extracting files from a PS Vita, they do have to be PFS decrypted; 
+but do not have to be PSSE decrypted;
 
 please note that software made for PlayStation Mobile for Unity (PCSI10009, & PCSI10010) runtimes;
 are not yet supported at all; and are not planned at this time;
