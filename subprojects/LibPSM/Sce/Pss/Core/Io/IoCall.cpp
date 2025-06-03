@@ -212,7 +212,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->IsRewritable())
 			return PSM_ERROR_ACCESS_DENIED;
 		
-		*puBytesWritten = static_cast<EdataStream*>(handle->GetUnderlying())->Write(buffer, uBytesToWrite);
+		*puBytesWritten = reinterpret_cast<EdataStream*>(handle->GetUnderlying())->Write(buffer, uBytesToWrite);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -233,7 +233,7 @@ namespace Sce::Pss::Core::Io {
 		if (handle->IsDirectory())
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		return static_cast<EdataStream*>(handle->GetUnderlying())->Seek(nOffset, seekType);
+		return reinterpret_cast<EdataStream*>(handle->GetUnderlying())->Seek(nOffset, seekType);
 	}
 
 	int IoCall::PsmFileFlush(uint64_t file) {
@@ -278,7 +278,7 @@ namespace Sce::Pss::Core::Io {
 		if (handle->IsDirectory())
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		*puSize = static_cast<uint32_t>(static_cast<EdataStream*>(handle->GetUnderlying())->Length());
+		*puSize = static_cast<uint32_t>(reinterpret_cast<EdataStream*>(handle->GetUnderlying())->Length());
 
 		return PSM_ERROR_NO_ERROR;
 	}
