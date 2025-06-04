@@ -285,9 +285,6 @@
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes_x86.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Mono\InitilaizeMono.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Mono\InitializeMono.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -843,9 +840,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Mono\InitilaizeMono.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Mono\InitializeMono.hpp">
