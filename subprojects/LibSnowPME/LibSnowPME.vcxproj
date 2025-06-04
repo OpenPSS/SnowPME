@@ -101,7 +101,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\sdl\;$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\External\$(Platform)\include\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL-Static\SDL2\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
