@@ -6,11 +6,18 @@
 #define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 #include <cstring>
+#include <iostream>
+#include <format>
+#include <algorithm>
 
 namespace Sce::Pss::Core::Graphics {
 	using namespace Shared::Debug;
 
-
+	inline std::string reversed(char* data, size_t len) {
+		std::string out(data, data + len);
+		std::reverse(out.begin(), out.end());
+		return out;
+	}
 
 	bool CGX::headerIsValid() {
 		if (this->cgxBuf == nullptr) 
@@ -57,7 +64,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	CGX::CGX(uint8_t* cgx, size_t cgxSz) {
-		
 		if (cgx == nullptr) {
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 			return;
@@ -72,70 +78,53 @@ namespace Sce::Pss::Core::Graphics {
 
 		this->cgxBuf = cgx;
 		this->cgxSz = cgxSz;
-
 		this->header = *(CGXHeader*)this->cgxBuf;
 
-		this->magic = Shared::String::StringUtil::Reverse(std::string(this->header.magic, CGX_MAGIC_LEN));
-		this->cgVer = Shared::String::StringUtil::Reverse(std::string(this->header.cgVer, CGX_MAGIC_LEN));
-		this->glesVer = Shared::String::StringUtil::Reverse(std::string(this->header.glesVer, CGX_MAGIC_LEN));
+		std::string magic = reversed(this->header.magic, 4);
+		std::string cgVer = reversed(this->header.cgVer, 4);
+		std::string glesVer = reversed(this->header.glesVer, 4);
+		Logger::Debug(std::format("CGX: {} {} {}", magic, cgVer, glesVer));
 
-		Logger::Debug("CGX : " + this->magic + " " + this->cgVer + " "+ this->glesVer);
-
-		if (!(this->magic == ".CGX" &&
-			this->cgVer == "0.95" &&
-			this->glesVer == "ES20")) {
-
-			ExceptionInfo::AddMessage("Unsupported shader file\n");
-			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
-			return;
-		}
-
-		if (!this->headerIsValid()) {
+		bool is_valid = magic == ".CGX" && cgVer == "0.95" && glesVer == "ES20";
+		if (!is_valid || !this->headerIsValid()) {
 			ExceptionInfo::AddMessage("Corrupted shader file\n");
 			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 			return;
 		}
 
-		memset((void*)&this->fragmentVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
-		memset((void*)&this->vertexVariantTableEntry, 0, sizeof(this->fragmentVariantTableEntry));
+		this->fragmentVariantTableEntry = {0};
+		this->vertexVariantTableEntry = {0};
 
 		if (this->header.vertexShaderVariantsPtr != 0) {
-			memcpy(&this->vertexVariantTableEntry, (CGXVariantTableEntry*)(this->cgxBuf + this->header.vertexShaderVariantsPtr), sizeof(CGXVariantTableEntry));
-		
-			this->vertexVariants = new CGXVariant[this->vertexVariantTableEntry.VariantCount];
+			this->vertexVariantTableEntry = *(CGXVariantTableEntry*)(this->cgxBuf + this->header.vertexShaderVariantsPtr);
+			this->vertexVariants.reserve(this->vertexVariantTableEntry.VariantCount);
 
 			for (uint32_t i = 0; i < this->vertexVariantTableEntry.VariantCount; i++) {
-				this->vertexVariants[i] = ((CGXVariant*)(this->cgxBuf + this->vertexVariantTableEntry.VariantListPtr))[i];
-
-				Logger::Debug("CGX : vert : lang : " + Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN)));
+				CGXVariant variant = ((CGXVariant*)(this->cgxBuf + this->vertexVariantTableEntry.VariantListPtr))[i];
+				this->vertexVariants.push_back(variant);
+				std::string language = reversed(variant.language, 4);
+				Logger::Debug("CGX : vert : lang : " + language);
 			}
 		}
 
 		if (this->header.fragmentShaderVariantsPtr != 0) {
-			memcpy(&this->fragmentVariantTableEntry, (CGXVariantTableEntry*)(this->cgxBuf + this->header.fragmentShaderVariantsPtr), sizeof(CGXVariantTableEntry));
-
-
-			this->fragmentVariants = new CGXVariant[this->fragmentVariantTableEntry.VariantCount];
+			this->fragmentVariantTableEntry = *(CGXVariantTableEntry*)(this->cgxBuf + this->header.fragmentShaderVariantsPtr);
+			this->fragmentVariants.reserve(this->fragmentVariantTableEntry.VariantCount);
 
 			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.VariantCount; i++) {
-				this->fragmentVariants[i] = ((CGXVariant*)(this->cgxBuf + this->fragmentVariantTableEntry.VariantListPtr))[i];
-
-				Logger::Debug("CGX : frag : lang : " + Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN)));
+				CGXVariant variant = ((CGXVariant*)(this->cgxBuf + this->fragmentVariantTableEntry.VariantListPtr))[i];
+				this->fragmentVariants.push_back(variant);
+				std::string language = reversed(variant.language, 4);
+				Logger::Debug("CGX : frag : lang : " + language);
 			}
 		}
 	}
 	const std::string CGX::FindVertexShader(const std::string& shaderLanguage) {
-		if (this->vertexVariants != NULL) {
-			
-			for (uint32_t i = 0; i < this->vertexVariantTableEntry.VariantCount; i++) {
-				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->vertexVariants[i].language, CGX_MAGIC_LEN));
-
-				if (foundLanguage == shaderLanguage) {
-					const char* shaderData = (char*)(this->cgxBuf + this->vertexVariants[i].sourcePtr);
-					return std::string(shaderData, this->vertexVariants[i].sourceSz);
-				}
+		for(CGXVariant& variant : this->vertexVariants) {
+			if(reversed(variant.language, 4) == shaderLanguage) {
+				const char* shaderData = (char*)(this->cgxBuf + variant.sourcePtr);
+					return std::string(shaderData, variant.sourceSz);
 			}
-
 		}
 		ExceptionInfo::AddMessage("Vertex shader not found\n");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
@@ -143,26 +132,16 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	const std::string CGX::FindFragmentShader(const std::string& shaderLanguage) {
-		if (this->fragmentVariants != NULL) {
-			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.VariantCount; i++) {
-				std::string foundLanguage = Shared::String::StringUtil::Reverse(std::string(this->fragmentVariants[i].language, CGX_MAGIC_LEN));
-
-				if (foundLanguage == shaderLanguage) {
-					const char* shaderData = (char*)(this->cgxBuf + this->fragmentVariants[i].sourcePtr);
-					return std::string(shaderData, this->fragmentVariants[i].sourceSz);
-				}
+		for(CGXVariant& variant : this->fragmentVariants) {
+			if(reversed(variant.language, 4) == shaderLanguage) {
+				const char* shaderData = (char*)(this->cgxBuf + variant.sourcePtr);
+					return std::string(shaderData, variant.sourceSz);
 			}
 		}
-
 		ExceptionInfo::AddMessage("Fragment shader not found\n");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 		return "";
 	}
 
-	CGX::~CGX() {		
-		delete[] fragmentVariants;
-		delete[] vertexVariants;
-	}
-
-
+	CGX::~CGX() {}
 }

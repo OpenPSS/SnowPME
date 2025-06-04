@@ -56,7 +56,7 @@ namespace Sce::Pss::Core::Io {
 		if (pszDirectoryPath == nullptr || pDirectory == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		assert(pszFileExtension != nullptr);
+		//assert(pszFileExtension != nullptr); called with NULL in pss-mono...
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
 

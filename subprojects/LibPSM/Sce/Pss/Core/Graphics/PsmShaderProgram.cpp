@@ -110,13 +110,10 @@ namespace Sce::Pss::Core::Graphics {
 		std::string attributeName;
     	Mono::MonoUtil::MonoStringToStdString(name, attributeName);
 
-		for (const auto& binding : prog->GetAttributeBindings()) {
-			if (binding.second == attributeName) {
-				*result = binding.first;
-				return PSM_ERROR_NO_ERROR;
-			}
-		}
-		return PSM_ERROR_COMMON_INVALID_OPERATION;
+		// if not found, *result = -1
+		// do NOT return error, that isnt what psm expects
+		*result = prog->GetAttributeLocation(attributeName);
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoString** result) {
@@ -183,9 +180,14 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result){
-		UNIMPLEMENTED();
+	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result) {
+		GET_PROG();
+		std::string uniformName;
+		prog->GetUniformName(index, uniformName);
+		*result = Mono::MonoUtil::StdStringToMonoString(uniformName);
+		return PSM_ERROR_NO_ERROR;
 	}
+
 	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoString** result) {
 		UNIMPLEMENTED();
 	}

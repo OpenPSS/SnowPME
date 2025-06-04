@@ -12,14 +12,14 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
-		int vertexCgxLen = NULL;
-		int fragmentCgxLen = NULL;
+		int vertexCgxLen = 0;
+		int fragmentCgxLen = 0;
 
 		std::string fragmentSrc = "";
 		std::string vertexSrc = "";
 		ShaderProgramOption* programOptions;
 
-		std::unordered_map<int, std::string> attributeBindings; 
+		std::vector<std::string> attributeBindings; 
 
 		int compileShader(int type, char* source);
 	public:
@@ -40,9 +40,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		void SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
-		const inline std::unordered_map<int, std::string>& GetAttributeBindings() const {
-			return attributeBindings;
-		}
+		int GetAttributeLocation(std::string& name) const;
 		int GetAttributeType(int index, ShaderAttributeType* attributeType);
 
 		int GetUniformName(int index, std::string& uniformName) const;

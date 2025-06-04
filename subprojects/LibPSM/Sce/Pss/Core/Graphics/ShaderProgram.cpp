@@ -1,3 +1,5 @@
+#include "ShaderProgram.hpp"
+
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
@@ -9,6 +11,9 @@
 #include <glad/glad.h>
 #include <string.h>
 #include <cassert>
+#include <format>
+
+#include "err.h"
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
@@ -80,8 +85,8 @@ namespace Sce::Pss::Core::Graphics {
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
 		// i dont know why.
-		this->fragmentSrc = "#version 150\r\n" + this->fragmentSrc;
-		this->vertexSrc = "#version 150\r\n" + this->vertexSrc;
+		this->fragmentSrc = "#version 100\r\nprecision mediump float;\r\n" + this->fragmentSrc;
+		this->vertexSrc = "#version 100\r\nprecision mediump float;\r\n" + this->vertexSrc;
 
 		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)this->fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
@@ -137,18 +142,20 @@ namespace Sce::Pss::Core::Graphics {
 			uniform.Location = glGetUniformLocation(this->GLReference, name);
 			uniform.Index = i;
 			uniform.Name = std::string(name, nameLen);
-
+			size_t pos = uniform.Name.find('[');
+			if (pos != std::string::npos) {
+				uniform.Name = uniform.Name.substr(0, pos);
+			}
 
 			Logger::Debug("Uniform: " + uniform.Name + " location: " + std::to_string(uniform.Location));
-			
-			//PSM has some special processing for these, but i havent been able to find what it is.
-			assert(uniform.Name.find(']') != std::string::npos);
-			
 			this->Uniforms.push_back(uniform);
 		}
 
-		glGetProgramiv(this->GLReference, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+		if(this->Handle == 18) {
+			Logger::Debug("a");
+		}
 
+		glGetProgramiv(this->GLReference, GL_ACTIVE_ATTRIBUTES, &attributeCount);
 
 		for (int i = 0; i < attributeCount; i++) {
 			ProgramAttribute attribute = ProgramAttribute();
@@ -156,20 +163,22 @@ namespace Sce::Pss::Core::Graphics {
 			int nameLen;
 			char name[0x100];
 
-
 			glGetActiveAttrib(this->GLReference, i, sizeof(name), &nameLen, &attribute.Size, &attribute.Type, name);
 			attribute.Location = glGetAttribLocation(this->GLReference, name);
 			attribute.Index = i;
 			attribute.Name = std::string(name, nameLen);
+			size_t pos = attribute.Name.find('[');
+			if (pos != std::string::npos) {
+				attribute.Name = attribute.Name.substr(0, pos);
+			}
 
 			Logger::Debug("Attribute: " + attribute.Name + " location: " + std::to_string(attribute.Location));
-			//PSM has some special processing for these, but i havent been able to find what it is.
-			assert(attribute.Name.find(']') != std::string::npos);
 			this->Attributes.push_back(attribute);
 		}
 		
-		Logger::Debug("CGX : fragment source code : \n" + this->vertexSrc);
+		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
 		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
+		Logger::Debug(std::format("handle: {}", this->Handle));
 
 		return this->GLReference;
 	}
@@ -297,27 +306,23 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	void ShaderProgram::SetAttributeBinding(int index, std::string& name) {
-		GLuint attributeLocation = glGetAttribLocation(this->GLReference, name.c_str());
-
-		if(attributeLocation == -1) {
-			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			return;
-		}
-		glBindAttribLocation(this->GLReference, index, name.c_str());
+		GL_CALL(glBindAttribLocation(this->GLReference, index, name.c_str()));
+		if (attributeBindings.size() <= index) attributeBindings.resize(index + 1);
 		attributeBindings[index] = name;
 	}
 
 	std::string ShaderProgram::GetAttributeBinding(int index) const {
-        auto it = attributeBindings.find(index);
-        if (it != attributeBindings.end()) {
-            return it->second;
-        } else {
-            return "";
-        }
+		if(attributeBindings.size() <= index) return "";
+		return attributeBindings[index];
     }
 
-	int ShaderProgram::GetAttributeType(int index, ShaderAttributeType* attributeType) {
-		GLint params = 0;
+    int ShaderProgram::GetAttributeLocation(std::string &name) const {
+		return glGetAttribLocation(this->GLReference, name.c_str());
+    }
+
+    int ShaderProgram::GetAttributeType(int index, ShaderAttributeType *attributeType)
+    {
+        GLint params = 0;
 		glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &params);
 		GLenum err = glGetError();
 		if(err != GL_NO_ERROR) {
@@ -333,9 +338,9 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_NO_ERROR;
 		}
 		return PSM_ERROR_NO_ERROR;
-	}
+    }
 
-	int ShaderProgram::GetUniformName(int index, std::string& name) const {
+    int ShaderProgram::GetUniformName(int index, std::string& name) const {
 		GLchar nameBuf[0xff];
 		GLsizei nameLength;
 		glGetActiveUniform(this->GLReference, index, name.capacity(), &nameLength, nullptr, nullptr, nameBuf);

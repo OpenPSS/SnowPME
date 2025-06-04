@@ -55,20 +55,16 @@ namespace Sce::Pss::Core::Graphics {
 		uint8_t hash[0x14];
 	} CGXHeader;
 
-	class CGX : public Errorable{
+	class CGX : public Errorable {
 	private:
 		uint8_t* cgxBuf;
 		size_t cgxSz;
 
-		std::string magic;
-		std::string cgVer;
-		std::string glesVer;
-
 		CGXHeader header;
 		CGXVariantTableEntry fragmentVariantTableEntry;
 		CGXVariantTableEntry vertexVariantTableEntry;
-		CGXVariant* fragmentVariants = nullptr;
-		CGXVariant* vertexVariants = nullptr;
+		std::vector<CGXVariant> fragmentVariants;
+		std::vector<CGXVariant> vertexVariants;
 
 		bool headerIsValid();
 	public:

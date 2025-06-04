@@ -5,6 +5,9 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <format>
+#include <source_location>
+
 #define MONO_ZERO_LEN_ARRAY 1
 #include <mono/mono.h>
 
@@ -85,9 +88,19 @@ enum PsmError : uint32_t {
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
 #endif
 
-#define UNIMPLEMENTED_MSG(msg) do { \
-									_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + ":"+ std::string(msg) + std::string(" is not yet implemented.")); \
-								} while (0)
+inline std::string function_name(const std::source_location& location = std::source_location::current()) {
+    const char* full = location.function_name();
+    const char* end = full;
+    while (*end && *end != '(') ++end;
+    const char* start = end;
+    while (start > full && !std::isspace(start[-1])) --start;
+    return std::string(start, end);
+}
+
+#define UNIMPLEMENTED_MSG(msg) \
+	do { \
+		_UNIMPLEMENETED_MACRO_BODY(std::format("{} {} is not yet implemented.", function_name(), msg)); \
+	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
 
