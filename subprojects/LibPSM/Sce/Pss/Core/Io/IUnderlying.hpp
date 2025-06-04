@@ -8,7 +8,7 @@ namespace Sce::Pss::Core::Io {
 		protected:
 		public:
 			IUnderlying() = default;
-			virtual ~IUnderlying();
+			~IUnderlying() = default;
 			virtual uint64_t Tell() = 0;
 			virtual void Close() = 0;
 			virtual uint32_t Read(void* buffer, uint32_t length) = 0;

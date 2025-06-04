@@ -58,7 +58,7 @@
     <ClCompile Include="Sce\Pss\Core\Io\Edata\PsmDrm.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\EmulatedDirectory.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\PsmFileHandle.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Mono\InitializeMono.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\PsmUniqueObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\AccountInformation.cpp" />
@@ -230,7 +230,7 @@
     <ClInclude Include="Sce\Pss\Core\Io\PsmFileHandle.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\StackItem.hpp" />
     <ClInclude Include="Sce\Pss\Core\Matrix4.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Mono\InitializeMono.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmDlls.hpp" />
     <ClInclude Include="Sce\Pss\Core\Mono\PsmMonoFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmMutexObject.hpp" />

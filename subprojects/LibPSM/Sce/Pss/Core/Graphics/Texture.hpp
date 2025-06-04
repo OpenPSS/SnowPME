@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Graphics {
 		int ActiveStateChanged(bool state);
 
 		Texture();
-		~Texture();
+		virtual ~Texture();
 	};
 }
 

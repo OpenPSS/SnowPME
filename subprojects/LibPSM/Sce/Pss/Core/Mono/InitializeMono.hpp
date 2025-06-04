@@ -7,7 +7,7 @@
 
 namespace Sce::Pss::Core::Mono
 {
-	class InitalizeMono {
+	class InitializeMono {
 	private:
 		static MonoDomain* psmDomain;
 

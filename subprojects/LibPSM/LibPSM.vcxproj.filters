@@ -240,9 +240,6 @@
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Mono\InitalizeMono.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -286,6 +283,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes_x86.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Mono\InitilaizeMono.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Mono\InitializeMono.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -779,9 +782,6 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandArguments.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Mono\InitalizeMono.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -843,6 +843,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Mono\InitilaizeMono.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Mono\InitializeMono.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,6 @@
-#include <Sce/Pss/Core/Mono/InitalizeMono.hpp>
+#include <Sce/Pss/Core/Mono/InitializeMono.hpp>
 #include <Sce/Pss/Core/Mono/Resources.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
-
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Mono/Security.hpp>
@@ -35,9 +34,9 @@ namespace Sce::Pss::Core::Mono {
 
 	std::jmp_buf exit_handler;
 	int exit_code;
-	MonoDomain* InitalizeMono::psmDomain = nullptr;
+	MonoDomain* InitializeMono::psmDomain = nullptr;
 
-	int InitalizeMono::ScePsmTerminate() {
+	int InitializeMono::ScePsmTerminate() {
 		mono_runtime_quit();
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
@@ -45,7 +44,7 @@ namespace Sce::Pss::Core::Mono {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int InitalizeMono::ScePsmInitalize(const char* assemblyPath, AppInfo* settings) {
+	int InitializeMono::ScePsmInitalize(const char* assemblyPath, AppInfo* settings) {
 		
 		std::string appExePath = std::string(assemblyPath, strlen(assemblyPath));
 		Logger::Info("C# Assembly Loading [ " + appExePath + " ]");
@@ -65,7 +64,7 @@ namespace Sce::Pss::Core::Mono {
 
 
 		// Create a domain in which this application will run under.
-		InitalizeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
+		InitializeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
 
 		// run profiler and debug if needed
 		if (strlen(Config::ProfilerSettings) > 0)
@@ -124,7 +123,7 @@ namespace Sce::Pss::Core::Mono {
 	}
 
 
-	int InitalizeMono::scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc) {
+	int InitializeMono::scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc) {
 		MonoObject* exception = NULL;
 
 		// Get executable image
@@ -145,9 +144,9 @@ namespace Sce::Pss::Core::Mono {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int InitalizeMono::scePsmExecute(const char* appExe, int* resCode) {
+	int InitializeMono::scePsmExecute(const char* appExe, int* resCode) {
 		// Load the executable
-		MonoAssembly* appExeBin = MonoUtil::MonoAssemblyOpenFull(InitalizeMono::psmDomain, appExe);
+		MonoAssembly* appExeBin = MonoUtil::MonoAssemblyOpenFull(InitializeMono::psmDomain, appExe);
 
 		// Create argv
 		char* argv[2] = { (char*)appExe, NULL };
@@ -155,7 +154,7 @@ namespace Sce::Pss::Core::Mono {
 		if (appExeBin != nullptr) {
 
 			// start assembly
-			InitalizeMono::scePsmMonoJitExec2(appExeBin, argv, 1);
+			InitializeMono::scePsmMonoJitExec2(appExeBin, argv, 1);
 
 			mono_runtime_set_shutting_down();
 			mono_threads_set_shutting_down();
@@ -173,7 +172,7 @@ namespace Sce::Pss::Core::Mono {
 		}
 	}
 
-	int InitalizeMono::ScePssMain(const char* gameFolder) {
+	int InitializeMono::ScePssMain(const char* gameFolder) {
 		int resCode = 0;
 		Sandbox* sandbox = new Sandbox(gameFolder);
 
@@ -205,12 +204,12 @@ namespace Sce::Pss::Core::Mono {
 		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
 		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
 
-		mono_set_exit_callback(InitalizeMono::exitCallback);
+		mono_set_exit_callback(InitializeMono::exitCallback);
 		if(setjmp(exit_handler)) {
 			return exit_code;
 		}
 
-		if (InitalizeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo) != PSM_ERROR_NO_ERROR) {
+		if (InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo) != PSM_ERROR_NO_ERROR) {
 			return 1;
 		}
 		// This is automatically called when a resource limit is reached
@@ -226,15 +225,15 @@ namespace Sce::Pss::Core::Mono {
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
 		if(!setjmp(exit_handler)) {
-			InitalizeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
+			InitializeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
 		} else {
 			resCode = exit_code;
 		}
-		InitalizeMono::ScePsmTerminate();
+		InitializeMono::ScePsmTerminate();
 		return resCode;
 	}
 
-	int InitalizeMono::exitCallback(int code) {
+	int InitializeMono::exitCallback(int code) {
 		Logger::Info(std::format("game exited {}", code));
 		exit_code = code;
 		std::longjmp(exit_handler, true);

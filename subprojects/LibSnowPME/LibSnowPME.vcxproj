@@ -112,7 +112,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

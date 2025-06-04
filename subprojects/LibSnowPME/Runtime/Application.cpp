@@ -41,7 +41,7 @@ namespace SnowPME::Runtime {
 
 	void Application::RunPssMain() {
 		this->appWindow->MakeCurrent();
-		InitalizeMono::ScePssMain(this->appMainDirectory.c_str());
+		InitializeMono::ScePssMain(this->appMainDirectory.c_str());
 	}
 
 	void Application::LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window) {
