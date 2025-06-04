@@ -16,7 +16,7 @@ MONO_BEGIN_DECLS
  * build Mono.
  */
 #ifndef MONO_ZERO_LEN_ARRAY
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__cplusplus)
 #define MONO_ZERO_LEN_ARRAY 0
 #else
 #define MONO_ZERO_LEN_ARRAY 1

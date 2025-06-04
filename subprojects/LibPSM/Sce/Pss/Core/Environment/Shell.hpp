@@ -1,7 +1,7 @@
 #ifndef LIB_PSS_SHELL_H
 #define LIB_PSS_SHELL_H 1
 #include <iostream>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 #include <Sce/Pss/Core/Environment/Action.hpp>

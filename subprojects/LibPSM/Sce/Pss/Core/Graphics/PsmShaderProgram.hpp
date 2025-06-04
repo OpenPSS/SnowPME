@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 #include <Sce/Pss/Core/Graphics/ShaderUniformType.hpp>

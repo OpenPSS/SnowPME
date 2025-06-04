@@ -1,4 +1,4 @@
-#include <GLES2/gl2.h>
+#include <glad/glad.h>
 
 static const char* glErrorToString(GLenum err) {
     switch (err) {

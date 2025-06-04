@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <fstream>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 

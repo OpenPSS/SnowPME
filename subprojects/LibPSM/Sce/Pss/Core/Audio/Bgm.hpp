@@ -5,7 +5,7 @@
 #include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
 #include <string>
 #include <iostream>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 #include <atomic>
 namespace Sce::Pss::Core::Audio {

@@ -7,7 +7,7 @@
 
 #include <filesystem>
 #include <sys/stat.h>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 #include <LibShared.hpp>

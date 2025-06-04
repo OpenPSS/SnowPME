@@ -21,7 +21,7 @@
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
 #include <LibShared.hpp>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 #include <glad/glad.h>
 using namespace Sce::Pss::Core::Imaging;

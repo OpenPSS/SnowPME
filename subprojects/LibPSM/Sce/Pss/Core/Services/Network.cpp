@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Services/Network.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Services {

@@ -1,7 +1,7 @@
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <cstring>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Mono {

@@ -3,7 +3,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 
 #include <LibShared.hpp>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 #include <cstring>
 #include <iostream>

@@ -8,7 +8,7 @@
 #include <format>
 #include <source_location>
 
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 enum PsmError : uint32_t {

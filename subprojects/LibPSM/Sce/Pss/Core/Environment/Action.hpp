@@ -1,6 +1,6 @@
 #ifndef LIB_PSS_ACTION_H
 #define LIB_PSS_ACTION_H 1
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Environment/ActionType.hpp>
 

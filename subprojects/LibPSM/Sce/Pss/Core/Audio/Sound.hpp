@@ -1,7 +1,7 @@
 #ifndef LIB_PSS_SOUND_H
 #define LIB_PSS_SOUND_H 1
 #include <cstdint>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 
 #include <string>

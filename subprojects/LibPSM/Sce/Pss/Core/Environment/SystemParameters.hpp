@@ -2,7 +2,7 @@
 #define LIB_PSS_SYSTEMPARAMETERS_H 1
 #include <string>
 #include <iostream>
-#define MONO_ZERO_LEN_ARRAY 1
+
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Environment/ParameterKey.hpp>
 
