@@ -17,7 +17,7 @@ namespace SnowPME::Graphics::Gui {
 		virtual void onWindowClose();
 	public:
 		ImGuiWindow();
-		~ImGuiWindow();
+		virtual ~ImGuiWindow();
 		virtual void Show();
 		virtual void Display();
 		virtual void Hide();

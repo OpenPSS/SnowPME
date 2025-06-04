@@ -1,5 +1,4 @@
-#include "ShaderProgram.hpp"
-
+#include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
@@ -13,8 +12,6 @@
 #include <string.h>
 #include <cassert>
 #include <format>
-
-
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
