@@ -23,7 +23,7 @@ executable('SnowPME',
 	'SnowPME/SnowPME.cpp',
 	'SnowPME/Program.cpp',
 	dependencies : [
-		GlobalInclude_dep
+		GlobalInclude_dep,
 		LibPSM_dep,
 		LibCXML_dep,
 		LibShared_dep,
