@@ -4,30 +4,31 @@ project('SnowPME', 'cpp',
 
 cpp = meson.get_compiler('cpp')
 
+GlobalInclude = subproject('GlobalInclude')
+GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
+
 LibPSM = subproject('LibPSM')
 LibCXML = subproject('LibCXML')
 LibShared = subproject('LibShared')
 LibSnowPME = subproject('LibSnowPME')
 LibPssMono = subproject('LibPssMono')
-External = subproject('External')
 
 LibPSM_dep = LibPSM.get_variable('LibPSM_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibShared_dep = LibShared.get_variable('LibShared_dep')
 LibSnowPME_dep = LibSnowPME.get_variable('LibSnowPME_dep')
 LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
-External_dep = External.get_variable('External_dep')
 
 executable('SnowPME',
 	'SnowPME/SnowPME.cpp',
 	'SnowPME/Program.cpp',
 	dependencies : [
+		GlobalInclude_dep
 		LibPSM_dep,
 		LibCXML_dep,
 		LibShared_dep,
 		LibSnowPME_dep,
-		LibPssMono_dep,
-		External_dep
+		LibPssMono_dep
 	]
 )
 

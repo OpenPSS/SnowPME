@@ -7,7 +7,7 @@ cpp = meson.get_compiler('cpp')
 dirbase = meson.current_source_dir()
 include_libs = include_directories('.')
 
-External = subproject('External')
+GlobalInclude = subproject('GlobalInclude')
 LibPSM = subproject('LibPSM')
 LibShared = subproject('LibShared')
 LibCXML = subproject('LibCXML')
@@ -15,7 +15,7 @@ LibImGui = subproject('LibImGui')
 LibGLAD = subproject('LibGLAD')
 LibPssMono = subproject('LibPssMono')
 
-External_dep = External.get_variable('External_dep')
+GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 LibPSM_dep = LibPSM.get_variable('LibPSM_dep')
 LibShared_dep = LibShared.get_variable('LibShared_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
@@ -48,7 +48,7 @@ libSnowPME = static_library('SnowPME',
 		LibImGui_dep,
 		LibGLAD_dep,
 		LibPssMono_dep,
-		External_dep
+		GlobalInclude_dep
 	],
 	install: true
 )

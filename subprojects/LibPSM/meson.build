@@ -20,14 +20,14 @@ LibGLAD = subproject('LibGLAD')
 LibCXML = subproject('LibCXML')
 LibMonoBridge = subproject('LibMonoBridge')
 LibPssMono = subproject('LibPssMono')
-External = subproject('External')
+GlobalInclude = subproject('GlobalInclude')
 
 LibShared_dep = LibShared.get_variable('LibShared_dep')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
 LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
-External_dep = External.get_variable('External_dep')
+GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
 LibPSM = static_library('PSM',
 	'Sce/Pss/Core/Audio/Bgm.cpp',
@@ -128,7 +128,7 @@ LibPSM = static_library('PSM',
 		LibCXML_dep,
 		LibMonoBridge_dep,
 		LibPssMono_dep,
-		External_dep
+		GlobalInclude_dep
 	],
 	c_args: ['-maes', '-mssse3']
 )

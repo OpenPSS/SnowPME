@@ -4,7 +4,7 @@ c = meson.get_compiler('c')
 bin_dir = meson.current_build_dir()
 mono_include_dir = include_directories('include')
 
-mod = import('unstable-external_project')
+mod = import('unstable-GlobalInclude_project')
 p = mod.add_project('configure',
 	env: {
 		'CFLAGS': '-O2'
