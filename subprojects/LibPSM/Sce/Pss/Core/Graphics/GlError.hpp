@@ -1,3 +1,5 @@
+#ifndef LIB_PSS_GLERROR_H
+#define LIB_PSS_GLERROR_H 1
 #include <glad/glad.h>
 
 static const char* glErrorToString(GLenum err) {
@@ -23,3 +25,5 @@ static const char* glErrorToString(GLenum err) {
                       << std::endl; \
         } \
     } while (0)
+
+#endif

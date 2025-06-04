@@ -842,5 +842,8 @@
     <ClInclude Include="Sce\Pss\Core\Io\EmulatedDirectory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

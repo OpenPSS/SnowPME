@@ -4,6 +4,8 @@ project('SnowPME', 'cpp',
 
 cpp = meson.get_compiler('cpp')
 
+include_libs = include_directories('SnowPME')
+
 GlobalInclude = subproject('GlobalInclude')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
@@ -22,6 +24,7 @@ LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
 executable('SnowPME',
 	'SnowPME/SnowPME.cpp',
 	'SnowPME/Program.cpp',
+	include_directories: include_libs,
 	dependencies : [
 		GlobalInclude_dep,
 		LibPSM_dep,

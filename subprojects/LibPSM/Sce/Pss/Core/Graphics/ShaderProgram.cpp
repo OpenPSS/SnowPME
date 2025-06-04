@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
+#include <Sce/Pss/Core/Graphics/GlError.hpp>
 
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
@@ -13,7 +14,7 @@
 #include <cassert>
 #include <format>
 
-#include "err.h"
+
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
