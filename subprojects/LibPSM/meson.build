@@ -19,14 +19,14 @@ LibShared = subproject('LibShared')
 LibGLAD = subproject('LibGLAD')
 LibCXML = subproject('LibCXML')
 LibMonoBridge = subproject('LibMonoBridge')
-LibPSSMono = subproject('LibPSSMono')
+LibPssMono = subproject('LibPssMono')
 External = subproject('External')
 
 LibShared_dep = LibShared.get_variable('LibShared_dep')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
-LibPSSMono_dep = LibPSSMono.get_variable('LibPSSMono_dep')
+LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
 External_dep = External.get_variable('External_dep')
 
 LibPSM = static_library('PSM',
@@ -127,7 +127,7 @@ LibPSM = static_library('PSM',
 		LibGLAD_dep,
 		LibCXML_dep,
 		LibMonoBridge_dep,
-		LibPSSMono_dep,
+		LibPssMono_dep,
 		External_dep
 	],
 	c_args: ['-maes', '-mssse3']

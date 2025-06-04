@@ -40,28 +40,28 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibImGui", "subprojects\Lib
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgc", "subprojects\LibPSSMono\pss-mono\msvc2022\libgc.vcxproj", "{EB56000B-C80B-4E8B-908D-D84D31B517D3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgc", "subprojects\LibPssMono\pss-mono\msvc2022\libgc.vcxproj", "{EB56000B-C80B-4E8B-908D-D84D31B517D3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eglib", "subprojects\LibPSSMono\pss-mono\msvc2022\eglib.vcxproj", "{158073ED-99AE-4196-9EDC-DDB2344F8466}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eglib", "subprojects\LibPssMono\pss-mono\msvc2022\eglib.vcxproj", "{158073ED-99AE-4196-9EDC-DDB2344F8466}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmono", "subprojects\LibPSSMono\pss-mono\msvc2022\libmono.vcxproj", "{CB0D9E92-293C-439C-9AC7-C5F59B6E0771}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libmono", "subprojects\LibPssMono\pss-mono\msvc2022\libmono.vcxproj", "{CB0D9E92-293C-439C-9AC7-C5F59B6E0771}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0262A77E-91E9-4500-BAD6-9AC3DC5BD68D} = {0262A77E-91E9-4500-BAD6-9AC3DC5BD68D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "monoposixhelper", "subprojects\LibPSSMono\pss-mono\msvc2022\monoposixhelper.vcxproj", "{33014734-0F46-4099-9A21-0C989E428681}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "monoposixhelper", "subprojects\LibPssMono\pss-mono\msvc2022\monoposixhelper.vcxproj", "{33014734-0F46-4099-9A21-0C989E428681}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono", "Mono", "{1CCB81B3-8645-434C-819A-212F17677D8F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDL", "SDL", "{13972128-C66B-4F2E-9C39-D3E2A8D0C625}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDL2-Static", "SDL2-Static", "{13972128-C66B-4F2E-9C39-D3E2A8D0C625}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2", "subprojects\External\Src\SDL\VisualC\SDL\SDL.vcxproj", "{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2", "subprojects\LibSDL2-Static\SDL.vcxproj", "{81CE8DAF-EBB2-4761-8E45-B71ABCCA8C68}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2main", "subprojects\External\Src\SDL\VisualC\SDLmain\SDLmain.vcxproj", "{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2main", "subprojects\LibSDL2-Static\SDLmain.vcxproj", "{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{F498BE8F-5C4B-4890-A499-4799DDCDFC0B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genmdesc", "subprojects\LibPSSMono\pss-mono\msvc2022\genmdesc.vcxproj", "{B7098DFA-31E6-4006-8A15-1C9A4E925149}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genmdesc", "subprojects\LibPssMono\pss-mono\msvc2022\genmdesc.vcxproj", "{B7098DFA-31E6-4006-8A15-1C9A4E925149}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic", "Generic", "{A4B8704C-07F5-4D42-A949-42D2488521CA}"
 EndProject
