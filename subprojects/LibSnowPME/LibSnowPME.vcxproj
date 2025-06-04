@@ -101,7 +101,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -129,7 +129,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibImGui\;$(SolutionDir)subprojects\LibGLAD\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>

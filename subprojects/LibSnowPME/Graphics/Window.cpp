@@ -1,8 +1,7 @@
+#include <SDL2/SDL.h>
 #include <Graphics/Window.hpp>
-
 #include <LibShared.hpp>
 #include <glad/glad.h>
-#include <SDL2/SDL.h>
 #include <thread>
 #include <string>
 #include <LibPSM.hpp>

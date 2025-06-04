@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>WIN32;HAVE_LIBC;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibSnowPME\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibSnowPME\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;HAVE_LIBC ;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibPSM\;$(SolutionDir)subprojects\LibSnowPME\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibSnowPME\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
