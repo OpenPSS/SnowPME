@@ -19,5 +19,4 @@ LibPssMono_dep = declare_dependency(
 include_directories: mono_include_dir,
 dependencies: [
 	eglib_dep, monosgen_dep, monoruntimesgen_dep
-]
-)
+])

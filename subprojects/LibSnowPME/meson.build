@@ -13,6 +13,7 @@ LibShared = subproject('LibShared')
 LibCXML = subproject('LibCXML')
 LibImGui = subproject('LibImGui')
 LibGLAD = subproject('LibGLAD')
+LibPssMono = subproject('LibPssMono')
 
 External_dep = External.get_variable('External_dep')
 LibPSM_dep = LibPSM.get_variable('LibPSM_dep')
@@ -20,6 +21,8 @@ LibShared_dep = LibShared.get_variable('LibShared_dep')
 LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibImGui_dep = LibImGui.get_variable('LibImGui_dep')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
+LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
+
 
 libSnowPME = static_library('SnowPME',
 	'Callback/Impl.cpp',
@@ -44,6 +47,7 @@ libSnowPME = static_library('SnowPME',
 		LibCXML_dep,
 		LibImGui_dep,
 		LibGLAD_dep,
+		LibPssMono_dep,
 		External_dep
 	],
 	install: true
