@@ -1,6 +1,7 @@
 #ifndef LIB_PSS_HANDLES_H
 #define LIB_PSS_HANDLES_H 1
 #include <cstddef>
+#include <cassert>
 #include <stdint.h>
 #include <unordered_map>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
