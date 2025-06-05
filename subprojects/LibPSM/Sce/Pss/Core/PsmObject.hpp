@@ -8,23 +8,25 @@
 
 namespace Sce::Pss::Core {
 	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<T> {
-	public:
-		PsmObject() {
-			this->Handle = System::Handles::Create(static_cast<T*>(this));
-		};
-		~PsmObject() {
-			this->Dispose();
-		};
-		void Dispose() {
+	private:
+		void dispose() {
 			LOCK_GUARD();
 			this->IsDisposed = true;
-			if (System::Handles::IsValid(this->Handle))
-				System::Handles::Delete(this->Handle);
-			this->Handle = System::Handles::NoHandle;
+			if (Sce::Pss::Core::System::Handles::IsValid(this->Handle))
+				Sce::Pss::Core::System::Handles::Delete(this->Handle);
+			this->Handle = Sce::Pss::Core::System::Handles::NoHandle;
+		};
+
+	public:
+		PsmObject() {
+			this->Handle = Sce::Pss::Core::System::Handles::Create(reinterpret_cast<T*>(this));
+		};
+		~PsmObject() {
+			this->dispose();
 		};
 
 		bool IsDisposed = false;
-		int Handle = System::Handles::NoHandle;
+		int Handle = Sce::Pss::Core::System::Handles::NoHandle;
 
 	};
 

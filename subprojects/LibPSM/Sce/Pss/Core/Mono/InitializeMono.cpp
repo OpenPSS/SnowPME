@@ -13,8 +13,6 @@
 #include <LibCXML.hpp>
 #include <LibShared.hpp>
 #include <LibMonoBridge.hpp>
-
-
 #include <mono/mono.h>
 
 #include <csetjmp>
@@ -32,19 +30,19 @@ using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Mono {
 
-	std::jmp_buf exit_handler;
-	int exit_code;
+	std::jmp_buf exitHandler;
+	int exitCode;
 	MonoDomain* InitializeMono::psmDomain = nullptr;
 
 	int InitializeMono::ScePsmTerminate() {
 		mono_runtime_quit();
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
-		delete HeapAllocator::GetResourceHeapAllocator();
+		delete HeapAllocator::GetUniqueObject();
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int InitializeMono::ScePsmInitalize(const char* assemblyPath, AppInfo* settings) {
+	int InitializeMono::ScePsmInitalize(const char* assemblyPath, int resourceHeapSize) {
 		
 		std::string appExePath = std::string(assemblyPath, strlen(assemblyPath));
 		Logger::Info("C# Assembly Loading [ " + appExePath + " ]");
@@ -57,13 +55,13 @@ namespace Sce::Pss::Core::Mono {
 
 
 		// Tell mono there is no config file
-		mono_config_parse(NULL);
+		mono_config_parse(nullptr);
 
 		// Set runtime install location
 		mono_set_dirs(Config::RuntimeLibPath, Config::RuntimeConfigPath);
 
-
 		// Create a domain in which this application will run under.
+		// be sure to specify the "playstation mobile" version not regular mono.
 		InitializeMono::psmDomain = mono_jit_init_version(appExePath.c_str() , "mobile");
 
 		// run profiler and debug if needed
@@ -97,7 +95,7 @@ namespace Sce::Pss::Core::Mono {
 
 
 		// setup all C# side psm related functions ...
-		HeapAllocator::CreateResourceHeapAllocator(settings->ResourceHeapSize);
+		HeapAllocator::CreateResourceHeapAllocator(resourceHeapSize);
 		Thread::SetMainThread();
 		InitalizeCsharp::Initalize();
 
@@ -117,14 +115,14 @@ namespace Sce::Pss::Core::Mono {
 		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
 		MonoClass* psmLogClass = mono_class_from_name(psmCoreLibImage, "Sce.PlayStation.Core.Environment", "Log");
 		MonoMethod* psmSetToConsoleMethod = mono_class_get_method_from_name(psmLogClass, "SetToConsole", 0);
-		mono_runtime_invoke(psmSetToConsoleMethod, NULL, NULL, NULL);
+		mono_runtime_invoke(psmSetToConsoleMethod, nullptr, nullptr, nullptr);
 
 		return PSM_ERROR_NO_ERROR;
 	}
 
 
 	int InitializeMono::scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc) {
-		MonoObject* exception = NULL;
+		MonoObject* exception = nullptr;
 
 		// Get executable image
 		MonoImage* runImage = mono_assembly_get_image(assembly);
@@ -133,12 +131,12 @@ namespace Sce::Pss::Core::Mono {
 		uint32_t entryPointAddr = mono_image_get_entry_point(runImage);
 
 		// Get entry point method
-		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, NULL);
+		MonoMethod* entryPointMethod = mono_get_method(runImage, entryPointAddr, nullptr);
 
 		// Run entry point function
 		mono_runtime_run_main(entryPointMethod, argc, argv, &exception);
 
-		if (exception != NULL)
+		if (exception != nullptr)
 			mono_unhandled_exception(exception);
 
 		return PSM_ERROR_NO_ERROR;
@@ -149,7 +147,7 @@ namespace Sce::Pss::Core::Mono {
 		MonoAssembly* appExeBin = MonoUtil::MonoAssemblyOpenFull(InitializeMono::psmDomain, appExe);
 
 		// Create argv
-		char* argv[2] = { (char*)appExe, NULL };
+		char* argv[2] = { (char*)appExe, nullptr };
 
 		if (appExeBin != nullptr) {
 
@@ -174,16 +172,19 @@ namespace Sce::Pss::Core::Mono {
 
 	int InitializeMono::ScePssMain(const char* gameFolder) {
 		int resCode = 0;
-		Sandbox* sandbox = new Sandbox(gameFolder);
+		// create Sandbox object
+		new Sandbox(gameFolder);
+		Sandbox* sandbox = Sandbox::GetUniqueObject();
 
 		std::string appInfoPath = "/Application/app.info";
 		std::string realAppExePath = sandbox->LocateRealPath("/Application/app.exe", false);
 		
-		// read & parse app.info
-		CXMLElement* elem = (!sandbox->PathExist(appInfoPath, false) ? nullptr : new CXMLElement(sandbox->LocateRealPath(appInfoPath, false), "PSMA"));
-		AppInfo* appInfo = new AppInfo(elem);
+		// create appinfo object
+		(!sandbox->PathExist(appInfoPath, false) ? nullptr : new AppInfo(sandbox->LocateRealPath(appInfoPath, false)));
+		
+		AppInfo* appInfo = AppInfo::GetUniqueObject();
 
-		// setup Edata ... for DRM..
+		// setup Edata ... for ScePsmDrm / PSSE decrypt..
 		PssCryptoCallbacks callbacks;
 		callbacks.eOpen  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataOpen;
 		callbacks.eRead  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataRead;
@@ -201,17 +202,20 @@ namespace Sce::Pss::Core::Mono {
 			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
 			return PSM_ERROR_OUT_OF_MEMORY;
 		}
-		Logger::Debug("cxml : managed_heap_size : " + std::to_string(heapSizeLimit));
-		Logger::Debug("cxml : resource_heap_size : " + std::to_string(resourceSizeLimit));
+		Logger::Debug(std::format("cxml : managed_heap_size : {}", heapSizeLimit));
+		Logger::Debug(std::format("cxml : resource_heap_size : {}", resourceSizeLimit));
 
 		mono_set_exit_callback(InitializeMono::exitCallback);
-		if(setjmp(exit_handler)) {
-			return exit_code;
+		if(setjmp(exitHandler)) {
+			return exitCode;
 		}
 
-		if (InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo) != PSM_ERROR_NO_ERROR) {
-			return 1;
+		int res = InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo->ResourceHeapSize);
+		if (res != PSM_ERROR_NO_ERROR) {
+			Logger::Error(std::format("Failed to call ScePsmInitalize // {}", res));
+			return res;
 		}
+
 		// This is automatically called when a resource limit is reached
 		mono_runtime_resource_set_callback(Resources::ResourceLimitReachedCallback);
 
@@ -224,19 +228,23 @@ namespace Sce::Pss::Core::Mono {
 		mono_threadpool_set_max_threads(8, 8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		if(!setjmp(exit_handler)) {
+		if(!setjmp(exitHandler)) {
 			InitializeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
 		} else {
-			resCode = exit_code;
+			resCode = exitCode;
 		}
+
 		InitializeMono::ScePsmTerminate();
 		return resCode;
 	}
 
 	int InitializeMono::exitCallback(int code) {
-		Logger::Info(std::format("game exited {}", code));
-		exit_code = code;
-		std::longjmp(exit_handler, true);
+		// shouldn't this call InitializeMono::ScePsmTerminate() ?
+
+		Logger::Info(std::format("app.exe exited with status code: {}", code));
+
+		exitCode = code;
+		std::longjmp(exitHandler, true);
 		return 0;
 	}
 }

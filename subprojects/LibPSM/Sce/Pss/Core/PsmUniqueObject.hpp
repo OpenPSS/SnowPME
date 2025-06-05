@@ -1,32 +1,31 @@
 #ifndef LIB_PSS_PSM_UNIQUE_OBJECT_H
 #define LIB_PSS_PSM_UNIQUE_OBJECT_H 1
-#include <atomic>
 #include <Sce/Pss/Core/Errorable.hpp>
-#include <LibShared.hpp>
 
 namespace Sce::Pss::Core {
 	template<typename T> class PsmUniqueObject {
 	private:
-		static std::atomic<T*> uniqueObjectPtr;
+		static T* uniqueObjectPtr;
 	public:
 		PsmUniqueObject() {
-			if (this->GetUniqueObject() != nullptr) {
-				Shared::Debug::Logger::Error("UniqueObject already found, overwriting...");
-				delete this->GetUniqueObject();
-			}
-			PsmUniqueObject<T>::uniqueObjectPtr.store((T*)this);
+			assert(!PsmUniqueObject<T>::Exists());
+			PsmUniqueObject<T>::uniqueObjectPtr = reinterpret_cast<T*>(this);
 		}
 
 		~PsmUniqueObject() {
-			PsmUniqueObject<T>::uniqueObjectPtr.store((T*)nullptr);
+			uniqueObjectPtr = nullptr;
 		}
 
 		static T* GetUniqueObject() {
-			return (T*)(PsmUniqueObject<T>::uniqueObjectPtr.load());
+			return PsmUniqueObject<T>::uniqueObjectPtr;
+		}
+
+		static bool Exists() {
+			return PsmUniqueObject<T>::uniqueObjectPtr != nullptr;
 		}
 
 	};
 
-	template<typename T> std::atomic<T*> PsmUniqueObject<T>::uniqueObjectPtr(nullptr);
+	template<typename T> T* PsmUniqueObject<T>::uniqueObjectPtr = nullptr;
 }
 #endif

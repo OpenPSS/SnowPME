@@ -9,9 +9,9 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	class Image : public Errorable{
 	private:
 		uint8_t* image = nullptr;
-		int x = NULL;
-		int y = NULL;
-		int comp = NULL;
+		int x = 0;
+		int y = 0;
+		int comp = 0;
 	public:
 		int Open(const uint8_t* data, uint32_t dataLen, Sce::Pss::Core::Memory::HeapAllocator* alloc);
 		Image();

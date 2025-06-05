@@ -1,9 +1,11 @@
 #include <Graphics/Gui/ProgramList.hpp>
+#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 #include <LibCXML.hpp>
 #include <LibPSM.hpp>
 #include <LibImGui.hpp>
 #include <LibShared.hpp>
 #include <filesystem>
+
 
 using namespace LibCXML;
 using namespace Shared;
@@ -29,12 +31,13 @@ namespace SnowPME::Graphics::Gui {
 					std::string fname = dirEntry.path().filename().string();
 					std::string programPath = dirEntry.path().string();
 
-					std::string appInfoPath = Path::Combine(Path::Combine(programPath, "Application"), "app.info");
-					if (!std::filesystem::exists(appInfoPath)) appInfoPath = Path::Combine(Path::Combine(Path::Combine(programPath, "RO"), "Application"), "app.info");
+					std::string appInfoPath = std::filesystem::path(programPath).append("Application").append("app.info").string();
+					if (!std::filesystem::exists(appInfoPath)) appInfoPath = std::filesystem::path(programPath).append("RO").append("Application").append("app.info").string();
 
 					if (std::filesystem::exists(appInfoPath)) {
-						AppInfo appInfo(new CXMLElement(appInfoPath, "PSMA"));
+						AppInfo appInfo(appInfoPath);
 						std::string shortName = appInfo.GetLocaleValue(appInfo.Names, Config::SystemLanguage);
+						
 						if (shortName != "") {
 							this->addMenuItem(shortName, programPath);
 							continue;

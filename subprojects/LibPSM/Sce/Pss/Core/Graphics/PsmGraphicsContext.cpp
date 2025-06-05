@@ -42,6 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::GetUniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 			delete GraphicsContext::GetUniqueObject();
+			
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
@@ -116,7 +117,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (!GraphicsContext::Exists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			*height = Shared::Config::ScreenHeight(0);
 			*width = Shared::Config::ScreenWidth(0);
 			Logger::Debug("width: " + std::to_string(*width) + " height: " + std::to_string(*height));
@@ -130,7 +131,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::GetScreenSizes(MonoArray* sizes, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (!GraphicsContext::Exists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			int numScreens = Shared::Config::ScreenTotal;
 			Logger::Debug("numScreens: " + std::to_string(numScreens));
 			if (sizes) {
@@ -158,7 +159,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+			if (!GraphicsContext::Exists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			*width = GraphicsContext::GetUniqueObject()->Width;
 			*height = GraphicsContext::GetUniqueObject()->Height;
@@ -177,7 +178,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::GetCaps(int handle, GraphicsCapsState* caps) {
 		Logger::Debug(__FUNCTION__);
-		if (GraphicsContext::GetUniqueObject() == NULL) return PSM_ERROR_GRAPHICS_SYSTEM;
+		if (!GraphicsContext::Exists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (Thread::IsMainThread()) {
 			memcpy(caps, GraphicsContext::GetUniqueObject()->CapsState, sizeof(GraphicsCapsState));
 			return PSM_ERROR_NO_ERROR;

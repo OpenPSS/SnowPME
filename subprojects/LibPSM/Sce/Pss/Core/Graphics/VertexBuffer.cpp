@@ -560,18 +560,18 @@ namespace Sce::Pss::Core::Graphics {
 			changed = false;
 		}
 
-		// Do we need **Trans Rights** ???
-		Vector4* transRights = *trans;
-		if (transRights->X != 0.0f || transRights->Y != 0.0f || transRights->Z != 0.0f || transRights->W != 0.0f) {
+		// Do we need to invert the transform
+		Vector4* transRef = *trans;
+		if (transRef->X != 0.0f || transRef->Y != 0.0f || transRef->Z != 0.0f || transRef->W != 0.0f) {
 			changed = true;
 
-			Vector4 transLefts;
-			transLefts.X = -transRights->X;
-			transLefts.Y = -transRights->Y;
-			transLefts.Z = -transRights->Z;
-			transLefts.W = -transRights->W;
+			Vector4 transInverted;
+			transInverted.X = -transRef->X;
+			transInverted.Y = -transRef->Y;
+			transInverted.Z = -transRef->Z;
+			transInverted.W = -transRef->W;
 
-			memcpy(*trans, &transLefts, sizeof(Vector4));
+			memcpy(*trans, &transInverted, sizeof(Vector4));
 		}
 		
 
@@ -636,10 +636,10 @@ namespace Sce::Pss::Core::Graphics {
 			// i took this '-0.000015259f' constant directly from PSM Runtime,
 			// i have no idea what this constant is actually for, or why it specifically was chosen.
 
-			newTrans.X = transRights->X + (-0.000015259f * scaleRef->X);
-			newTrans.Y = transRights->Y + (-0.000015259f * scaleRef->Y);
-			newTrans.Z = transRights->Z + (-0.000015259f * scaleRef->Z);
-			newTrans.W = transRights->W + (-0.000015259f * scaleRef->W);
+			newTrans.X = transRef->X + (-0.000015259f * scaleRef->X);
+			newTrans.Y = transRef->Y + (-0.000015259f * scaleRef->Y);
+			newTrans.Z = transRef->Z + (-0.000015259f * scaleRef->Z);
+			newTrans.W = transRef->W + (-0.000015259f * scaleRef->W);
 			
 			// Multiply by the types max value, as a float
 
@@ -656,10 +656,10 @@ namespace Sce::Pss::Core::Graphics {
 			// i took this '-0.0039216f' constant directly from PSM Runtime,
 			// i have no idea what this constant is actually for, or why it specifically was chosen.
 
-			newTrans.X = transRights->X + (-0.0039216f * scaleRef->X);
-			newTrans.Y = transRights->Y + (-0.0039216f * scaleRef->Y);
-			newTrans.Z = transRights->Z + (-0.0039216f * scaleRef->Z);
-			newTrans.W = transRights->W + (-0.0039216f * scaleRef->W);
+			newTrans.X = transRef->X + (-0.0039216f * scaleRef->X);
+			newTrans.Y = transRef->Y + (-0.0039216f * scaleRef->Y);
+			newTrans.Z = transRef->Z + (-0.0039216f * scaleRef->Z);
+			newTrans.W = transRef->W + (-0.0039216f * scaleRef->W);
 
 			// Multiply by the types max value, as a float
 
@@ -740,14 +740,14 @@ namespace Sce::Pss::Core::Graphics {
 
 	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen) {
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == NULL) {
+			if (GraphicsContext::Exists()) {
 				this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 				return;
 			}
 			this->VertexFormats = std::vector<VertexFormat>();
 
 			// Get graphics context
-			GraphicsContext* graphicsContext = GraphicsContext::GetUniqueObject();
+			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
 
 			// Store state passed to parameters
 			this->VertexCount = vertexCount;
@@ -759,7 +759,7 @@ namespace Sce::Pss::Core::Graphics {
 			// Check arguments are valid
 
 			// is vertexFormats null, or less than 0 formats?
-			if (vertexFormats == NULL && vertexFormatsLen > 0) {
+			if (vertexFormats == nullptr && vertexFormatsLen > 0) {
 				this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 				return;
 			}
@@ -774,12 +774,12 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			// is option set?
-			if (option != NULL) {
+			if (option != 0) {
 				this->SetError(PSM_ERROR_COMMON_ARGUMENT);
 				return;
 			}
 
-			int extensions = graphicsContext->CapsState->Extension;
+			int extensions = ctx->CapsState->Extension;
 			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
 				ExceptionInfo::AddMessage("Unsupported extension on this device\n");
 				this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);

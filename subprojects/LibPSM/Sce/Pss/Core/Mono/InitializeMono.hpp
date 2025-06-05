@@ -3,7 +3,6 @@
 #include <string>
 
 #include <mono/mono.h>
-#include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 
 namespace Sce::Pss::Core::Mono
 {
@@ -16,7 +15,7 @@ namespace Sce::Pss::Core::Mono
 		static int exitCallback(int code);
 
 	public:
-		static int ScePsmInitalize(const char* assemblyPath, Sce::Pss::Core::Metadata::AppInfo* settings);
+		static int ScePsmInitalize(const char* assemblyPath, int resourceHeapSize);
 		static int ScePsmTerminate();
 		static int ScePssMain(const char* gameFolder);
 	};

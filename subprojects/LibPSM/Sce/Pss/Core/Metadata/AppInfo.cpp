@@ -3,6 +3,7 @@
 #include <LibCXML.hpp>
 
 using namespace Shared::Debug;
+using namespace LibCXML;
 
 namespace Sce::Pss::Core::Metadata {
 
@@ -18,10 +19,6 @@ namespace Sce::Pss::Core::Metadata {
 		return "Unknown";
 	}
 
-	AppInfo::~AppInfo() {
-		LOCK_GUARD();
-		delete element;
-	}
 
 	bool AppInfo::nextElement() {
 		// goto next element
@@ -63,10 +60,8 @@ namespace Sce::Pss::Core::Metadata {
 		return name;
 	}
 
-	AppInfo::AppInfo(LibCXML::CXMLElement* elem) {
+	void AppInfo::readElements() {
 		LOCK_GUARD();
-
-		this->element = elem;
 		std::string parserMode = "";
 		ProductInfo* productInfo = nullptr;
 
@@ -217,4 +212,8 @@ namespace Sce::Pss::Core::Metadata {
 			productInfo = nullptr;
 		}
 	}
+	AppInfo::AppInfo(std::string appInfoFile) {
+		this->element = std::make_unique<CXMLElement>(appInfoFile, "PSMA");
+	}
+
 }

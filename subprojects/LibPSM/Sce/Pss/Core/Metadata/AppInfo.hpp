@@ -39,11 +39,11 @@ namespace Sce::Pss::Core::Metadata {
 
 	class AppInfo : public PsmObject<AppInfo>, public PsmUniqueObject<AppInfo> {
 	private:
-		LibCXML::CXMLElement* element;
+		std::unique_ptr<LibCXML::CXMLElement> element;
 		bool nextElement();
+		void readElements();
 	public:
-		AppInfo(LibCXML::CXMLElement* elem);
-		~AppInfo();
+		AppInfo(std::string appInfoFile);
 		std::string GetLocaleValue(std::vector<LocaleInfo>& localeInfos, std::string locale);
 
 		// <application>
