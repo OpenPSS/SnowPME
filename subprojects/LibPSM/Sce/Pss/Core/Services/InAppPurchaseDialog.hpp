@@ -18,11 +18,12 @@
 #include <Sce/Pss/Core/Environment/CommonDialogResult.hpp>
 #include <Sce/Pss/Core/Environment/CommonDialog.hpp>
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
+#include <Sce/Pss/Core/PsmObject.hpp>
 
 #define MAX_PRODUCT_COUNT (0x100)
 
 namespace Sce::Pss::Core::Services {
-	class InAppPurchaseDialog : public Environment::CommonDialog, public PsmUniqueObject<InAppPurchaseDialog> {
+	class InAppPurchaseDialog : public Sce::Pss::Core::Environment::CommonDialog, public PsmUniqueObject<InAppPurchaseDialog>{
 	private:
 		InAppPurchaseInventory inventory;
 		InAppPurchaseCommand command = InAppPurchaseCommand::None;
@@ -42,8 +43,8 @@ namespace Sce::Pss::Core::Services {
 
 
 	public:
-		int Open(Environment::CommonDialogArguments* cmdArg);
-		int Result(Environment::CommonDialogResult* result, Environment::CommonDialogResults* results);
+		int Open(Sce::Pss::Core::Environment::CommonDialogArguments* cmdArg);
+		int Result(Sce::Pss::Core::Environment::CommonDialogResult* result, Sce::Pss::Core::Environment::CommonDialogResults* results);
 	};
 }
 #endif
