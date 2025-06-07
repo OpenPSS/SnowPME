@@ -40,7 +40,7 @@ namespace Sce::Pss::Core::Graphics {
 				IoCall::PsmFileGetSize(handle, &totalFileSize);
 
 				// allocate memory for this file
-				HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 				fileData = allocator->sce_psm_malloc(totalFileSize);
 
 				if (fileData != nullptr) {

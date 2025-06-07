@@ -196,7 +196,7 @@ namespace Sce::Pss::Core::Graphics {
 				uint32_t cgxLen = 0;
 				IoCall::PsmFileGetSize(file, &cgxLen);
 
-				HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+				std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 				uint8_t* cgxData = resourceHeap->sce_psm_malloc(cgxLen);
 
 				if (cgxData != nullptr) {
@@ -228,7 +228,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	uint8_t* ShaderProgram::CopyFile(uint8_t* shaderSrc, int shaderLen) {
-		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 		uint8_t* cgxData = resourceHeap->sce_psm_malloc(shaderLen);
 		if (cgxData != nullptr) {
 			memcpy(cgxData, shaderSrc, shaderLen);
@@ -286,7 +286,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	ShaderProgram::~ShaderProgram() {
 		LOCK_GUARD();
-		HeapAllocator* resourceHeap = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::GetResourceHeapAllocator();
 
 		if(this->vertexCgx != nullptr)
 			resourceHeap->sce_psm_free(this->vertexCgx);

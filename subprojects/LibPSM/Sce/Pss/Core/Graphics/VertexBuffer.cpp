@@ -747,7 +747,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->VertexFormats = std::vector<VertexFormat>();
 
 			// Get graphics context
-			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::GetUniqueObject();
 
 			// Store state passed to parameters
 			this->VertexCount = vertexCount;

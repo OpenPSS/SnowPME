@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	Bgm::~Bgm() {
-		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 		if(this->audioData != nullptr) allocator->sce_psm_free(this->audioData);
 		if (this->AudioImplObject != nullptr) delete this->AudioImplObject;
 
@@ -67,7 +67,7 @@ namespace Sce::Pss::Core::Audio {
 			IoCall::PsmFileGetSize(file, &this->audioSz);
 			
 			// allocate enough space in memory for this audio file
-			HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+			std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 			this->audioData = allocator->sce_psm_malloc(this->audioSz);
 
 			if (this->audioData != nullptr) {
@@ -131,7 +131,7 @@ namespace Sce::Pss::Core::Audio {
 		char* fImage = mono_array_addr_with_size(fileImage, 1, 0);
 		int fSz = mono_array_length(fileImage);
 
-		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 		uint8_t* musicData = allocator->sce_psm_malloc(fSz);
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);

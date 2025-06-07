@@ -23,8 +23,8 @@ namespace Sce::Pss::Core::Memory {
 
 		uint8_t* sce_psm_malloc(int sz);
 		void sce_psm_free(uint8_t* buffer);
-		static HeapAllocator* GetResourceHeapAllocator();
-		static HeapAllocator* CreateResourceHeapAllocator(size_t resourceHeapSize);
+		static std::shared_ptr<HeapAllocator> GetResourceHeapAllocator();
+		static std::shared_ptr<HeapAllocator> CreateResourceHeapAllocator(size_t resourceHeapSize);
 	};
 
 }

@@ -38,7 +38,7 @@ namespace Sce::Pss::Core::Mono {
 		mono_runtime_quit();
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
-		delete HeapAllocator::GetUniqueObject();
+		HeapAllocator::GetUniqueObject()->Dereference();
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -173,17 +173,14 @@ namespace Sce::Pss::Core::Mono {
 	int InitializeMono::ScePssMain(const char* gameFolder) {
 		int resCode = 0;
 		// create Sandbox object
-		new Sandbox(gameFolder);
-		Sandbox* sandbox = Sandbox::GetUniqueObject();
+		std::shared_ptr<Sandbox> sandbox = std::make_shared<Sandbox>(gameFolder);
 
 		std::string appInfoPath = "/Application/app.info";
 		std::string realAppExePath = sandbox->LocateRealPath("/Application/app.exe", false);
 		
 		// create appinfo object
-		(!sandbox->PathExist(appInfoPath, false) ? nullptr : new AppInfo(sandbox->LocateRealPath(appInfoPath, false)));
+		std::shared_ptr<AppInfo> appInfo = (!sandbox->PathExist(appInfoPath, false) ? nullptr : std::make_shared<AppInfo>(sandbox->LocateRealPath(appInfoPath, false)));
 		
-		AppInfo* appInfo = AppInfo::GetUniqueObject();
-
 		// setup Edata ... for ScePsmDrm / PSSE decrypt..
 		PssCryptoCallbacks callbacks;
 		callbacks.eOpen  = Sce::Pss::Core::Io::Edata::EdataCallbacks::EdataOpen;

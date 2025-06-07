@@ -30,7 +30,7 @@ namespace Sce::Pss::Core::Graphics {
 				this->LoadImage(fileData, fileSize, mipmap, format);
 
 				// free the file data
-				HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 				allocator->sce_psm_free(fileData);
 			}
 		}
@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug(__FUNCTION__);
 
 		int err;
-		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::GetResourceHeapAllocator();
 
 		err = this->image.Open(data, dataLen, allocator);
 		if (err != PSM_ERROR_NO_ERROR) {

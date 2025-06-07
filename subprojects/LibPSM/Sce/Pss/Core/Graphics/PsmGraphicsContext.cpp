@@ -8,7 +8,6 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 
-
 #include <mono/mono.h>
 #include <LibShared.hpp>
 #include <glad/glad.h>
@@ -26,22 +25,23 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
 		Logger::Debug(__FUNCTION__);
 		
-		if (GraphicsContext::GetUniqueObject() != nullptr) {
+		if (GraphicsContext::Exists()) {
 			return PSM_ERROR_GRAPHICS_SYSTEM;
 		}
 
-		GraphicsContext* graphicsContext = new GraphicsContext(width, height, colorFormat, depthFormat, multiSampleMode);
-		RETURN_ERRORABLE(graphicsContext);
+		std::shared_ptr<GraphicsContext> graphicsContext = std::make_shared<GraphicsContext>(width, height, colorFormat, depthFormat, multiSampleMode);
+		// TODO: fix errorable macro for shared ptr / psmuniqueobject.
+		// RETURN_ERRORABLE(graphicsContext);
 
-		*result = Handles::Create(graphicsContext);
+		*result = graphicsContext->Handle;
 		
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmGraphicsContext::Delete(int handle){
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
-			delete GraphicsContext::GetUniqueObject();
+			if (!GraphicsContext::Exists()) return PSM_ERROR_GRAPHICS_SYSTEM;
+			GraphicsContext::GetUniqueObject()->Dereference();
 			
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -53,10 +53,10 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::GetUniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
-			int* handlesList = NULL;
+			int* handlesList = nullptr;
 
 			if (handles) {
 				handlesList = (int*)mono_array_addr_with_size(handles, 1, 0);
@@ -73,7 +73,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::SwapBuffers(int handle){
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::GetUniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			ctx->SwapBuffers();
@@ -89,7 +89,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmGraphicsContext::Clear(int handle, ClearMask mask) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::GetUniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			return ctx->Clear(mask);
