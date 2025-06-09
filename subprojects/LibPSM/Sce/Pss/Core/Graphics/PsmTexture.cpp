@@ -26,7 +26,7 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
 		Logger::Debug(__FUNCTION__);
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::GetUniqueObject() == nullptr)
+			if (GraphicsContext::UniqueObject() == nullptr)
 				return PSM_ERROR_GRAPHICS_SYSTEM;
 			
 			std::string filename;

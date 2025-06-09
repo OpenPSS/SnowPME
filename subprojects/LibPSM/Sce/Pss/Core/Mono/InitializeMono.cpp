@@ -8,6 +8,7 @@
 #include <Sce/Pss/Core/Io/Edata/EdataCallbacks.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseDialog.hpp>
 #include <Sce/Pss/Core/InitializeCsharp.hpp>
 
 #include <LibCXML.hpp>
@@ -27,6 +28,8 @@ using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Metadata;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Memory;
+using namespace Sce::Pss::Core::Environment;
+using namespace Sce::Pss::Core::Services;
 
 namespace Sce::Pss::Core::Mono {
 
@@ -38,7 +41,13 @@ namespace Sce::Pss::Core::Mono {
 		mono_runtime_quit();
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
-		delete HeapAllocator::GetUniqueObject();
+
+
+		HeapAllocator::MakeLocalObject();
+		AppInfo::MakeLocalObject();
+		Sandbox::MakeLocalObject();
+		InAppPurchaseDialog::MakeLocalObject();
+
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -95,8 +104,12 @@ namespace Sce::Pss::Core::Mono {
 
 
 		// setup all C# side psm related functions ...
-		HeapAllocator::CreateResourceHeapAllocator(resourceHeapSize);
+		HeapAllocator::MakeUniqueObject(std::make_shared<HeapAllocator>(resourceHeapSize, "ScePsmResourceHeap"));
+
+		// Set this as the 'main thread'
 		Thread::SetMainThread();
+
+		// initalize C# functions
 		InitalizeCsharp::Initalize();
 
 		// Load essential dlls
@@ -173,16 +186,13 @@ namespace Sce::Pss::Core::Mono {
 	int InitializeMono::ScePssMain(const char* gameFolder) {
 		int resCode = 0;
 		// create Sandbox object
-		new Sandbox(gameFolder);
-		Sandbox* sandbox = Sandbox::GetUniqueObject();
+		std::shared_ptr<Sandbox> sandbox = Sandbox::MakeUniqueObject(std::make_shared<Sandbox>(gameFolder));
 
 		std::string appInfoPath = "/Application/app.info";
 		std::string realAppExePath = sandbox->LocateRealPath("/Application/app.exe", false);
 		
 		// create appinfo object
-		(!sandbox->PathExist(appInfoPath, false) ? nullptr : new AppInfo(sandbox->LocateRealPath(appInfoPath, false)));
-		
-		AppInfo* appInfo = AppInfo::GetUniqueObject();
+		std::shared_ptr<AppInfo> appInfo = (!sandbox->PathExist(appInfoPath, false) ? nullptr : AppInfo::MakeUniqueObject(std::make_shared<AppInfo>(sandbox->LocateRealPath(appInfoPath, false))));
 
 		// setup Edata ... for ScePsmDrm / PSSE decrypt..
 		PssCryptoCallbacks callbacks;

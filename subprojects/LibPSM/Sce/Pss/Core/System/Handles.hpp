@@ -9,7 +9,7 @@
 namespace Sce::Pss::Core::System {
 	class Handles : public PsmMutexObject<Handles> {
 	private:
-		static std::unordered_map<int, void*> handles;
+		static std::unordered_map<int, uintptr_t> handles;
 		static int lastHandle;
 	public:
 		static const int NoHandle = 0x0;
@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::System {
 			LOCK_GUARD_STATIC();
 			int handle = ++lastHandle;
 			assert(!Handles::IsValid(handle));
-			handles.emplace(handle, address);
+			handles.emplace(handle, reinterpret_cast<uintptr_t>(address));
 			return handle;
 		}
 
@@ -33,8 +33,13 @@ namespace Sce::Pss::Core::System {
 
 		template<typename T> static T* Get(int handle) {
 			LOCK_GUARD_STATIC();
+			// find entry with this handle ...;
 			auto it = handles.find(handle);
+			
+			// if its the last entry then return nullptr;
 			if(it == handles.end()) return nullptr;
+
+			// cast it to the desired type and return.
 			return reinterpret_cast<T*>(handles[handle]);
 		}
 		static void Delete(int handle) {

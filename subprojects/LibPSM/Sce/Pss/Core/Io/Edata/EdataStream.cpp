@@ -140,14 +140,12 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
-		memset(this->titleKey, 0x00, sizeof(EdataStream::titleKey));
-		memset(this->fileIv, 0x00, sizeof(EdataStream::fileIv));
-
 		this->EncryptedDataList = edata;
 
 		// copy the titlekey into this object
-		if(drm != nullptr)
+		if (drm != nullptr) {
 			drm->GetTitleKey(this->titleKey);
+		}
 
 		memset(&this->header, 0x00, sizeof(EdataHeader));
  
@@ -156,17 +154,13 @@ namespace Sce::Pss::Core::Io::Edata {
 			this->totalFileSize = std::filesystem::file_size(file);
 			this->totalBlocks = (this->totalFileSize / PSSE_BLOCK_SIZE);
 		}
-		this->osHandle = new std::fstream(file, mode);
+		this->osHandle = std::make_unique<std::fstream>(file, mode);
 
 		// if stream errors, return error code
 
 		if (this->osHandle->fail() || !this->osHandle->is_open()) {
 			Logger::Debug("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + strerror(errno));
-
-			if (this->osHandle != nullptr) {
-				delete this->osHandle;
-				this->osHandle = nullptr;
-			}
+			this->osHandle = nullptr;
 
 			switch (errno) {
 			case EPERM:
@@ -201,11 +195,7 @@ namespace Sce::Pss::Core::Io::Edata {
 				// check version & type is not 1
 				if (this->header.Version == 0x1 && this->header.PsseType != 0x1) {
 					Logger::Error(file + " Has an invalid PSSE header.");
-
-					if (this->osHandle != nullptr) {
-						delete this->osHandle;
-						this->osHandle = nullptr;
-					}
+					this->osHandle = nullptr;
 
 					this->SetError(PSM_ERROR_COMMON_IO);
 					return;
@@ -222,7 +212,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 				// decrypt the IV from the file header
 				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
-				this->aes = new AesCbc(this->titleKey, this->fileIv);
+				this->aes = std::make_unique<AesCbc>(this->titleKey, this->fileIv);
 
 				// decrypt first block from the PSSE'd file
 				decryptBlock(this->block);
@@ -233,22 +223,15 @@ namespace Sce::Pss::Core::Io::Edata {
 		this->fileEncrypted = false;
 		this->osHandle->clear();
 		this->osHandle->seekg(0, std::ios::beg);
-		return;
 	}
 
 	EdataStream::~EdataStream() {
-		if (this->aes != nullptr) {
-			delete aes;
-		}
-
 		if (this->osHandle != nullptr && this->osHandle->is_open()) {
 			this->Close();
 		}
 
-		if (this->osHandle != nullptr) {
-			delete this->osHandle;
-			this->osHandle = nullptr;
-		}
+		this->osHandle = nullptr;
+		this->aes = nullptr;
 	}
 
 	uint64_t EdataStream::Length() {
@@ -393,11 +376,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		else {
 			this->osHandle->close();
 		}
-
-		if (this->osHandle != nullptr) {
-			delete this->osHandle;
-			this->osHandle = nullptr;
-		}
+		this->osHandle = nullptr;
 	}
 	bool EdataStream::Verify() {
 		LOCK_GUARD();

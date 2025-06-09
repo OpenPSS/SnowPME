@@ -35,9 +35,9 @@ namespace SnowPME::Graphics::Gui {
 					if (!std::filesystem::exists(appInfoPath)) appInfoPath = std::filesystem::path(programPath).append("RO").append("Application").append("app.info").string();
 
 					if (std::filesystem::exists(appInfoPath)) {
-						AppInfo appInfo(appInfoPath);
-						std::string shortName = appInfo.GetLocaleValue(appInfo.Names, Config::SystemLanguage);
-						
+						std::shared_ptr<AppInfo> appInfo = std::make_shared<AppInfo>(appInfoPath);
+						std::string shortName = appInfo->GetLocaleValue(appInfo->Names, Config::SystemLanguage);
+
 						if (shortName != "") {
 							this->addMenuItem(shortName, programPath);
 							continue;
