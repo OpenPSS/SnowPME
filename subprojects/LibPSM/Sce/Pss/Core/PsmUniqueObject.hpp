@@ -9,7 +9,7 @@ namespace Sce::Pss::Core {
 	public:
 		PsmUniqueObject() {
 			assert(!PsmUniqueObject<T>::Exists());
-			PsmUniqueObject<T>::uniqueObjectPtr = reinterpret_cast<T*>(this);
+			PsmUniqueObject<T>::uniqueObjectPtr = static_cast<T*>(this);
 		}
 
 		~PsmUniqueObject() {
