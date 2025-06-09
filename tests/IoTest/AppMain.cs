@@ -11,7 +11,7 @@ namespace IoTest
 {
 	public class AppMain
 	{
-		public static void Main (string[] args)
+		public static int Main (string[] args)
 		{
 			Console.WriteLine("- Trying to read non existent file .. ( should fail )");
 			try{
