@@ -39,10 +39,6 @@
     <Compile Include="AppMain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ShaderProgram Include="shaders\Simple.fcg" />
-    <ShaderProgram Include="shaders\Simple.vcg" />
-  </ItemGroup>
-  <ItemGroup>
     <PsmMetadata Include="app.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
