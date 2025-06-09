@@ -48,7 +48,7 @@ jobs:
           name: SnowPME-Windows
           path: build/SnowPME/bin/SnowPME.exe
   build_psm_tests:
-    name: Build PSM SDK Tests
+    name: Test Suite (PSM SDK v2.00)
     runs-on: windows-latest
     steps:
       - name: Checkout Repo

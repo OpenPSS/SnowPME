@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BgmTest", "..\BgmTest\BgmTest.csproj", "{FF8796DF-8795-48D1-8AD3-DF6046D48E92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BgmTest", "BgmTest\BgmTest.csproj", "{FF8796DF-8795-48D1-8AD3-DF6046D48E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmTest", "..\PmTest\PmTest.csproj", "{98815CCB-152E-401B-AD63-1FE29C407AA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmTest", "PmTest\PmTest.csproj", "{98815CCB-152E-401B-AD63-1FE29C407AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceID", "..\DeviceID\DeviceID.csproj", "{92D2E733-09C0-4750-A544-93FF7266F88D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceID", "DeviceID\DeviceID.csproj", "{92D2E733-09C0-4750-A544-93FF7266F88D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteOpen", "..\WebsiteOpen\WebsiteOpen.csproj", "{9AB03FE8-C792-4761-9308-C0497949F7EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteOpen", "WebsiteOpen\WebsiteOpen.csproj", "{9AB03FE8-C792-4761-9308-C0497949F7EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTest", "..\IoTest\IoTest.csproj", "{54058206-F34F-4C8E-AEDA-2D7B91184615}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTest", "IoTest\IoTest.csproj", "{54058206-F34F-4C8E-AEDA-2D7B91184615}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
