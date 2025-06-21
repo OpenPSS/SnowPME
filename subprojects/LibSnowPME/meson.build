@@ -50,7 +50,7 @@ libSnowPME = static_library('SnowPME',
 		LibPssMono_dep,
 		GlobalInclude_dep
 	],
-	install: true
+	install: true,
 )
 
 LibSnowPME_dep = declare_dependency(
