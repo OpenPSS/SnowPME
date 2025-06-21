@@ -11,8 +11,8 @@ GlobalInclude = subproject('GlobalInclude')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
 # override default libraries to be static varients
-LibC_dep = cpp.find_library('libc', required: true, static: true)
-LibCPP_dep = cpp.find_library('libc++', required: true, static: true)
+LibC_dep = cpp.find_library('c', required: true, static: true)
+LibCPP_dep = cpp.find_library('c++', required: true, static: true)
 
 # other LibPSM
 LibPSM = subproject('LibPSM')
