@@ -11,7 +11,6 @@
 #include <glad/glad.h>
 #include <string.h>
 #include <cassert>
-#include <format>
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
@@ -176,7 +175,6 @@ namespace Sce::Pss::Core::Graphics {
 		
 		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
 		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
-		Logger::Debug(std::format("handle: {}", this->Handle));
 
 		return this->GLReference;
 	}

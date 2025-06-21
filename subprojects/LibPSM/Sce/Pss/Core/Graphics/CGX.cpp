@@ -7,7 +7,6 @@
 #include <mono/mono.h>
 #include <cstring>
 #include <iostream>
-#include <format>
 #include <algorithm>
 
 namespace Sce::Pss::Core::Graphics {
@@ -83,7 +82,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::string magic = reversed(this->header.magic, 4);
 		std::string cgVer = reversed(this->header.cgVer, 4);
 		std::string glesVer = reversed(this->header.glesVer, 4);
-		Logger::Debug(std::format("CGX: {} {} {}", magic, cgVer, glesVer));
+		Logger::Debug("CGX: "+magic+" "+cgVer+" "+glesVer);
 
 		bool is_valid = magic == ".CGX" && cgVer == "0.95" && glesVer == "ES20";
 		if (!is_valid || !this->headerIsValid()) {
