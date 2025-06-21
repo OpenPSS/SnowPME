@@ -6,13 +6,15 @@ cpp = meson.get_compiler('cpp')
 
 include_libs = include_directories('SnowPME')
 
+# common #include directories
 GlobalInclude = subproject('GlobalInclude')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
-libC_dep = cpp.find_library('libc', required: true, static: true)
-libCPP_dep = cpp.find_library('libc++', required: true, static: true)
+# override default libraries to be static varients
+LibC_dep = cpp.find_library('libc', required: true, static: true)
+LibCPP_dep = cpp.find_library('libc++', required: true, static: true)
 
-
+# other LibPSM
 LibPSM = subproject('LibPSM')
 LibCXML = subproject('LibCXML')
 LibShared = subproject('LibShared')
@@ -37,8 +39,8 @@ executable('SnowPME',
 		LibSnowPME_dep,
 		LibPssMono_dep,
 
-		libC_dep,
-		libCPP_dep
+		LibC_dep,
+		LibCPP_dep
 	]
 )
 
