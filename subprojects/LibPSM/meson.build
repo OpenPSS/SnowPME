@@ -4,7 +4,8 @@ project('LibPSM',
   default_options:  {
     'warning_level': '3',
     'cpp_std': 'c++20',
-    'c_std': 'c11'
+    'c_std': 'c11',
+    'default_library': 'static'
   }
 )
 cpp = meson.get_compiler('cpp')
