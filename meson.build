@@ -10,10 +10,6 @@ include_libs = include_directories('SnowPME')
 GlobalInclude = subproject('GlobalInclude')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
-# override default libraries to be static varients
-LibC_dep = cpp.find_library('c', required: true, static: true)
-LibCPP_dep = cpp.find_library('c++', required: true, static: true)
-
 # other LibPSM
 LibPSM = subproject('LibPSM')
 LibCXML = subproject('LibCXML')
@@ -38,10 +34,8 @@ executable('SnowPME',
 		LibShared_dep,
 		LibSnowPME_dep,
 		LibPssMono_dep,
-
-		LibC_dep,
-		LibCPP_dep
-	]
+	],
+	link_args: ['-static-libgcc', '-static-libstdc++']
 )
 
 subproject('SnowPMEBenchmark')

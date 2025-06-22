@@ -6,8 +6,8 @@ project('LibImGui', 'cpp',
 cpp = meson.get_compiler('cpp')
 dirbase = meson.current_source_dir()
 
-libSDL2_dep = cpp.find_library('SDL2', required: true)
-libOpenGL_dep = cpp.find_library('GL', required: true)
+LibSDL2_dep = cpp.find_library('SDL2', required: true)
+LibOpenGL_dep = cpp.find_library('GL', required: true)
 
 include_libs = include_directories('.')
 
@@ -19,8 +19,8 @@ libImGui = static_library('ImGui',
 	'imgui_widgets.cpp',
 	'imgui.cpp',
     dependencies: [
-        libSDL2_dep,
-		libOpenGL_dep
+        LibSDL2_dep,
+		LibOpenGL_dep
     ],
 	include_directories: [ include_libs ],
 	install: true)
