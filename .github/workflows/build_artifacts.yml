@@ -60,12 +60,10 @@ jobs:
         uses: OpenPSS/install-psm-sdk@v1
         with:
             version: 2.00.00
-      #- name: Add MSBuild to Path
-      #  run: $Env:Path += ";"+$Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319"
+      - name: Add MSBuild to Path
+        run: $Env:Path += ";"+$Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319"
       - name: MSBuild PsmTestSuite
-        run: | 
-                $Env:Path += ";"+$Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319"
-                MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
+        run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Upload Test Binaries
         uses: actions/upload-artifact@v4
         with:
