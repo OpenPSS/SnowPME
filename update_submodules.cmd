@@ -1,3 +1,4 @@
+@echo off
 cd subprojects/LibCXML
 git checkout main
 git add -A 
@@ -10,7 +11,7 @@ git checkout mono-2-11
 git add -A 
 git commit -m %%1
 git push
-cd ../..
+cd ../../..
 
 cd subprojects/LibMonoBridge
 git checkout main
@@ -20,3 +21,6 @@ git push
 cd ../..
 
 git submodule update --remote --merge
+git add -A
+git commit -m "%%1"
+git push
