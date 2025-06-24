@@ -13,7 +13,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		int y = 0;
 		int comp = 0;
 	public:
-		int Open(const uint8_t* data, uint32_t dataLen, Sce::Pss::Core::Memory::HeapAllocator* alloc);
+		int Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc);
 		Image();
 		virtual ~Image();
 	};

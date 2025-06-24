@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Metadata {
 		int Value;
 	} RatingInfo;
 
-	class AppInfo : public PsmObject<AppInfo>, public PsmUniqueObject<AppInfo> {
+	class AppInfo : public PsmUniqueObject<AppInfo>, public PsmObject<AppInfo> {
 	private:
 		std::unique_ptr<LibCXML::CXMLElement> element;
 		bool nextElement();

@@ -5,12 +5,12 @@
 #include <string>
 #include <mutex>
 
-#include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
 namespace Sce::Pss::Core::Memory {
 
-	class HeapAllocator : public PsmObject<HeapAllocator>, public PsmUniqueObject<HeapAllocator> {
+	class HeapAllocator : public PsmUniqueObject<HeapAllocator>, public PsmMutexObject<HeapAllocator> {
 	private:
 		std::map<uintptr_t, std::vector<uint8_t>*> heapAllocations;
 	public:
@@ -23,8 +23,6 @@ namespace Sce::Pss::Core::Memory {
 
 		uint8_t* sce_psm_malloc(int sz);
 		void sce_psm_free(uint8_t* buffer);
-		static HeapAllocator* GetResourceHeapAllocator();
-		static HeapAllocator* CreateResourceHeapAllocator(size_t resourceHeapSize);
 	};
 
 }

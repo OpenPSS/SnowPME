@@ -36,11 +36,11 @@ namespace Sce::Pss::Core::Graphics {
 			IoCall::PsmFileOpen((char*)fileName, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle);
 			if (handle) {
 				// get the file size
-				uint32_t totalFileSize = NULL;
+				uint32_t totalFileSize = 0;
 				IoCall::PsmFileGetSize(handle, &totalFileSize);
 
 				// allocate memory for this file
-				HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
 				fileData = allocator->sce_psm_malloc(totalFileSize);
 
 				if (fileData != nullptr) {

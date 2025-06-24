@@ -740,14 +740,14 @@ namespace Sce::Pss::Core::Graphics {
 
 	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen) {
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::Exists()) {
+			if (GraphicsContext::UniqueObjectExists()) {
 				this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 				return;
 			}
 			this->VertexFormats = std::vector<VertexFormat>();
 
 			// Get graphics context
-			GraphicsContext* ctx = GraphicsContext::GetUniqueObject();
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 
 			// Store state passed to parameters
 			this->VertexCount = vertexCount;

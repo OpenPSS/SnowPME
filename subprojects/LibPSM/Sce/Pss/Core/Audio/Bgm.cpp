@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	Bgm::~Bgm() {
-		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
 		if(this->audioData != nullptr) allocator->sce_psm_free(this->audioData);
 		if (this->AudioImplObject != nullptr) delete this->AudioImplObject;
 
@@ -67,7 +67,7 @@ namespace Sce::Pss::Core::Audio {
 			IoCall::PsmFileGetSize(file, &this->audioSz);
 			
 			// allocate enough space in memory for this audio file
-			HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+			std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
 			this->audioData = allocator->sce_psm_malloc(this->audioSz);
 
 			if (this->audioData != nullptr) {
@@ -117,7 +117,7 @@ namespace Sce::Pss::Core::Audio {
 
 		Bgm* bgm = new Bgm(audioFileName);
 		RETURN_ERRORABLE(bgm);
-		*handle = bgm->Handle;
+		*handle = bgm->Handle();
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -131,13 +131,13 @@ namespace Sce::Pss::Core::Audio {
 		char* fImage = mono_array_addr_with_size(fileImage, 1, 0);
 		int fSz = mono_array_length(fileImage);
 
-		HeapAllocator* allocator = HeapAllocator::GetResourceHeapAllocator();
+		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
 		uint8_t* musicData = allocator->sce_psm_malloc(fSz);
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);
 			Bgm* bgm = new Bgm(musicData, fSz);
 			RETURN_ERRORABLE(bgm);
-			*handle = bgm->Handle;
+			*handle = bgm->Handle();
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -165,8 +165,8 @@ namespace Sce::Pss::Core::Audio {
 			Bgm* bgm = Handles::Get<Bgm>(handle);
 			BgmPlayer* player = new BgmPlayer(bgm);
 
-			if (Handles::IsValid(player->Handle)) {
-				*playerHandle = player->Handle;
+			if (Handles::IsValid(player->Handle())) {
+				*playerHandle = player->Handle();
 			}
 			else {
 				return PSM_ERROR_COMMON_INVALID_OPERATION;

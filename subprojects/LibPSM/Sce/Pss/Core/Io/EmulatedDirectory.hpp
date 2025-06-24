@@ -1,8 +1,11 @@
 #ifndef LIB_PSS_EMULATED_DIRECTORY_H
 #define LIB_PSS_EMULATED_DIRECTORY_H 1
-#include <Sce/Pss/Core/Io/IUnderlying.hpp>
 #include <vector>
 #include <string>
+
+#include <Sce/Pss/Core/Io/IUnderlying.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
+
 namespace Sce::Pss::Core::Io {
 
 	typedef struct EmulatedDirectoryEntry {
@@ -12,7 +15,7 @@ namespace Sce::Pss::Core::Io {
 		uint64_t size = 0;
 	} EmulatedDirectoryEntry;
 
-	class EmulatedDirectory : public IUnderlying {
+	class EmulatedDirectory : public IUnderlying, public PsmMutexObject<EmulatedDirectory> {
 	private:
 		std::string directoryName = "/";
 		std::vector<EmulatedDirectoryEntry> subdirectories;

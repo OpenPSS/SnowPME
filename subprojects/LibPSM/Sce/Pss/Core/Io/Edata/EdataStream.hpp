@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 #include <Sce/Pss/Core/Crypto/AesCbc.hpp>
 #include <Sce/Pss/Core/Io/IUnderlying.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
 
 #include <fstream>
 
@@ -15,22 +16,21 @@
 #define PSSE_SIGNATURE_SIZE (0x400)
 
 namespace Sce::Pss::Core::Io::Edata {
-	class EdataStream : public IUnderlying {
+	class EdataStream : public IUnderlying, public PsmMutexObject<EdataStream> {
 	private:
-		std::fstream* osHandle = nullptr;
-		Sce::Pss::Core::Crypto::AesCbc* aes = nullptr;
+		std::unique_ptr<std::fstream> osHandle = nullptr;
+		std::unique_ptr<Sce::Pss::Core::Crypto::AesCbc> aes = nullptr;
 
 		bool psmDeveloperAssistant = false;
 
 		EdataHeader header;
 
-		uint8_t fileIv[0x10];
-		uint8_t titleKey[0x10];
+		uint8_t fileIv[0x10] = { 0 };
+		uint8_t titleKey[0x10] = { 0 };
 
 		std::vector<std::uint8_t> currentBlock = std::vector<std::uint8_t>();
 
 		uint64_t position = 0;
-		
 		uint64_t block = 0;
 		uint64_t totalFileSize = 0;
 		uint64_t totalBlocks = 0;

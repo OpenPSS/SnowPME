@@ -110,7 +110,7 @@ namespace Sce::Pss::Core::Io {
 			RETURN_ERRORABLE(this->GameDrmProvider);
 		}
 		else {
-			Logger::Warn("No " + FakeRifLocation + " found.");
+			Logger::Warn("No " + FakeRifLocation + " found. - This is normal if your running a pre-decrypted executable (i.e homebrew)");
 		}
 		return PSM_ERROR_NO_ERROR;
 	}
