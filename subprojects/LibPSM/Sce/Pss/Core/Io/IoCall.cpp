@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
 
-		return Sandbox::GetUniqueObject()->MakeDirectory(sandboxPath);
+		return Sandbox::UniqueObject()->MakeDirectory(sandboxPath);
 	}
 
 	int IoCall::PsmDirectoryRemove(char* pszDirectoryPath) {
@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
 
-		return Sandbox::GetUniqueObject()->RemoveDirectory(sandboxPath);
+		return Sandbox::UniqueObject()->RemoveDirectory(sandboxPath);
 	}
 
 	int IoCall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
@@ -60,14 +60,14 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
 
-		if (!Sandbox::GetUniqueObject()->PathExist(sandboxPath, false))
+		if (!Sandbox::UniqueObject()->PathExist(sandboxPath, false))
 			return PSM_ERROR_PATH_NOT_FOUND;
 
-		if (Sandbox::GetUniqueObject()->IsDirectory(sandboxPath)) {
-			PsmFileHandle* directoryHandle = Sandbox::GetUniqueObject()->OpenDirectory(sandboxPath);
+		if (Sandbox::UniqueObject()->IsDirectory(sandboxPath)) {
+			PsmFileHandle* directoryHandle = Sandbox::UniqueObject()->OpenDirectory(sandboxPath);
 			RETURN_ERRORABLE(directoryHandle);
 			
-			*pDirectory = static_cast<uint64_t>(directoryHandle->Handle);
+			*pDirectory = static_cast<uint64_t>(directoryHandle->Handle());
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -106,7 +106,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_BUFFER_FULL;
 
 		memset(pszDirectoryPath, 0, uBufferSize);
-		strncpy(pszDirectoryPath, Sandbox::GetUniqueObject()->GetWorkingDirectory().c_str(), uBufferSize - 1);
+		strncpy(pszDirectoryPath, Sandbox::UniqueObject()->GetWorkingDirectory().c_str(), uBufferSize - 1);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -117,7 +117,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
-		return Sandbox::GetUniqueObject()->SetWorkingDirectory(sandboxPath);
+		return Sandbox::UniqueObject()->SetWorkingDirectory(sandboxPath);
 	}
 
 	int IoCall::PsmFileOpen(char* pszFileName, uint32_t uOpenFlags, uint64_t* phFile) {
@@ -129,11 +129,11 @@ namespace Sce::Pss::Core::Io {
 		if (pszFileName == nullptr || phFile == nullptr || strlen(pszFileName) > PSM_PATH_MAX) return PSM_ERROR_INVALID_PARAMETER;
 		std::string sandboxedPath = std::string(pszFileName);
 
-		if (!Sandbox::GetUniqueObject()->IsDirectory(sandboxedPath)) {
-			PsmFileHandle* fileHandle = Sandbox::GetUniqueObject()->OpenFile(sandboxedPath, static_cast<ScePssFileOpenFlag_t>(uOpenFlags), includeSystem);
+		if (!Sandbox::UniqueObject()->IsDirectory(sandboxedPath)) {
+			PsmFileHandle* fileHandle = Sandbox::UniqueObject()->OpenFile(sandboxedPath, static_cast<ScePssFileOpenFlag_t>(uOpenFlags), includeSystem);
 			RETURN_ERRORABLE(fileHandle);
 
-			*phFile = static_cast<uint64_t>(fileHandle->Handle);
+			*phFile = static_cast<uint64_t>(fileHandle->Handle());
 			return PSM_ERROR_NO_ERROR;
 		}
 
@@ -149,7 +149,7 @@ namespace Sce::Pss::Core::Io {
 		if (sandboxPath.length() > PSM_PATH_MAX)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		return Sandbox::GetUniqueObject()->RemoveFile(sandboxPath);
+		return Sandbox::UniqueObject()->RemoveFile(sandboxPath);
 
 	}
 
@@ -167,7 +167,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->IsDirectory())
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		ScePssFileInformation_t fileInfo = Sandbox::GetUniqueObject()->Stat(handle->PathInSandbox(), handle->PathInSandbox());
+		ScePssFileInformation_t fileInfo = Sandbox::UniqueObject()->Stat(handle->PathInSandbox(), handle->PathInSandbox());
 		memcpy(pFileInfo, &fileInfo, sizeof(ScePssFileInformation_t));
 
 		return PSM_ERROR_NO_ERROR;
@@ -301,7 +301,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->IsRewritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
-		int errorcode = Sandbox::GetUniqueObject()->ChangeSize(handle, uSize);
+		int errorcode = Sandbox::UniqueObject()->ChangeSize(handle, uSize);
 
 		return errorcode;
 	}
@@ -314,7 +314,7 @@ namespace Sce::Pss::Core::Io {
 		std::string srcSandboxPath = std::string(pszOldName);
 		std::string dstSandboxPath = std::string(pszNewName);
 
-		return Sandbox::GetUniqueObject()->CopyFile(srcSandboxPath, dstSandboxPath, static_cast<bool>(bMove));
+		return Sandbox::UniqueObject()->CopyFile(srcSandboxPath, dstSandboxPath, static_cast<bool>(bMove));
 
 	}
 	int IoCall::PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags) {
@@ -325,7 +325,7 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszFileName);
 
-		return Sandbox::GetUniqueObject()->SetAttributes(sandboxPath, uFlags);
+		return Sandbox::UniqueObject()->SetAttributes(sandboxPath, uFlags);
 	}
 	int IoCall::PsmFileSetTimes(const char* pszFileName, const uint64_t* pCreationTime, const uint64_t* pLastAccessTime, const uint64_t* pLastWriteTime) {
 		Logger::Debug(__FUNCTION__);
@@ -339,7 +339,7 @@ namespace Sce::Pss::Core::Io {
 		time_t lastAccessTime = FILETIME_TO_UNIX(*pLastAccessTime);
 		time_t lastWriteTime = FILETIME_TO_UNIX(*pLastWriteTime);
 
-		return Sandbox::GetUniqueObject()->SetFileTimes(sandboxPath, creationTime, lastAccessTime, lastWriteTime);
+		return Sandbox::UniqueObject()->SetFileTimes(sandboxPath, creationTime, lastAccessTime, lastWriteTime);
 	}
 
 	int IoCall::PsmFileGetPathInformation(const char* pszFileName, ScePssFileInformation_t* pFileInfo) {
@@ -352,10 +352,10 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszFileName);
 
-		if (!Sandbox::GetUniqueObject()->PathExist(sandboxPath, false))
+		if (!Sandbox::UniqueObject()->PathExist(sandboxPath, false))
 			return PSM_ERROR_NOT_FOUND;
 
-		ScePssFileInformation_t fileinfo = Sandbox::GetUniqueObject()->Stat(sandboxPath, sandboxPath);
+		ScePssFileInformation_t fileinfo = Sandbox::UniqueObject()->Stat(sandboxPath, sandboxPath);
 		memcpy(pFileInfo, &fileinfo, sizeof(ScePssFileInformation_t));
 
 		return PSM_ERROR_NO_ERROR;

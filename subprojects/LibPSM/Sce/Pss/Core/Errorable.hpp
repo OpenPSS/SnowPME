@@ -8,6 +8,13 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
+#define RETURN_ERRORABLE_SHARED(x) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			x = nullptr; \
+			return error; \
+		}
+
 #define RETURN_ERRORABLE(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \

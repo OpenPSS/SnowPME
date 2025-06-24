@@ -13,10 +13,11 @@ using namespace Sce::Pss::Core::System;
 namespace Sce::Pss::Core::Io::Edata {
 	int EdataCallbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
 		if (handle != nullptr && type != nullptr) {
-			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, Sandbox::GetUniqueObject()->GameDrmProvider, nullptr);
+			PsmDrm* drm = Sandbox::UniqueObject()->GameDrmProvider;
+			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, drm, nullptr);
 			RETURN_ERRORABLE(stream);
 
-			*handle = stream->Handle;
+			*handle = Handles::Create(stream);
 
 			*type = SCE_PSS_FILE_FLAG_READONLY;
 			if (stream->IsEncrypted())
@@ -76,6 +77,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		if (Handles::IsValid(handle)) {
 			EdataStream* str = Handles::Get<EdataStream>(handle);
 			delete str;
+			Handles::Delete(handle);
 		}
 	}
 }

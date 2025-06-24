@@ -1,7 +1,7 @@
-#include "Program.hpp"
+#include <Program.hpp>
 
 int main(int argc, char* argv[])
 {
-	SnowPME::Program program(argc, argv);
+	std::make_unique<SnowPME::Program>(argc, argv);
 	return 0;
 }

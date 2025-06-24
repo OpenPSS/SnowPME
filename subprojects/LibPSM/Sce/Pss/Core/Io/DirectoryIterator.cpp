@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Io {
 		StackItem item;
 		item.positionInFolder = 0;
 		item.pathInSandbox = this->startFolderSandboxPath;
-		item.pathOnDisk = Sandbox::GetUniqueObject()->LocateRealPath(item.pathInSandbox, false);
+		item.pathOnDisk = Sandbox::UniqueObject()->LocateRealPath(item.pathInSandbox, false);
 		item.relativePath = "";
 		item.iterator = new std::filesystem::directory_iterator(item.pathOnDisk);
 
@@ -96,7 +96,7 @@ namespace Sce::Pss::Core::Io {
 		ScePssFileInformation_t psmPathInformation;
 
 		if ((Config::TargetImplementation == RuntimeImplementation::Windows) && this->iterPos == 0) {
-			psmPathInformation = Sandbox::GetUniqueObject()->Stat(item.pathInSandbox, Path::Combine(item.relativePath, "."));
+			psmPathInformation = Sandbox::UniqueObject()->Stat(item.pathInSandbox, Path::Combine(item.relativePath, "."));
 		}
 		else if((Config::TargetImplementation == RuntimeImplementation::Windows) && this->iterPos == 1) {
 
@@ -104,7 +104,7 @@ namespace Sce::Pss::Core::Io {
 			if (depth > 0)
 				prevStackItem = this->folderStack.at(depth - 1);
 
-			psmPathInformation = Sandbox::GetUniqueObject()->Stat(prevStackItem.pathInSandbox, Path::Combine(item.relativePath, ".."));
+			psmPathInformation = Sandbox::UniqueObject()->Stat(prevStackItem.pathInSandbox, Path::Combine(item.relativePath, ".."));
 		}
 		else {
 			if (iterator == std::filesystem::end(iterator)) {
@@ -125,17 +125,17 @@ namespace Sce::Pss::Core::Io {
 			std::string sandboxAbsPath = Path::Combine(item.pathInSandbox, filename);
 			std::string sandboxRelativePath = Path::Combine(item.relativePath, filename);
 
-			psmPathInformation = Sandbox::GetUniqueObject()->Stat(sandboxAbsPath, sandboxRelativePath);
+			psmPathInformation = Sandbox::UniqueObject()->Stat(sandboxAbsPath, sandboxRelativePath);
 
 			iterator++;
 
-			if (Sandbox::GetUniqueObject()->IsDirectory(sandboxAbsPath) && this->recursive) {
+			if (Sandbox::UniqueObject()->IsDirectory(sandboxAbsPath) && this->recursive) {
 				// Push to the stack, and set current directory to the new one.
 
 				StackItem nitem;
 				nitem.pathInSandbox = sandboxAbsPath;
 				nitem.relativePath = sandboxRelativePath;
-				nitem.pathOnDisk = Sandbox::GetUniqueObject()->LocateRealPath(sandboxAbsPath, false);
+				nitem.pathOnDisk = Sandbox::UniqueObject()->LocateRealPath(sandboxAbsPath, false);
 
 				nitem.iterator = new std::filesystem::directory_iterator(nitem.pathOnDisk);
 				nitem.positionInFolder = 0;

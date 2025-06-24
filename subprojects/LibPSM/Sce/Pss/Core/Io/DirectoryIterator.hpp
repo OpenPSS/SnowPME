@@ -7,10 +7,11 @@
 #include <mono/mono.h>
 #include <Sce/Pss/Core/Io/StackItem.hpp>
 #include <Sce/Pss/Core/Io/IUnderlying.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
 
 namespace Sce::Pss::Core::Io {
 
-	class DirectoryIterator : public IUnderlying {
+	class DirectoryIterator : public IUnderlying, public PsmMutexObject<DirectoryIterator>{
 	private:
 		std::vector<StackItem> folderStack;
 		std::string startFolderSandboxPath = "";

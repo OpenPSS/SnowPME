@@ -1,10 +1,10 @@
 #ifndef LIB_PSS_IUNDERLYINGL_H
 #define LIB_PSS_IUNDERLYINGL_H 1
 #include <cstdint>
-#include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/Errorable.hpp>
 
 namespace Sce::Pss::Core::Io {
-	class IUnderlying : public PsmObject<IUnderlying> {
+	class IUnderlying : public Errorable {
 		protected:
 		public:
 			IUnderlying() = default;

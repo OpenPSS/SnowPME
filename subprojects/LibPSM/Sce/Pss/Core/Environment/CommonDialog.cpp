@@ -98,17 +98,17 @@ namespace Sce::Pss::Core::Environment {
 				Logger::Debug("CommonDialogType::InAppPurchaseDialog");
 
 				// check an in app purchase dialog has not already been created.
-				if (InAppPurchaseDialog::GetUniqueObject() != nullptr) {
+				if (InAppPurchaseDialog::UniqueObjectExists()) {
 					ExceptionInfo::AddMessage("InAppPurchaseDialog can have one instance at same time\n");
 					return PSM_ERROR_COMMON_INVALID_OPERATION;
 				}
 
 				// create in app purchase common dialog,
-				InAppPurchaseDialog* commonIapDialog = new InAppPurchaseDialog();
-				RETURN_ERRORABLE(commonIapDialog);
+				std::shared_ptr<InAppPurchaseDialog> commonIapDialog = InAppPurchaseDialog::MakeUniqueObject(std::make_shared<InAppPurchaseDialog>());
+				RETURN_ERRORABLE_SHARED(commonIapDialog);
 
 				// set handle to the new in app purchase
-				*handle = commonIapDialog->Handle;
+				*handle = std::static_pointer_cast<CommonDialog>(commonIapDialog)->Handle();
 
 				return PSM_ERROR_NO_ERROR;
 			}
@@ -125,7 +125,16 @@ namespace Sce::Pss::Core::Environment {
 		LOCK_GUARD_STATIC();
 
 		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-		delete Handles::Get<CommonDialog>(handle);
+		CommonDialog* dlg = Handles::Get<CommonDialog>(handle);
+		Handles::Delete(handle);
+
+		switch (type) {
+			case CommonDialogType::InAppPurchaseDialog:
+				InAppPurchaseDialog::MakeLocalObject();
+				return PSM_ERROR_NO_ERROR;
+		}
+
+		delete dlg;
 
 		return PSM_ERROR_NO_ERROR;
 	}

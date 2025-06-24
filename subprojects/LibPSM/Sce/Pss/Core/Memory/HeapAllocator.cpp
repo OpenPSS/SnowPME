@@ -63,14 +63,5 @@ namespace Sce::Pss::Core::Memory {
 		this->heapAllocations.erase((uintptr_t)buffer);
 
 	}
-	HeapAllocator* HeapAllocator::GetResourceHeapAllocator() {
-		LOCK_GUARD_STATIC();
-		return HeapAllocator::GetUniqueObject();
-	}
-
-	HeapAllocator* HeapAllocator::CreateResourceHeapAllocator(size_t resourceHeapSize) {
-		LOCK_GUARD_STATIC();
-		return new HeapAllocator(resourceHeapSize, "ScePsmResourceHeap");
-	}
 
 }

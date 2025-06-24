@@ -49,7 +49,7 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram* shdrPrg = new ShaderProgram(vertexProgramFileName, fragmentProgramFileName);
 		RETURN_ERRORABLE(shdrPrg);
 
-		*result = shdrPrg->Handle;
+		*result = shdrPrg->Handle();
 
 		if(vertexProgramFileName != nullptr)
 			mono_free(vertexProgramFileName);
@@ -76,7 +76,7 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
 		RETURN_ERRORABLE(shdrPrg);
 
-		*result = shdrPrg->Handle;
+		*result = shdrPrg->Handle();
 		return PSM_ERROR_NO_ERROR;
 	}
 	

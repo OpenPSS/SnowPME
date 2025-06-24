@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		}
 	}
 
-	int Image::Open(const uint8_t* data, uint32_t dataLen, HeapAllocator* alloc) {
+	int Image::Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<HeapAllocator> alloc) {
 
 		// TODO: Use allocator!
 
