@@ -7,11 +7,13 @@ namespace Shared::Debug {
 		Red,
 		Green,
 		Blue,
-		Yellow,
 		Gray,
 		White,
+		Gold,
+		Yellow,
 		LightRed,
-		LightGreen
+		LightGreen,
+		LightBlue
 	};
 }
 #endif

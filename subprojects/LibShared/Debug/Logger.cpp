@@ -11,6 +11,7 @@
 #endif
 
 using namespace Shared::String;
+
 namespace Shared::Debug
 {
 	std::mutex Logger::logMutex;
@@ -29,6 +30,7 @@ namespace Shared::Debug
 
 		WORD FOREGROUND_LGREEN =  FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 		WORD FOREGROUND_LRED = FOREGROUND_RED | FOREGROUND_INTENSITY;
+		WORD FOREGROUND_LBLUE = FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 
 		// Set text color
 		switch (color) {
@@ -50,11 +52,17 @@ namespace Shared::Debug
 		case ConsoleColor::White:
 			attribute = FOREGROUND_WHITE;
 			break;
+		case ConsoleColor::Gold:
+			attribute = FOREGROUND_GOLD;
+			break;
 		case ConsoleColor::LightGreen:
 			attribute = FOREGROUND_LGREEN;
 			break;
 		case ConsoleColor::LightRed:
 			attribute = FOREGROUND_LRED;
+			break;
+		case ConsoleColor::LightBlue:
+			attribute = FOREGROUND_LBLUE;
 			break;
 		default:
 			attribute = FOREGROUND_GRAY;
@@ -63,27 +71,34 @@ namespace Shared::Debug
 
 		SetConsoleTextAttribute(hConsole, attribute);
 #elif __linux__
-		std::string FOREGROUND_RESET = "\033[0m";
-		std::string FOREGROUND_RED = "\033[31m";
-		std::string FOREGROUND_BLUE = "\033[34m";
-		std::string FOREGROUND_GREEN = "\033[32m";
-		std::string FOREGROUND_BLACK = "\033[30m";
-		std::string FOREGROUND_LBLUE = "\033[36m"; 
-		std::string FOREGROUND_RED = "\033[31m"; 
-		std::string FOREGROUND_MAGENTA = "\033[35m"
-		std::string FOREGROUND_ORANGE = "\033[33m";
-		std::string FOREGROUND_GREY = "\033[37m"; 
-		std::string FOREGROUND_LGREY = "\033[90m"; 
-		std::string FOREGROUND_BLUE = "\033[94m"; 
-		std::string FOREGROUND_GREEN = "\033[92m"; 
-		std::string FOREGROUND_CYAN = "\033[96m"; 
-		std::string FOREGROUND_LRED = "\033[91m"; 
-		std::string FOREGROUND_PINK = "\033[95m"; 
-		std::string FOREGROUND_YELLOW = "\033[93m";
-		std::string FOREGROUND_WHITE = "\033[97m"; 
+
+		/*
+		\e[0;30m or \e[0;90m: Black
+		\e[0;31m or \e[0;91m: Red
+		\e[0;32m or \e[0;92m: Green
+		\e[0;33m or \e[0;93m: Yellow
+		\e[0;34m or \e[0;94m: Blue
+		\e[0;35m or \e[0;95m: Magenta
+		\e[0;36m or \e[0;96m: Cyan
+		\e[0;37m or \e[0;97m: White
+		*/
+
+		std::string FOREGROUND_RESET = "\e[0m";
+		std::string FOREGROUND_RED = "\e[31m";
+		std::string FOREGROUND_BLUE = "\e[34m";
+		std::string FOREGROUND_GREEN = "\e[32m";
+
+		std::string FOREGROUND_GOLD = "\e[33m";
+		std::string FOREGROUND_YELLOW = "\e[93m";
+		std::string FOREGROUND_GRAY = "\e[37m";
+		std::string FOREGROUND_WHITE = "\e[97m";
+
+		std::string FOREGROUND_LGREEN = "\e[92m";
+		std::string FOREGROUND_LRED = "\e[91m";
+		std::string FOREGROUND_LBLUE = "\e[94m";
+
 
 		std::cerr << FOREGROUND_RESET;
-
 
 		switch (color) {
 		case ConsoleColor::Red:
