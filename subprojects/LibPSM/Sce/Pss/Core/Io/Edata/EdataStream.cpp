@@ -8,6 +8,8 @@
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 
 #include <LibShared.hpp>
+
+#include <memory>
 #include <filesystem>
 #include <errno.h>
 #include <string.h>

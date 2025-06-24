@@ -7,8 +7,8 @@
 #include <Sce/Pss/Core/Io/IUnderlying.hpp>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
 
+#include <memory>
 #include <fstream>
-
 #include <mono/mono.h>
 
 #define PSSE_BLOCK_SIZE (0x8000)
