@@ -89,7 +89,7 @@ namespace SnowPME {
 
 				while (this->guiThread.joinable()) {
 
-					if (this->gui->Done()) {
+					if (!this->gui->Done()) {
 						this->gui->UpdateGui();
 					}
 

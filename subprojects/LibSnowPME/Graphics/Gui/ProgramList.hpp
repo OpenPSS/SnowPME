@@ -17,7 +17,7 @@ namespace SnowPME::Graphics::Gui {
 
 	class ProgramList {
 	private:
-		std::atomic<ProgramEntry> selectedProgram;
+		ProgramEntry selectedProgram;
 		std::vector<ProgramEntry> programs;
 		std::atomic<bool> hasSelectedProgram = false;
 

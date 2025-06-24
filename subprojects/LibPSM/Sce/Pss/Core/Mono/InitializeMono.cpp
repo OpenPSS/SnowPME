@@ -41,7 +41,6 @@ namespace Sce::Pss::Core::Mono {
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
 
-
 		HeapAllocator::MakeLocalObject();
 		AppInfo::MakeLocalObject();
 		Sandbox::MakeLocalObject();

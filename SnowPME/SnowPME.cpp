@@ -3,6 +3,6 @@
 
 int main(int argc, char* argv[])
 {
-	SnowPME::Program prog = SnowPME::Program(argc, argv);
+	std::unique_ptr<SnowPME::Program> prog = std::make_unique<SnowPME::Program>(argc, argv);
 	return 0;
 }
