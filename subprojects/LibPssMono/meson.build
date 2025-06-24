@@ -1,6 +1,6 @@
 project('LibPssMono', 'c',
 version: '0.1',
-default_options: ['warning_level=3', 'cpp_std=c++20', 'default_library=static'])
+default_options: ['warning_level=0', 'cpp_std=c++20', 'default_library=static'])
 
 c = meson.get_compiler('c')
 bin_dir = meson.current_build_dir()
