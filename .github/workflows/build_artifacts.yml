@@ -61,7 +61,7 @@ jobs:
         with:
             version: 2.00.00
       - name: Add MsBuild to Path
-        run: set PATH=%PATH%;C:\Windows\Microsoft.NET\Framework\v4.0.30319
+        run: $Env:Path += ';C:\Windows\Microsoft.NET\Framework\v4.0.30319'
       - name: MsBuild PsmTestSuite
         run: msbuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Upload Test Binaries
