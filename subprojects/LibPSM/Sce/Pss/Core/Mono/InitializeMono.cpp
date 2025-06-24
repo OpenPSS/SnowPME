@@ -32,12 +32,10 @@ using namespace Sce::Pss::Core::Services;
 
 namespace Sce::Pss::Core::Mono {
 
-	std::jmp_buf exitHandler;
-	int exitCode;
+	int InitializeMono::exitCode = 0;
 	MonoDomain* InitializeMono::psmDomain = nullptr;
 
 	int InitializeMono::ScePsmTerminate() {
-		mono_runtime_quit();
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
 
@@ -212,10 +210,6 @@ namespace Sce::Pss::Core::Mono {
 		Logger::Debug("cxml : managed_heap_size : "+ std::to_string(heapSizeLimit));
 		Logger::Debug("cxml : resource_heap_size : "+ std::to_string(resourceSizeLimit));
 
-		mono_set_exit_callback(InitializeMono::exitCallback);
-		if(setjmp(exitHandler)) {
-			return exitCode;
-		}
 
 		int res = InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo->ResourceHeapSize);
 		if (res != PSM_ERROR_NO_ERROR) {
@@ -235,23 +229,13 @@ namespace Sce::Pss::Core::Mono {
 		mono_threadpool_set_max_threads(8, 8);
 		mono_thread_set_threads_exhausted_callback(Resources::ThreadsExhaustedCallback);
 
-		if(!setjmp(exitHandler)) {
-			InitializeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
-		} else {
-			resCode = exitCode;
-		}
-
+		InitializeMono::scePsmExecute(realAppExePath.c_str(), &resCode);
 		InitializeMono::ScePsmTerminate();
+
+		Logger::Info("app.exe exited with status code: " + std::to_string(resCode));
+
 		return resCode;
 	}
 
-	int InitializeMono::exitCallback(int code) {
-		// shouldn't this call InitializeMono::ScePsmTerminate() ?
 
-		Logger::Info("app.exe exited with status code: " + std::to_string(code));
-
-		exitCode = code;
-		std::longjmp(exitHandler, true);
-		return 0;
-	}
 }

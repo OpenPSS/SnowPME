@@ -20,7 +20,6 @@ namespace SnowPME::Runtime {
 	std::shared_ptr<Application> Application::runningApplication = nullptr;
 
 	int Application::initCallbacks(std::shared_ptr<Graphics::Window> window) {
-		Callback::WindowImpl::Init(window);
 
 		Sce::Pss::Core::Callback::WindowCallbacks::Init(
 			Callback::WindowImpl::SwapBuffers,
@@ -40,8 +39,13 @@ namespace SnowPME::Runtime {
 		Application::initCallbacks(window);
 	}
 
-	void Application::RunPssMain() {
-		InitializeMono::ScePssMain(this->appMainDirectory.c_str());
+	int Application::RunPssMain() {
+		return InitializeMono::ScePssMain(this->appMainDirectory.c_str());
+	}
+
+	void Application::RunPssTerminate() {
+		InitializeMono::ScePsmTerminate();
+		this->runningApplication = nullptr;
 	}
 
 	bool Application::IsRunning() {
@@ -60,7 +64,7 @@ namespace SnowPME::Runtime {
 			if (SDL_PollEvent(&evt)) {
 				switch (evt.type) {
 					case SDL_QUIT:
-						Logger::Debug("evt // SDL_QUIT");
+						app->RunPssTerminate();
 						break;
 					case SDL_WINDOWEVENT:
 						Logger::Debug("evt // SDL_WINDOWEVENT");
@@ -71,18 +75,23 @@ namespace SnowPME::Runtime {
 					case SDL_KEYUP:
 						Logger::Debug("evt // SDL_KEYUP");
 						break;
+					case SDL_MOUSEMOTION:
+						Logger::Debug("evt // SDL_MOUSEMOTION");
+						break;
+					default:
+						Logger::Debug("evt // " + std::to_string(evt.type));
+						break;
 				}
 			}
 		}
 	}
 
-	void Application::LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window) {
+	int Application::LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window) {
 		if (Application::runningApplication != nullptr) {
 			Application::runningApplication = nullptr;
 		}
 		
 		Application::runningApplication = std::make_shared<Application>(gameFolder, window);
-		Application::runningApplication->RunPssMain();
-
+		return Application::runningApplication->RunPssMain();
 	}
 }

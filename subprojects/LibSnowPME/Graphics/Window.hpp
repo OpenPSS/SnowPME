@@ -21,6 +21,7 @@ namespace SnowPME::Graphics {
 		void onResized();
 	public:
 		Window(int height, int width, const std::string& title);
+
 		void SwapBuffers();
 		void Vsync(uint32_t frameTaken);
 		uint32_t GetTime();
@@ -33,7 +34,8 @@ namespace SnowPME::Graphics {
 		SDL_GLContext GetGlCtx();
 		
 		static std::shared_ptr<Window> GetMainWindow();
-		static void create(int height, int width, const std::string& title);
+		static void Create(int height, int width, const std::string& title);
+		static void Delete();
 
 		~Window();
 	};

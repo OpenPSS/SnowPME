@@ -9,10 +9,10 @@ namespace Sce::Pss::Core::Mono
 	class InitializeMono {
 	private:
 		static MonoDomain* psmDomain;
+		static int exitCode;
 
 		static int scePsmExecute(const char* exeFile, int* resCode);
 		static int scePsmMonoJitExec2(MonoAssembly* assembly, char** argv, int argc);
-		static int exitCallback(int code);
 
 	public:
 		static int ScePsmInitalize(const char* assemblyPath, int resourceHeapSize);

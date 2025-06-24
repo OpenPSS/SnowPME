@@ -15,6 +15,8 @@ namespace SnowPME {
 
 
 	void Program::progThreadFunc() {
+		threadRunning = true;
+
 		std::shared_ptr<Window> window = Window::GetMainWindow();
 		if (window == nullptr) return;
 
@@ -24,11 +26,14 @@ namespace SnowPME {
 
 		Logger::Debug("Running mono program ...");
 		if (ProgramSelectWindow::Programs.HasSelectedProgram()) {
-			Application::LoadApplication(this->programPath, window);
+			this->exitCode = Application::LoadApplication(this->programPath, window);
 		}
+
+		this->threadRunning = false;
 	}
 
 	void Program::guiThreadFunc() {
+		this->threadRunning = true;
 		std::shared_ptr<Window> window = Window::GetMainWindow();
 		if (window == nullptr) return;
 
@@ -46,7 +51,7 @@ namespace SnowPME {
 	}
 
 	Program::Program(int argc, const char* const* argv) {
-		std::string runningFrom = ""; // Path::UpDirectory(std::string(argv[0])); (doesnt work on windows ...)
+		std::string runningFrom = "";
 		Config::ReadConfig(runningFrom, "SnowPME.cfg");
 
 		cxxopts::Options options("snowpme", "SnowPME PlayStation Mobile Emulator");
@@ -58,22 +63,23 @@ namespace SnowPME {
 
 		auto opts = options.parse(argc, argv);
 
-		if(opts.count("help")) {
-			std::cout << options.help({""}) << std::endl;
+		if (opts.count("help")) {
+			std::cout << options.help({ "" }) << std::endl;
 			return;
 		}
 
 		Logger::Debug("Opening Window.");
-		Graphics::Window::create(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
+		Window::Create(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
 
 		auto gamePath = opts["path"].as_optional<std::string>();
-		if(gamePath.has_value()) {
+		if (gamePath.has_value()) {
 			this->programPath = gamePath.value();
 			this->guiThread = std::thread(&Program::progThreadFunc, this);
-		} else {
+		}
+		else {
 			bool showGui = true;
 
-			if(opts.count("gui")) {
+			if (opts.count("gui")) {
 				showGui = opts["gui"].as<bool>();
 			}
 
@@ -86,21 +92,28 @@ namespace SnowPME {
 				mainWindow->Register();
 
 				this->guiThread = std::thread(&Program::guiThreadFunc, this);
+			}
+		}
 
-				while (this->guiThread.joinable()) {
+		// wait for thread start ...
+		while (!this->threadRunning) {};
 
-					if (!this->gui->Done()) {
-						this->gui->UpdateGui();
-					}
-
-					if (Application::IsRunning()) {
-						Application::CheckEvent();
-					}
-				}
+		while (this->threadRunning) {
+			if (this->gui != nullptr && !this->gui->Done()) {
+				this->gui->UpdateGui();
 			}
 
+			if (Application::IsRunning()) {
+				Application::CheckEvent();
+			}
 		}
+
+		Window::Delete();
 	}
 
 	Program::~Program() {}
+
+	int Program::ExitCode() {
+		return exitCode;
+	}
 }

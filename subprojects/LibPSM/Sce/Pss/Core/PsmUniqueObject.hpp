@@ -37,8 +37,9 @@ namespace Sce::Pss::Core {
 		}
 		
 		static void MakeLocalObject() {
-			assert(!PsmUniqueObject<T>::UniqueObjectExists());
-			PsmUniqueObject<T>::uObjPtr = nullptr;
+			if (PsmUniqueObject<T>::UniqueObjectExists()) {
+				PsmUniqueObject<T>::uObjPtr = nullptr;
+			}
 		}
 
 	};

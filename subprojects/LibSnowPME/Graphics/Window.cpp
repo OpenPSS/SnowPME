@@ -127,7 +127,12 @@ namespace SnowPME::Graphics {
 		SDL_Quit();
 	}
 
-	void Window::create(int height, int width, const std::string& title) {
+	void Window::Create(int height, int width, const std::string& title) {
 		Window::mainWindow = std::make_shared<Graphics::Window>(height, width, title);
+	}
+
+	void Window::Delete() {
+		mainWindow->~Window();
+		Window::mainWindow = nullptr;
 	}
 }

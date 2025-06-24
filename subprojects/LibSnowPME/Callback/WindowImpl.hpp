@@ -8,10 +8,7 @@ namespace SnowPME::Callback {
 
 	class WindowImpl : public Impl {
 	private:
-		static std::shared_ptr<Graphics::Window> mainWindow;
-		
 	public:
-		static void Init(std::shared_ptr<Graphics::Window> oglWindow);
 		static void SwapBuffers();
 		static double GetTime();
 		static void PollEvents();
