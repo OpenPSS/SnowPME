@@ -577,13 +577,23 @@ namespace Sce::Pss::Core::Io {
 			std::string fsDirName = Path::UpDirectory(fsRealPath.string());
 			std::string fsFname = fsRealPath.filename().string();
 
-			// scan the directory the file is supposed to be in;
-			for (const std::filesystem::directory_entry entry : std::filesystem::directory_iterator(fsDirName)) {
-				std::string gotFname = entry.path().filename().string();
+			if (std::filesystem::exists(fsDirName)) {
 
-				// match anything that == same as first file but all uppercase;
-				if (StringUtil::ToUpper(gotFname) == StringUtil::ToUpper(fsFname)) {
-					fsRealPath = std::filesystem::path(Path::Combine(fsDirName, gotFname));
+				std::error_code err;
+
+				// scan the directory the file is supposed to be in;
+				for (const std::filesystem::directory_entry entry : std::filesystem::directory_iterator(fsDirName, err)) {
+					std::string gotFname = entry.path().filename().string();
+
+					// match anything that == same as first file but all uppercase;
+					if (StringUtil::ToUpper(gotFname) == StringUtil::ToUpper(fsFname)) {
+						fsRealPath = std::filesystem::path(Path::Combine(fsDirName, gotFname));
+						Logger::Debug("ExFAT Fixer-Upper: " + fsRealPath.string());
+					}
+				}
+
+				if (err) {
+					Logger::Error(err.message());
 				}
 			}
 		}
