@@ -14,14 +14,16 @@ using namespace Shared::String;
 namespace Shared::Debug
 {
 	std::mutex Logger::logMutex;
+	std::mutex Logger::colorMutex;
 
 	void inline Logger::changeColor(ConsoleColor color) {
-		std::scoped_lock<std::mutex> lock(Logger::logMutex);
+		std::scoped_lock<std::mutex> lock(Logger::colorMutex);
 #ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		WORD attribute = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
 
-		WORD FOREGROUND_YELLOW = FOREGROUND_RED | FOREGROUND_GREEN;
+		WORD FOREGROUND_GOLD = FOREGROUND_RED | FOREGROUND_GREEN;
+		WORD FOREGROUND_YELLOW = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 		WORD FOREGROUND_GRAY = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 		WORD FOREGROUND_WHITE = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 
@@ -63,22 +65,22 @@ namespace Shared::Debug
 #elif __linux__
 		std::string FOREGROUND_RESET = "\033[0m";
 		std::string FOREGROUND_RED = "\033[31m";
-		std::string FORGROUND_BLUE = "\033[34m";
-		std::string FORGROUND_GREEN = "\033[32m";
-		std::string FORGROUND_BLACK = "\033[30m";
-		std::string FORGROUND_LBLUE = "\033[36m"; 
-		std::string FORGROUND_RED = "\033[31m"; 
-		std::string FORGROUND_MAGENTA = "\033[35m"
-		std::string FORGROUND_ORANGE = "\033[33m";
-		std::string FORGROUND_GREY = "\033[37m"; 
-		std::string FORGROUND_LGREY = "\033[90m"; 
-		std::string FORGROUND_BLUE = "\033[94m"; 
-		std::string FORGROUND_GREEN = "\033[92m"; 
-		std::string FORGROUND_CYAN = "\033[96m"; 
-		std::string FORGROUND_LRED = "\033[91m"; 
-		std::string FORGROUND_PINK = "\033[95m"; 
-		std::string FORGROUND_YELLOW = "\033[93m";
-		std::string FORGROUND_WHITE = "\033[97m"; 
+		std::string FOREGROUND_BLUE = "\033[34m";
+		std::string FOREGROUND_GREEN = "\033[32m";
+		std::string FOREGROUND_BLACK = "\033[30m";
+		std::string FOREGROUND_LBLUE = "\033[36m"; 
+		std::string FOREGROUND_RED = "\033[31m"; 
+		std::string FOREGROUND_MAGENTA = "\033[35m"
+		std::string FOREGROUND_ORANGE = "\033[33m";
+		std::string FOREGROUND_GREY = "\033[37m"; 
+		std::string FOREGROUND_LGREY = "\033[90m"; 
+		std::string FOREGROUND_BLUE = "\033[94m"; 
+		std::string FOREGROUND_GREEN = "\033[92m"; 
+		std::string FOREGROUND_CYAN = "\033[96m"; 
+		std::string FOREGROUND_LRED = "\033[91m"; 
+		std::string FOREGROUND_PINK = "\033[95m"; 
+		std::string FOREGROUND_YELLOW = "\033[93m";
+		std::string FOREGROUND_WHITE = "\033[97m"; 
 
 		std::cerr << FOREGROUND_RESET;
 
@@ -119,7 +121,7 @@ namespace Shared::Debug
 #endif
 	}
 
-	void inline Logger::logMultiline(const std::string& channel, const std::string& msg) {
+	void inline Logger::logMultiline(const std::string& channel, const std::string& msg, std::ostream& stream) {
 		std::scoped_lock<std::mutex> lock(Logger::logMutex);
 		std::string fixedStr = StringUtil::Replace(msg, "\r", "");
 		std::vector<std::string> lines = StringUtil::Split(fixedStr, "\n");
@@ -128,45 +130,43 @@ namespace Shared::Debug
 			line = StringUtil::Replace(line, "\n", "");
 			if (line.empty()) continue;
 
-			std::cerr << "[" << channel << "] ";
-			if (channel == "GAME")
-				std::cout <<  line << std::endl;
-			else 
-				std::cerr << line << std::endl;
+			std::cout << "[" << channel << "] ";
+			stream <<  line << std::endl;
 
 		}
 
+		changeColor(ConsoleColor::Gray);
 	}
 
 	void Logger::Debug(const std::string& msg) {
 #ifdef _DEBUG
-		changeColor(ConsoleColor::Gray);
-		logMultiline("DEBUG", msg);
+		changeColor(ConsoleColor::Blue);
+		logMultiline("DEBUG", msg, std::cerr);
 #endif
 	}
 	void Logger::Todo(const std::string& msg) {
 		changeColor(ConsoleColor::LightRed);
-		logMultiline("TODO", msg);
+		logMultiline("TODO", msg, std::cerr);
 	}
 
 	void Logger::Warn(const std::string& msg) {
 		changeColor(ConsoleColor::Yellow);
-		logMultiline("WARN", msg);
+		logMultiline("WARN", msg, std::cerr);
 	}
 
 	void Logger::Error(const std::string& msg) {
 		changeColor(ConsoleColor::Red);
-		logMultiline("ERROR", msg);
+		logMultiline("ERROR", msg, std::cerr);
 	}
 
 	void Logger::Info(const std::string& msg) {
-		changeColor(ConsoleColor::Blue);
-		logMultiline("INFO", msg);
+		changeColor(ConsoleColor::LightGreen);
+		logMultiline("INFO", msg, std::cerr);
 	}
 
 	void Logger::Game(const std::string& msg) {
-		changeColor(ConsoleColor::Green);
-		logMultiline("GAME", msg);
+		changeColor(ConsoleColor::White);
+		logMultiline("GAME", msg, std::cout);
 	}
 
 }
