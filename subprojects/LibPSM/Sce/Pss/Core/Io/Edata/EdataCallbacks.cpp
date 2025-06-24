@@ -76,7 +76,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	void EdataCallbacks::EdataClose(int handle) {
 		if (Handles::IsValid(handle)) {
 			EdataStream* str = Handles::Get<EdataStream>(handle);
-			delete str;
+			str->Close();
 			Handles::Delete(handle);
 		}
 	}
