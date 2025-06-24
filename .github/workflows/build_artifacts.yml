@@ -61,7 +61,7 @@ jobs:
         with:
             version: 2.00.00
       - name: Add MSBuild to Path
-        run: $Env:Path += ";"+$Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319"
+        run: echo $Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319" >> $GITHUB_PATH
       - name: MSBuild PsmTestSuite
         run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Upload Test Binaries
