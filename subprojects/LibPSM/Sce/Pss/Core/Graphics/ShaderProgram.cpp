@@ -10,7 +10,6 @@
 #include <LibShared.hpp>
 #include <glad/glad.h>
 #include <string.h>
-#include <cassert>
 
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;

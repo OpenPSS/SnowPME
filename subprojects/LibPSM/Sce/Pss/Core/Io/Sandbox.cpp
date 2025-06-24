@@ -7,7 +7,6 @@
 
 #include <filesystem>
 #include <sys/stat.h>
-
 #include <mono/mono.h>
 
 #include <LibShared.hpp>
@@ -153,7 +152,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		assert(true);
+		ASSERT(true);
 		return this->filesystems.front();
 	}
 

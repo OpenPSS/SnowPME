@@ -2,7 +2,6 @@
 #define LIB_PSS_ERRORABLE_H 1
 #include <vector>
 #include <string>
-#include <cassert>
 
 #include <LibShared.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
@@ -50,7 +49,7 @@
 		do { \
 			Sce::Pss::Core::ExceptionInfo::AddMessage(std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n")); \
 			this->SetError(PSM_ERROR_NOT_IMPLEMENTED); \
-			assert(true); \
+			ASSERT(true); \
 			return; \
 		} while (0)
 

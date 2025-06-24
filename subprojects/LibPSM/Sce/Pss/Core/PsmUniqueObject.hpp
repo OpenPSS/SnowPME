@@ -2,7 +2,6 @@
 #define LIB_PSS_PSM_UNIQUE_OBJECT_H 1
 #include <memory>
 #include <atomic>
-#include <cassert>
 #include <LibShared.hpp>
 using namespace Shared::Debug;
 
@@ -20,7 +19,7 @@ namespace Sce::Pss::Core {
 
 		static std::shared_ptr<T> MakeUniqueObject(std::shared_ptr<T> ptr) {
 			// fail if a uniqueobject already exists
-			assert(!PsmUniqueObject<T>::UniqueObjectExists());
+			ASSERT(!PsmUniqueObject<T>::UniqueObjectExists());
 			
 			// set unique object to shared_ptr of this 
 			PsmUniqueObject<T>::uObjPtr = std::reinterpret_pointer_cast<T>(ptr);
@@ -28,7 +27,7 @@ namespace Sce::Pss::Core {
 		}
 
 		static std::shared_ptr<T> UniqueObject() {
-			assert(PsmUniqueObject<T>::UniqueObjectExists());
+			ASSERT(PsmUniqueObject<T>::UniqueObjectExists());
 			return PsmUniqueObject<T>::uObjPtr;
 		}
 

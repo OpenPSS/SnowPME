@@ -65,6 +65,7 @@ namespace SnowPME::Runtime {
 				switch (evt.type) {
 					case SDL_QUIT:
 						app->RunPssTerminate();
+						exit(0);
 						break;
 					case SDL_WINDOWEVENT:
 						Logger::Debug("evt // SDL_WINDOWEVENT");

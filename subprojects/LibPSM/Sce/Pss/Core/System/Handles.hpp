@@ -1,10 +1,10 @@
 #ifndef LIB_PSS_HANDLES_H
 #define LIB_PSS_HANDLES_H 1
 #include <cstddef>
-#include <cassert>
 #include <stdint.h>
 #include <unordered_map>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
+#include <LibShared.hpp>
 
 namespace Sce::Pss::Core::System {
 	class Handles : public PsmMutexObject<Handles> {
@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::System {
 		template<typename T> static int Create(T* address) {
 			LOCK_GUARD_STATIC();
 			int handle = ++lastHandle;
-			assert(!Handles::IsValid(handle));
+			ASSERT(!Handles::IsValid(handle));
 			handles.emplace(handle, reinterpret_cast<uintptr_t>(address));
 			return handle;
 		}

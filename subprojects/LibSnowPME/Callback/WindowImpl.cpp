@@ -1,6 +1,5 @@
 #include <Callback/WindowImpl.hpp>
 #include <LibShared.hpp>
-#include <cassert>
 
 using namespace Shared::Debug;
 using namespace SnowPME::Graphics;
@@ -8,11 +7,10 @@ using namespace SnowPME::Graphics;
 namespace SnowPME::Callback {
 
 	void WindowImpl::PollEvents() {
-		Logger::Todo(__FUNCTION__);
+		//TODO: Should probably replace with a 'capture' system
 	}
 
 	bool WindowImpl::WasClosed() {
-		Logger::Todo(__FUNCTION__);
 		return false;
 	}
 
@@ -21,7 +19,6 @@ namespace SnowPME::Callback {
 	}
 
 	bool WindowImpl::WasMinimized() {
-		Logger::Todo(__FUNCTION__);
 		return false;
 	}
 

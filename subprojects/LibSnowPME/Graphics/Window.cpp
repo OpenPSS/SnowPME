@@ -5,7 +5,6 @@
 #include <thread>
 #include <string>
 #include <LibPSM.hpp>
-#include <cassert>
 
 using namespace Shared::Debug;
 
@@ -16,8 +15,7 @@ namespace SnowPME::Graphics {
 	}
 
 	Window::Window(int height, int width, const std::string& title) {
-		int sdlInitRes = SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
-		assert(sdlInitRes == 0);
+		ASSERT(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0);
 
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -27,7 +25,7 @@ namespace SnowPME::Graphics {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
-		assert(this->sdlWindow != nullptr);
+		ASSERT(this->sdlWindow != nullptr);
 
 		int displayIndex = SDL_GetWindowDisplayIndex(this->sdlWindow);
 		SDL_DisplayMode mode;
@@ -49,10 +47,8 @@ namespace SnowPME::Graphics {
 		Logger::Debug("Initalizing OpenGL");
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
-		assert(this->glCtx != nullptr);
-
-		int gladGles2LoaderRes = gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress);
-		assert(gladGles2LoaderRes != 1);
+		ASSERT(this->glCtx != nullptr);
+		ASSERT(gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress));
 
 		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
 		SDL_GL_SetSwapInterval(1);

@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
+    <ClInclude Include="Debug\Assert.hpp" />
     <ClInclude Include="Debug\ConsoleColor.hpp" />
     <ClInclude Include="Debug\Logger.hpp" />
     <ClInclude Include="LibShared.hpp" />
