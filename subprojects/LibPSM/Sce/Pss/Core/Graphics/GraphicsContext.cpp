@@ -5,20 +5,16 @@
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 #include <Sce/Pss/Core/Graphics/ColorMask.hpp>
-
-#include <Sce/Pss/Core/Event/PsmEventQueue.hpp>
-#include <Sce/Pss/Core/Event/PsmEvent.hpp>
-#include <Sce/Pss/Core/Event/PsmEventType.hpp>
+#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
 #include <math.h>
 
-using namespace Sce::Pss::Core;
+using namespace Sce::Pss::Core::Callback;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::System;
-using namespace Sce::Pss::Core::Event;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
@@ -258,10 +254,10 @@ namespace Sce::Pss::Core::Graphics {
 		
 		// end the current frame ..
 		this->EndFrame();
+
 		// swap buffers ..
 		glFlush();
-
-		PsmEventQueue::IncomingEventQueue.Push(new PsmEvent(PsmEventType::SwapBuffers));
+		WindowCallbacks::SwapBuffers();
 
 		// begin a new frame
 		this->BeginFrame();
@@ -727,6 +723,7 @@ namespace Sce::Pss::Core::Graphics {
 			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
 
 			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
+
 
 #ifdef _DEBUG
 			glEnable(GL_DEBUG_OUTPUT);

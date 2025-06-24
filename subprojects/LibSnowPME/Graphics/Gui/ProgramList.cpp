@@ -26,7 +26,8 @@ namespace SnowPME::Graphics::Gui {
 
 	void ProgramList::parsePsmFolder(std::string psmFolderPath) {
 		if(std::filesystem::exists(psmFolderPath)) {
-			for (const std::filesystem::directory_entry& dirEntry : std::filesystem::directory_iterator(psmFolderPath)) {
+			std::error_code err;
+			for (const std::filesystem::directory_entry& dirEntry : std::filesystem::directory_iterator(psmFolderPath, err)) {
 				if (dirEntry.is_directory()) {
 					std::string fname = dirEntry.path().filename().string();
 					std::string programPath = dirEntry.path().string();

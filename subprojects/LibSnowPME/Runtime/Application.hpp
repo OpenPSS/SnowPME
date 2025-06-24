@@ -9,15 +9,18 @@ namespace SnowPME::Runtime
 {
 	class Application {
 	private:
+		static std::shared_ptr<Application> runningApplication;
 		std::string appMainDirectory;
 		std::shared_ptr<Graphics::Window> appWindow = nullptr;
-		static std::shared_ptr<Application> runningApplication;
+		std::thread appThread;
 
 		static int initCallbacks(std::shared_ptr<Graphics::Window> window);
 
 	public:
 		Application(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
 		void RunPssMain();
+		static bool IsRunning();
+		static void CheckEvent();
 		static void LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
 	};
 }

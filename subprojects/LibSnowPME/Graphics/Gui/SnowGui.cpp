@@ -20,7 +20,7 @@ namespace SnowPME::Graphics::Gui {
 		ImGui_ImplOpenGL2_Init();
 	}
 
-	void SnowGui::updateGui() {
+	void SnowGui::UpdateGui() {
 
 		SDL_Event event;
 		
@@ -39,7 +39,7 @@ namespace SnowPME::Graphics::Gui {
 
 	}
 
-	void SnowGui::renderGui() {
+	void SnowGui::RenderGui() {
 		uint32_t frameStart = this->window->GetTime();
 		this->NewFrame();
 		ImGuiWindow::ProcessWindows();
@@ -57,18 +57,15 @@ namespace SnowPME::Graphics::Gui {
 	void SnowGui::EndFrame() {
 		ImGui::Render();
 
-		glClearColor(1, 1, 1, 1);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 		window->SwapBuffers();
 	}
 
-	void SnowGui::RunMainLoop() {
-		while (!this->done) {
-			this->updateGui();
-			this->renderGui();
-		}
+	bool SnowGui::Done() {
+		return this->done;
 	}
 
 	SnowGui::SnowGui(std::shared_ptr<Window> guiWindow) {

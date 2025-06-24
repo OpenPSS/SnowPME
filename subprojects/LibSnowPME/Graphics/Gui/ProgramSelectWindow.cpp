@@ -11,6 +11,8 @@
 using namespace SnowPME::Runtime;
 
 namespace SnowPME::Graphics::Gui {
+	ProgramList ProgramSelectWindow::Programs;
+
 	void ProgramSelectWindow::createMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Install")) {
@@ -51,11 +53,8 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void ProgramSelectWindow::updateWindow() {
-		if (this->Programs.HasSelectedProgram()) {
-			ProgramEntry entry = this->Programs.SelectedProgram();
+		if (Programs.HasSelectedProgram()) {
 			this->Close();
-
-			Application::LoadApplication(entry.programPath, Window::GetMainWindow());
 		}
 
 	}

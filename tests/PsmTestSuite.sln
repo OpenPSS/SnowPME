@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteOpen", "WebsiteOpen\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTest", "IoTest\IoTest.csproj", "{54058206-F34F-4C8E-AEDA-2D7B91184615}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaitTest", "WaitTest\WaitTest.csproj", "{A123E733-09C0-4750-A544-93FF7266F88D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,10 +23,6 @@ Global
 		{54058206-F34F-4C8E-AEDA-2D7B91184615}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54058206-F34F-4C8E-AEDA-2D7B91184615}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54058206-F34F-4C8E-AEDA-2D7B91184615}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92D2E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92D2E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92D2E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92D2E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98815CCB-152E-401B-AD63-1FE29C407AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98815CCB-152E-401B-AD63-1FE29C407AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98815CCB-152E-401B-AD63-1FE29C407AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,8 +35,16 @@ Global
 		{FF8796DF-8795-48D1-8AD3-DF6046D48E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF8796DF-8795-48D1-8AD3-DF6046D48E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF8796DF-8795-48D1-8AD3-DF6046D48E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D2E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D2E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D2E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D2E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A123E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A123E733-09C0-4750-A544-93FF7266F88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A123E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A123E733-09C0-4750-A544-93FF7266F88D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ..\BgmTest\BgmTest.csproj
+		StartupItem = BgmTest\BgmTest.csproj
 	EndGlobalSection
 EndGlobal

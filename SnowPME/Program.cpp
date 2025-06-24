@@ -6,15 +6,44 @@
 using namespace Shared;
 using namespace Shared::Debug;
 using namespace Shared::String;
+
 using namespace SnowPME::Runtime;
+using namespace SnowPME::Graphics;
+using namespace SnowPME::Graphics::Gui;
 
 namespace SnowPME {
 
-	void Program::startMonoApplication(const std::string& gamePath) {
-		// run program
-		Application::LoadApplication(gamePath, Graphics::Window::GetMainWindow());
+
+	void Program::progThreadFunc() {
+		std::shared_ptr<Window> window = Window::GetMainWindow();
+		if (window == nullptr) return;
+
+		if (!window->IsOpenGLInitalized()) {
+			window->InitOpenGL();
+		}
+
+		Logger::Debug("Running mono program ...");
+		if (ProgramSelectWindow::Programs.HasSelectedProgram()) {
+			Application::LoadApplication(this->programPath, window);
+		}
 	}
 
+	void Program::guiThreadFunc() {
+		std::shared_ptr<Window> window = Window::GetMainWindow();
+		if (window == nullptr) return;
+
+		if (!window->IsOpenGLInitalized()) {
+			window->InitOpenGL();
+		}
+
+		Logger::Debug("Running GUI render loop.");
+		while (!gui->Done()) {
+			gui->RenderGui();
+		}
+		
+		this->programPath = ProgramSelectWindow::Programs.SelectedProgram().programPath;
+		this->progThreadFunc();
+	}
 
 	Program::Program(int argc, const char* const* argv) {
 		std::string runningFrom = ""; // Path::UpDirectory(std::string(argv[0])); (doesnt work on windows ...)
@@ -39,23 +68,37 @@ namespace SnowPME {
 
 		auto gamePath = opts["path"].as_optional<std::string>();
 		if(gamePath.has_value()) {
-			startMonoApplication(gamePath.value());
+			this->programPath = gamePath.value();
+			this->guiThread = std::thread(&Program::progThreadFunc, this);
 		} else {
 			bool showGui = true;
+
 			if(opts.count("gui")) {
 				showGui = opts["gui"].as<bool>();
 			}
-			if(showGui) {
+
+			if (showGui) {
 				Logger::Debug("Setting up Gui.");
-				Graphics::Gui::SnowGui gui(Graphics::Window::GetMainWindow());
+				this->gui = std::make_unique<SnowGui>(Window::GetMainWindow());
 
 				Logger::Debug("Initalizing main window.");
-				Graphics::Gui::ProgramSelectWindow* mainWindow = new Graphics::Gui::ProgramSelectWindow();
+				ProgramSelectWindow* mainWindow = new ProgramSelectWindow();
 				mainWindow->Register();
-				
-				Logger::Debug("Running GUI main loop.");
-				gui.RunMainLoop();
+
+				this->guiThread = std::thread(&Program::guiThreadFunc, this);
+
+				while (this->guiThread.joinable()) {
+
+					if (this->gui->Done()) {
+						this->gui->UpdateGui();
+					}
+
+					if (Application::IsRunning()) {
+						Application::CheckEvent();
+					}
+				}
 			}
+
 		}
 	}
 

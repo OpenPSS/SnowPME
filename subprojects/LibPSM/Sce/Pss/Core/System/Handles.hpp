@@ -17,6 +17,7 @@ namespace Sce::Pss::Core::System {
 			return Handles::IsValid(static_cast<int>(handle));
 		}
 		static bool IsValid(int handle) {
+			if (handle == Handles::NoHandle) return false;
 			return handles.contains(handle);
 		}
 		template<typename T> static int Create(T* address) {

@@ -5,6 +5,7 @@
 #include <thread>
 #include <string>
 #include <LibPSM.hpp>
+#include <cassert>
 
 using namespace Shared::Debug;
 
@@ -15,10 +16,7 @@ namespace SnowPME::Graphics {
 	}
 
 	Window::Window(int height, int width, const std::string& title) {
-		if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
-			Logger::Error("Failed to initalize SDL2.");
-			throw std::runtime_error("Failed to initalize SDL2.");
-		};
+		assert(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER));
 
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -28,26 +26,30 @@ namespace SnowPME::Graphics {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
-		
-		if (this->sdlWindow == NULL) {
-			Logger::Error("Failed to create SDL window. "+std::string(SDL_GetError()));
-			throw std::runtime_error("Failed to create SDL window. " + std::string(SDL_GetError()));
-		}
+		assert(this->sdlWindow != nullptr);
 
 		int displayIndex = SDL_GetWindowDisplayIndex(this->sdlWindow);
 		SDL_DisplayMode mode;
+		
 		if (SDL_GetDisplayMode(displayIndex, 0, &mode) != 0) {
-			SDL_Log("Could not get display mode! SDL_Error: %s\n", SDL_GetError());
+			Logger::Warn("Could not get display mode! SDL_Error: "+ std::string(SDL_GetError()));
 			mode.refresh_rate = 60;
 		}
+
 		this->refreshRate = mode.refresh_rate;
+
+	}
+
+	bool Window::IsOpenGLInitalized() {
+		return this->glInitalized;
+	}
+
+	void Window::InitOpenGL() {
+		Logger::Debug("Initalizing OpenGL");
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
 
-		if (!gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress)) {
-			Logger::Error("Failed to initalize GL.");
-			throw std::runtime_error("Failed to initalize GL.");
-		}
+		assert(gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress));
 
 		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
 		SDL_GL_SetSwapInterval(1);
@@ -55,6 +57,7 @@ namespace SnowPME::Graphics {
 		onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
+		this->glInitalized = true;
 	}
 
 	SDL_Window* Window::GetSdlWindow() {
@@ -72,18 +75,10 @@ namespace SnowPME::Graphics {
 		glViewport(0, 0, windowWidth, windowHeight);
 	}
 
-	void Window::PollEvents() {
-		SDL_Event event;
-		SDL_PollEvent(&event);
-
-	}
 	uint32_t Window::GetTime() {
 		return SDL_GetTicks();
 	}
 
-	bool Window::IsMinimized() {
-		return false; //glfwGetWindowAttrib(window, GLFW_ICONIFIED);
-	}
 
 	void Window::SwapBuffers() {
 		SDL_GL_SwapWindow(this->sdlWindow);
@@ -97,14 +92,6 @@ namespace SnowPME::Graphics {
         }
 	}
 	
-	bool Window::ShouldClose() {
-		return false; //glfwWindowShouldClose(this->sdlWindow);
-	}
-
-	void Window::MakeCurrent() {
-		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
-	}
-
 	bool Window::ShowMessageBox(const std::string& message, const std::string& caption) {
 		SDL_MessageBoxButtonData buttonData[2];
 		memset(buttonData, 0, sizeof(SDL_MessageBoxButtonData) * 2);

@@ -1,4 +1,5 @@
 #include <Graphics/Gui/InstallGameFolderWindow.hpp>
+#include <Graphics/Gui/ProgramSelectWindow.hpp>
 #include <LibShared.hpp>
 #include <filesystem>
 #include <vector>
@@ -46,6 +47,8 @@ namespace SnowPME::Graphics::Gui {
 			}
 
 			this->progress.Increment();
+
+			ProgramSelectWindow::Programs.Refresh();
 		}		
 	}
 }

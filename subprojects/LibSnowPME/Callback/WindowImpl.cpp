@@ -1,5 +1,8 @@
 #include <Callback/WindowImpl.hpp>
+#include <LibShared.hpp>
+#include <cassert>
 
+using namespace Shared::Debug;
 using namespace SnowPME::Graphics;
 
 namespace SnowPME::Callback {
@@ -12,12 +15,13 @@ namespace SnowPME::Callback {
 
 	void WindowImpl::PollEvents() {
 		WindowImpl::Impl::ErrorOnNotInit();
-		WindowImpl::mainWindow->PollEvents();
+		Logger::Todo(__FUNCTION__);
 	}
 
 	bool WindowImpl::WasClosed() {
 		WindowImpl::Impl::ErrorOnNotInit();
-		return WindowImpl::mainWindow->ShouldClose();
+		Logger::Todo(__FUNCTION__);
+		return false;
 	}
 
 	bool WindowImpl::YesNoMessageBox(const char* message, const char* caption) {
@@ -27,7 +31,8 @@ namespace SnowPME::Callback {
 
 	bool WindowImpl::WasMinimized() {
 		WindowImpl::Impl::ErrorOnNotInit();
-		return WindowImpl::mainWindow->IsMinimized();
+		Logger::Todo(__FUNCTION__);
+		return false;
 	}
 
 
