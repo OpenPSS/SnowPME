@@ -52,20 +52,11 @@ namespace SnowPME::Graphics::Gui {
 		}
 	}
 
-	ProgramList::ProgramList() {
-		this->Refresh();
-	}
 
 	void ProgramList::Refresh() {
 		this->programs.clear();
 		this->hasSelectedProgram = false;
 		this->parsePsmFolder(Config::PsmApps);
-	}
-
-
-	ProgramList::~ProgramList() {
-		this->programs.clear();
-		this->hasSelectedProgram = false;
 	}
 
 

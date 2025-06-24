@@ -59,6 +59,7 @@ namespace SnowPME::Graphics::Gui {
 
 	}
 
+
 	void ProgramSelectWindow::renderWindow() {
 		this->createMenuBar();
 
@@ -68,6 +69,10 @@ namespace SnowPME::Graphics::Gui {
 		ImGui::Begin(this->createWindowTitle("Game Selector").c_str() , &this->windowOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoFocusOnAppearing);
 		Programs.RenderProgramList();
 		ImGui::End();
+	}
+
+	ProgramSelectWindow::ProgramSelectWindow() {
+		Programs.Refresh();
 	}
 
 

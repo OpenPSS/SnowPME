@@ -13,6 +13,7 @@ namespace SnowPME::Graphics::Gui {
 		void updateWindow();
 	public:
 		static ProgramList Programs;
+		ProgramSelectWindow();
 	};
 
 }

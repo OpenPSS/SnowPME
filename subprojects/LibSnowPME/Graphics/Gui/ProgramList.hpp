@@ -4,6 +4,7 @@
 #include <LibShared.hpp>
 #include <vector>
 #include <string>
+#include <atomic>
 
 namespace SnowPME::Graphics::Gui {
 
@@ -16,9 +17,9 @@ namespace SnowPME::Graphics::Gui {
 
 	class ProgramList {
 	private:
-		ProgramEntry selectedProgram;
+		std::atomic<ProgramEntry> selectedProgram;
 		std::vector<ProgramEntry> programs;
-		bool hasSelectedProgram = false;
+		std::atomic<bool> hasSelectedProgram = false;
 
 		void addMenuItem(std::string menuName, std::string programPath);
 		void parsePsmFolder(std::string psmFolderPath);
@@ -27,8 +28,6 @@ namespace SnowPME::Graphics::Gui {
 		void RenderProgramList();
 		ProgramEntry SelectedProgram();
 		bool HasSelectedProgram();
-		ProgramList();
-		~ProgramList();
 	};
 
 };
