@@ -5,6 +5,11 @@
 #include <vector>
 #include <mutex>
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN 1
+#include <windows.h>
+#endif
+
 using namespace Shared::String;
 namespace Shared::Debug
 {
@@ -15,6 +20,13 @@ namespace Shared::Debug
 #ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		WORD attribute = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
+
+		WORD FOREGROUND_YELLOW = FOREGROUND_RED | FOREGROUND_GREEN;
+		WORD FOREGROUND_GRAY = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+		WORD FOREGROUND_WHITE = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+
+		WORD FOREGROUND_LGREEN =  FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+		WORD FOREGROUND_LRED = FOREGROUND_RED | FOREGROUND_INTENSITY;
 
 		// Set text color
 		switch (color) {
@@ -28,13 +40,22 @@ namespace Shared::Debug
 			attribute = FOREGROUND_BLUE;
 			break;
 		case ConsoleColor::Yellow:
-			attribute = FOREGROUND_RED | FOREGROUND_GREEN;
+			attribute = FOREGROUND_YELLOW;
 			break;
 		case ConsoleColor::Gray:
-			attribute = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+			attribute = FOREGROUND_GRAY;
 			break;
 		case ConsoleColor::White:
-			attribute = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+			attribute = FOREGROUND_WHITE;
+			break;
+		case ConsoleColor::LightGreen:
+			attribute = FOREGROUND_LGREEN;
+			break;
+		case ConsoleColor::LightRed:
+			attribute = FOREGROUND_LRED;
+			break;
+		default:
+			attribute = FOREGROUND_GRAY;
 			break;
 		};
 
@@ -42,8 +63,22 @@ namespace Shared::Debug
 #elif __linux__
 		std::string FOREGROUND_RESET = "\033[0m";
 		std::string FOREGROUND_RED = "\033[31m";
-		std::string FOREGROUND_GREEN = "\033[32m";
-		std::string FOREGROUND_BLUE = "\033[34m";
+		std::string FORGROUND_BLUE = "\033[34m";
+		std::string FORGROUND_GREEN = "\033[32m";
+		std::string FORGROUND_BLACK = "\033[30m";
+		std::string FORGROUND_LBLUE = "\033[36m"; 
+		std::string FORGROUND_RED = "\033[31m"; 
+		std::string FORGROUND_MAGENTA = "\033[35m"
+		std::string FORGROUND_ORANGE = "\033[33m";
+		std::string FORGROUND_GREY = "\033[37m"; 
+		std::string FORGROUND_LGREY = "\033[90m"; 
+		std::string FORGROUND_BLUE = "\033[94m"; 
+		std::string FORGROUND_GREEN = "\033[92m"; 
+		std::string FORGROUND_CYAN = "\033[96m"; 
+		std::string FORGROUND_LRED = "\033[91m"; 
+		std::string FORGROUND_PINK = "\033[95m"; 
+		std::string FORGROUND_YELLOW = "\033[93m";
+		std::string FORGROUND_WHITE = "\033[97m"; 
 
 		std::cerr << FOREGROUND_RESET;
 
@@ -59,13 +94,22 @@ namespace Shared::Debug
 			std::cerr << FOREGROUND_BLUE;
 			break;
 		case ConsoleColor::Yellow:
-			std::cerr << FOREGROUND_RED << FOREGROUND_GREEN;
+			std::cerr << FOREGROUND_YELLOW;
 			break;
 		case ConsoleColor::Gray:
-			std::cerr << FOREGROUND_RED << FOREGROUND_GREEN << FOREGROUND_BLUE;
+			std::cerr << FOREGROUND_GREY
 			break;
 		case ConsoleColor::White:
-			std::cerr << FOREGROUND_RED << FOREGROUND_GREEN << FOREGROUND_BLUE;
+			std::cerr << FOREGROUND_WHITE;
+			break;
+		case ConsoleColor::LightGreen:
+			std::cerr << FOREGROUND_LGREEN;
+			break;
+		case ConsoleColor::LightRed:
+			std::cerr << FOREGROUND_LRED;
+			break;
+		default:
+			std::cerr << FOREGROUND_GREY;
 			break;
 		};
 
@@ -101,7 +145,7 @@ namespace Shared::Debug
 #endif
 	}
 	void Logger::Todo(const std::string& msg) {
-		changeColor(ConsoleColor::Red);
+		changeColor(ConsoleColor::LightRed);
 		logMultiline("TODO", msg);
 	}
 
@@ -121,7 +165,7 @@ namespace Shared::Debug
 	}
 
 	void Logger::Game(const std::string& msg) {
-		changeColor(ConsoleColor::White);
+		changeColor(ConsoleColor::Green);
 		logMultiline("GAME", msg);
 	}
 
