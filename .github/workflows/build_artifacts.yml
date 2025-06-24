@@ -60,10 +60,8 @@ jobs:
         uses: OpenPSS/install-psm-sdk@v1
         with:
             version: 2.00.00
-      - name: Run Developer Command Prompt
-        uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
-        with:
-          arch: x86
+      - name: Add MsBuild to Path
+        run: set PATH=%PATH%;C:\Windows\Microsoft.NET\Framework\v4.0.30319
       - name: MsBuild PsmTestSuite
         run: msbuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Upload Test Binaries
