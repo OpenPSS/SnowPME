@@ -1,14 +1,16 @@
 project('SnowPME', 'cpp',
   version : '0.1',
-  default_options : ['warning_level=3', 'cpp_std=c++20'])
+  default_options : ['warning_level=3', 'cpp_std=c++20', 'default_library=static'])
 
 cpp = meson.get_compiler('cpp')
 
 include_libs = include_directories('SnowPME')
 
+# common #include directories
 GlobalInclude = subproject('GlobalInclude')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
 
+# other LibPSM
 LibPSM = subproject('LibPSM')
 LibCXML = subproject('LibCXML')
 LibShared = subproject('LibShared')
@@ -31,8 +33,9 @@ executable('SnowPME',
 		LibCXML_dep,
 		LibShared_dep,
 		LibSnowPME_dep,
-		LibPssMono_dep
-	]
+		LibPssMono_dep,
+	],
+	link_args: ['-static-libgcc', '-static-libstdc++']
 )
 
 subproject('SnowPMEBenchmark')

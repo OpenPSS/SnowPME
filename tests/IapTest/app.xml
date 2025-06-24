@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application project_name="*" version="1.00" default_locale="en-US">
+	<purchase>
+    <product_list>
+      <product label="SWD001" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Broken Sword" />
+          <localized_item locale="ja-JP" value="こわれたつるぎ" />
+        </name>
+      </product>
+      <product label="SWD002" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Brittle Sword" />
+          <localized_item locale="ja-JP" value="もろいつるぎ" />
+        </name>
+      </product>
+      <product label="SWD003" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Normal Sword" />
+          <localized_item locale="ja-JP" value="ふつうのつるぎ" />
+        </name>
+      </product>
+      <product label="SWD004" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Strong Sword" />
+          <localized_item locale="ja-JP" value="つよいつるぎ" />
+        </name>
+      </product>
+      <product label="SWD005" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Extreme Sword" />
+          <localized_item locale="ja-JP" value="きゅうきょくのつるぎ" />
+        </name>
+      </product>
+      <product label="SLD001" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Aluminum Shield" />
+          <localized_item locale="ja-JP" value="アルミのたて" />
+        </name>
+      </product>
+      <product label="SLD002" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Ceramic Shield" />
+          <localized_item locale="ja-JP" value="セラミックのたて" />
+        </name>
+      </product>
+      <product label="SLD003" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Titanium Shield" />
+          <localized_item locale="ja-JP" value="チタンのたて" />
+        </name>
+      </product>
+      <product label="SLD004" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Iridium Shield" />
+          <localized_item locale="ja-JP" value="イリジウムのたて" />
+        </name>
+      </product>
+      <product label="SLD005" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Diamond Shield" />
+          <localized_item locale="ja-JP" value="ダイヤモンドのたて" />
+        </name>
+      </product>
+      <product label="SUP001" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Charm" />
+          <localized_item locale="ja-JP" value="おまもり" />
+        </name>
+      </product>
+      <product label="SUP002" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Bell" />
+          <localized_item locale="ja-JP" value="ベル" />
+        </name>
+      </product>
+      <product label="SUP003" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Holy Water" />
+          <localized_item locale="ja-JP" value="せいすい" />
+        </name>
+      </product>
+      <product label="SUP004" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Book of Wisdom" />
+          <localized_item locale="ja-JP" value="ちえのほん" />
+        </name>
+      </product>
+      <product label="SUP005" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Love potion" />
+          <localized_item locale="ja-JP" value="ほれぐすり" />
+        </name>
+      </product>
+    </product_list>
+  </purchase>	
+	<runtime_config>
+		<memory managed_heap_size="32768" resource_heap_size="65536" />
+	</runtime_config>
+	<feature_list>
+		<feature value="GamePad" />
+		<feature value="Touch" />
+	</feature_list>
+</application>

@@ -1,7 +1,7 @@
-![logo](https://github.com/user-attachments/assets/e0f4cc30-6901-4ba4-aa4e-b8a494b60b71)
+![logo](https://raw.githubusercontent.com/OpenPSS/SnowPME/refs/heads/main/SnowPME/resources/logo.png)
 
 
-[![.github/workflows/build_artifacts.yml](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml/badge.svg?branch=main)](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml)
+[![Build Artifacts](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml/badge.svg?branch=main)](https://github.com/OpenPSS/SnowPME/actions/workflows/build_artifacts.yml)
 
 SnowPME is a emulator for [PlayStation Mobile](https://en.wikipedia.org/wiki/PlayStation_Mobile).
 

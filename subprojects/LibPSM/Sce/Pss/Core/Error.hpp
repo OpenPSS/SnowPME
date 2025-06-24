@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
-#include <format>
 #include <source_location>
 
 
@@ -88,7 +87,7 @@ enum PsmError : uint32_t {
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
 #endif
 
-inline std::string function_name(const std::source_location& location = std::source_location::current()) {
+inline std::string functionName(const std::source_location& location = std::source_location::current()) {
     const char* full = location.function_name();
     const char* end = full;
     while (*end && *end != '(') ++end;
@@ -99,7 +98,7 @@ inline std::string function_name(const std::source_location& location = std::sou
 
 #define UNIMPLEMENTED_MSG(msg) \
 	do { \
-		_UNIMPLEMENETED_MACRO_BODY(std::format("{} {} is not yet implemented.", function_name(), msg)); \
+		_UNIMPLEMENETED_MACRO_BODY(std::string(functionName()) + std::string(msg) + " is not yet implemented."); \
 	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")

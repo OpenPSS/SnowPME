@@ -1,3 +1,4 @@
+name: Build Artifacts
 on:
   push:
     branches:
@@ -7,21 +8,21 @@ jobs:
     name: Linux (GCC)
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext
+          packages: build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext libc++-dev libc-dev
           version: 1.0
-      - name: compile
+      - name: Meson Build
         run: |
             meson setup build
             cd build
             ninja
-      - name: upload binaries
+      - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
           name: SnowPME-Linux
@@ -30,20 +31,41 @@ jobs:
     name: Windows (Microsoft Visual C++)
     runs-on: windows-latest
     steps:
-      - name: checkout
+      - name: Checkout Repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: get submodules
+      - name: Get Submodules
         run: git submodule update --init --recursive
-      - name: run msvc developer command prompt
+      - name: Run Developer Command Prompt
         uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
         with:
           arch: x86
-      - name: compile
+      - name: MsBuild SnowPME.sln
         run: msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
-      - name: upload binaries
+      - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
           name: SnowPME-Windows
           path: build/SnowPME/bin/SnowPME.exe
+  build_psm_tests:
+    name: Test Suite (PSM SDK v2.00)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install PlayStation Mobile SDK
+        uses: OpenPSS/install-psm-sdk@v1
+        with:
+            version: 2.00.00
+      - name: Add MsBuild to Path
+        run: $Env:Path += ";C:\Windows\Microsoft.NET\Framework\v4.0.30319"
+      - name: MsBuild PsmTestSuite
+        run: msbuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
+      - name: Upload Test Binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: SnowPME-Tests
+          path: tests/build

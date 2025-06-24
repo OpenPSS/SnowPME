@@ -17,7 +17,6 @@
 #include <mono/mono.h>
 
 #include <csetjmp>
-#include <format>
 
 using namespace LibCXML;
 
@@ -52,7 +51,6 @@ namespace Sce::Pss::Core::Mono {
 	}
 
 	int InitializeMono::ScePsmInitalize(const char* assemblyPath, int resourceHeapSize) {
-		
 		std::string appExePath = std::string(assemblyPath, strlen(assemblyPath));
 		Logger::Info("C# Assembly Loading [ " + appExePath + " ]");
 
@@ -212,8 +210,8 @@ namespace Sce::Pss::Core::Mono {
 			Logger::Error("resource_heap_size + managed_heap_size > 96MB.");
 			return PSM_ERROR_OUT_OF_MEMORY;
 		}
-		Logger::Debug(std::format("cxml : managed_heap_size : {}", heapSizeLimit));
-		Logger::Debug(std::format("cxml : resource_heap_size : {}", resourceSizeLimit));
+		Logger::Debug("cxml : managed_heap_size : "+ std::to_string(heapSizeLimit));
+		Logger::Debug("cxml : resource_heap_size : "+ std::to_string(resourceSizeLimit));
 
 		mono_set_exit_callback(InitializeMono::exitCallback);
 		if(setjmp(exitHandler)) {
@@ -222,7 +220,7 @@ namespace Sce::Pss::Core::Mono {
 
 		int res = InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo->ResourceHeapSize);
 		if (res != PSM_ERROR_NO_ERROR) {
-			Logger::Error(std::format("Failed to call ScePsmInitalize // {}", res));
+			Logger::Error("Failed to call ScePsmInitalize // " + std::to_string(res));
 			return res;
 		}
 
@@ -251,7 +249,7 @@ namespace Sce::Pss::Core::Mono {
 	int InitializeMono::exitCallback(int code) {
 		// shouldn't this call InitializeMono::ScePsmTerminate() ?
 
-		Logger::Info(std::format("app.exe exited with status code: {}", code));
+		Logger::Info("app.exe exited with status code: " + std::to_string(code));
 
 		exitCode = code;
 		std::longjmp(exitHandler, true);

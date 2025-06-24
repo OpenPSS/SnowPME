@@ -1,6 +1,6 @@
 project('GLAD', 'c',
   version: '0.1',
-  default_options: ['warning_level=3', 'c_std=c99'])
+  default_options: ['warning_level=3', 'c_std=c99', 'default_library=static'])
 
 dirbase = meson.current_source_dir()
 include_libs = include_directories('.')

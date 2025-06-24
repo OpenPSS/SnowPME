@@ -27,7 +27,7 @@ msbuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
 before building on linux you begin you'll need to install dependancies; 
 
 ```
-apt install build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext
+apt install build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext libc++-dev libc-dev
 ```
 
 after that you should be able to just do:
