@@ -109,7 +109,7 @@ namespace Shared::Debug
 			line = StringUtil::Replace(line, "\n", "");
 			if (line.empty()) continue;
 
-			std::cout << "[" << channel << "] ";
+			std::cerr << "[" << channel << "] ";
 			stream <<  line << std::endl;
 
 		}
