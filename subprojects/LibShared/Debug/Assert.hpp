@@ -12,12 +12,15 @@
 
 #define DEBUG_ASSERT(expression) assert(expression);
 
-#ifdef _DEBUG
-#define ASSERT(expression) DEBUG_ASSERT(expression);
-#else
+#ifdef NDEBUG
 #define ASSERT(expression) RELEASE_ASSERT(expression);
+#else
+#define ASSERT(expression) DEBUG_ASSERT(expression);
 #endif
 
+#ifdef NDEBUG
 #undef assert
+#define assert RELEASE_ASSERT
+#endif
 
 #endif
