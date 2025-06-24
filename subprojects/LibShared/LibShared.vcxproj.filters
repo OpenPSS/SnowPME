@@ -53,5 +53,8 @@
     <ClInclude Include="Threading\ProgressTracker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Debug\ConsoleColor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
