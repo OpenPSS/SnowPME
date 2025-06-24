@@ -24,7 +24,7 @@ namespace Sce::Pss::Core {
 			if ( functionsList[i].functionSignature == nullptr) return PSM_ERROR_NO_ERROR;
 			if ( functionsList[i].functionPointer == nullptr ) return PSM_ERROR_COMMON_ARGUMENT;
 
-			Logger::Debug(std::format("{} -> {}", functionsList[i].functionSignature, reinterpret_cast<void*>(functionsList[i].functionPointer)));
+			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> " + std::to_string(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer)));
 			mono_add_internal_call(functionsList[i].functionSignature, reinterpret_cast<void*>(functionsList[i].functionPointer));
 		}
 	}

@@ -26,7 +26,7 @@ namespace Sce::Pss::Core::Io {
 		item.pathInSandbox = this->startFolderSandboxPath;
 		item.pathOnDisk = Sandbox::UniqueObject()->LocateRealPath(item.pathInSandbox, false);
 		item.relativePath = "";
-		item.iterator = new std::filesystem::directory_iterator(item.pathOnDisk);
+		item.iterator = std::filesystem::directory_iterator(item.pathOnDisk);
 
 		this->iterPos = 0;
 		this->folderStack.push_back(item);
@@ -41,10 +41,6 @@ namespace Sce::Pss::Core::Io {
 	void DirectoryIterator::Close() {
 		LOCK_GUARD();
 		if (!this->opened) return;
-
-		for (StackItem item : this->folderStack) {
-			delete item.iterator;
-		}
 		this->folderStack.clear();
 
 		this->opened = false;
@@ -91,7 +87,6 @@ namespace Sce::Pss::Core::Io {
 		int depth = this->folderStack.size() - 1;
 		StackItem item = this->folderStack.at(depth);
 
-		std::filesystem::directory_iterator iterator = *item.iterator;
 		
 		ScePssFileInformation_t psmPathInformation;
 
@@ -107,8 +102,7 @@ namespace Sce::Pss::Core::Io {
 			psmPathInformation = Sandbox::UniqueObject()->Stat(prevStackItem.pathInSandbox, Path::Combine(item.relativePath, ".."));
 		}
 		else {
-			if (iterator == std::filesystem::end(iterator)) {
-				delete item.iterator; // delete current iterator
+			if (item.iterator == std::filesystem::end(item.iterator)) {
 				this->folderStack.pop_back(); // Pop from the stack, and set current directory to the previous one.
 
 				if (depth > 0) {
@@ -119,7 +113,7 @@ namespace Sce::Pss::Core::Io {
 				}
 			}
 
-			std::string nextPath = iterator->path().string();
+			std::string nextPath = item.iterator->path().string();
 
 			std::string filename = Path::GetFilename(nextPath);
 			std::string sandboxAbsPath = Path::Combine(item.pathInSandbox, filename);
@@ -127,7 +121,7 @@ namespace Sce::Pss::Core::Io {
 
 			psmPathInformation = Sandbox::UniqueObject()->Stat(sandboxAbsPath, sandboxRelativePath);
 
-			iterator++;
+			item.iterator++;
 
 			if (Sandbox::UniqueObject()->IsDirectory(sandboxAbsPath) && this->recursive) {
 				// Push to the stack, and set current directory to the new one.
@@ -137,7 +131,7 @@ namespace Sce::Pss::Core::Io {
 				nitem.relativePath = sandboxRelativePath;
 				nitem.pathOnDisk = Sandbox::UniqueObject()->LocateRealPath(sandboxAbsPath, false);
 
-				nitem.iterator = new std::filesystem::directory_iterator(nitem.pathOnDisk);
+				nitem.iterator = std::filesystem::directory_iterator(nitem.pathOnDisk);
 				nitem.positionInFolder = 0;
 
 				this->folderStack.push_back(nitem);

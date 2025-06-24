@@ -53,6 +53,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 		EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
 		~EdataStream();
+
 		uint64_t Length();
 		uint32_t Read(void* buffer, uint32_t length);
 		uint32_t Write(void* buffer, uint32_t length);
