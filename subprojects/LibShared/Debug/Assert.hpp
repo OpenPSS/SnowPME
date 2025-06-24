@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <Debug/Logger.hpp>
 
-#define RELEASE_ASSERT(expression) if(!expression) { \
+#define RELEASE_ASSERT(expression) if(!(expression)) { \
 										Shared::Debug::Logger::Error("!!! ASSERT FAILED: " + std::string(#expression) + " in file: " + std::string(__FILE__) + " line: " + std::to_string((uint32_t)(__LINE__))); \
 										std::abort(); \
 									}
