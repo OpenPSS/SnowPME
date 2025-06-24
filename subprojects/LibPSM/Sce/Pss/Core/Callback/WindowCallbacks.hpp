@@ -4,7 +4,7 @@
 #include <string>
 
 namespace Sce::Pss::Core::Callback {
-	class WindowCallbacks : public CallbackBase{
+	class WindowCallbacks : public CallbackBase {
 	private:
 		static void (*swapBufferCallback)(void);
 		static double (*getTimeCallback)(void);

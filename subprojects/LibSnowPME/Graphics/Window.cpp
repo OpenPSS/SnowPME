@@ -48,8 +48,10 @@ namespace SnowPME::Graphics {
 		Logger::Debug("Initalizing OpenGL");
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
+		assert(this->glCtx != nullptr);
 
-		assert(gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress));
+		int gladGles2LoaderRes = gladLoadGLES2Loader((GLADloadproc)SDL_GL_GetProcAddress);
+		assert(gladGles2LoaderRes != 1);
 
 		SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx);
 		SDL_GL_SetSwapInterval(1);
