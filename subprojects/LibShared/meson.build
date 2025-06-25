@@ -1,6 +1,6 @@
 project('Shared', 'cpp',
   version: '0.1',
-  default_options: ['warning_level=0', 'cpp_std=c++20', 'default_library=static'])
+  default_options: ['warning_level=0', 'cpp_std=c++20'])
 
 
 cpp = meson.get_compiler('cpp')
@@ -16,7 +16,7 @@ libShared = static_library('Shared',
 	'Windowing/CallbackBase.cpp',
 	'Windowing/Event.cpp',
 	'Windowing/EventQueue.cpp',
-	'Windowing/WindowControl.cpp'
+	'Windowing/WindowControl.cpp',
 	include_directories: [ include_libs ],
 	install: true)
 	
