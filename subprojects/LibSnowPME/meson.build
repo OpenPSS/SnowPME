@@ -25,7 +25,6 @@ LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
 
 
 libSnowPME = static_library('SnowPME',
-	'Callback/WindowImpl.cpp',
 	'Graphics/Gui/ConfigurationWindow.cpp',
 	'Graphics/Gui/DemoWindow.cpp',
 	'Graphics/Gui/ImGuiWindow.cpp',
