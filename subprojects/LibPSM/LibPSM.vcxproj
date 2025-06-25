@@ -104,7 +104,7 @@
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\BgmPlayer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\BgmStatus.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Audio\Impl\AudioImpl.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\Sound.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundPlayer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />

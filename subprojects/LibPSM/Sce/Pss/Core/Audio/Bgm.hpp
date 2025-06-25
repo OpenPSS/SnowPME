@@ -2,20 +2,20 @@
 #define LIB_PSS_BGM_H 1
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
-#include <Sce/Pss/Core/Audio/Impl/Audio.hpp>
+#include <Sce/Pss/Core/Audio/Impl/AudioImpl.hpp>
 #include <string>
 #include <iostream>
+#include <memory>
 
 #include <mono/mono.h>
 #include <atomic>
 namespace Sce::Pss::Core::Audio {
 	class Bgm : public PsmObject<Bgm> {
-		uint8_t* audioData = nullptr;
-		uint32_t audioSz = 0;
+		std::vector<uint8_t> audioData;
 
 		bool isMp3();
 	public:
-		Impl::Audio* AudioImplObject = nullptr;
+		std::unique_ptr<Sce::Pss::Core::Audio::Impl::AudioImpl> AudioImplObject = nullptr;
 		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();

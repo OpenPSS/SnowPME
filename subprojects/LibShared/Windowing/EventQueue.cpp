@@ -36,7 +36,7 @@ namespace Shared::Windowing {
 		if (responseQueue.empty()) return nullptr;
 
 
-		for (std::shared_ptr<Event>& response : responseQueue) {
+		for (std::shared_ptr<Event> response : responseQueue) {
 			if (response->Uid() == request->Uid()) {
 				responseQueue.remove(response);
 				return response;
@@ -59,7 +59,7 @@ namespace Shared::Windowing {
 
 		do {
 			response = GetResponse(evtRequest);
-		} while (response != nullptr);
+		} while (response == nullptr);
 
 		return response;
 	}

@@ -48,6 +48,8 @@ namespace SnowPME::Runtime {
 	int Application::LoadApplication(const std::string& gameFolder) {
 		appMainDirectory = gameFolder;
 		Application::initCallbacks(Window::GetMainWindow());
+		isRunning = true;
+
 		return Application::RunPssMain();
 	}
 }

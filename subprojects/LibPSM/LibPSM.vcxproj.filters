@@ -788,7 +788,7 @@
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\Image.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp">
+    <ClInclude Include="Sce\Pss\Core\Audio\Impl\AudioImpl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp">
