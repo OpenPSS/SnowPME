@@ -38,6 +38,7 @@ libSnowPME = static_library('SnowPME',
 	'Graphics/Gui/SnowGui.cpp',
 	'Graphics/Window.cpp',
 	'Runtime/Application.cpp',
+	'Runtime/ApplicationEvent.cpp',
 	include_directories: [ include_libs ],
 	dependencies: [
 		LibPSM_dep,
