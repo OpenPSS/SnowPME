@@ -1,4 +1,6 @@
 #include <Windowing/WindowControl.hpp>
+#include <cstdlib>
+#include <cstring>
 
 namespace Shared::Windowing {
 	using namespace Shared::Debug;
