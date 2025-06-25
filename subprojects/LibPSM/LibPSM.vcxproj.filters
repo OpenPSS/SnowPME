@@ -153,9 +153,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Callback\WindowCallbacks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -243,9 +240,6 @@
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Environment\CommonDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -253,12 +247,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Event\PsmEventQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Event\PsmEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Audio\Impl\AudioImpl.cpp">
@@ -632,9 +620,6 @@
     <ClInclude Include="Sce\Pss\Core\Timing\DeltaTime.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Callback\WindowCallbacks.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\ProgramUniform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -782,9 +767,6 @@
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -804,15 +786,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\Image.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEventQueue.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEvent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEventType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Audio\Impl\Audio.hpp">

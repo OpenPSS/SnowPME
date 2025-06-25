@@ -13,20 +13,30 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Debug\Logger.cpp" />
+    <ClCompile Include="Windowing\CallbackBase.cpp" />
+    <ClCompile Include="Windowing\Event.cpp" />
+    <ClCompile Include="Windowing\WindowControl.cpp" />
     <ClCompile Include="String\Path.cpp" />
     <ClCompile Include="String\StringUtil.cpp" />
     <ClCompile Include="Threading\ProgressTracker.cpp" />
+    <ClCompile Include="Windowing\EventQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.hpp" />
     <ClInclude Include="Debug\Assert.hpp" />
     <ClInclude Include="Debug\ConsoleColor.hpp" />
     <ClInclude Include="Debug\Logger.hpp" />
+    <ClInclude Include="Windowing\CallbackBase.hpp" />
+    <ClInclude Include="Windowing\Capture.hpp" />
+    <ClInclude Include="Windowing\EventType.hpp" />
+    <ClInclude Include="Windowing\Event.hpp" />
+    <ClInclude Include="Windowing\WindowControl.hpp" />
     <ClInclude Include="LibShared.hpp" />
     <ClInclude Include="RuntimeImplementation.hpp" />
     <ClInclude Include="String\Path.hpp" />
     <ClInclude Include="String\StringUtil.hpp" />
     <ClInclude Include="Threading\ProgressTracker.hpp" />
+    <ClInclude Include="Windowing\EventQueue.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

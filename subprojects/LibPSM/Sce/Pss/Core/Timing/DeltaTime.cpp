@@ -1,29 +1,29 @@
-#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Timing/DeltaTime.hpp>
+#include <LibShared.hpp>
 
+using namespace Shared::Windowing;
 
 namespace Sce::Pss::Core::Timing {
-	using namespace Sce::Pss::Core::Callback;
 
 	DeltaTime::DeltaTime(int minDelta) {
 		this->minDelta = minDelta;
-		this->lastTime = WindowCallbacks::GetTime();
+		this->lastTime = WindowControl::GetTime();
 	}
 	DeltaTime::~DeltaTime() {
 
 	}
-	double DeltaTime::CalculateDelta() {
+	uint64_t DeltaTime::CalculateDelta() {
 		// get the current time .
-		double currentTime = WindowCallbacks::GetTime();
+		uint64_t currentTime = WindowControl::GetTime();
 		// subtract current time from the last time.
-		double deltaTime = currentTime - this->lastTime;
+		uint64_t deltaTime = currentTime - this->lastTime;
 		// set the last time to the current time
 		this->lastTime = currentTime;
 
 		return deltaTime;
 	}
 
-	double DeltaTime::MinDelta() {
+	uint64_t DeltaTime::MinDelta() {
 		return (1 / this->minDelta);
 	}
 

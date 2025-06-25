@@ -15,7 +15,6 @@
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 
 #include <LibShared.hpp>
@@ -25,8 +24,8 @@
 
 using namespace Shared;
 using namespace Shared::Debug;
+using namespace Shared::Windowing;
 
-using namespace Sce::Pss::Core::Callback;
 using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Metadata;
 using namespace Sce::Pss::Core::Environment;
@@ -50,7 +49,7 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to purchase the following item?", productIndicies, true), "Purchase Item?")) {
+		if (WindowControl::YesNoDialog(getDialogConfirmString("Do you want to purchase the following item?", productIndicies, true), "Purchase Item?")) {
 
 			InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(productIndicies.front());
 			if (prod == nullptr) res = CommonDialogResult::Error;
@@ -81,7 +80,7 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Do you want to consume the following item?", productIndicies, false), "Consume Item?")) {
+		if (WindowControl::YesNoDialog(getDialogConfirmString("Do you want to consume the following item?", productIndicies, false), "Consume Item?")) {
 			// get first argument.
 			InAppPurchaseProduct* prod = this->inventory.GetItemByIndex(productIndicies.front());
 			if (prod == nullptr) res = CommonDialogResult::Error;
@@ -111,7 +110,7 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt user for confirmation w yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Get product information for the following items?", productIndicies, false), "Get Product information?")) {
+		if (WindowControl::YesNoDialog(getDialogConfirmString("Get product information for the following items?", productIndicies, false), "Get Product information?")) {
 			this->commandsRun |= InAppPurchaseCommand::GetProductInfo;
 			res = CommonDialogResult::OK;
 		}
@@ -131,7 +130,7 @@ namespace Sce::Pss::Core::Services {
 		CommonDialogResult res;
 
 		// prompt user for confirmation w yes or no dialog box,
-		if (WindowCallbacks::YesNoDialog(getDialogConfirmString("Get Ticket Information?", productIndicies, false), "Get ticket information?")) {
+		if (WindowControl::YesNoDialog(getDialogConfirmString("Get Ticket Information?", productIndicies, false), "Get ticket information?")) {
 			if (this->inventory.SyncInventoryToDisk() == PSM_ERROR_NO_ERROR) {
 				this->commandsRun |= InAppPurchaseCommand::GetTicketInfo;
 				res = CommonDialogResult::OK;

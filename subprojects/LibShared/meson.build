@@ -13,6 +13,10 @@ libShared = static_library('Shared',
 	'Debug/Logger.cpp',
 	'String/Path.cpp',
 	'String/StringUtil.cpp',
+	'Windowing/CallbackBase.cpp',
+	'Windowing/Event.cpp',
+	'Windowing/EventQueue.cpp',
+	'Windowing/WindowControl.cpp'
 	include_directories: [ include_libs ],
 	install: true)
 	

@@ -2,6 +2,8 @@
 #define SNOW_PME_H 1
 
 #include <Runtime/Application.hpp>
+#include <Runtime/ApplicationEvent.hpp>
+
 #include <Graphics/Window.hpp>
 #include <Graphics/Gui/SnowGui.hpp>
 

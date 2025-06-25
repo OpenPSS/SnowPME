@@ -1,12 +1,15 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/Environment/Shell.hpp>
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
-#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 #include <LibShared.hpp>
 
+using namespace Shared;
+using namespace Shared::Windowing;
+using namespace Shared::Debug;
+
+using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Environment {
-	using namespace Sce::Pss::Core::System;
 
 	Shell::Shell(ActionType type, char* p0, char* p1, char* p2, char* p3) {
 
@@ -35,7 +38,7 @@ namespace Sce::Pss::Core::Environment {
 		}
 	}
 	int Shell::executeBrowserWindows(const std::string& url) {
-		if (Callback::WindowCallbacks::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
+		if (WindowControl::YesNoDialog("Do you want to open \"" + url + "\"?", "Website Open Request"))
 			return PlatformSpecific::OpenWebsite(url);
 
 		return PSM_ERROR_NO_ERROR;
@@ -48,19 +51,19 @@ namespace Sce::Pss::Core::Environment {
 
 	int Shell::ExecuteBrowser() {
 		std::string url = this->paramater0.substr(0, 2048);
-		switch (Shared::Config::TargetImplementation) {
-		case Shared::RuntimeImplementation::Windows:
+		switch (Config::TargetImplementation) {
+		case RuntimeImplementation::Windows:
 			return this->executeBrowserWindows(url);
-		case Shared::RuntimeImplementation::PSVita:
-		case Shared::RuntimeImplementation::Android:
+		case RuntimeImplementation::PSVita:
+		case RuntimeImplementation::Android:
 			return this->executeBrowserVita(url);
 		default:
-			UNIMPLEMENTED();
+			UNIMPLEMENTED_MSG("ExecuteBrowser targeting RuntimeImplementation: "+std::to_string(static_cast<uint32_t>(Config::TargetImplementation)));
 		}
 
 	}
 	int Shell::ExecuteNative(Action* data){
-		Shared::Debug::Logger::Debug(__FUNCTION__);
+		Logger::Debug(__FUNCTION__);
 		if (data == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -83,10 +86,8 @@ namespace Sce::Pss::Core::Environment {
 			p3 = mono_string_to_utf8(data->parameter3);
 
 		
-		Shell* shell = new Shell(data->type, p0, p1, p2, p3);
+		std::unique_ptr<Shell> shell = std::make_unique<Shell>(data->type, p0, p1, p2, p3);
 		int ret = shell->Execute();
-		delete shell;
-
 
 		// Free paramaters
 		if(p0 != nullptr)

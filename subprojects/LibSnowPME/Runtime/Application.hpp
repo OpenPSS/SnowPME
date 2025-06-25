@@ -4,25 +4,24 @@
 #include <Graphics/Window.hpp>
 #include <thread>
 #include <memory>
+#include <atomic>
+#include <LibShared.hpp>
 
 namespace SnowPME::Runtime
 {
 	class Application {
 	private:
-		static std::shared_ptr<Application> runningApplication;
-		std::string appMainDirectory;
-		std::shared_ptr<Graphics::Window> appWindow = nullptr;
-		std::thread appThread;
+		static std::string appMainDirectory;
+		static std::thread appThread;
+		static std::atomic<bool> isRunning;
 
-		static int initCallbacks(std::shared_ptr<Graphics::Window> window);
+		static void initCallbacks(std::shared_ptr<SnowPME::Graphics::Window> window);
 
 	public:
-		Application(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
-		int RunPssMain();
-		void RunPssTerminate();
+		static int RunPssMain();
+		static void RunPssTerminate();
 		static bool IsRunning();
-		static void CheckEvent();
-		static int LoadApplication(const std::string& gameFolder, std::shared_ptr<Graphics::Window> window);
+		static int LoadApplication(const std::string& gameFolder);
 	};
 }
 

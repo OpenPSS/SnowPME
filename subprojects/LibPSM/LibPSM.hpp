@@ -38,11 +38,6 @@
 
 // things calling app has to setup :
 #include <Sce/Pss/Core/Mono/InitializeMono.hpp>
-#include <Sce/Pss/Core/Event/PsmEventQueue.hpp>
-#include <Sce/Pss/Core/Event/PsmEventType.hpp>
-#include <Sce/Pss/Core/Event/PsmEvent.hpp>
-
-#include <Sce/Pss/Core/Callback/WindowCallbacks.hpp>
 
 
 #endif

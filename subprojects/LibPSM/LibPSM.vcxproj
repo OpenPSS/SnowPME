@@ -16,7 +16,6 @@
     <ClCompile Include="Sce\Pss\Core\Audio\Impl\AudioImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Audio\Sound.cpp" />
     <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Callback\CallbackBase.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesCbc.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
@@ -39,8 +38,6 @@
     <ClCompile Include="Sce\Pss\Core\Environment\SystemParameters.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\TextInputDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Error.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Event\PsmEvent.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Event\PsmEventQueue.cpp" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\PsmFrameBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\PsmGraphicsContext.cpp" />
@@ -88,7 +85,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Callback\WindowCallbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\System\Handles.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
@@ -112,7 +108,6 @@
     <ClInclude Include="Sce\Pss\Core\Audio\Sound.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundPlayer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Callback\CallbackBase.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesCbc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
@@ -155,9 +150,6 @@
     <ClInclude Include="Sce\Pss\Core\Environment\TextInputDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\TextInputMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Error.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEvent.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEventQueue.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Event\PsmEventType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncFactor.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\BlendFuncMode.hpp" />
@@ -276,7 +268,6 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\ShaderProgram.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\Texture.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\VertexBuffer.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Callback\WindowCallbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\System\Handles.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\DirectoryIterator.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\FileSystem.hpp" />

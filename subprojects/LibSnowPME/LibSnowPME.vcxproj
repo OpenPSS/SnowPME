@@ -11,8 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Callback\Impl.hpp" />
-    <ClInclude Include="Callback\WindowImpl.hpp" />
+    <ClInclude Include="Runtime\ApplicationEvent.hpp" />
     <ClInclude Include="Graphics\Gui\ConfigurationWindow.hpp" />
     <ClInclude Include="Graphics\Gui\DemoWindow.hpp" />
     <ClInclude Include="Graphics\Gui\ProgramList.hpp" />
@@ -29,8 +28,7 @@
     <ClInclude Include="Runtime\Application.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Callback\Impl.cpp" />
-    <ClCompile Include="Callback\WindowImpl.cpp" />
+    <ClCompile Include="Runtime\ApplicationEvent.cpp" />
     <ClCompile Include="Graphics\Gui\ConfigurationWindow.cpp" />
     <ClCompile Include="Graphics\Gui\DemoWindow.cpp" />
     <ClCompile Include="Graphics\Gui\ImGuiWindow.cpp" />

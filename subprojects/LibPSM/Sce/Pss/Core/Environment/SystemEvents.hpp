@@ -1,17 +1,15 @@
 #ifndef LIB_PSS_SYSTEMEVENTS_H
 #define LIB_PSS_SYSTEMEVENTS_H 1
 #include <Sce/Pss/Core/Environment/InternalData.hpp>
-
+#include <LibShared.hpp>
 
 namespace Sce::Pss::Core::Environment {
 
 	class SystemEvents {
 	private:
-		static bool lastQuit;
-		static bool lastMinimized;
-		static bool lastRestored;
+		static Shared::Windowing::Capture state;
 	public:
-		static int CheckEvents(Sce::Pss::Core::Environment::InternalData* internalData);
+		static int CheckEvents(InternalData* internalData);
 		static int CheckEventsNative(InternalData *data);
 	};
 }

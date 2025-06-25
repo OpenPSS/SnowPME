@@ -26,7 +26,7 @@ namespace SnowPME {
 
 		Logger::Debug("Running mono program ...");
 		if (ProgramSelectWindow::Programs.HasSelectedProgram()) {
-			this->exitCode = Application::LoadApplication(this->programPath, window);
+			this->exitCode = Application::LoadApplication(this->programPath);
 		}
 
 		this->threadRunning = false;
@@ -104,7 +104,7 @@ namespace SnowPME {
 			}
 
 			if (Application::IsRunning()) {
-				Application::CheckEvent();
+				ApplicationEvent::ProcessEvent();
 			}
 		}
 

@@ -24,10 +24,7 @@
     <ClInclude Include="Graphics\Window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Callback\WindowImpl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Callback\Impl.hpp">
+    <ClInclude Include="Runtime\ApplicationEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Gui\SnowGui.hpp">
@@ -71,10 +68,7 @@
     <ClCompile Include="Graphics\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Callback\WindowImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Callback\Impl.cpp">
+    <ClCompile Include="Runtime\ApplicationEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Gui\SnowGui.cpp">
