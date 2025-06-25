@@ -34,14 +34,10 @@ namespace Sce::Pss::Core::System {
 
 		template<typename T> static T* Get(int handle) {
 			LOCK_GUARD_STATIC();
-			// find entry with this handle ...;
-			auto it = handles.find(handle);
-			
-			// if its the last entry then return nullptr;
-			if(it == handles.end()) return nullptr;
-
-			// cast it to the desired type and return.
-			return reinterpret_cast<T*>(handles[handle]);
+			if (Handles::IsValid(handle)) {
+				return reinterpret_cast<T*>(handles[handle]);
+			}
+			return nullptr;
 		}
 		static void Delete(int handle) {
 			LOCK_GUARD_STATIC();

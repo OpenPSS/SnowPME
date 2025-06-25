@@ -123,7 +123,7 @@ namespace Sce::Pss::Core::Services {
 			err = IoCall::PsmFileGetSize(handle, &size);
 			if (err == PSM_ERROR_NO_ERROR) {
 				std::shared_ptr<HeapAllocator> heapAllocator = HeapAllocator::UniqueObject();
-				uint8_t* data = heapAllocator->sce_psm_malloc(size);
+				uint8_t* data = reinterpret_cast<uint8_t*>(heapAllocator->sce_psm_malloc(size));
 				if (data != nullptr) {
 					err = IoCall::PsmFileRead(handle, data, size, &_);
 					if (err == PSM_ERROR_NO_ERROR) {

@@ -41,7 +41,7 @@ namespace Sce::Pss::Core::Graphics {
 
 				// allocate memory for this file
 				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
-				fileData = allocator->sce_psm_malloc(totalFileSize);
+				fileData = reinterpret_cast<uint8_t*>(allocator->sce_psm_malloc(totalFileSize));
 
 				if (fileData != nullptr) {
 					fileSize = 0;

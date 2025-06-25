@@ -7,25 +7,15 @@
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Memory {
+	std::unordered_map<std::string, std::shared_ptr<HeapAllocator>> HeapAllocator::heapList;
 
 	HeapAllocator::HeapAllocator(size_t heapSize, const std::string& heapName) {
 		this->HeapName = heapName;
 		this->TotalHeapSize = heapSize;
 
-		this->heapAllocations = std::map<uintptr_t, std::vector<uint8_t>*>();
 	}
-	HeapAllocator::~HeapAllocator()
-	{
-		LOCK_GUARD();
 
-		for (std::map<uintptr_t, std::vector<uint8_t>*>::iterator i = heapAllocations.begin(); i != heapAllocations.end(); ++i)
-		{
-			std::vector<uint8_t>* vec = i->second;
-			delete vec;
-		}
-
-	}
-	uint8_t* HeapAllocator::sce_psm_malloc(int sz) {
+	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
 
 		/*if (this->UsedSpace + sz > this->TotalHeapSize) {
@@ -34,7 +24,7 @@ namespace Sce::Pss::Core::Memory {
 		}*/
 
 		// allocate a vector of uint8_t, of the given size
-		std::vector<uint8_t>* vec = new std::vector<uint8_t>(sz);
+		std::shared_ptr<std::vector<uint8_t>> vec = std::make_shared<std::vector<uint8_t>>(sz);
 
 		// increase the total size by the size of the vector
 		this->UsedSpace += vec->size();
@@ -45,22 +35,19 @@ namespace Sce::Pss::Core::Memory {
 		// make a note of this allocation in the heapAllocations map.
 		this->heapAllocations[(uintptr_t)buffer] = vec;
 
-		return buffer;
+		return reinterpret_cast<void*>(buffer);
 	}
-	void HeapAllocator::sce_psm_free(uint8_t* buffer) {
+	void HeapAllocator::sce_psm_free(void* buffer) {
 		LOCK_GUARD();
 
 		// lookup the vector from this map
-		std::vector<uint8_t>* vec = this->heapAllocations[(uintptr_t)buffer];
+		std::shared_ptr<std::vector<uint8_t>> vec = this->heapAllocations[reinterpret_cast<uintptr_t>(buffer)];
 
 		// minus the total space from the vector, from the total used space
 		this->UsedSpace -= vec->size();
 
-		// free the vector
-		delete vec;
-
 		// remove the buffer from the map
-		this->heapAllocations.erase((uintptr_t)buffer);
+		this->heapAllocations.erase(reinterpret_cast<uintptr_t>(buffer));
 
 	}
 

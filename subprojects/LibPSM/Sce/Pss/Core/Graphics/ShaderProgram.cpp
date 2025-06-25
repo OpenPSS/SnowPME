@@ -194,7 +194,7 @@ namespace Sce::Pss::Core::Graphics {
 				IoCall::PsmFileGetSize(file, &cgxLen);
 
 				std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::UniqueObject();
-				uint8_t* cgxData = resourceHeap->sce_psm_malloc(cgxLen);
+				uint8_t* cgxData = reinterpret_cast<uint8_t*>(resourceHeap->sce_psm_malloc(cgxLen));
 
 				if (cgxData != nullptr) {
 					uint32_t totalRead;
@@ -226,7 +226,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	uint8_t* ShaderProgram::CopyFile(uint8_t* shaderSrc, int shaderLen) {
 		std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::UniqueObject();
-		uint8_t* cgxData = resourceHeap->sce_psm_malloc(shaderLen);
+		uint8_t* cgxData = reinterpret_cast<uint8_t*>(resourceHeap->sce_psm_malloc(shaderLen));
 		if (cgxData != nullptr) {
 			memcpy(cgxData, shaderSrc, shaderLen);
 			return cgxData;

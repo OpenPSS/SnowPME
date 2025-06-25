@@ -126,7 +126,8 @@ namespace Sce::Pss::Core::Audio {
 		int fSz = mono_array_length(fileImage);
 
 		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
-		uint8_t* musicData = allocator->sce_psm_malloc(fSz);
+		uint8_t* musicData = reinterpret_cast<uint8_t*>(allocator->sce_psm_malloc(fSz));
+
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);
 			Bgm* bgm = new Bgm(musicData, fSz);
