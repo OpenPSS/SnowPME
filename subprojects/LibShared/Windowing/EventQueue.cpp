@@ -1,6 +1,7 @@
 #include <Windowing/EventQueue.hpp>
 #include <Windowing/Event.hpp>
 
+#include <cstring>
 #include <cstdint>
 #include <queue>
 #include <memory>

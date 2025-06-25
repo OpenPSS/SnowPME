@@ -1,4 +1,7 @@
 #include <Windowing/Event.hpp>
+#include <cstring>
+#include <cstdint>
+#include <cstdlib>
 
 namespace Shared::Windowing {
 	EventType Event::TypeID() {
