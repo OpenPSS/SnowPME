@@ -89,5 +89,8 @@
     <ClInclude Include="Windowing\EventType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Windowing\RunFunction.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -30,6 +30,7 @@
     <ClInclude Include="Windowing\Capture.hpp" />
     <ClInclude Include="Windowing\EventType.hpp" />
     <ClInclude Include="Windowing\Event.hpp" />
+    <ClInclude Include="Windowing\RunFunction.hpp" />
     <ClInclude Include="Windowing\WindowControl.hpp" />
     <ClInclude Include="LibShared.hpp" />
     <ClInclude Include="RuntimeImplementation.hpp" />

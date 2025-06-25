@@ -36,6 +36,8 @@ namespace Sce::Pss::Core::Mono {
 	MonoDomain* InitializeMono::psmDomain = nullptr;
 
 	int InitializeMono::ScePsmTerminate() {
+		mono_exit(0);
+
 		psmDomain = nullptr;
 		InitalizeCsharp::Terminate();
 

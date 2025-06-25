@@ -15,8 +15,6 @@ namespace SnowPME::Runtime
 		static std::thread appThread;
 		static std::atomic<bool> isRunning;
 
-		static void initCallbacks(std::shared_ptr<SnowPME::Graphics::Window> window);
-
 	public:
 		static int RunPssMain();
 		static void RunPssTerminate();

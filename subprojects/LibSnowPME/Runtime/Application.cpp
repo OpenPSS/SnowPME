@@ -22,16 +22,6 @@ namespace SnowPME::Runtime {
 	std::thread Application::appThread;
 	std::atomic<bool> Application::isRunning = false;
 
-	void Application::initCallbacks(std::shared_ptr<Window> window) {
-
-		WindowControl::Init(
-			ApplicationEvent::SwapBuffers,
-			ApplicationEvent::GetTime,
-			ApplicationEvent::YesNoMessageBox);
-
-	}
-	
-
 	int Application::RunPssMain() {
 		return InitializeMono::ScePssMain(appMainDirectory.c_str());
 	}
@@ -47,7 +37,6 @@ namespace SnowPME::Runtime {
 
 	int Application::LoadApplication(const std::string& gameFolder) {
 		appMainDirectory = gameFolder;
-		Application::initCallbacks(Window::GetMainWindow());
 		isRunning = true;
 
 		return Application::RunPssMain();

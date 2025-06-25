@@ -16,7 +16,7 @@ namespace Sce::Pss::Core::Environment {
 
 		internalData->QuitRequired = state.Closed;
 		internalData->Minimized = state.Minmized;
-		internalData->Restored = state.Visible;
+		internalData->Restored = state.Restored;
 
 		return PSM_ERROR_NO_ERROR;
 	}

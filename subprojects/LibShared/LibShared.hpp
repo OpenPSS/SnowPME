@@ -10,6 +10,7 @@
 #include <Windowing/EventType.hpp>
 #include <Windowing/EventQueue.hpp>
 #include <Windowing/Capture.hpp>
+#include <Windowing/RunFunction.hpp>
 #include <Windowing/WindowControl.hpp>
 #include <Threading/ProgressTracker.hpp>
 #include <Config.hpp>

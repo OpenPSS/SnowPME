@@ -7,7 +7,7 @@
 #include <queue>
 #include <memory>
 #include <mutex>
-#include <list>
+#include <unordered_map>
 
 namespace Shared::Windowing {
 	class EventQueue  {
@@ -15,8 +15,8 @@ namespace Shared::Windowing {
 		static std::mutex lockRequestQueue;
 		static std::mutex lockResponseQueue;
 
-		static std::list<std::shared_ptr<Event>> requestQueue;
-		static std::list<std::shared_ptr<Event>> responseQueue;
+		static std::queue<std::shared_ptr<Event>> requestQueue;
+		static std::unordered_map<uint32_t, std::shared_ptr<Event>> responseQueue;
 	public:
 		static std::shared_ptr<Event> GetNextRequest();
 		static void PushRequest(std::shared_ptr<Event> request);

@@ -70,6 +70,8 @@ namespace SnowPME {
 
 		Logger::Debug("Opening Window.");
 		Window::Create(Config::ScreenHeight(0), Config::ScreenWidth(0), "- SnowPME - ");
+		ApplicationEvent::Init();
+
 
 		auto gamePath = opts["path"].as_optional<std::string>();
 		if (gamePath.has_value()) {
