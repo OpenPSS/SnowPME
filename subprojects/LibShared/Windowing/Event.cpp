@@ -9,6 +9,10 @@ namespace Shared::Windowing {
 		return this->uid;
 	}
 
+	Event::Event(EventType typeId) {
+		this->typeId = typeId;
+	}
+
 	Event::Event(EventType typeId, std::vector<std::byte>& args) {
 		this->typeId = typeId;
 		ArgsReplace(args);
