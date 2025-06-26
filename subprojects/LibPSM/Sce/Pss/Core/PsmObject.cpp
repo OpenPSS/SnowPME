@@ -3,7 +3,4 @@
 
 
 namespace Sce::Pss::Core {
-	void PsmObject::WereNotFreeUntilWeAllAre() {
-
-	}
 }
