@@ -75,7 +75,7 @@ namespace Sce::Pss::Core::Mono {
 			return mono_domain_assembly_open(domain, exePath);
 
 		// check if any invalid characters in the string
-		for (int i = 0; i < strlen(exePath); ++i) if (exePath[i] < ' ' || exePath[i] > '~') return nullptr;
+		for (size_t i = 0; i < strlen(exePath); ++i) if (exePath[i] < ' ' || exePath[i] > '~') return nullptr;
 
 		return mono_domain_assembly_open(domain, exePath);
 	}

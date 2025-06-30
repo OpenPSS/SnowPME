@@ -32,6 +32,11 @@ namespace Sce::Pss::Core {
 			return obj;
 		}
 
+		static std::shared_ptr<T> Create(std::shared_ptr<T> obj) {
+			obj->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
+			return obj;
+		}
+
 		static void Delete(std::shared_ptr<T> obj) {
 			if (Sce::Pss::Core::System::Handles<T>::IsValid(obj->Handle())) {
 				Sce::Pss::Core::System::Handles<T>::Delete(obj->Handle());

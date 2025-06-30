@@ -6,9 +6,7 @@
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
-	class Texture : public GraphicsObject {
-	protected:
-		std::unique_ptr<PixelBuffer> pbuf = nullptr;
+	class Texture : public PixelBuffer {
 	public:
 		virtual GLenum GLTextureType() = 0;
 		std::string Filename;

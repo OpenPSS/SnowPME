@@ -2,12 +2,15 @@
 #include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
+#include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <LibShared.hpp>
 
+#include <memory>
 #include <vector>
 #include <filesystem>
 
 using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Io::Edata;
 
 namespace Sce::Pss::Core::Io {
@@ -35,36 +38,34 @@ namespace Sce::Pss::Core::Io {
 
 		if (std::filesystem::exists(psseListFile) || std::filesystem::exists(edataListFile)) { // check either psse.list or edata.list exist
 			// read psse.list
-			EdataStream* str = nullptr;
+			std::unique_ptr<EdataStream> str = nullptr;
 
 			// if no psmDrm object cannot decrypt psse.list file, and must use edata.list.
 			if(psmDrm != nullptr)
-				str = new EdataStream(psseListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
+				str = std::make_unique<EdataStream>(psseListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
 
 			if (str == nullptr || str->GetError() == PSM_ERROR_NOT_FOUND) { // if that not exist, open edata.list
-				if(str != nullptr)
-					delete str;
-
-				Logger::Debug("reading edata.list.");
-				str = new EdataStream(edataListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
-				RETURN_ERRORABLE(str);
+				Logger::Debug("fallback on reading edata.list.");
+				str = std::make_unique<EdataStream>(edataListFile.string(), std::ios::binary | std::ios::in, psmDrm, nullptr);
+				RETURN_ERRORABLE_SMARTPTR(str);
 			}
-			// allocate memory for the full psse.list file 
-			char* psseLstData = new char[str->Length()];
+
+			// allocate memory for the full psse.list file
+			std::shared_ptr<HeapAllocator> heapAlloc = HeapAllocator::UniqueObject();
+			char* psseLstData = reinterpret_cast<char*>(heapAlloc->sce_psm_malloc(static_cast<int>(str->Length())));
 
 			// read the psse.list into the memory just allocated.
-			int totalRead = str->Read(psseLstData, str->Length());
+			int totalRead = str->Read(psseLstData, static_cast<uint32_t>(str->Length()));
 
 			if (totalRead == str->Length()) { // if the total bytes read is the same as the filesize
-				std::string edataList = std::string(psseLstData, str->Length()); // create a std::string from the psse.list data
+				std::string edataList = std::string(psseLstData, static_cast<size_t>(str->Length())); // create a std::string from the psse.list data
 				this->edataList = new EdataList(edataList); // create a psse.list object.
 			}
 			else {
 				res = PSM_ERROR_COMMON_IO;
 			}
 
-			delete[] psseLstData;
-			delete str;
+			heapAlloc->sce_psm_free(psseLstData);
 		}
 		return res;
 	}

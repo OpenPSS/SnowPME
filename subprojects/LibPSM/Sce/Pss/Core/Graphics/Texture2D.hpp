@@ -7,7 +7,7 @@
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
-	class Texture2D : private Texture, public PsmObject<Texture2D> {
+	class Texture2D : private Texture {
 	private:
 		Sce::Pss::Core::Imaging::Impl::Image image;
 	public:

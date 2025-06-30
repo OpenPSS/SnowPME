@@ -277,7 +277,7 @@ namespace Sce::Pss::Core::Graphics {
 			// this->mscreen_something |= 1;
 		}
 
-		double deltaTime = minFrameDelta->CalculateDelta();
+		double deltaTime = static_cast<double>(minFrameDelta->CalculateDelta());
 		if (deltaTime < minFrameDelta->MinDelta()) {
 			double maxSleepTime = (1 / 16);
 			deltaTime -= maxSleepTime;

@@ -2,10 +2,10 @@
 #include <glad/glad.h>
 namespace Sce::Pss::Core::Graphics {
 
-	ShaderProgram* OpenGL::activeShaderProgram = nullptr;
-	VertexBuffer* OpenGL::activeVertexBuffer = nullptr;
-	FrameBuffer* OpenGL::activeFrameBuffer = nullptr;
-	Texture* OpenGL::activeTexture = nullptr;
+	ShaderProgram* OpenGL::activeShaderProgram;
+	VertexBuffer* OpenGL::activeVertexBuffer;
+	FrameBuffer* OpenGL::activeFrameBuffer;
+	Texture* OpenGL::activeTexture;
 
 	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
 		OpenGL::activeShaderProgram = shaderProgram;

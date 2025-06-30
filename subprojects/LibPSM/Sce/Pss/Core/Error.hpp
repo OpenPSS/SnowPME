@@ -102,7 +102,7 @@ inline std::string functionName(const std::source_location& location = std::sour
 	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
-#define LOG_FUNCTION() Shared::Debug::Logger::Debug(functionName());
+#define LOG_FUNCTION() Shared::Debug::Logger::Debug("Executing function : '"+std::string(__FUNCTION__)+"'.");
 
 
 namespace Sce::Pss::Core {

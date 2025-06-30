@@ -12,6 +12,7 @@
 #include <LibShared.hpp>
 
 #include <mono/mono.h>
+#include <memory>
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::System;
@@ -35,17 +36,24 @@ namespace Sce::Pss::Core::Graphics {
 
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
-				std::shared_ptr<Texture2D> tex = Texture2D::Create(filename, mipmap, format);
-				RETURN_ERRORABLE_PSMOBJECT(tex, Texture2D);
-				*result = tex->Handle();
+
+				std::shared_ptr<PixelBuffer> tex2d = PixelBuffer::Create(reinterpret_pointer_cast<PixelBuffer>(std::make_shared<Texture2D>(filename, mipmap, format)));				
+				RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
+
+				*result = tex2d->Handle();
 				return PSM_ERROR_NO_ERROR;
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				std::shared_ptr<TextureCube> tex = TextureCube::Create(filename, mipmap, format);
-				RETURN_ERRORABLE_PSMOBJECT(tex, TextureCube);
-				*result = tex->Handle();
+				std::shared_ptr<PixelBuffer> texCube = PixelBuffer::Create(reinterpret_pointer_cast<PixelBuffer>(std::make_shared<TextureCube>(filename, mipmap, format)));
+
+				RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
+				*result = texCube->Handle();
+
 				return PSM_ERROR_NO_ERROR;
+			}
+			else {
+				UNIMPLEMENTED();
 			}
 			
 
