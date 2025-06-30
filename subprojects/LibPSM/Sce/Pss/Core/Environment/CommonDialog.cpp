@@ -24,6 +24,22 @@ using namespace Sce::Pss::Core::Threading;
 
 namespace Sce::Pss::Core::Environment {
 	
+	std::shared_ptr<CommonDialog> CommonDialog::getCommonDialogFromHandle(CommonDialogType type, int handle) {
+		switch (type) {
+		case CommonDialogType::InAppPurchaseDialog:
+			return  reinterpret_pointer_cast<CommonDialog>(Handles<InAppPurchaseDialog>::Get(handle));
+			break;
+		case CommonDialogType::CameraImportDialog:
+		case CommonDialogType::PhotoImportDialog:
+		case CommonDialogType::TextInput:
+		case CommonDialogType::Reserved0:
+			return reinterpret_pointer_cast<CommonDialog>(Handles<CommonDialog>::Get(handle));
+			break;
+		}
+
+		return nullptr;
+	}
+
 	int CommonDialog::CheckOpen() {
 		if (!Thread::IsMainThread()) return PSM_ERROR_COMMON_INVALID_OPERATION;
 		if (this->state.load() == CommonDialogState::Running) return PSM_ERROR_COMMON_INVALID_OPERATION;
@@ -50,7 +66,6 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int CommonDialog::Abort() {
-		LOCK_GUARD();
 
 		// seriouisly ..?
 		if (Config::TargetImplementation == RuntimeImplementation::Windows) return PSM_ERROR_NOT_SUPPORTED;
@@ -61,13 +76,12 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::Result(CommonDialogResult* result, CommonDialogResults* results) {
-		LOCK_GUARD();
 
 		Logger::Warn("Using default CommonDialog::Result implemenation.");
 		Logger::Warn("This is most likely incorrect, this common dialog might not be fully implemented?");
 
 		if (result != nullptr) {
-			*result = this->result.load();
+			*result = this->result;
 		}
 
 
@@ -75,16 +89,15 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int CommonDialog::State(CommonDialogState* state) {
-		LOCK_GUARD();
 
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		*state = this->state.load();
+		*state = this->state;
 		return PSM_ERROR_NO_ERROR;
 	}
 
 	int CommonDialog::NewNative(CommonDialogType type, int* handle) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
+
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
 		if (handle == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL; 
 
@@ -104,11 +117,12 @@ namespace Sce::Pss::Core::Environment {
 				}
 
 				// create in app purchase common dialog,
-				std::shared_ptr<InAppPurchaseDialog> commonIapDialog = InAppPurchaseDialog::MakeUniqueObject(std::make_shared<InAppPurchaseDialog>());
-				RETURN_ERRORABLE_SMARTPTR(commonIapDialog);
+				
+				std::shared_ptr<InAppPurchaseDialog> cDialog = InAppPurchaseDialog::MakeUniqueObject(std::shared_ptr<InAppPurchaseDialog>(InAppPurchaseDialog::Create()));
+				RETURN_ERRORABLE_SMARTPTR(cDialog);
 
 				// set handle to the new in app purchase
-				*handle = std::static_pointer_cast<CommonDialog>(commonIapDialog)->Handle();
+				*handle = cDialog->Handle();
 
 				return PSM_ERROR_NO_ERROR;
 			}
@@ -122,11 +136,20 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::ReleaseNative(CommonDialogType type, int handle) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
-		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-		CommonDialog* dlg = Handles::Get<CommonDialog>(handle);
-		Handles::Delete(handle);
+		std::shared_ptr<CommonDialog> cDialog = getCommonDialogFromHandle(type, handle);
+		if (cDialog == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+		switch (type) {
+		case CommonDialogType::InAppPurchaseDialog:
+			InAppPurchaseDialog::Delete(reinterpret_pointer_cast<InAppPurchaseDialog>(cDialog));
+			break;
+		case CommonDialogType::PhotoImportDialog:
+		case CommonDialogType::CameraImportDialog:
+		case CommonDialogType::TextInput:
+			UNIMPLEMENTED_MSG("CommonDialogType / PhotoImport, CamerImport or TextInput");
+			break;
+		}
 
 		switch (type) {
 			case CommonDialogType::InAppPurchaseDialog:
@@ -134,20 +157,15 @@ namespace Sce::Pss::Core::Environment {
 				return PSM_ERROR_NO_ERROR;
 		}
 
-		delete dlg;
-
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::OpenNative(CommonDialogType type, int handle, CommonDialogArguments* cmdArg) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT; 
 		if (cmdArg == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		CommonDialog* cDialog = Handles::Get<CommonDialog>(handle);
-
+		std::shared_ptr<CommonDialog> cDialog = getCommonDialogFromHandle(type, handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		// I think this is actually a bit inaccurate for some InAppPurchaseDialog commands ...
@@ -166,12 +184,8 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::AbortNative(CommonDialogType type, int handle) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
-		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-
-		// get common dialog object, and check if it is valid
-		CommonDialog* cDialog = Handles::Get<CommonDialog>(handle);
+		std::shared_ptr<CommonDialog> cDialog = getCommonDialogFromHandle(type, handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		int err = cDialog->CheckAbort();
@@ -183,13 +197,10 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::GetState(CommonDialogType type, int handle, CommonDialogState* state) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
-		
+
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		
-		// get common dialog object, and check if it is valid
-		CommonDialog* cDialog = Handles::Get<CommonDialog>(handle);
+		std::shared_ptr<CommonDialog> cDialog = getCommonDialogFromHandle(type, handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		int err = cDialog->CheckState();
@@ -201,16 +212,14 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::GetResult(CommonDialogType type, int handle, CommonDialogResult* result, CommonDialogResults* results) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (result == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (results == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
-		
-		// get common dialog object, and check if it is valid
-		CommonDialog* cDialog = Handles::Get<CommonDialog>(handle);
-		if (cDialog == nullptr) return PSM_ERROR_COMMON_INVALID_OPERATION;
+
+		std::shared_ptr<CommonDialog> cDialog = getCommonDialogFromHandle(type, handle);
+		if (cDialog == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
 
 		int err = cDialog->CheckResult();
 		if (err != PSM_ERROR_NO_ERROR) {

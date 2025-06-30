@@ -46,9 +46,9 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmPixelBuffer::Delete(int handle) {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
-			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pix = Handles::Get<PixelBuffer>(handle);
-			delete pix;
+			if (!Handles<PixelBuffer>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			std::shared_ptr<PixelBuffer> pix = Handles<PixelBuffer>::Get(handle);
+			PixelBuffer::Delete(pix);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -64,8 +64,8 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
-			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer* pixBuffer = Handles::Get<PixelBuffer>(handle);
+			if (!Handles<PixelBuffer>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			std::shared_ptr<PixelBuffer> pixBuffer = Handles<PixelBuffer>::Get(handle);
 
 			return pixBuffer->GetInfo(type, width, height, level, format, option);
 		}

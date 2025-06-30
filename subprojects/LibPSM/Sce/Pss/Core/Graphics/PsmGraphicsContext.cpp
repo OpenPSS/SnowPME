@@ -29,10 +29,10 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_GRAPHICS_SYSTEM;
 		}
 
-		GraphicsContext* ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
+		std::shared_ptr<GraphicsContext> ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
 		RETURN_ERRORABLE_PSMOBJECT(ctx, GraphicsContext);
-		
-		GraphicsContext::MakeUniqueObject(std::shared_ptr<GraphicsContext>(ctx));
+
+		GraphicsContext::MakeUniqueObject(ctx);
 
 		*result = ctx->Handle();
 		
@@ -42,10 +42,10 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
-			GraphicsContext::MakeLocalObject();
 
-			GraphicsContext* ctx = Handles::Get<GraphicsContext>(handle);
-			GraphicsContext::Delete(ctx);
+
+			GraphicsContext::Delete(GraphicsContext::UniqueObject());
+			GraphicsContext::MakeLocalObject();
 			
 			return PSM_ERROR_NO_ERROR;
 		}

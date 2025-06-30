@@ -9,7 +9,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
 		OpenGL::activeShaderProgram = shaderProgram;
-		if (shaderProgram == NULL) {
+		if (shaderProgram == nullptr) {
 			glUseProgram(0);
 		}
 		else {
@@ -19,7 +19,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetVertexBuffer(VertexBuffer* vertexBuffer) {
 		OpenGL::activeVertexBuffer = vertexBuffer;
-		if (vertexBuffer == NULL) {
+		if (vertexBuffer == nullptr) {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 		else {
@@ -29,7 +29,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetFrameBuffer(FrameBuffer* frameBuffer) {
 		OpenGL::activeFrameBuffer = frameBuffer;
-		if (frameBuffer == NULL) {
+		if (frameBuffer == nullptr) {
 			glBindBuffer(GL_FRAMEBUFFER, 0);
 		}
 		else {
@@ -39,7 +39,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetTexture(Texture* texture) {
 		OpenGL::activeTexture = texture;
-		if (texture == NULL) {
+		if (texture == nullptr) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		else {

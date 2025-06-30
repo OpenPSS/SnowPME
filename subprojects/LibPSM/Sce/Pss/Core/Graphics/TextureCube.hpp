@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
-	class TextureCube : public Texture, public PsmObject<TextureCube> {
+	class TextureCube : private Texture, public PsmObject<TextureCube> {
 	private:
 
 	public:

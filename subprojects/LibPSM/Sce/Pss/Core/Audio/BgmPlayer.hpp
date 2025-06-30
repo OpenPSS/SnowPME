@@ -10,10 +10,9 @@
 namespace Sce::Pss::Core::Audio {
 	class BgmPlayer : public PsmObject<BgmPlayer> {
 	private:
-		Bgm* audioBgm = nullptr;
+		std::weak_ptr<Bgm> audioBgm;
 	public:
-		BgmPlayer(Bgm* bgm);
-		~BgmPlayer();
+		BgmPlayer(std::weak_ptr<Bgm> bgm);
 		static int ReleaseNative(int handle);
 		static int PlayNative(int handle);
 		static int StopNative(int handle);

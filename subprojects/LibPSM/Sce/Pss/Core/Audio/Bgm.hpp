@@ -6,9 +6,9 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <atomic>
 
 #include <mono/mono.h>
-#include <atomic>
 namespace Sce::Pss::Core::Audio {
 	class Bgm : public PsmObject<Bgm> {
 	private:
@@ -17,7 +17,7 @@ namespace Sce::Pss::Core::Audio {
 	public:
 		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
-		~Bgm();
+		Bgm() = default;
 		std::unique_ptr<Sce::Pss::Core::Audio::Impl::AudioImpl> AudioImplObject = nullptr;
 		static int NewFromFilename(MonoString* filename, int* handle);
 		static int NewFromFileImage(MonoArray* fileImage, int* handle);

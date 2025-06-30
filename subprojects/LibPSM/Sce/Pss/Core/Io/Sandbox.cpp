@@ -123,7 +123,7 @@ namespace Sce::Pss::Core::Io {
 	
 	// Some functions require handling via filepath,
 	// in these cases, the fstream needs to be created again
-	void Sandbox::reopen(PsmFileHandle* handle) {
+	void Sandbox::reopen(std::shared_ptr<PsmFileHandle> handle) {
 		if (handle->IsOpen() && !handle->IsDirectory() && handle->GetUnderlying() != nullptr) {
 			// Close the file
 			EdataStream* edataStream = static_cast<EdataStream*>(handle->GetUnderlying());
@@ -256,7 +256,7 @@ namespace Sce::Pss::Core::Io {
 	}
 
 
-	int Sandbox::ChangeSize(PsmFileHandle* handle, uint32_t newSize) {
+	int Sandbox::ChangeSize(std::shared_ptr<PsmFileHandle> handle, uint32_t newSize) {
 		if (!handle->IsEncrypted() && handle->IsRewritable()) { // Check the file is writable.
 
 			// close becuase you cant resize the file while its open
@@ -273,14 +273,13 @@ namespace Sce::Pss::Core::Io {
 		return PSM_ERROR_ACCESS_DENIED;
 	}
 
-	PsmFileHandle* Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem) {
+	std::shared_ptr<PsmFileHandle> Sandbox::OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem) {
 		std::string pathInSandbox = this->normalizePath(sandboxedPath);
 		std::string pathOnDisk = this->LocateRealPath(pathInSandbox, includeSystem);
 		FileSystem filesystem = this->findFilesystem(pathInSandbox, includeSystem);
 
 		// Create File Handle Object
-		PsmFileHandle* handle = PsmFileHandle::Create(pathInSandbox, pathOnDisk, flags);
-		
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::Create(pathInSandbox, pathOnDisk, flags);
 
 		if (handle->IsRewritable() && !filesystem.IsWritable()) {
 			handle->SetError(PSM_ERROR_ACCESS_DENIED);
@@ -353,8 +352,8 @@ namespace Sce::Pss::Core::Io {
 		else { // otherwise, its a copy operation..
 			char buffer[0x8000];
 
-			PsmFileHandle* srcHandle = this->OpenFile(normSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE), false);
-			PsmFileHandle* dstHandle = this->OpenFile(normDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE), false);
+			std::shared_ptr<PsmFileHandle> srcHandle = this->OpenFile(normSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE), false);
+			std::shared_ptr<PsmFileHandle> dstHandle = this->OpenFile(normDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE), false);
 			this->ChangeSize(dstHandle, 0);
 				
 			int totalRead = 0;
@@ -508,13 +507,13 @@ namespace Sce::Pss::Core::Io {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	PsmFileHandle* Sandbox::OpenDirectory(std::string sandboxedPath) {
+	std::shared_ptr<PsmFileHandle> Sandbox::OpenDirectory(std::string sandboxedPath) {
 		std::string normPath = this->normalizePath(sandboxedPath);
 		std::string pathOnDisk = this->LocateRealPath(normPath, false);
 		FileSystem filesystem = this->findFilesystem(normPath, false);
 
 		// Create a new PsmFileDescriptor 
-		PsmFileHandle* handle = PsmFileHandle::Create(normPath, pathOnDisk, static_cast<ScePssFileOpenFlag_t>(filesystem.IsWritable() ? SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_WRITE : SCE_PSS_FILE_OPEN_FLAG_READ));
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::Create(normPath, pathOnDisk, static_cast<ScePssFileOpenFlag_t>(filesystem.IsWritable() ? SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_WRITE : SCE_PSS_FILE_OPEN_FLAG_READ));
 
 		// Fail if its a file or it doesnt exist.
 		if (this->IsFile(normPath) || !this->PathExist(normPath, false)) {

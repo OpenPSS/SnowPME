@@ -13,7 +13,7 @@ namespace Sce::Pss::Core::Graphics {
 		virtual int ActiveStateChanged(bool state) = 0;
 		bool Active = false;
 		static void Release(GraphicsObject* object);
-		uint32_t GLReference;
+		uint32_t GLReference = 0;
 	};
 }
 #endif

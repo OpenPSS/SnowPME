@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 
-	int GraphicsContext::setCurrentObject(ShaderProgram* shaderProgram) {
+	int GraphicsContext::setCurrentObject(std::shared_ptr<ShaderProgram> shaderProgram) {
 		int result = PSM_ERROR_NO_ERROR;
 
 		if (shaderProgram != this->currentProgram) {
@@ -47,7 +47,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		return result;
 	}
-	int GraphicsContext::setCurrentObject(FrameBuffer* frameBuffer) {
+	int GraphicsContext::setCurrentObject(std::shared_ptr<FrameBuffer> frameBuffer) {
 		int result = PSM_ERROR_NO_ERROR;
 
 		if (frameBuffer != this->currentFrameBuffer) {
@@ -85,7 +85,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::ShaderProgram");
 
 				// Resolve the handle for the new shader program
-				ShaderProgram* workingShaderProgram = Handles::Get<ShaderProgram>(handles[GraphicsContext::shaderProgramHandleOffset]);
+				std::shared_ptr<ShaderProgram> workingShaderProgram = Handles<ShaderProgram>::Get(handles[GraphicsContext::shaderProgramHandleOffset]);
 				
 				// Set this shader program as the currently active shader program.
 				setCurrentObject(workingShaderProgram);
@@ -97,9 +97,9 @@ namespace Sce::Pss::Core::Graphics {
 
 				int fbHandle = handles[GraphicsContext::frameBufferHandleOffset];
 				// Check this handle is valid ..
-				if (fbHandle != Handles::NoHandle) {
+				if (Handles<FrameBuffer>::IsValid(fbHandle)) {
 					// Resolve the handle for the new shader program
-					FrameBuffer* workingFrameBuffer = Handles::Get<FrameBuffer>(fbHandle);
+					std::shared_ptr<FrameBuffer> workingFrameBuffer = Handles<FrameBuffer>::Get(fbHandle);
 
 					// Set this frame buffer as the currently active frame buffer.
 					setCurrentObject(workingFrameBuffer);
@@ -127,10 +127,10 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::VertexBuffer");
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
-					VertexBuffer* workingVertexBuffer = Handles::Get<VertexBuffer>(handles[GraphicsContext::vertexBufferHandleOffset + i]);
-					VertexBuffer* currentVertexBuffer = (VertexBuffer*)this->currentVertexBuffers[i];
+					std::shared_ptr<VertexBuffer> workingVertexBuffer = Handles<VertexBuffer>::Get(handles[GraphicsContext::vertexBufferHandleOffset + i]);
+					VertexBuffer* currentVertexBuffer = reinterpret_cast<VertexBuffer*>(this->currentVertexBuffers[i]);
 
-					if (currentVertexBuffer == workingVertexBuffer) {
+					if (currentVertexBuffer == workingVertexBuffer.get()) {
 						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
 							this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 						}
@@ -144,7 +144,7 @@ namespace Sce::Pss::Core::Graphics {
 							}
 						}
 
-						this->currentVertexBuffers[i] = workingVertexBuffer;
+						this->currentVertexBuffers[i] = workingVertexBuffer.get();
 
 						if (workingVertexBuffer != nullptr) {
 							workingVertexBuffer->Active = true;
@@ -177,7 +177,7 @@ namespace Sce::Pss::Core::Graphics {
 			Logger::Debug("notifyFlag & GraphicsUpdate::ShaderProgram");
 
 			// bind the current program in openGL
-			OpenGL::SetShaderProgram(this->currentProgram);
+			OpenGL::SetShaderProgram(this->currentProgram.get());
 
 			// set the vertexBuffer notify flag.
 			notifyFlag = notifyFlag | GraphicsUpdate::VertexBuffer;
@@ -198,7 +198,7 @@ namespace Sce::Pss::Core::Graphics {
 			Logger::Debug("notifyFlag & GraphicsUpdate::FrameBuffer");
 
 			// bind the framebuffer
-			OpenGL::SetFrameBuffer(this->currentFrameBuffer);
+			OpenGL::SetFrameBuffer(this->currentFrameBuffer.get());
 			
 			// set hasNoFrameBuffer and HasShaderOrNoFrameBuffer flags
 			this->hasFrameBuffer = (!this->currentFrameBuffer  || this->currentFrameBuffer->unk12 );

@@ -66,12 +66,12 @@ namespace Sce::Pss::Core {
 
 	class Errorable {
 	private:
-		uint32_t lastError = PSM_ERROR_NO_ERROR;
+		std::atomic<uint32_t> lastError = PSM_ERROR_NO_ERROR;
 	public:
-		Errorable();
-		~Errorable();
-		uint32_t SetError(uint32_t errorCode);
+		Errorable() = default;
+		~Errorable() = default;
 		uint32_t GetClearError();
+		uint32_t SetError(uint32_t errorCode);
 		uint32_t GetError();
 	};
 }

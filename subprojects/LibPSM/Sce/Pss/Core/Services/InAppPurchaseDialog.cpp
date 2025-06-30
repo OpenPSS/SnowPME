@@ -237,7 +237,7 @@ namespace Sce::Pss::Core::Services {
 
 		if (iapResults != nullptr) {
 			iapResults->Command = this->command;
-			iapResults->InfoStatus = (int)this->commandsRun;
+			iapResults->InfoStatus = static_cast<int>(this->commandsRun);
 			iapResults->Count = this->inventory.GetProductCount();
 
 			if (iapResults->Results != nullptr) {

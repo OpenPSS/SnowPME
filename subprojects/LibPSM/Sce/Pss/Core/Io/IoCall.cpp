@@ -17,13 +17,12 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmClose(uint64_t handle) {
 		LOG_FUNCTION();
-		if (!Handles::IsValid(handle))
-			return PSM_ERROR_INVALID_PARAMETER;
-		
-		PsmFileHandle* fd = Handles::Get<PsmFileHandle>(handle);
+		if (!Handles<PsmFileHandle>::IsValid(handle)) return PSM_ERROR_INVALID_PARAMETER;
+		std::shared_ptr<PsmFileHandle> fd = Handles<PsmFileHandle>::Get(handle);
 	
 		if (fd != nullptr) return PSM_ERROR_INVALID_PARAMETER;
 		if (!fd->IsOpen()) return PSM_ERROR_INVALID_PARAMETER;
+		fd->GetUnderlying()->Close();
 
 		PsmFileHandle::Delete(fd);
 
@@ -63,7 +62,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_PATH_NOT_FOUND;
 
 		if (Sandbox::UniqueObject()->IsDirectory(sandboxPath)) {
-			PsmFileHandle* directoryHandle = Sandbox::UniqueObject()->OpenDirectory(sandboxPath);
+			std::shared_ptr<PsmFileHandle> directoryHandle = Sandbox::UniqueObject()->OpenDirectory(sandboxPath);
 			RETURN_ERRORABLE_PSMOBJECT(directoryHandle, PsmFileHandle);
 			
 			*pDirectory = static_cast<uint64_t>(directoryHandle->Handle());
@@ -75,17 +74,17 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
 		LOG_FUNCTION();
-		if (pFileInfo == nullptr || !Handles::IsValid(directory))
+		if (pFileInfo == nullptr || !Handles<PsmFileHandle>::IsValid(directory))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(directory);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(directory);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		if (!handle->IsDirectory())
-			return PSM_ERROR_INVALID_PARAMETER
-			;
+			return PSM_ERROR_INVALID_PARAMETER;
+
 		if (handle->GetUnderlying() == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
@@ -129,7 +128,7 @@ namespace Sce::Pss::Core::Io {
 		std::string sandboxedPath = std::string(pszFileName);
 
 		if (!Sandbox::UniqueObject()->IsDirectory(sandboxedPath)) {
-			PsmFileHandle* fileHandle = Sandbox::UniqueObject()->OpenFile(sandboxedPath, static_cast<ScePssFileOpenFlag_t>(uOpenFlags), includeSystem);
+			std::shared_ptr<PsmFileHandle> fileHandle = Sandbox::UniqueObject()->OpenFile(sandboxedPath, static_cast<ScePssFileOpenFlag_t>(uOpenFlags), includeSystem);
 			RETURN_ERRORABLE_PSMOBJECT(fileHandle, PsmFileHandle);
 
 			*phFile = static_cast<uint64_t>(fileHandle->Handle());
@@ -155,10 +154,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo) { 
 		LOG_FUNCTION();
 
-		if (!Handles::IsValid(file) || pFileInfo == nullptr)
+		if (!Handles<PsmFileHandle>::IsValid(file) || pFileInfo == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -175,11 +174,11 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead) {
 		LOG_FUNCTION();
 
-		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToRead == 0 || puBytesRead == nullptr)
+		if (!Handles<PsmFileHandle>::IsValid(file) || buffer == nullptr || uBytesToRead == 0 || puBytesRead == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -195,10 +194,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
 		LOG_FUNCTION();
 
-		if (!Handles::IsValid(file) || buffer == nullptr || uBytesToWrite == 0 || puBytesWritten == 0)
+		if (!Handles<PsmFileHandle>::IsValid(file) || buffer == nullptr || uBytesToWrite == 0 || puBytesWritten == 0)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -219,10 +218,10 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmFileSeek(uint64_t file, int32_t nOffset, ScePssFileSeekType_t seekType) {
 		LOG_FUNCTION();
-		if (!Handles::IsValid(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
+		if (!Handles<PsmFileHandle>::IsValid(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 		
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -238,10 +237,10 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmFileFlush(uint64_t file) {
 		LOG_FUNCTION();
-		if (!Handles::IsValid(file))
+		if (!Handles<PsmFileHandle>::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 		
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -264,10 +263,10 @@ namespace Sce::Pss::Core::Io {
 	
 	int IoCall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
 		LOG_FUNCTION();
-		if (puSize == nullptr || !Handles::IsValid(file))
+		if (puSize == nullptr || !Handles<PsmFileHandle>::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -286,10 +285,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
 		LOG_FUNCTION();
 
-		if (!Handles::IsValid(file))
+		if (!Handles<PsmFileHandle>::IsValid(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		PsmFileHandle* handle = Handles::Get<PsmFileHandle>(file);
+		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if(!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;

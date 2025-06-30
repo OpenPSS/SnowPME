@@ -17,6 +17,7 @@ using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::Mono;
 
 using namespace Shared::Debug;
 
@@ -30,24 +31,24 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_GRAPHICS_SYSTEM;
 			
 			std::string filename;
-			Mono::MonoUtil::MonoStringToStdString(fileName, filename);
+			MonoUtil::MonoStringToStdString(fileName, filename);
 
-			Texture* tex = nullptr;
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
-				tex = new Texture2D(filename, mipmap, format);
-				RETURN_ERRORABLE(tex);
+				std::shared_ptr<Texture2D> tex = Texture2D::Create(filename, mipmap, format);
+				RETURN_ERRORABLE_PSMOBJECT(tex, Texture2D);
+				*result = tex->Handle();
+				return PSM_ERROR_NO_ERROR;
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				tex = new TextureCube(filename, mipmap, format);
-				RETURN_ERRORABLE(tex);
-			}
-			
-			if (tex != nullptr) {
-				*result = Handles::Create(tex);
+				std::shared_ptr<TextureCube> tex = TextureCube::Create(filename, mipmap, format);
+				RETURN_ERRORABLE_PSMOBJECT(tex, TextureCube);
+				*result = tex->Handle();
 				return PSM_ERROR_NO_ERROR;
 			}
+			
+
 			return PSM_ERROR_INVALID_PARAMETER;
 
 		}

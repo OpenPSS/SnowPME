@@ -35,9 +35,9 @@ namespace Sce::Pss::Core::Graphics {
 	#define GET_PROG() \
 		LOG_FUNCTION(); \
 		CHECK_MAIN_THREAD() \
-		ShaderProgram* prog = Handles::Get<ShaderProgram>(handle); \
+		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle); \
 		if (prog == nullptr) { \
-			Logger::Error("handle was null."); \
+			Logger::Warn("ShaderProgram handle was null."); \
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED; \
 		}
 
@@ -74,8 +74,8 @@ namespace Sce::Pss::Core::Graphics {
 		if(fpFileImage != nullptr)
 			fragmentShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(fpFileImage, 1, 0));
 
-		ShaderProgram* shdrPrg = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
-		RETURN_ERRORABLE(shdrPrg);
+		std::shared_ptr<ShaderProgram> shdrPrg = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
+		RETURN_ERRORABLE_PSMOBJECT(shdrPrg, ShaderProgram);
 
 		*result = shdrPrg->Handle();
 		return PSM_ERROR_NO_ERROR;

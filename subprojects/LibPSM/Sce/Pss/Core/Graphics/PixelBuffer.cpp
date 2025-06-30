@@ -15,11 +15,6 @@ using namespace Sce::Pss::Core::Io;
 namespace Sce::Pss::Core::Graphics {
 
 
-	PixelBuffer::PixelBuffer() {
-	}
-	PixelBuffer::~PixelBuffer() {
-	}
-
 	int PixelBuffer::GetInfo(PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option) {
 		*type = this->type;
 		*width = this->width;
@@ -30,13 +25,18 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PixelBuffer::LoadImage(char* data, uint64_t dataLen, int mipmap, PixelFormat format) {
+	int PixelBuffer::LoadImage(uint8_t* data, uint64_t dataLen, int mipmap, PixelFormat format) {
 		return PSM_ERROR_NO_ERROR;
 	}
+
+	int PixelBuffer::ActiveStateChanged(bool state) {
+		UNIMPLEMENTED();
+	}
+
 	int PixelBuffer::LoadFile(const char* fileName, uint8_t* &fileData, uint32_t& fileSize) {
 		if (fileName != nullptr) {
 			// open the file
-			uint64_t handle = Handles::NoHandle;
+			uint64_t handle = Handles<PixelBuffer>::NoHandle;
 			IoCall::PsmFileOpen((char*)fileName, SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle);
 			if (handle) {
 				// get the file size
@@ -67,6 +67,9 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 
+
 	}
+
+
 
 }

@@ -99,9 +99,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\System\Handles.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

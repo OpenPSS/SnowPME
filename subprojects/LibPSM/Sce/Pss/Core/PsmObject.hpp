@@ -12,36 +12,30 @@
 #include <type_traits>
 
 namespace Sce::Pss::Core {
-	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<T> {
+	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<PsmObject<T>> {
 
 	private:
-		int handle = Sce::Pss::Core::System::Handles::NoHandle;
+		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 	protected:
-		PsmObject() {
-			this->handle = Sce::Pss::Core::System::Handles::Create(reinterpret_cast<T*>(this));
-		}
+		PsmObject() = default;
 		~PsmObject() {
 			this->IsDisposed = true;
-			this->handle = Sce::Pss::Core::System::Handles::NoHandle;
+			this->handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		};
 		
 	public:
 		bool IsDisposed = false;
 
-		template <typename... Args, typename = T> static T* Create(Args&&... args) {
-
-			T* obj = new T(std::forward<Args>(args)...);
-			obj->handle = Sce::Pss::Core::System::Handles::Create(obj);
+		template <typename... Args, typename = T> static std::shared_ptr<T> Create(Args&&... args) {
+			std::shared_ptr<T> obj = std::make_shared<T>(std::forward<Args>(args)...);
+			obj->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
 			return obj;
 		}
 
-		static void Delete(T* obj) {
-
-			if (Sce::Pss::Core::System::Handles::IsValid(obj->Handle())) {
-				Sce::Pss::Core::System::Handles::Delete(obj->Handle());
+		static void Delete(std::shared_ptr<T> obj) {
+			if (Sce::Pss::Core::System::Handles<T>::IsValid(obj->Handle())) {
+				Sce::Pss::Core::System::Handles<T>::Delete(obj->Handle());
 			}
-			
-			delete obj;
 		}
 		
 		int Handle() {

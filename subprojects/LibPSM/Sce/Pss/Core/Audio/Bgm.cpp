@@ -36,9 +36,7 @@ namespace Sce::Pss::Core::Audio {
 		return false;
 	}
 
-	Bgm::~Bgm() {
-		this->AudioImplObject = nullptr;
-	}
+
 	Bgm::Bgm(uint8_t* data, int dataSz) {
 		// set audioData and size
 		this->audioData.resize(dataSz);
@@ -109,8 +107,8 @@ namespace Sce::Pss::Core::Audio {
 		std::string audioFileName = std::string(fname);
 		mono_free(fname);
 
-		Bgm* bgm = new Bgm(audioFileName);
-		RETURN_ERRORABLE(bgm);
+		std::shared_ptr<Bgm> bgm = Bgm::Create(audioFileName);
+		RETURN_ERRORABLE_PSMOBJECT(bgm, Bgm);
 		*handle = bgm->Handle();
 
 		return PSM_ERROR_NO_ERROR;
@@ -130,8 +128,8 @@ namespace Sce::Pss::Core::Audio {
 
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);
-			Bgm* bgm = new Bgm(musicData, fSz);
-			RETURN_ERRORABLE(bgm);
+			std::shared_ptr<Bgm> bgm = Bgm::Create(musicData, fSz);
+			RETURN_ERRORABLE_PSMOBJECT(bgm, Bgm);
 			*handle = bgm->Handle();
 
 			return PSM_ERROR_NO_ERROR;
@@ -144,9 +142,11 @@ namespace Sce::Pss::Core::Audio {
 	int Bgm::ReleaseNative(int handle) {
 		LOG_FUNCTION();
 		
-		if (Handles::IsValid(handle)) {
-			Bgm* bgm = Handles::Get<Bgm>(handle);
-			delete bgm;
+		if (Handles<Bgm>::IsValid(handle)) {
+			std::shared_ptr<Bgm> bgm = Handles<Bgm>::Get(handle);
+			if (bgm == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+			Bgm::Delete(bgm);
 		}
 
 		return PSM_ERROR_NO_ERROR;
@@ -156,16 +156,12 @@ namespace Sce::Pss::Core::Audio {
 		if (playerHandle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
-		if (Handles::IsValid(handle)) {
-			Bgm* bgm = Handles::Get<Bgm>(handle);
-			BgmPlayer* player = BgmPlayer::Create(bgm);
+		if (Handles<Bgm>::IsValid(handle)) {
+			std::shared_ptr<Bgm> bgm = Handles<Bgm>::Get(handle);
+			std::shared_ptr<BgmPlayer> player = BgmPlayer::Create(std::weak_ptr<Bgm>(bgm));
+			RETURN_ERRORABLE_PSMOBJECT(player, BgmPlayer);
 
-			if (Handles::IsValid(player->Handle())) {
-				*playerHandle = player->Handle();
-			}
-			else {
-				return PSM_ERROR_COMMON_INVALID_OPERATION;
-			}
+			*playerHandle = player->Handle();
 		}
 		else {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;

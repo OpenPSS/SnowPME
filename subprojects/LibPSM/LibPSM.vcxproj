@@ -85,7 +85,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp" />
-    <ClCompile Include="Sce\Pss\Core\System\Handles.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\DirectoryIterator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\FileSystem.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\IoCall.cpp" />

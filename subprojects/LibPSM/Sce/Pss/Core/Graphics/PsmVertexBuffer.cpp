@@ -25,10 +25,10 @@ namespace Sce::Pss::Core::Graphics {
 		VertexFormat* vertexFormats = (VertexFormat*)mono_array_addr_with_size(formats, 1, 0);
 		int vertexFormatsLen = mono_array_length(formats);
 
-		VertexBuffer* vertxBuffer = new VertexBuffer(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
-		RETURN_ERRORABLE(vertxBuffer);
+		std::shared_ptr<VertexBuffer> vtxBuf = VertexBuffer::Create(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
+		RETURN_ERRORABLE_PSMOBJECT(vtxBuf, VertexBuffer);
 
-		*result = vertxBuffer->Handle();
+		*result = vtxBuf->Handle();
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -45,7 +45,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
-			VertexBuffer* buffer = Handles::Get<VertexBuffer>(handle);
+			std::shared_ptr<VertexBuffer> buffer = Handles<VertexBuffer>::Get(handle);
 			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 			MonoType* type = Sce::Pss::Core::Mono::MonoUtil::MonoArrayElementsType(vertices);

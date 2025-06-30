@@ -14,10 +14,10 @@ namespace Sce::Pss::Core::Io::Edata {
 	int EdataCallbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
 		if (handle != nullptr && type != nullptr) {
 			PsmDrm* drm = Sandbox::UniqueObject()->GameDrmProvider;
-			EdataStream* stream = new EdataStream(std::string(path), std::ios::binary | std::ios::in, drm, nullptr);
-			RETURN_ERRORABLE(stream);
+			std::shared_ptr<EdataStream> stream = std::make_shared<EdataStream>(std::string(path), std::ios::binary | std::ios::in, drm, nullptr);
+			RETURN_ERRORABLE_SMARTPTR(stream);
 
-			*handle = Handles::Create(stream);
+			*handle = Handles<EdataStream>::Create(stream);
 
 			*type = SCE_PSS_FILE_FLAG_READONLY;
 			if (stream->IsEncrypted())
@@ -30,8 +30,8 @@ namespace Sce::Pss::Core::Io::Edata {
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 	int EdataCallbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
-		if (Handles::IsValid(handle) && totalRead != nullptr) {
-			EdataStream* stream = Handles::Get<EdataStream>(handle);
+		if (Handles<EdataStream>::IsValid(handle) && totalRead != nullptr) {
+			std::shared_ptr<EdataStream> stream = Handles<EdataStream>::Get(handle);
 
 			*totalRead = stream->Read((char*)buffer, toRead);
 
@@ -41,8 +41,8 @@ namespace Sce::Pss::Core::Io::Edata {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int EdataCallbacks::EdataSeek(int handle, long offset, int whence, long* totalSeeked) {
-		if (Handles::IsValid(handle) && totalSeeked != nullptr) {
-			EdataStream* stream = Handles::Get<EdataStream>(handle);
+		if (Handles<EdataStream>::IsValid(handle) && totalSeeked != nullptr) {
+			std::shared_ptr<EdataStream> stream = Handles<EdataStream>::Get(handle);
 
 			ScePssFileSeekType_t whenceType = SCE_PSS_FILE_SEEK_TYPE_BEGIN;
 			if (whence == PssCryptoSeekCur)
@@ -74,10 +74,10 @@ namespace Sce::Pss::Core::Io::Edata {
 		return PSM_ERROR_NO_ERROR;
 	}
 	void EdataCallbacks::EdataClose(int handle) {
-		if (Handles::IsValid(handle)) {
-			EdataStream* str = Handles::Get<EdataStream>(handle);
+		if (Handles<EdataStream>::IsValid(handle)) {
+			std::shared_ptr<EdataStream> str = Handles<EdataStream>::Get(handle);
 			str->Close();
-			Handles::Delete(handle);
+			Handles<EdataStream>::Delete(handle);
 		}
 	}
 }

@@ -23,7 +23,7 @@
 #define MAX_PRODUCT_COUNT (0x100)
 
 namespace Sce::Pss::Core::Services {
-	class InAppPurchaseDialog : public Sce::Pss::Core::Environment::CommonDialog, public PsmUniqueObject<InAppPurchaseDialog>{
+	class InAppPurchaseDialog : private Sce::Pss::Core::Environment::CommonDialog, public PsmUniqueObject<InAppPurchaseDialog>, public PsmObject<InAppPurchaseDialog> {
 	private:
 		InAppPurchaseInventory inventory;
 		InAppPurchaseCommand command = InAppPurchaseCommand::None;

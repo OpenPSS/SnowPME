@@ -56,8 +56,8 @@ namespace Sce::Pss::Core::Graphics {
 		const GLenum glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
 		const GLenum glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
 
-		ShaderProgram* currentProgram = nullptr;
-		FrameBuffer* currentFrameBuffer = nullptr;
+		std::shared_ptr<ShaderProgram> currentProgram;
+		std::shared_ptr<FrameBuffer> currentFrameBuffer;
 		VertexBuffer* currentVertexBuffers[4];
 		Texture* currentTextures[4];
 		EnableMode currentEnableModes = EnableMode::None;
@@ -76,8 +76,8 @@ namespace Sce::Pss::Core::Graphics {
 		std::unique_ptr<DeltaTime> minFrameDelta = nullptr;
 
 
-		int setCurrentObject(ShaderProgram* program);
-		int setCurrentObject(FrameBuffer* frameBuffer);
+		int setCurrentObject(std::shared_ptr<ShaderProgram> program);
+		int setCurrentObject(std::shared_ptr<FrameBuffer> frameBuffer);
 
 		static void ErrorCallback(
 			GLenum source,

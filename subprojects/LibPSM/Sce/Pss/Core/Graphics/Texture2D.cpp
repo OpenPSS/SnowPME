@@ -16,6 +16,8 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		LOCK_GUARD();
 
+		this->pbuf = std::make_unique<PixelBuffer>();
+
 		if (!fileName.empty()) {
 			this->Filename = std::string(fileName.c_str(), strlen(fileName.c_str()));
 
@@ -23,11 +25,11 @@ namespace Sce::Pss::Core::Graphics {
 			uint32_t fileSize = 0;
 
 			// load the file data
-			int res = this->LoadFile(this->Filename.c_str(), fileData, fileSize);
+			int res = pbuf->LoadFile(this->Filename.c_str(), fileData, fileSize);
 			if (res == PSM_ERROR_NO_ERROR) {
 
 				// parse image file 
-				this->LoadImage(fileData, fileSize, mipmap, format);
+				pbuf->LoadImage(fileData, fileSize, mipmap, format);
 
 				// free the file data
 				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
