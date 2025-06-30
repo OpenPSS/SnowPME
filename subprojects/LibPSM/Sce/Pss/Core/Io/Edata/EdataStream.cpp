@@ -122,7 +122,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	int EdataStream::blockPosition() {
-		int blockPosition = (this->position - this->getBlockDecryptedFileOffset(this->block));
+		int blockPosition = static_cast<int>(this->position - this->getBlockDecryptedFileOffset(this->block));
 
 		if (blockPosition > this->currentBlock.size())
 			blockPosition = this->currentBlock.size();

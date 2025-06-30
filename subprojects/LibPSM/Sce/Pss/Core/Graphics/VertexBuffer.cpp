@@ -523,7 +523,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	}
 	int VertexBuffer::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		return PSM_ERROR_NO_ERROR;
 	}
 

@@ -15,7 +15,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::ReleaseNative(int handle){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			delete player;
@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int BgmPlayer::PlayNative(int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			return player->audioBgm->AudioImplObject->Play();
@@ -31,7 +31,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::StopNative(int handle){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			return player->audioBgm->AudioImplObject->Stop();
@@ -39,7 +39,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::PauseNative(int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			return player->audioBgm->AudioImplObject->Pause();
@@ -48,7 +48,7 @@ namespace Sce::Pss::Core::Audio {
 
 	}
 	int BgmPlayer::ResumeNative(int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			return player->audioBgm->AudioImplObject->Resume();
@@ -58,7 +58,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::GetStatusNative(int handle, BgmStatus *status){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			if(player->audioBgm->AudioImplObject->Paused())
@@ -74,7 +74,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::SetVolumeNative(int handle, float volume){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
@@ -84,7 +84,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetVolumeNative(int handle, float *volume){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (volume == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -98,7 +98,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLoopNative(int handle, bool *pan){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (pan == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -112,7 +112,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetLoopNative(int handle, bool pan){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
 			player->audioBgm->AudioImplObject->SetLooping(pan);
@@ -123,7 +123,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::GetPlaybackRateNative(int handle, float *rate){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		
 		if (rate == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -138,7 +138,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetPlaybackRateNative(int handle, float rate){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
@@ -149,7 +149,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::GetPosition(int handle, unsigned long *milisecond){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (milisecond == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -163,7 +163,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::SetPosition(int handle, unsigned long milisecond){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);
@@ -173,7 +173,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLength(int handle, unsigned long *milisecond){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (milisecond == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -187,7 +187,7 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int BgmPlayer::GetLoopPosition(int handle, unsigned long *msStart, unsigned long *msEnd){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (msEnd == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -206,7 +206,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int BgmPlayer::SetLoopPosition(int handle, unsigned long msStart, unsigned long msEnd){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (Handles::IsValid(handle)) {
 			BgmPlayer* player = Handles::Get<BgmPlayer>(handle);

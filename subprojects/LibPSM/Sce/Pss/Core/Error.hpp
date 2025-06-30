@@ -10,7 +10,7 @@
 
 #include <mono/mono.h>
 
-enum PsmError : uint32_t {
+enum PsmError: uint32_t {
 	PSM_ERROR_NO_ERROR = 0,
 	PSM_ERROR_BASE_ERROR = 0x80010000,
 	PSM_ERROR_ERROR = 0x80010001,
@@ -102,6 +102,7 @@ inline std::string functionName(const std::source_location& location = std::sour
 	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
+#define LOG_FUNCTION() Shared::Debug::Logger::Debug(functionName());
 
 
 namespace Sce::Pss::Core {

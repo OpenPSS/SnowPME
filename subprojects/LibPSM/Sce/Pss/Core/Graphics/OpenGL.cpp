@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		else {
-			glBindTexture(texture->GlTextureType(), texture->GLReference);
+			glBindTexture(texture->GLTextureType(), texture->GLReference);
 		}
 	}
 

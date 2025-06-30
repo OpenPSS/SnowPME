@@ -22,9 +22,26 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		}
 	}
 
+	int GetMode() {
+		UNIMPLEMENTED();
+	}
+	
+	int ConvertMode() {
+		UNIMPLEMENTED();
+	}
+	
+	int GetExtent(int* extent) {
+		UNIMPLEMENTED();
+	}
+
+	int ToBuffer(void* pngBuffer, int unk0) {
+		UNIMPLEMENTED();
+	}
+
 	int Image::Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<HeapAllocator> alloc) {
 
-		// TODO: Use allocator!
+		void* buffer = alloc->sce_psm_malloc(dataLen);
+		memcpy(buffer, data, dataLen);
 
 		this->image = stbi_load_from_memory(data, dataLen, &this->x, &this->y, &this->comp, 4);
 		return this->image ? PSM_ERROR_NO_ERROR : PSM_ERROR_COMMON_INVALID_FORMAT;

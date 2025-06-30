@@ -83,7 +83,7 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int CommonDialog::NewNative(CommonDialogType type, int* handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
 		if (handle == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL; 
@@ -105,7 +105,7 @@ namespace Sce::Pss::Core::Environment {
 
 				// create in app purchase common dialog,
 				std::shared_ptr<InAppPurchaseDialog> commonIapDialog = InAppPurchaseDialog::MakeUniqueObject(std::make_shared<InAppPurchaseDialog>());
-				RETURN_ERRORABLE_SHARED(commonIapDialog);
+				RETURN_ERRORABLE_SMARTPTR(commonIapDialog);
 
 				// set handle to the new in app purchase
 				*handle = std::static_pointer_cast<CommonDialog>(commonIapDialog)->Handle();
@@ -121,7 +121,7 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::ReleaseNative(CommonDialogType type, int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
 		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -139,7 +139,7 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int CommonDialog::OpenNative(CommonDialogType type, int handle, CommonDialogArguments* cmdArg) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT; 
@@ -165,7 +165,7 @@ namespace Sce::Pss::Core::Environment {
 		return cDialog->Open(cmdArg);
 	}
 	int CommonDialog::AbortNative(CommonDialogType type, int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
 		if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -182,7 +182,7 @@ namespace Sce::Pss::Core::Environment {
 		return cDialog->Abort();
 	}
 	int CommonDialog::GetState(CommonDialogType type, int handle, CommonDialogState* state) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 		
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -200,7 +200,7 @@ namespace Sce::Pss::Core::Environment {
 		return cDialog->State(state);
 	}
 	int CommonDialog::GetResult(CommonDialogType type, int handle, CommonDialogResult* result, CommonDialogResults* results) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
 		if (result == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;

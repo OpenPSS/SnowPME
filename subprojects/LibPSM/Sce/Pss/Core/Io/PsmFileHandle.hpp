@@ -22,6 +22,10 @@ namespace Sce::Pss::Core::Io {
 
 		void signalClosed();
 	public:
+		PsmFileHandle(std::string pathInSandbox, std::string pathOnDisk, ScePssFileOpenFlag_t flags);
+		PsmFileHandle(std::string pathInSandbox, std::string pathOnDisk, ScePssFileOpenFlag_t flags, IUnderlying* underlying);
+
+		~PsmFileHandle();
 		bool IsOpen();
 		bool IsDirectory();
 		bool IsEncrypted();
@@ -37,10 +41,6 @@ namespace Sce::Pss::Core::Io {
 		IUnderlying* GetUnderlying();
 		int SetUnderyling(IUnderlying* edataStream);
 
-		PsmFileHandle(std::string pathInSandbox, std::string pathOnDisk, ScePssFileOpenFlag_t flags);
-		PsmFileHandle(std::string pathInSandbox, std::string pathOnDisk, ScePssFileOpenFlag_t flags, IUnderlying* underlying);
-
-		~PsmFileHandle();
 	};
 }
 

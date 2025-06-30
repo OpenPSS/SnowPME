@@ -7,21 +7,21 @@ using namespace Sce::Pss::Core::Graphics;
 namespace Sce::Pss::Core::Graphics {
 
 
-	TextureCube::TextureCube(std::string* fileName, bool mipmap, PixelFormat format) {
-		Logger::Debug(__FUNCTION__);
-		Logger::Error("TextureCube not done yet");
+	TextureCube::TextureCube(std::string& fileName, bool mipmap, PixelFormat format) {
+		LOG_FUNCTION();
+		UNIMPLEMENTED_ERRORABLE("TextureCube");
 	}
 
 	TextureCube::~TextureCube() {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 	}
 
-	GLenum TextureCube::GlTextureType() {
+	GLenum TextureCube::GLTextureType() {
 		UNIMPLEMENTED();
 	}
 
 	int TextureCube::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		return PSM_ERROR_NO_ERROR;
 	}
 

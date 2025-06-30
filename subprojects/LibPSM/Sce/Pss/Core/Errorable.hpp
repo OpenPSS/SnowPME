@@ -7,9 +7,17 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
-#define RETURN_ERRORABLE_SHARED(x) \
+#define RETURN_ERRORABLE_SMARTPTR(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
+			x = nullptr; \
+			return error; \
+		}
+
+#define RETURN_ERRORABLE_PSMOBJECT(x, t) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			t::Delete(x); \
 			x = nullptr; \
 			return error; \
 		}

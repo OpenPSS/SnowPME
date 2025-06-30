@@ -11,14 +11,14 @@
 #include <atomic>
 namespace Sce::Pss::Core::Audio {
 	class Bgm : public PsmObject<Bgm> {
+	private:
 		std::vector<uint8_t> audioData;
-
 		bool isMp3();
 	public:
-		std::unique_ptr<Sce::Pss::Core::Audio::Impl::AudioImpl> AudioImplObject = nullptr;
 		Bgm(const std::string& filename);
 		Bgm(uint8_t* data, int dataSz);
 		~Bgm();
+		std::unique_ptr<Sce::Pss::Core::Audio::Impl::AudioImpl> AudioImplObject = nullptr;
 		static int NewFromFilename(MonoString* filename, int* handle);
 		static int NewFromFileImage(MonoArray* fileImage, int* handle);
 		static int ReleaseNative(int handle);

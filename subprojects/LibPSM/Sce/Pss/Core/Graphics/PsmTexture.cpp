@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr)
 				return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -35,12 +35,12 @@ namespace Sce::Pss::Core::Graphics {
 			Texture* tex = nullptr;
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
-				tex = new Texture2D(&filename, mipmap, format);
+				tex = new Texture2D(filename, mipmap, format);
 				RETURN_ERRORABLE(tex);
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				tex = new TextureCube(&filename, mipmap, format);
+				tex = new TextureCube(filename, mipmap, format);
 				RETURN_ERRORABLE(tex);
 			}
 			

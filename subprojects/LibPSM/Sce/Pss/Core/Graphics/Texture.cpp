@@ -2,20 +2,16 @@
 #include <glad/glad.h>
 #include <LibShared.hpp>
 
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Shared::Debug;
 
 	Texture::Texture() {
 
 	}
 
-	Texture::~Texture() {
-
-	}
-
 	int Texture::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		return PSM_ERROR_NO_ERROR;
 	}
 

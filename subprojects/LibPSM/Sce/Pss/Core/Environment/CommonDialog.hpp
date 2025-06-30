@@ -19,6 +19,8 @@ namespace Sce::Pss::Core::Environment {
 	protected:
 		std::atomic<CommonDialogState> state = CommonDialogState::None;
 		std::atomic<CommonDialogResult> result = CommonDialogResult::OK;
+		CommonDialog() = default;
+		virtual ~CommonDialog() = default;
 	public:
 		virtual int Open(CommonDialogArguments* cmdArg) = 0;
 		virtual int Abort();

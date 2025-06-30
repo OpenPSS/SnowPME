@@ -70,7 +70,7 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int PersistentMemory::WriteNative(MonoArray* fileImage) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (fileImage == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
@@ -80,7 +80,7 @@ namespace Sce::Pss::Core::Environment {
 		return PersistentMemory::Write(pm, pmLen);
 	}
 	int PersistentMemory::ReadNative(MonoArray* fileImage) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if(fileImage == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 

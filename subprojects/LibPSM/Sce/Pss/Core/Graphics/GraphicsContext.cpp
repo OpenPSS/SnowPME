@@ -226,7 +226,9 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	
 	int GraphicsContext::EndFrame() {
-		if (Threading::Thread::IsMainThread() /* && !endframe_related_ns && endframe_related_0 && endframe_related */) {
+		WindowControl::EndFrame();
+
+		if (Thread::IsMainThread() /* && !endframe_related_ns && endframe_related_0 && endframe_related */) {
 			if (this->frameInProgress) {
 				this->frameInProgress = false;
 			}
@@ -238,7 +240,9 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int GraphicsContext::BeginFrame() {
-		if (Threading::Thread::IsMainThread() /* || endframe_related_ns || startframe_related || !endframe_related_0 || !endframe_related */) {
+		WindowControl::StartFrame();
+
+		if (Thread::IsMainThread() /* || endframe_related_ns || startframe_related || !endframe_related_0 || !endframe_related */) {
 			if (this->frameInProgress) {
 				this->frameInProgress = false;
 			}
@@ -522,8 +526,6 @@ namespace Sce::Pss::Core::Graphics {
 	GraphicsContext::~GraphicsContext() {
 		if(this->CapsState != nullptr)
 			delete this->CapsState;
-		if(this->minFrameDelta != nullptr)
-			delete this->minFrameDelta;
 	}
 	void GraphicsContext::ErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
@@ -721,7 +723,7 @@ namespace Sce::Pss::Core::Graphics {
 			memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
 			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
 
-			this->minFrameDelta = new Sce::Pss::Core::Timing::DeltaTime(60);
+			this->minFrameDelta = std::make_unique<DeltaTime>(60);
 
 
 #ifdef _DEBUG

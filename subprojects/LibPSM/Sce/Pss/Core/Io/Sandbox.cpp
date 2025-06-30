@@ -279,7 +279,7 @@ namespace Sce::Pss::Core::Io {
 		FileSystem filesystem = this->findFilesystem(pathInSandbox, includeSystem);
 
 		// Create File Handle Object
-		PsmFileHandle* handle = new PsmFileHandle(pathInSandbox, pathOnDisk, flags);
+		PsmFileHandle* handle = PsmFileHandle::Create(pathInSandbox, pathOnDisk, flags);
 		
 
 		if (handle->IsRewritable() && !filesystem.IsWritable()) {
@@ -363,8 +363,8 @@ namespace Sce::Pss::Core::Io {
 				static_cast<EdataStream*>(dstHandle->GetUnderlying())->Write(buffer, totalRead);
 			} while (totalRead != 0);
 				
-			delete srcHandle;
-			delete dstHandle;
+			PsmFileHandle::Delete(srcHandle);
+			PsmFileHandle::Delete(dstHandle);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -514,7 +514,7 @@ namespace Sce::Pss::Core::Io {
 		FileSystem filesystem = this->findFilesystem(normPath, false);
 
 		// Create a new PsmFileDescriptor 
-		PsmFileHandle* handle = new PsmFileHandle(normPath, pathOnDisk, static_cast<ScePssFileOpenFlag_t>(filesystem.IsWritable() ? SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_WRITE : SCE_PSS_FILE_OPEN_FLAG_READ));
+		PsmFileHandle* handle = PsmFileHandle::Create(normPath, pathOnDisk, static_cast<ScePssFileOpenFlag_t>(filesystem.IsWritable() ? SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_WRITE : SCE_PSS_FILE_OPEN_FLAG_READ));
 
 		// Fail if its a file or it doesnt exist.
 		if (this->IsFile(normPath) || !this->PathExist(normPath, false)) {

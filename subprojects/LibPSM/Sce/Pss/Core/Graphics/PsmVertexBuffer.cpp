@@ -20,7 +20,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	int PsmVertexBuffer::Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray* formats, int* result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		VertexFormat* vertexFormats = (VertexFormat*)mono_array_addr_with_size(formats, 1, 0);
 		int vertexFormatsLen = mono_array_length(formats);
@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 			VertexBuffer* buffer = Handles::Get<VertexBuffer>(handle);

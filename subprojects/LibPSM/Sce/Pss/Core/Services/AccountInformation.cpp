@@ -18,7 +18,7 @@ using namespace Sce::Pss::Core::Mono;
 namespace Sce::Pss::Core::Services {
 
 	int AccountInformation::GetUniqueID(MonoArray* id) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (id == NULL)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;

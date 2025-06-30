@@ -18,7 +18,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() != nullptr) {
 				switch (type) {
@@ -44,7 +44,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmPixelBuffer::Delete(int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			PixelBuffer* pix = Handles::Get<PixelBuffer>(handle);
@@ -62,7 +62,7 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!Handles::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			PixelBuffer* pixBuffer = Handles::Get<PixelBuffer>(handle);

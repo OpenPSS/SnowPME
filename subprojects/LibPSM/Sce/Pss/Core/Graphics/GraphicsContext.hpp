@@ -30,7 +30,7 @@ using namespace Sce::Pss::Core::Timing;
 namespace Sce::Pss::Core::Graphics {
 
 	
-	class GraphicsContext : public GraphicsObject, public PsmUniqueObject<GraphicsContext> {
+	class GraphicsContext : public GraphicsObject, public PsmUniqueObject<GraphicsContext>, public PsmObject<GraphicsContext> {
 	private:
 		const int shaderProgramHandleOffset = 0;
 		const int frameBufferHandleOffset = 1;
@@ -73,7 +73,7 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsUpdate updateNotifyFlag = GraphicsUpdate::None;
 		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
 
-		DeltaTime* minFrameDelta = nullptr;
+		std::unique_ptr<DeltaTime> minFrameDelta = nullptr;
 
 
 		int setCurrentObject(ShaderProgram* program);
@@ -101,8 +101,8 @@ namespace Sce::Pss::Core::Graphics {
 		int Clear(ClearMask mask);
 		int SwapBuffers();
 
-		int Width = 960;
-		int Height = 544;
+		int Width = Shared::Config::ScreenWidth(0);
+		int Height = Shared::Config::ScreenHeight(0);
 
 		PixelFormat ColorFormat;
 		PixelFormat DepthFormat;

@@ -5,10 +5,11 @@
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgramOption.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderAttributeType.hpp>
+#include <Sce/Pss/Core/PsmObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 
-	class ShaderProgram : public GraphicsObject {
+	class ShaderProgram : public GraphicsObject, public PsmObject<ShaderProgram> {
 	private:
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
@@ -27,8 +28,8 @@ namespace Sce::Pss::Core::Graphics {
 		int UniformCount();
 		int AttributeCount();
 
-		std::vector<ProgramUniform> Uniforms = std::vector<ProgramUniform>();
-		std::vector<ProgramAttribute> Attributes = std::vector<ProgramAttribute>();
+		std::vector<ProgramUniform> Uniforms;
+		std::vector<ProgramAttribute> Attributes;
 
 		uint8_t* LoadFile(char* shaderPath, int* shaderLen);
 		uint8_t* CopyFile(uint8_t* shaderSrc, int shaderLen);
@@ -38,7 +39,8 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 		~ShaderProgram();
 
-		void SetAttributeBinding(int index, std::string& name);
+		int FindAttribute(std::string& name);
+		int SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
 		int GetAttributeLocation(std::string& name) const;
 		int GetAttributeType(int index, ShaderAttributeType* attributeType);

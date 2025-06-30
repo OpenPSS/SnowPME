@@ -9,7 +9,7 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core {
 	int Error::GetExceptionInfoNative(MonoString* message, MonoString* param) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		
 		const char* exceptionMessage = ExceptionInfo::GetMessage().c_str();
 		const char* exceptionParam = ExceptionInfo::GetParam().c_str();

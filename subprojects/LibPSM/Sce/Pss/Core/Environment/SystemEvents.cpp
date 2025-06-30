@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int SystemEvents::CheckEventsNative(InternalData *data){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		CheckEvents(data);
 

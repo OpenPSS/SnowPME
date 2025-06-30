@@ -12,19 +12,19 @@ using namespace Sce::Pss::Core::Imaging;
 
 namespace Sce::Pss::Core::Graphics {
 
-
-	Texture2D::Texture2D(std::string* fileName, bool mipmap, PixelFormat format) {
-		Logger::Debug(__FUNCTION__);
+	Texture2D::Texture2D(std::string& fileName, bool mipmap, PixelFormat format) {
+		LOG_FUNCTION();
 		LOCK_GUARD();
 
-		if (fileName != nullptr) {
-			this->Filename = std::string(fileName->c_str(), strlen(fileName->c_str()));
+		if (!fileName.empty()) {
+			this->Filename = std::string(fileName.c_str(), strlen(fileName.c_str()));
 
 			uint8_t* fileData = nullptr;
 			uint32_t fileSize = 0;
 
 			// load the file data
-			if (this->LoadFile(this->Filename.c_str(), fileData, fileSize)) {
+			int res = this->LoadFile(this->Filename.c_str(), fileData, fileSize);
+			if (res == PSM_ERROR_NO_ERROR) {
 
 				// parse image file 
 				this->LoadImage(fileData, fileSize, mipmap, format);
@@ -33,6 +33,9 @@ namespace Sce::Pss::Core::Graphics {
 				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
 				allocator->sce_psm_free(fileData);
 			}
+			else {
+				this->SetError(res);
+			}
 		}
 		else {
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
@@ -40,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int Texture2D::LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, PixelFormat format) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		int err;
 		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
@@ -53,17 +56,22 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 
-	Texture2D::~Texture2D() {
-		Logger::Debug(__FUNCTION__);
+	int Texture2D::InitImage() {
+		LOG_FUNCTION();
+		return PSM_ERROR_NO_ERROR;
 	}
 
-	GLenum Texture2D::GlTextureType() {
-		Logger::Debug(__FUNCTION__);
+	Texture2D::~Texture2D() {
+		LOG_FUNCTION();
+	}
+
+	GLenum Texture2D::GLTextureType() {
+		LOG_FUNCTION();
 		return GL_TEXTURE_2D;
 	}
 
 	int Texture2D::ActiveStateChanged(bool state) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		return PSM_ERROR_NO_ERROR;
 	}
 

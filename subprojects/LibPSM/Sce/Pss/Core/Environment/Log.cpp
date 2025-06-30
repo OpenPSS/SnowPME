@@ -10,7 +10,7 @@ namespace Sce::Pss::Core::Environment {
 
 
 	int Log::WriteNative(MonoString* text){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (!text) {
 			Logger::Error("\"text\" was a nullptr.");
@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Environment {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Log::GetNeedsRedirection(){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		// This was set based on what was being implemented,
 		switch (Shared::Config::TargetImplementation) {

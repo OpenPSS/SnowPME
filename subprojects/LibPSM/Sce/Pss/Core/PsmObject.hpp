@@ -8,26 +8,43 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <mutex>
 #include <memory>
+#include <utility>
+#include <type_traits>
 
 namespace Sce::Pss::Core {
-	template<typename T> class PsmObject : public std::enable_shared_from_this<T>, public Errorable, public PsmMutexObject<T> {
+	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<T> {
+
 	private:
 		int handle = Sce::Pss::Core::System::Handles::NoHandle;
-	public:
-		bool IsDisposed = false;
+	protected:
+		PsmObject() {
+			this->handle = Sce::Pss::Core::System::Handles::Create(reinterpret_cast<T*>(this));
+		}
 		~PsmObject() {
-			LOCK_GUARD();
 			this->IsDisposed = true;
-			Sce::Pss::Core::System::Handles::Delete(this->handle);
-
 			this->handle = Sce::Pss::Core::System::Handles::NoHandle;
 		};
+		
+	public:
+		bool IsDisposed = false;
 
+		template <typename... Args, typename = T> static T* Create(Args&&... args) {
 
-		int Handle() {
-			if (!Sce::Pss::Core::System::Handles::IsValid(this->handle)) {
-				this->handle = Sce::Pss::Core::System::Handles::Create(reinterpret_cast<T*>(this));
+			T* obj = new T(std::forward<Args>(args)...);
+			obj->handle = Sce::Pss::Core::System::Handles::Create(obj);
+			return obj;
+		}
+
+		static void Delete(T* obj) {
+
+			if (Sce::Pss::Core::System::Handles::IsValid(obj->Handle())) {
+				Sce::Pss::Core::System::Handles::Delete(obj->Handle());
 			}
+			
+			delete obj;
+		}
+		
+		int Handle() {
 			return this->handle;
 		}
 
@@ -42,6 +59,7 @@ namespace Sce::Pss::Core {
 			std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject();
 			alloc->sce_psm_free(ptr);
 		}
+
 	};
 
 }

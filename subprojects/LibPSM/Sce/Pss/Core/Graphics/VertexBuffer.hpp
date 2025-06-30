@@ -6,7 +6,7 @@
 #include <Sce/Pss/Core/Graphics/ElementType.hpp>
 #include <Sce/Pss/Core/Graphics/VertexFormat.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
-
+#include <Sce/Pss/Core/PsmObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 	using namespace Sce::Pss::Core::Graphics;
@@ -16,7 +16,7 @@ namespace Sce::Pss::Core::Graphics {
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
-	class VertexBuffer : public GraphicsObject {
+	class VertexBuffer : public GraphicsObject, public PsmObject<VertexBuffer> {
 	private:
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
 	public:

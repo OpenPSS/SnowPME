@@ -63,7 +63,7 @@ namespace Sce::Pss::Core::Environment {
 
 	}
 	int Shell::ExecuteNative(Action* data){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (data == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 

@@ -8,11 +8,12 @@
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 
+using namespace Sce::Pss::Core::System;
+using namespace Sce::Pss::Core::Memory;
+using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core::System;
-	using namespace Sce::Pss::Core::Memory;
-	using namespace Sce::Pss::Core::Io;
+
 
 	PixelBuffer::PixelBuffer() {
 	}
@@ -29,6 +30,9 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
+	int PixelBuffer::LoadImage(char* data, uint64_t dataLen, int mipmap, PixelFormat format) {
+		return PSM_ERROR_NO_ERROR;
+	}
 	int PixelBuffer::LoadFile(const char* fileName, uint8_t* &fileData, uint32_t& fileSize) {
 		if (fileName != nullptr) {
 			// open the file
@@ -50,11 +54,11 @@ namespace Sce::Pss::Core::Graphics {
 				}
 				else {
 					IoCall::PsmClose(handle);
-					return this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+					return PSM_ERROR_COMMON_OUT_OF_MEMORY;
 				}
 			}
 			else {
-				return this->SetError(PSM_ERROR_COMMON_FILE_NOT_FOUND);
+				return PSM_ERROR_COMMON_FILE_NOT_FOUND;
 			}
 
 		}

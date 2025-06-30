@@ -95,7 +95,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int Bgm::NewFromFilename(MonoString* filename, int* handle){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (filename == nullptr || handle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -117,7 +117,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int Bgm::NewFromFileImage(MonoArray* fileImage, int* handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 
 		if (fileImage == nullptr || handle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -142,7 +142,7 @@ namespace Sce::Pss::Core::Audio {
 	}
 
 	int Bgm::ReleaseNative(int handle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		
 		if (Handles::IsValid(handle)) {
 			Bgm* bgm = Handles::Get<Bgm>(handle);
@@ -152,13 +152,13 @@ namespace Sce::Pss::Core::Audio {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Bgm::CreatePlayerNative(int handle, int* playerHandle) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (playerHandle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		if (Handles::IsValid(handle)) {
 			Bgm* bgm = Handles::Get<Bgm>(handle);
-			BgmPlayer* player = new BgmPlayer(bgm);
+			BgmPlayer* player = BgmPlayer::Create(bgm);
 
 			if (Handles::IsValid(player->Handle())) {
 				*playerHandle = player->Handle();

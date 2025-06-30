@@ -49,34 +49,31 @@ namespace Sce::Pss::Core::Graphics {
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
 
 		if (vertexShaderBuf != nullptr) {
-			CGX* cgxFile = new CGX(vertexShaderBuf, vertexShaderSz);
-			RETURN_ERRORABLE(cgxFile);
+			std::unique_ptr<CGX> cgxFile = std::make_unique<CGX>(vertexShaderBuf, vertexShaderSz);
+			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindVertexShader("GLSL");
-			RETURN_ERRORABLE(cgxFile);
+			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 			this->vertexSrc = src;
 
 			if(fragmentShaderBuf == nullptr) {
 				std::string src = cgxFile->FindFragmentShader("GLSL");
-				RETURN_ERRORABLE(cgxFile);
+				RETURN_ERRORABLE_SMARTPTR(cgxFile);
 				this->fragmentSrc = src;
 			}
 
-			delete cgxFile;
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			CGX* cgxFile = new CGX(fragmentShaderBuf, fragmentShaderSz);
-			RETURN_ERRORABLE(cgxFile);
+			std::unique_ptr<CGX> cgxFile = std::make_unique<CGX>(fragmentShaderBuf, fragmentShaderSz);
+			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindFragmentShader("GLSL");
-			RETURN_ERRORABLE(cgxFile);
+			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 			this->fragmentSrc = src;
-			delete cgxFile;
 		}
 
 		this->GLReference = glCreateProgram();
-
 
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
@@ -128,6 +125,10 @@ namespace Sce::Pss::Core::Graphics {
 
 		glGetProgramiv(this->GLReference, GL_ACTIVE_UNIFORMS, &uniformCount);
 
+		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
+		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
+
+
 		for (int i = 0; i < uniformCount; i++) {
 			ProgramUniform uniform = ProgramUniform();
 
@@ -145,10 +146,6 @@ namespace Sce::Pss::Core::Graphics {
 
 			Logger::Debug("Uniform: " + uniform.Name + " location: " + std::to_string(uniform.Location));
 			this->Uniforms.push_back(uniform);
-		}
-
-		if(this->Handle() == 18) {
-			Logger::Debug("a");
 		}
 
 		glGetProgramiv(this->GLReference, GL_ACTIVE_ATTRIBUTES, &attributeCount);
@@ -172,8 +169,6 @@ namespace Sce::Pss::Core::Graphics {
 			this->Attributes.push_back(attribute);
 		}
 		
-		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
-		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
 
 		return this->GLReference;
 	}
@@ -300,12 +295,28 @@ namespace Sce::Pss::Core::Graphics {
 		return this->Attributes.size();
 	}
 
-	void ShaderProgram::SetAttributeBinding(int index, std::string& name) {
+
+	int ShaderProgram::FindAttribute(std::string& name) {
+		for (ProgramAttribute attribute : this->Attributes) {
+			if (attribute.Name == name) {
+				return attribute.Index;
+			}
+		}
+
+		return -1;
+	}
+
+	int ShaderProgram::SetAttributeBinding(int index, std::string& name) {
+		if (this->FindAttribute(name) == -1) {
+			ExceptionInfo::AddMessage("Attribute variable '" + name + "' is not found\n");
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
 		GL_CALL(glBindAttribLocation(this->GLReference, index, name.c_str()));
 		if (attributeBindings.size() <= index) attributeBindings.resize(index + 1);
 		attributeBindings[index] = name;
+		return PSM_ERROR_NO_ERROR;
 	}
-
 	std::string ShaderProgram::GetAttributeBinding(int index) const {
 		if(attributeBindings.size() <= index) return "";
 		return attributeBindings[index];

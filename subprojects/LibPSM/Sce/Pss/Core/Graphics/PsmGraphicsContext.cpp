@@ -23,26 +23,29 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		
 		if (GraphicsContext::UniqueObjectExists()) {
 			return PSM_ERROR_GRAPHICS_SYSTEM;
 		}
 
-		std::shared_ptr<GraphicsContext> ctx = std::make_shared<GraphicsContext>(width, height, colorFormat, depthFormat, multiSampleMode);
-		RETURN_ERRORABLE_SHARED(ctx);
+		GraphicsContext* ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
+		RETURN_ERRORABLE_PSMOBJECT(ctx, GraphicsContext);
 		
-		GraphicsContext::MakeUniqueObject(ctx);
+		GraphicsContext::MakeUniqueObject(std::shared_ptr<GraphicsContext>(ctx));
 
 		*result = ctx->Handle();
 		
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmGraphicsContext::Delete(int handle){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			GraphicsContext::MakeLocalObject();
+
+			GraphicsContext* ctx = Handles::Get<GraphicsContext>(handle);
+			GraphicsContext::Delete(ctx);
 			
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -52,7 +55,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -72,7 +75,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::SwapBuffers(int handle){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -88,7 +91,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::Clear(int handle, ClearMask mask) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -116,7 +119,7 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			*height = Shared::Config::ScreenHeight(0);
@@ -130,7 +133,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::GetScreenSizes(MonoArray* sizes, int* result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			int numScreens = Shared::Config::ScreenTotal;
@@ -158,7 +161,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 
@@ -178,7 +181,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 	int PsmGraphicsContext::GetCaps(int handle, GraphicsCapsState* caps) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (Thread::IsMainThread()) {
 			memcpy(caps, GraphicsContext::UniqueObject()->CapsState, sizeof(GraphicsCapsState));

@@ -20,6 +20,7 @@ using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Io;
+using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Graphics {
@@ -32,16 +33,16 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 	#define GET_PROG() \
-		Logger::Debug(__FUNCTION__); \
+		LOG_FUNCTION(); \
 		CHECK_MAIN_THREAD() \
 		ShaderProgram* prog = Handles::Get<ShaderProgram>(handle); \
-		if (prog == NULL) { \
+		if (prog == nullptr) { \
 			Logger::Error("handle was null."); \
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED; \
 		}
 
 	int PsmShaderProgram::FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		CHECK_MAIN_THREAD();
 		char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
 		char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
@@ -60,20 +61,20 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmShaderProgram::FromImage(MonoArray* vpFileImage, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
 		CHECK_MAIN_THREAD();
 
-		size_t vertexShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vpFileImage);
-		size_t fragmentShaderSz = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(fpFileImage);
+		size_t vertexShaderSz = MonoUtil::MonoArrayBytesLength(vpFileImage);
+		size_t fragmentShaderSz = MonoUtil::MonoArrayBytesLength(fpFileImage);
 		uint8_t* vertexShaderBuf = nullptr;
 		uint8_t* fragmentShaderBuf = nullptr;
 
 		if(vpFileImage != nullptr)
-			vertexShaderBuf = (uint8_t*)mono_array_addr_with_size(vpFileImage, 1, 0);
+			vertexShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(vpFileImage, 1, 0));
 		if(fpFileImage != nullptr)
-			fragmentShaderBuf = (uint8_t*)mono_array_addr_with_size(fpFileImage, 1, 0);
+			fragmentShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(fpFileImage, 1, 0));
 
-		ShaderProgram* shdrPrg = new ShaderProgram(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
+		ShaderProgram* shdrPrg = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
 		RETURN_ERRORABLE(shdrPrg);
 
 		*result = shdrPrg->Handle();
@@ -108,7 +109,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 
 		std::string attributeName;
-    	Mono::MonoUtil::MonoStringToStdString(name, attributeName);
+    	MonoUtil::MonoStringToStdString(name, attributeName);
 
 		// if not found, *result = -1
 		// do NOT return error, that isnt what psm expects
@@ -124,7 +125,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 		
 		std::string uniformName;
-		Mono::MonoUtil::MonoStringToStdString(name, uniformName);
+		MonoUtil::MonoStringToStdString(name, uniformName);
 
 		bool found = false;
 		for (ProgramUniform uniform : prog->Uniforms)
@@ -152,7 +153,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		*result = Mono::MonoUtil::StdStringToMonoString(bindingName);
+		*result = MonoUtil::StdStringToMonoString(bindingName);
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -160,14 +161,9 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 
 		std::string attributeName;
-		Mono::MonoUtil::MonoStringToStdString(name, attributeName);
+		MonoUtil::MonoStringToStdString(name, attributeName);
 
-		prog->SetAttributeBinding(index, attributeName);
-		if(prog->GetError() != PSM_ERROR_NO_ERROR) {
-			return prog->GetError();
-		}
-
-		return PSM_ERROR_NO_ERROR;
+		return prog->SetAttributeBinding(index, attributeName);
 	}
 
 	int PsmShaderProgram::GetUniformType(int handle, int index, ShaderUniformType* result) {
@@ -184,7 +180,7 @@ namespace Sce::Pss::Core::Graphics {
 		GET_PROG();
 		std::string uniformName;
 		prog->GetUniformName(index, uniformName);
-		*result = Mono::MonoUtil::StdStringToMonoString(uniformName);
+		*result = MonoUtil::StdStringToMonoString(uniformName);
 		return PSM_ERROR_NO_ERROR;
 	}
 
