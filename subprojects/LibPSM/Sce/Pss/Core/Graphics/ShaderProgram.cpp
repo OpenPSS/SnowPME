@@ -313,12 +313,12 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		GL_CALL(glBindAttribLocation(this->GLReference, index, name.c_str()));
-		if (attributeBindings.size() <= index) attributeBindings.resize(index + 1);
+		if (attributeBindings.size() <= static_cast<size_t>(index)) attributeBindings.resize(index + 1);
 		attributeBindings[index] = name;
 		return PSM_ERROR_NO_ERROR;
 	}
 	std::string ShaderProgram::GetAttributeBinding(int index) const {
-		if(attributeBindings.size() <= index) return "";
+		if(attributeBindings.size() <= static_cast<size_t>(index)) return "";
 		return attributeBindings[index];
     }
 

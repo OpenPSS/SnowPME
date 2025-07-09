@@ -16,7 +16,7 @@ namespace SnowPME::Graphics::Gui {
 
 	void ProgramList::addMenuItem(std::string menuName, std::string programPath) {
 		ProgramEntry progEntry;
-		progEntry.label = menuName + "##" + StringUtil::CreateRandomString(10);
+		progEntry.label = menuName + "##" + Format::CreateRandomString(10);
 		progEntry.programPath = programPath;
 		progEntry.selected = false;
 		progEntry.enabled = true;

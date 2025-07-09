@@ -7,9 +7,15 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
+#define PRINT_ERR(error) \
+		do { \
+			Shared::Debug::Logger::Error(std::string(__FUNCTION__) + " returned error: " + Shared::String::Format::Hex(error)); \
+		} while(0);
+
 #define RETURN_ERRORABLE_SMARTPTR(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
+			PRINT_ERR(error); \
 			x = nullptr; \
 			return error; \
 		}
@@ -17,6 +23,7 @@
 #define RETURN_ERRORABLE_PSMOBJECT(x, t) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
+			PRINT_ERR(error); \
 			t::Delete(x); \
 			x = nullptr; \
 			return error; \
@@ -25,6 +32,7 @@
 #define RETURN_ERRORABLE(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
+			PRINT_ERR(error); \
 			delete x; \
 			x = nullptr; \
 			return error; \
@@ -34,6 +42,7 @@
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			this->SetError(error); \
+			PRINT_ERR(error); \
 			delete x; \
 			x = nullptr; \
 			return PSM_ERROR_NO_ERROR; \
@@ -42,6 +51,7 @@
 #define RETURN_ERRORABLE_AS_BOOL(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
+			PRINT_ERR(error); \
 			delete x; \
 			x = nullptr; \
 			return false; \
@@ -55,9 +65,11 @@
 
 #define UNIMPLEMENTED_ERRORABLE(msg) \
 		do { \
-			Sce::Pss::Core::ExceptionInfo::AddMessage(std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n")); \
+			std::string str = std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n"); \
+			Shared::Debug::Logger::Todo(str); \
+			Sce::Pss::Core::ExceptionInfo::AddMessage(str); \
 			this->SetError(PSM_ERROR_NOT_IMPLEMENTED); \
-			ASSERT(true); \
+			ASSERT(false); \
 			return; \
 		} while (0)
 

@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Imaging/Impl/Image.hpp>
+#include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
@@ -9,6 +9,7 @@
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
+using namespace Sce::Pss::Core::Imaging::Impl;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -45,13 +46,8 @@ namespace Sce::Pss::Core::Graphics {
 	int Texture2D::LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, PixelFormat format) {
 		LOG_FUNCTION();
 
-		int err;
-		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
-
-		err = this->image.Open(data, dataLen, allocator);
-		if (err != PSM_ERROR_NO_ERROR) {
-			return err;
-		}
+		this->image = ImageImpl::Open(data, dataLen, HeapAllocator::UniqueObject());
+		RETURN_ERRORABLE_SMARTPTR(this->image);
 
 		UNIMPLEMENTED();
 	}

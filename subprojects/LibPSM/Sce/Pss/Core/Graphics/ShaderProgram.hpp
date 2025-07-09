@@ -18,18 +18,16 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::string fragmentSrc = "";
 		std::string vertexSrc = "";
-		ShaderProgramOption* programOptions;
+		std::unique_ptr<ShaderProgramOption> programOptions = nullptr;
 
 		std::vector<std::string> attributeBindings; 
+
 
 		int compileShader(int type, char* source);
 	public:
 		int ActiveStateChanged(bool state);
 		int UniformCount();
 		int AttributeCount();
-
-		std::vector<ProgramUniform> Uniforms;
-		std::vector<ProgramAttribute> Attributes;
 
 		uint8_t* LoadFile(char* shaderPath, int* shaderLen);
 		uint8_t* CopyFile(uint8_t* shaderSrc, int shaderLen);
@@ -46,6 +44,12 @@ namespace Sce::Pss::Core::Graphics {
 		int GetAttributeType(int index, ShaderAttributeType* attributeType);
 
 		int GetUniformName(int index, std::string& uniformName) const;
+
+		int TotalAttributeStreams;
+
+		std::vector<ProgramUniform> Uniforms;
+		std::vector<ProgramAttribute> Attributes;
+
 	};
 }
 

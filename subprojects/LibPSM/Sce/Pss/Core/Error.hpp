@@ -87,22 +87,13 @@ enum PsmError: uint32_t {
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
 #endif
 
-inline std::string functionName(const std::source_location& location = std::source_location::current()) {
-    const char* full = location.function_name();
-    const char* end = full;
-    while (*end && *end != '(') ++end;
-    const char* start = end;
-    while (start > full && !std::isspace(start[-1])) --start;
-    return std::string(start, end);
-}
-
 #define UNIMPLEMENTED_MSG(msg) \
 	do { \
-		_UNIMPLEMENETED_MACRO_BODY(std::string(functionName()) + std::string(msg) + " is not yet implemented."); \
+		_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + std::string(msg) + " is not yet implemented."); \
 	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
-#define LOG_FUNCTION() Shared::Debug::Logger::Debug("Executing function : '"+std::string(__FUNCTION__)+"'.");
+#define LOG_FUNCTION() Shared::Debug::Logger::Debug(std::string(__FUNCTION__));
 
 
 namespace Sce::Pss::Core {

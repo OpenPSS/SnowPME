@@ -38,13 +38,13 @@ namespace Sce::Pss::Core::Graphics {
 		char cgVer[CGX_MAGIC_LEN];
 		char glesVer[CGX_MAGIC_LEN];
 		uint32_t flags;
-		int unk0;
-		int unk1;
+		uint32_t unk0;
+		uint32_t unk1;
 
 		uint32_t vertexShaderVariantsPtr;
-		int unk2;
+		uint32_t unk2;
 		uint32_t fragmentShaderVariantsPtr;
-		int unk4;
+		uint32_t unk4;
 
 		uint32_t headerSize;
 		uint32_t shaderDataPtr;

@@ -24,6 +24,11 @@
 
 #include <mono/mono.h>
 #include <glad/glad.h>
+#include <list>
+#include <memory>
+#include <cstdint>
+#include <vector>
+
 using namespace Sce::Pss::Core::Imaging;
 using namespace Sce::Pss::Core::Timing;
 
@@ -56,10 +61,12 @@ namespace Sce::Pss::Core::Graphics {
 		const GLenum glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
 		const GLenum glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
 
-		std::shared_ptr<ShaderProgram> currentProgram;
-		std::shared_ptr<FrameBuffer> currentFrameBuffer;
-		VertexBuffer* currentVertexBuffers[4];
-		Texture* currentTextures[4];
+		std::shared_ptr<ShaderProgram> currentProgram = nullptr;
+		std::shared_ptr<FrameBuffer> currentFrameBuffer = nullptr;
+		std::shared_ptr<VertexBuffer> currentVertexBuffer = nullptr;
+
+		std::list<std::shared_ptr<VertexBuffer>> vertexBuffers;
+		std::list<std::shared_ptr<Texture>> textures;
 		EnableMode currentEnableModes = EnableMode::None;
 
 		int cullFaceBits = 0;
@@ -74,7 +81,6 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsUpdate updateNotifyDataFlag = GraphicsUpdate::None;
 
 		std::unique_ptr<DeltaTime> minFrameDelta = nullptr;
-
 
 		int setCurrentObject(std::shared_ptr<ShaderProgram> program);
 		int setCurrentObject(std::shared_ptr<FrameBuffer> frameBuffer);

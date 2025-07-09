@@ -5,12 +5,12 @@
 
 namespace Shared::String {
 	std::string Path::ChangeSlashesToPsmStyle(const std::string& path) {
-		return StringUtil::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
+		return Format::Replace(path, WINDOWS_PATH_SEPERATOR, PSM_PATH_SEPERATOR); // Replace all \ with /.
 	}
 
 	std::string Path::ChangeSlashesToNativeStyle(const std::string& path) {
 #ifdef _WIN32
-		return StringUtil::Replace(path, PSM_PATH_SEPERATOR, WINDOWS_PATH_SEPERATOR); // Replace all / with \.
+		return Format::Replace(path, PSM_PATH_SEPERATOR, WINDOWS_PATH_SEPERATOR); // Replace all / with \.
 #else
 		return ChangeSlashesToPsmStyle(path); // *NIX and PSM use the same style.
 #endif

@@ -4,19 +4,19 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Metadata/AppInfo.hpp>
 #include <Sce/Pss/Core/Io/Sandbox.hpp>
 
-#include <LibShared.hpp>
-
 #include <mono/mono.h>
+#include <LibShared.hpp>
 
 using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Environment;
+
 using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core {
 	int InitalizeCsharp::installFunctions(PsmMonoFunc* functionsList) {
@@ -24,7 +24,7 @@ namespace Sce::Pss::Core {
 			if ( functionsList[i].functionSignature == nullptr) return PSM_ERROR_NO_ERROR;
 			if ( functionsList[i].functionPointer == nullptr ) return PSM_ERROR_COMMON_ARGUMENT;
 
-			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> " + std::to_string(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer)));
+			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> " + Format::Hex(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer)));
 			mono_add_internal_call(functionsList[i].functionSignature, reinterpret_cast<void*>(functionsList[i].functionPointer));
 		}
 	}

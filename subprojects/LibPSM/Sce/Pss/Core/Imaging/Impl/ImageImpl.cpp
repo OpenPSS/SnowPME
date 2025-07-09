@@ -2,9 +2,9 @@
 #include <stb/stb_image.h>
 
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Imaging/Impl/Image.hpp>
+#include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
+#include <Sce/Pss/Core/Imaging/ImageSize.hpp>
 #include <Sce/Pss/Core/Error.hpp>
-
 #include <LibShared.hpp>
 
 using namespace Sce::Pss::Core::Memory;
@@ -12,13 +12,14 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Imaging::Impl {
 
-	Image::Image() {
-		this->image = nullptr;
+	ImageImpl::ImageImpl() {
+		this->imageSize.Width = 0;
+		this->imageSize.Height = 0;
 	}
 
-	Image::~Image() {
-		if (image != nullptr) {
-			stbi_image_free(image);
+	ImageImpl::~ImageImpl() {
+		if (imageBuffer != nullptr) {
+			this->allocator.lock()->sce_psm_free(imageBuffer);
 		}
 	}
 
@@ -38,13 +39,46 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		UNIMPLEMENTED();
 	}
 
-	int Image::Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<HeapAllocator> alloc) {
+	std::shared_ptr<ImageImpl> ImageImpl::CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, int channels, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc) {
+		std::shared_ptr<ImageImpl> implImg = std::make_shared<ImageImpl>();
 
-		void* buffer = alloc->sce_psm_malloc(dataLen);
-		memcpy(buffer, data, dataLen);
+		implImg->allocator = alloc;
 
-		this->image = stbi_load_from_memory(data, dataLen, &this->x, &this->y, &this->comp, 4);
-		return this->image ? PSM_ERROR_NO_ERROR : PSM_ERROR_COMMON_INVALID_FORMAT;
+		implImg->imageSize = *size;
+		implImg->channels = channels;
+
+		int imgSize = size->Width * size->Height * channels;
+		implImg->imageBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(imgSize));
+
+		if (implImg->imageBuffer != nullptr) {
+			memcpy(implImg->imageBuffer, imageBuffer, imgSize);
+		}
+
+		return implImg;
+	}
+
+	std::shared_ptr<ImageImpl> ImageImpl::Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<HeapAllocator> alloc) {
+		std::shared_ptr<ImageImpl> implImg = std::make_shared<ImageImpl>();
+
+		implImg->allocator = alloc;
+
+		if (memcmp("MIG", data, 3) == 0) {
+			Logger::Todo("Implement .GIM parsing to the image library (how did you even trigger this?)");
+			ASSERT(false);
+		}
+
+		stbi_uc* stbImg = stbi_load_from_memory(data, dataLen, &implImg->imageSize.Width, &implImg->imageSize.Height, &implImg->channels, 4);
+
+		int totalSz = implImg->imageSize.Width * implImg->imageSize.Height * implImg->channels;
+		implImg->imageBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(totalSz));
+
+		if (implImg->imageBuffer != nullptr) {
+			memcpy(implImg->imageBuffer, stbImg, totalSz);
+		}
+
+		stbi_image_free(stbImg);
+
+		return implImg;
 	}
 
 }

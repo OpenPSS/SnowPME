@@ -15,14 +15,31 @@ namespace Sce::Pss::Core::Memory {
 
 	}
 
+	void* HeapAllocator::sce_psm_realloc(void* buffer, int sz) {
+		LOCK_GUARD();
+
+		// lookup the vector from this map
+		std::shared_ptr<std::vector<uint8_t>> vec = this->heapAllocations[reinterpret_cast<uintptr_t>(buffer)];
+
+		// remove free space from the total used size
+		this->UsedSpace -= vec->size();
+
+		// add total free space after resize to used size.
+		vec->resize(sz);
+		this->UsedSpace += vec->size();
+
+		return vec->data();
+	}
+
 	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
 
-		/*if (this->UsedSpace + sz > this->TotalHeapSize) {
+#ifdef ENFORCE_MEM_LIMIT
+		if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
-			Logger::Debug("This should exceeed the resource heap limit, but since it barely works ima allow it for now ..");
-		}*/
-
+			return nullptr;
+		}
+#endif
 		// allocate a vector of uint8_t, of the given size
 		std::shared_ptr<std::vector<uint8_t>> vec = std::make_shared<std::vector<uint8_t>>(sz);
 
@@ -33,7 +50,7 @@ namespace Sce::Pss::Core::Memory {
 		uint8_t* buffer = vec->data();
 
 		// make a note of this allocation in the heapAllocations map.
-		this->heapAllocations[(uintptr_t)buffer] = vec;
+		this->heapAllocations[reinterpret_cast<uintptr_t>(buffer)] = vec;
 
 		return reinterpret_cast<void*>(buffer);
 	}

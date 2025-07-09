@@ -128,7 +128,7 @@ namespace Sce::Pss::Core::Graphics {
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
 					std::shared_ptr<VertexBuffer> workingVertexBuffer = Handles<VertexBuffer>::Get(handles[GraphicsContext::vertexBufferHandleOffset + i]);
-					VertexBuffer* currentVertexBuffer = reinterpret_cast<VertexBuffer*>(this->currentVertexBuffers[i]);
+					VertexBuffer* currentVertexBuffer = reinterpret_cast<VertexBuffer*>(this->vertexBuffers[i]);
 
 					if (currentVertexBuffer == workingVertexBuffer.get()) {
 						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
@@ -144,7 +144,7 @@ namespace Sce::Pss::Core::Graphics {
 							}
 						}
 
-						this->currentVertexBuffers[i] = workingVertexBuffer.get();
+						this->vertexBuffers[i] = workingVertexBuffer.get();
 
 						if (workingVertexBuffer != nullptr) {
 							workingVertexBuffer->Active = true;
@@ -185,6 +185,20 @@ namespace Sce::Pss::Core::Graphics {
 
 		// check notifyFlag is VertexBuffer
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
+			std::shared_ptr<ShaderProgram> program = this->currentProgram;
+			
+			int unk11 = 0;
+			if (program != nullptr) {
+				unk11 = program->unk11;
+			}
+
+			std::shared_ptr<VertexBuffer> vertexBuffer = this->currentVertexBuffer;
+
+			int instDivisor = 0;
+			if (vertexBuffer != nullptr) {
+				instDivisor = vertexBuffer->InstDivisor;
+			}
+
 			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::VertexBuffer");
 		}
 
@@ -612,7 +626,7 @@ namespace Sce::Pss::Core::Graphics {
 			else
 				this->Extensions = std::string(glExtensions);
 
-			std::vector<std::string> extensionList = Shared::String::StringUtil::Split(this->Extensions, " ");
+			std::vector<std::string> extensionList = Shared::String::Format::Split(this->Extensions, " ");
 
 			char* glVendor = (char*)glGetString(GL_VENDOR);
 			char* glRenderer = (char*)glGetString(GL_RENDERER);
@@ -720,7 +734,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			// set internal state to nulls
 
-			memset(this->currentVertexBuffers, NULL, sizeof(GraphicsContext::currentVertexBuffers));
+			memset(this->vertexBuffers, NULL, sizeof(GraphicsContext::vertexBuffers));
 			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
 
 			this->minFrameDelta = std::make_unique<DeltaTime>(60);
@@ -732,7 +746,7 @@ namespace Sce::Pss::Core::Graphics {
 #endif
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
 	}

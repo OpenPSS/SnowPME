@@ -14,9 +14,8 @@
 namespace Sce::Pss::Core {
 	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<PsmObject<T>> {
 
-	private:
-		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 	protected:
+		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		PsmObject() = default;
 		~PsmObject() {
 			this->IsDisposed = true;

@@ -51,7 +51,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	ImGuiWindow::ImGuiWindow() {
-		this->uuid = StringUtil::CreateRandomString(10);
+		this->uuid = Format::CreateRandomString(10);
 		this->Show();
 
 	}

@@ -740,11 +740,10 @@ namespace Sce::Pss::Core::Graphics {
 
 	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen) {
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::UniqueObjectExists()) {
+			if (!GraphicsContext::UniqueObjectExists()) {
 				this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 				return;
 			}
-			this->VertexFormats = std::vector<VertexFormat>();
 
 			// Get graphics context
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
@@ -826,7 +825,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
 	}

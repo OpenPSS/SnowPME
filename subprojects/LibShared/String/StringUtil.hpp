@@ -6,8 +6,12 @@
 #include <iostream>
 
 namespace Shared::String {
-	class StringUtil {
+	class Format {
 	public: 
+		static std::string Hex(int val);
+		static std::string Hex(uintptr_t val);
+		static std::string Hex(uint64_t val);
+
 		static std::string ZFill(std::string val, char pad, size_t fillSize);
 		static std::string Join(const std::vector<std::string> parts, const std::string& delimiter);
 		static std::vector<std::string> Split(const std::string& str, const std::string& delimiter);

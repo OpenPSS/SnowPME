@@ -102,11 +102,11 @@ namespace Shared::Debug
 
 	void inline Logger::logMultiline(const std::string& channel, const std::string& msg, std::ostream& stream) {
 		std::scoped_lock<std::mutex> lock(Logger::logMutex);
-		std::string fixedStr = StringUtil::Replace(msg, "\r", "");
-		std::vector<std::string> lines = StringUtil::Split(fixedStr, "\n");
+		std::string fixedStr = Format::Replace(msg, "\r", "");
+		std::vector<std::string> lines = Format::Split(fixedStr, "\n");
 
 		for (std::string line : lines) {
-			line = StringUtil::Replace(line, "\n", "");
+			line = Format::Replace(line, "\n", "");
 			if (line.empty()) continue;
 
 			std::cerr << "[" << channel << "] ";

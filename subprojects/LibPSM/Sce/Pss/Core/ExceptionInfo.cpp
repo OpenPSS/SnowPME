@@ -1,4 +1,5 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Errorable.hpp>
 #include <LibShared.hpp>
 #include <cstring>
 
@@ -11,21 +12,25 @@ namespace Sce::Pss::Core {
 	std::string ExceptionInfo::param = "";
 
 	std::string& ExceptionInfo::GetMessage() {
+		LOG_FUNCTION();
+
 		return message;
 	}
 	
 	std::string& ExceptionInfo::GetParam() {
+		LOG_FUNCTION();
+
 		return param;
 	}
 
 	void ExceptionInfo::SetMessage(const std::string& str) {
-		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
+		LOG_FUNCTION();
 
 		ExceptionInfo::message = str + "\n";
 	}
 
 	void ExceptionInfo::SetMessage(const char* str) {
-		Logger::Debug("ExceptionInfo::SetMessage(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
+		LOG_FUNCTION();
 
 		if (str != nullptr) {
 			ExceptionInfo::message = std::string(str, strlen(str)) + "\n";
@@ -36,13 +41,13 @@ namespace Sce::Pss::Core {
 	}
 
 	void ExceptionInfo::SetParam(const std::string& str) {
-		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(str, "\n", "") + "\");");
+		LOG_FUNCTION();
 
 		ExceptionInfo::param = str;
 	}
 
 	void ExceptionInfo::SetParam(const char* str) {
-		Logger::Debug("ExceptionInfo::SetParam(\"" + StringUtil::Replace(std::string(str), "\n", "") + "\");");
+		LOG_FUNCTION();
 
 		if (str != nullptr) {
 			ExceptionInfo::param = std::string(param, strlen(str));
@@ -53,7 +58,7 @@ namespace Sce::Pss::Core {
 	}
 
 	void ExceptionInfo::AddMessage(const std::string& str) {
-		Logger::Debug("ExceptionInfo::AddMessage(\"" + StringUtil::Replace(str, "\n", "") + "\");");
+		LOG_FUNCTION();
 
 		if (ExceptionInfo::message.empty())
 			ExceptionInfo::message += "\n";

@@ -165,7 +165,7 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsExtension.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GraphicsUpdate.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\Image.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImpl.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ImportDialogEnum.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\InternalOption.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\MultiSampleMode.hpp" />
@@ -291,13 +291,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

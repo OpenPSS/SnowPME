@@ -22,6 +22,7 @@ namespace Sce::Pss::Core::Memory {
 		size_t UsedSpace = 0;
 		std::string HeapName;
 
+		void* sce_psm_realloc(void* buffer, int sz);
 		void* sce_psm_malloc(int sz);
 		void sce_psm_free(void* buffer);
 	};

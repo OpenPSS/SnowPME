@@ -70,7 +70,7 @@ namespace Sce::Pss::Core::System {
         // loop over all special shell characters and replace them with escaped version
         for (int i = 0; i < specialCharacters.length(); i++) {
             std::string specialCharacter = std::string(1, specialCharacters.at(i));
-            arg = Shared::String::StringUtil::Replace(arg, specialCharacter, escapeSeq + specialCharacter);
+            arg = Shared::String::Format::Replace(arg, specialCharacter, escapeSeq + specialCharacter);
         }
 
         return arg;
@@ -82,9 +82,9 @@ namespace Sce::Pss::Core::System {
             url = "http://" + url;
         
         // escape URL (turn space into %20, newline into %0D and %0A)
-        url = Shared::String::StringUtil::Replace(url, " ",  "%20");
-        url = Shared::String::StringUtil::Replace(url, "\r", "%0D");
-        url = Shared::String::StringUtil::Replace(url, "\n", "%0A");
+        url = Shared::String::Format::Replace(url, " ",  "%20");
+        url = Shared::String::Format::Replace(url, "\r", "%0D");
+        url = Shared::String::Format::Replace(url, "\n", "%0A");
 
         // because this is passed as an argument to a shell command ..
         // we must strip unsafe values from the shell command

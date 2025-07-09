@@ -82,7 +82,7 @@ namespace Sce::Pss::Core::Io {
 			startDir = "";
 
 		// Split path by the / seperator
-		std::vector<std::string> pathComponents = Shared::String::StringUtil::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
+		std::vector<std::string> pathComponents = Shared::String::Format::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
 
 		// if you think about it, file paths are essentially. just First-In-First-Out (FIFO);
 
@@ -100,7 +100,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		std::string absolutePath = startDir + StringUtil::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
+		std::string absolutePath = startDir + Format::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
 		return absolutePath;
 	}
 	int Sandbox::readLicenseData() {
@@ -145,14 +145,14 @@ namespace Sce::Pss::Core::Io {
 		std::string normPath = this->normalizePath(sandboxedPath);
 
 		for (FileSystem filesystem : this->filesystems) {
-			if (String::StringUtil::ToLower(normPath).starts_with(String::StringUtil::ToLower(filesystem.SandboxPath()))) {
+			if (String::Format::ToLower(normPath).starts_with(String::Format::ToLower(filesystem.SandboxPath()))) {
 				if (filesystem.IsSystem() && !includeSystem) continue;
 
 				return filesystem;
 			}
 		}
 
-		ASSERT(true);
+		ASSERT(false);
 		return this->filesystems.front();
 	}
 
@@ -200,7 +200,7 @@ namespace Sce::Pss::Core::Io {
 		std::string normPath = this->normalizePath(sandboxedPath);
 
 		for (FileSystem filesystem : this->filesystems) {
-			if (StringUtil::ToLower(normPath) == StringUtil::ToLower(this->normalizePath(filesystem.SandboxPath()))) {
+			if (Format::ToLower(normPath) == Format::ToLower(this->normalizePath(filesystem.SandboxPath()))) {
 				return true;
 			}
 		}
@@ -584,7 +584,7 @@ namespace Sce::Pss::Core::Io {
 					std::string gotFname = entry.path().filename().string();
 
 					// match anything that == same as first file but all uppercase;
-					if (StringUtil::ToUpper(gotFname) == StringUtil::ToUpper(fsFname)) {
+					if (Format::ToUpper(gotFname) == Format::ToUpper(fsFname)) {
 						fsRealPath = std::filesystem::path(Path::Combine(fsDirName, gotFname));
 						Logger::Debug("ExFAT Fixer-Upper: " + fsRealPath.string());
 					}

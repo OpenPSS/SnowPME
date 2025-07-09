@@ -42,21 +42,21 @@ namespace Sce::Pss::Core::Services {
 		serializer.push_back(std::to_string(data->HaveTicket));
 
 		snprintf(_, sizeof(_)-1, "%llx", data->IssuedDate);
-		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 16));
+		serializer.push_back(Format::ZFill(std::string(_), '0', 16));
 		
 		snprintf(_, sizeof(_)-1, "%llx", data->ExpireDate);
-		serializer.push_back(StringUtil::ZFill(std::string(_), '0', 16));
+		serializer.push_back(Format::ZFill(std::string(_), '0', 16));
 
 		serializer.push_back(std::to_string(data->RemainingCount));
 		serializer.push_back(std::to_string(data->ConsumedCount));
 
-		return StringUtil::Join(serializer, " ")+"\n";
+		return Format::Join(serializer, " ")+"\n";
 	}
 	void InAppPurchaseInventory::readTicketLine(std::string line) {
-		line = StringUtil::Replace(line, "\r", "");
+		line = Format::Replace(line, "\r", "");
 		char* _;
 
-		std::vector<std::string> deserializer = StringUtil::Split(line, " ");
+		std::vector<std::string> deserializer = Format::Split(line, " ");
 		if (deserializer.size() < 6) return;
 		
 		std::string label = deserializer.at(0);
@@ -128,7 +128,7 @@ namespace Sce::Pss::Core::Services {
 					err = IoCall::PsmFileRead(handle, data, size, &_);
 					if (err == PSM_ERROR_NO_ERROR) {
 						std::string ticketData = std::string((char*)data, size);
-						std::vector<std::string> lines = StringUtil::Split(ticketData, "\n");
+						std::vector<std::string> lines = Format::Split(ticketData, "\n");
 						for (std::string line : lines) {
 							InAppPurchaseInventory::readTicketLine(line);
 						}

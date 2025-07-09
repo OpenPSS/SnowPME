@@ -50,7 +50,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -70,7 +70,7 @@ namespace Sce::Pss::Core::Graphics {
 			return ctx->Update(update, state, handlesList);
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -86,7 +86,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -99,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 			return ctx->Clear(mask);
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -128,7 +128,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -156,7 +156,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -176,7 +176,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
@@ -188,7 +188,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}

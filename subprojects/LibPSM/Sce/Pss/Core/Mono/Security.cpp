@@ -15,7 +15,7 @@ namespace Sce::Pss::Core::Mono
 {
 	PssSystemFileEnum Security::nameToEnum(std::string name) {
 		for (int i = 0; i < (sizeof(PsmDllFilenameList) / sizeof(std::string)); i++) {
-			if (StringUtil::ToLower(PsmDllFilenameList[i]) == StringUtil::ToLower(name)) {
+			if (Format::ToLower(PsmDllFilenameList[i]) == Format::ToLower(name)) {
 				return (PssSystemFileEnum)i;
 			}
 		}

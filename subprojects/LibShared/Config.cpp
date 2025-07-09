@@ -134,7 +134,7 @@ namespace Shared
 			// check if line is a comment
 			if (ln.starts_with(COMMENT)) continue;
 			// get key value pair seperated by ":"
-			std::vector<std::string> keyValues = StringUtil::Split(ln, SEPERATOR);
+			std::vector<std::string> keyValues = Format::Split(ln, SEPERATOR);
 			if (keyValues.size() < 2) continue;
 
 			// extract values into their own variables

@@ -55,7 +55,7 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
-			void* verticesBuffer = (void*)mono_array_addr_with_size(vertices, 1, 0);
+			void* verticesBuffer = reinterpret_cast<void*>(mono_array_addr_with_size(vertices, 1, 0));
 			size_t arrayLen = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vertices);
 
 			// if count < 0, set the count to the vertex count
@@ -78,7 +78,7 @@ namespace Sce::Pss::Core::Graphics {
 			return buffer->SetVerticies(stream, (float*)verticesBuffer, arrayLen, offset, stride, format, trans, scale, to, from, count);
 		}
 		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed from multiple threads.\n");
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 		

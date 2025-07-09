@@ -11,7 +11,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 	bool EdataList::IsFileInEdata(const std::string& path) {
 		for (const std::string& edataFile : this->edataFilesList) {
-			if (StringUtil::ToLower(edataFile) == StringUtil::ToLower(path)) {
+			if (Format::ToLower(edataFile) == Format::ToLower(path)) {
 				return true;
 			}
 		}
@@ -19,7 +19,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	EdataList::EdataList(std::string& psseListData) {		
-		std::vector<std::string> psseFilesList = StringUtil::Split(StringUtil::Replace(psseListData, "\r", ""), "\n");
+		std::vector<std::string> psseFilesList = Format::Split(Format::Replace(psseListData, "\r", ""), "\n");
 
 		for (const std::string& psseFile : psseFilesList) {
 			if (psseFile.empty()) continue;
