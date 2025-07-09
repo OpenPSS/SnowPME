@@ -1,4 +1,4 @@
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 #include <sstream>
 #include <iomanip>
 #include <cstdint>
@@ -8,8 +8,8 @@ namespace Shared::String {
 	std::string Format::Hex(int val) {
 		return Format::Hex(static_cast<uint64_t>(val));
 	}
-	
-	std::string Format::Hex(uintptr_t val) {
+
+	std::string Format::Hex(uint32_t val) {
 		return Format::Hex(static_cast<uint64_t>(val));
 	}
 

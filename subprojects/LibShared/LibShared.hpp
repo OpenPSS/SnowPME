@@ -4,7 +4,7 @@
 #include <Debug/Logger.hpp>
 #include <Debug/ConsoleColor.hpp>
 #include <Debug/Assert.hpp>
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 #include <String/Path.hpp>
 #include <Windowing/Event.hpp>
 #include <Windowing/EventType.hpp>

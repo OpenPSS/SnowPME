@@ -2,7 +2,7 @@
 #define SHARED_NAMEDEVENT_H 1
 #include <Windowing/EventType.hpp>
 #include <Debug/Assert.hpp>
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 
 #include <random>
 #include <vector>

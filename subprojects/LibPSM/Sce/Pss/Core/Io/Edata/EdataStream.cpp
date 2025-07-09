@@ -106,7 +106,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		}
 
 		// setup current block buffer
-		this->currentBlock.resize(totalRead);
+		this->currentBlock.resize(static_cast<size_t>(totalRead));
 		this->osHandle->clear();
 		this->osHandle->seekg(blockPosition, std::ios::beg);
 

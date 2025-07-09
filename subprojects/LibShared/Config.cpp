@@ -1,6 +1,6 @@
 #include <Config.hpp>
 #include <String/Path.hpp>
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 #include <Debug/Logger.hpp>
 #include <fstream>
 #include <string>

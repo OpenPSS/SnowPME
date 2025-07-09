@@ -1,4 +1,4 @@
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 #include <String/Path.hpp>
 
 #include <vector>

@@ -17,7 +17,7 @@
     <ClCompile Include="Windowing\Event.cpp" />
     <ClCompile Include="Windowing\WindowControl.cpp" />
     <ClCompile Include="String\Path.cpp" />
-    <ClCompile Include="String\StringUtil.cpp" />
+    <ClCompile Include="String\Format.cpp" />
     <ClCompile Include="Threading\ProgressTracker.cpp" />
     <ClCompile Include="Windowing\EventQueue.cpp" />
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="LibShared.hpp" />
     <ClInclude Include="RuntimeImplementation.hpp" />
     <ClInclude Include="String\Path.hpp" />
-    <ClInclude Include="String\StringUtil.hpp" />
+    <ClInclude Include="String\Format.hpp" />
     <ClInclude Include="Threading\ProgressTracker.hpp" />
     <ClInclude Include="Windowing\EventQueue.hpp" />
   </ItemGroup>

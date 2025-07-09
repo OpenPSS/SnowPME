@@ -1,6 +1,6 @@
 #include <Debug/ConsoleColor.hpp>
 #include <Debug/Logger.hpp>
-#include <String/StringUtil.hpp>
+#include <String/Format.hpp>
 #include <iostream>
 #include <vector>
 #include <mutex>
