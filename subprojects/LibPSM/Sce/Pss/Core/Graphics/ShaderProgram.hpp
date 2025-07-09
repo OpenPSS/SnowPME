@@ -41,12 +41,11 @@ namespace Sce::Pss::Core::Graphics {
 		int SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
 		std::string GetAttributeName(int index) const;
-		int GetAttributeLocation(std::string& name) const;
 		ShaderAttributeType GetAttributeType(int index) const;
+		int GetAttributeLocation(std::string& name) const;
+		int GetAttributeStream(int index) const;
 
 		std::string GetUniformName(int index);
-
-		int TotalAttributeStreams;
 
 		std::vector<ProgramUniform> Uniforms;
 		std::vector<ProgramAttribute> Attributes;

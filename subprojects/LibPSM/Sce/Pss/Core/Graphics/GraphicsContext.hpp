@@ -63,8 +63,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::shared_ptr<ShaderProgram> currentProgram = nullptr;
 		std::shared_ptr<FrameBuffer> currentFrameBuffer = nullptr;
-		std::shared_ptr<VertexBuffer> currentVertexBuffer = nullptr;
-
+		
 		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
 		std::vector<std::shared_ptr<Texture>> textures;
 		EnableMode currentEnableModes = EnableMode::None;

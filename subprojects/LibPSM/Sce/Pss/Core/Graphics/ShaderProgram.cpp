@@ -324,6 +324,12 @@ namespace Sce::Pss::Core::Graphics {
 		return attributeBindings[index];
     }
 
+
+	int ShaderProgram::GetAttributeStream(int index) const 
+	{
+		UNIMPLEMENTED();
+	}
+
 	std::string ShaderProgram::GetAttributeName(int index) const
 	{
 		if (Attributes.size() <= static_cast<size_t>(index)) return "";

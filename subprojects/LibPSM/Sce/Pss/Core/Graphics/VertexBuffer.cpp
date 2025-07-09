@@ -750,7 +750,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			// Store state passed to parameters
 			this->VertexCount = vertexCount;
-			this->InstDivisor = instDivisor;
+			this->NumStreams = instDivisor;
 			this->Option = option;
 			this->IndexCount = indexCount;
 

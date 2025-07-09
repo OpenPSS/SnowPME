@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::vector<VertexFormat> VertexFormats;
 		int VertexCount = 0;
 		int IndexCount = 0;
-		int InstDivisor = 0;
+		int NumStreams = 0;
 		int Option = 0;
 		size_t Size = 0;
 		bool unk21 = true;

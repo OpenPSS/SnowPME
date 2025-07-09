@@ -192,12 +192,49 @@ namespace Sce::Pss::Core::Graphics {
 				int numAttributes = program->Attributes.size();
 			}
 
-			std::shared_ptr<VertexBuffer> vertexBuffer = this->currentVertexBuffer;
+			std::shared_ptr<VertexBuffer> vertexBuffer = this->vertexBuffers[0];
 
-			int instDivisor = 0;
+			int numStreams = 0;
 			if (vertexBuffer != nullptr) {
-				instDivisor = vertexBuffer->InstDivisor;
+				numStreams = vertexBuffer->NumStreams;
 			}
+
+			// TODO: what are these?
+			int unk1 = 0xFFFF;
+			int unk2 = 0xFFFF;
+
+			OpenGL::SetVertexBuffer(vertexBuffer.get());
+
+			if (numAttributes > 0) {
+
+				for (int i = 0; i < numAttributes; i++) {
+					int stream = program->GetAttributeStream(i);
+					if (stream >= 0) {
+						if (stream >= numStreams) {
+
+							// TODO: this is actually while(1) strId++ 
+							// if strId is >= 4, then it does a goto,
+							// perhaps something like do while, and an if statement?
+							// REF: sce::pss::core::graphics::GraphicsContext::UpdateHandles (psm.exe)
+
+							for (int strId = 0; strId < 4; strId++) {
+								vertexBuffer = this->vertexBuffers[i];
+								
+								if (vertexBuffer != nullptr) {
+									numStreams = vertexBuffer->NumStreams;
+									if (stream < numStreams) {
+										if (strId > 0) numStreams = 0;
+										OpenGL::SetVertexBuffer(vertexBuffer.get());
+										break;
+									}
+								}
+
+							}
+						}
+					}
+				}
+			}
+
 
 			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::VertexBuffer");
 		}
@@ -480,7 +517,7 @@ namespace Sce::Pss::Core::Graphics {
 			EnableMode enableModeToggleFlags = (state->enable & this->cullFaceBits);
 			EnableMode enableModeBitlist = (enableModeToggleFlags ^ this->currentEnableModes) & EnableMode::All;
 			
-			if (this->currentEnableModes == (EnableMode)0xFF) {
+			if (this->currentEnableModes == static_cast<EnableMode>(0xFF)) {
 				enableModeBitlist = EnableMode::All;
 			}
 
