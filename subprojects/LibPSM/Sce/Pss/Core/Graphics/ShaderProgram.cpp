@@ -317,40 +317,47 @@ namespace Sce::Pss::Core::Graphics {
 		attributeBindings[index] = name;
 		return PSM_ERROR_NO_ERROR;
 	}
-	std::string ShaderProgram::GetAttributeBinding(int index) const {
+	
+	std::string ShaderProgram::GetAttributeBinding(int index) const 
+	{
 		if(attributeBindings.size() <= static_cast<size_t>(index)) return "";
 		return attributeBindings[index];
     }
 
-    int ShaderProgram::GetAttributeLocation(std::string &name) const {
+	std::string ShaderProgram::GetAttributeName(int index) const
+	{
+		if (Attributes.size() <= static_cast<size_t>(index)) return "";
+		return Attributes[index].Name;
+	}
+
+    int ShaderProgram::GetAttributeLocation(std::string &name) const 
+	{
 		return glGetAttribLocation(this->GLReference, name.c_str());
     }
 
-    int ShaderProgram::GetAttributeType(int index, ShaderAttributeType *attributeType)
+	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const
     {
         GLint params = 0;
-		glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &params);
+		GL_CALL(glGetVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &params));
 		GLenum err = glGetError();
-		if(err != GL_NO_ERROR) {
-			return err;
-		}
+		ASSERT(err != GL_NO_ERROR);
+
+		ASSERT(params != GL_BYTE);
+		ASSERT(params != GL_UNSIGNED_BYTE);
+		ASSERT(params != GL_SHORT);
+
 		switch(params) {
-			case GL_BYTE:
-			case GL_UNSIGNED_BYTE:
-			case GL_SHORT:
-				UNIMPLEMENTED_MSG(std::to_string(params));
 			case GL_FLOAT:
-				*attributeType = ShaderAttributeType::Float;
-				return PSM_ERROR_NO_ERROR;
+				return ShaderAttributeType::Float;
 		}
-		return PSM_ERROR_NO_ERROR;
+		return ShaderAttributeType::None;
     }
 
-    int ShaderProgram::GetUniformName(int index, std::string& name) const {
+    std::string ShaderProgram::GetUniformName(int index) {
 		GLchar nameBuf[0xff];
 		GLsizei nameLength;
-		glGetActiveUniform(this->GLReference, index, name.capacity(), &nameLength, nullptr, nullptr, nameBuf);
-		name = std::string(nameBuf, nameLength);
-		return PSM_ERROR_NO_ERROR;
+
+		GL_CALL(glGetActiveUniform(this->GLReference, index, sizeof(nameBuf), &nameLength, nullptr, nullptr, nameBuf));
+		return std::string(nameBuf, nameLength);
 	}
 }

@@ -153,7 +153,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoString** result) {
+	int PsmShaderProgram::GetUniformBinding(int handle, int index, MonoObject** result) {
 		UNIMPLEMENTED();
 	}
 
@@ -191,7 +191,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		return PSM_ERROR_NO_ERROR;
 	}
-	int PsmShaderProgram::GetAttributeBinding(int handle, int index, MonoString** result) {
+	int PsmShaderProgram::GetAttributeBinding(int handle, int index, MonoObject** result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
@@ -205,12 +205,15 @@ namespace Sce::Pss::Core::Graphics {
 		
 		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);;
 
-		auto bindingName = prog->GetAttributeBinding(index);
-		if(bindingName == "") {
-			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		std::string bindingName = prog->GetAttributeBinding(index);
+		if (!bindingName.empty()) {
+			MonoString* monoBindingName = MonoUtil::StdStringToMonoString(bindingName);
+			mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoBindingName));
+		}
+		else {
+			mono_gc_wbarrier_generic_store(result, nullptr);
 		}
 
-		*result = MonoUtil::StdStringToMonoString(bindingName);
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -221,16 +224,18 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-
 		if (!Handles<ShaderProgram>::IsValid(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
 		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
 
-		std::string attributeName;
-		MonoUtil::MonoStringToStdString(name, attributeName);
+		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
 
+		std::string attributeName = "";
+		MonoUtil::MonoStringToStdString(name, attributeName);
 		return prog->SetAttributeBinding(index, attributeName);
 	}
 
@@ -244,19 +249,21 @@ namespace Sce::Pss::Core::Graphics {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-
-
 		if (!Handles<ShaderProgram>::IsValid(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
 		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
 
-		prog->GetAttributeType(index, result);
+		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetAttributeType(index);
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PsmShaderProgram::GetUniformName(int handle, int index, MonoString** result) {
+	int PsmShaderProgram::GetUniformName(int handle, int index, MonoObject** result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
@@ -270,14 +277,38 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
 
-		std::string uniformName;
-		prog->GetUniformName(index, uniformName);
-		*result = MonoUtil::StdStringToMonoString(uniformName);
+		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		std::string uniformName = prog->GetUniformName(index);
+		MonoString* monoUniformName = MonoUtil::StdStringToMonoString(uniformName);
+		mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoUniformName));
+
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoString** result) {
-		UNIMPLEMENTED();
+	int PsmShaderProgram::GetAttributeName(int handle, int index, MonoObject** result) {
+		LOG_FUNCTION();
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!Handles<ShaderProgram>::IsValid(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+
+		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		std::string attributeName = prog->GetAttributeName(index);
+		MonoString* monoAttributeName = MonoUtil::StdStringToMonoString(attributeName);
+		mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoAttributeName));
+
 	}
 	int PsmShaderProgram::GetUniformSize(int handle, int index, int* result) {
 		UNIMPLEMENTED();

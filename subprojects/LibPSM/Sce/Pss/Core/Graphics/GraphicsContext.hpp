@@ -65,8 +65,8 @@ namespace Sce::Pss::Core::Graphics {
 		std::shared_ptr<FrameBuffer> currentFrameBuffer = nullptr;
 		std::shared_ptr<VertexBuffer> currentVertexBuffer = nullptr;
 
-		std::list<std::shared_ptr<VertexBuffer>> vertexBuffers;
-		std::list<std::shared_ptr<Texture>> textures;
+		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
+		std::vector<std::shared_ptr<Texture>> textures;
 		EnableMode currentEnableModes = EnableMode::None;
 
 		int cullFaceBits = 0;

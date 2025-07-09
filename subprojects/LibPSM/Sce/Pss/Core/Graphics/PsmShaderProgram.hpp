@@ -30,14 +30,14 @@ namespace Sce::Pss::Core::Graphics {
 		static int GetAttributeCount(int handle, int *result);
 		static int FindUniform(int handle, MonoString* name, int *result);
 		static int FindAttribute(int handle, MonoString* name, int *result);
-		static int GetUniformBinding(int handle, int index, MonoString** result);
+		static int GetUniformBinding(int handle, int index, MonoObject** result);
 		static int SetUniformBinding(int handle, int index, MonoString* name);
-		static int GetAttributeBinding(int handle, int index, MonoString** result);
+		static int GetAttributeBinding(int handle, int index, MonoObject** result);
 		static int SetAttributeBinding(int handle, int index, MonoString* name);
 		static int GetUniformType(int handle, int index, ShaderUniformType *result);
 		static int GetAttributeType(int handle, int index, ShaderAttributeType *result);
-		static int GetUniformName(int handle, int index, MonoString** result);
-		static int GetAttributeName(int handle, int index, MonoString** result);
+		static int GetUniformName(int handle, int index, MonoObject** result);
+		static int GetAttributeName(int handle, int index, MonoObject** result);
 		static int GetUniformSize(int handle, int index, int *result);
 		static int GetAttributeSize(int handle, int index, int *result);
 		static int SetUniformValue(int handle, int index, int offset, void *value, ShaderUniformType type);

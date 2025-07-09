@@ -128,9 +128,9 @@ namespace Sce::Pss::Core::Graphics {
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
 					std::shared_ptr<VertexBuffer> workingVertexBuffer = Handles<VertexBuffer>::Get(handles[GraphicsContext::vertexBufferHandleOffset + i]);
-					VertexBuffer* currentVertexBuffer = reinterpret_cast<VertexBuffer*>(this->vertexBuffers[i]);
+					std::shared_ptr<VertexBuffer> currentVertexBuffer = this->vertexBuffers[i];
 
-					if (currentVertexBuffer == workingVertexBuffer.get()) {
+					if (currentVertexBuffer == workingVertexBuffer) {
 						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
 							this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 						}
@@ -144,7 +144,7 @@ namespace Sce::Pss::Core::Graphics {
 							}
 						}
 
-						this->vertexBuffers[i] = workingVertexBuffer.get();
+						this->vertexBuffers[i] = workingVertexBuffer;
 
 						if (workingVertexBuffer != nullptr) {
 							workingVertexBuffer->Active = true;
@@ -187,9 +187,9 @@ namespace Sce::Pss::Core::Graphics {
 		if ((notifyFlag & GraphicsUpdate::VertexBuffer) != GraphicsUpdate::None) {
 			std::shared_ptr<ShaderProgram> program = this->currentProgram;
 			
-			int unk11 = 0;
+			int numAttributes = 0;
 			if (program != nullptr) {
-				unk11 = program->unk11;
+				int numAttributes = program->Attributes.size();
 			}
 
 			std::shared_ptr<VertexBuffer> vertexBuffer = this->currentVertexBuffer;
@@ -548,6 +548,7 @@ namespace Sce::Pss::Core::Graphics {
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
 
 		if (Thread::IsMainThread()) {
+
 			this->Width = width;
 			this->Height = height;
 			this->ColorFormat = colorFormat;
@@ -733,10 +734,10 @@ namespace Sce::Pss::Core::Graphics {
 													GraphicsExtension::InstancedArrays));
 
 			// set internal state to nulls
-
-			memset(this->vertexBuffers, NULL, sizeof(GraphicsContext::vertexBuffers));
-			memset(this->currentTextures, NULL, sizeof(GraphicsContext::currentTextures));
-
+			this->vertexBuffers.resize(4);
+			this->textures.resize(4);
+			
+			
 			this->minFrameDelta = std::make_unique<DeltaTime>(60);
 
 

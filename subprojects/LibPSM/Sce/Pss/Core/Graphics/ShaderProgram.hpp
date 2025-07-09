@@ -40,10 +40,11 @@ namespace Sce::Pss::Core::Graphics {
 		int FindAttribute(std::string& name);
 		int SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
+		std::string GetAttributeName(int index) const;
 		int GetAttributeLocation(std::string& name) const;
-		int GetAttributeType(int index, ShaderAttributeType* attributeType);
+		ShaderAttributeType GetAttributeType(int index) const;
 
-		int GetUniformName(int index, std::string& uniformName) const;
+		std::string GetUniformName(int index);
 
 		int TotalAttributeStreams;
 
