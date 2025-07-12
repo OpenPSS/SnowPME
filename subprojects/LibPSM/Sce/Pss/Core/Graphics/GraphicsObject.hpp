@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Graphics {
 		template<typename U> friend class GraphicsObject;
 
 	protected: 
-		size_t totalReferences = 0;
+		std::atomic<size_t> totalReferences = 0;
 		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 
 		GraphicsObject() = default;
@@ -38,7 +38,6 @@ namespace Sce::Pss::Core::Graphics {
 		};
 
 		static bool AddRef(int handle) {
-			LOCK_GUARD_STATIC();
 			if (Sce::Pss::Core::System::Handles<T>::IsValid(handle)) {
 				T* object = Sce::Pss::Core::System::Handles<T>::GetRaw(handle);
 
@@ -56,7 +55,6 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		static bool Release(T* object) {
-			LOCK_GUARD_STATIC();
 			if (object != nullptr) {
 				object->totalReferences--;
 				if (object->TotalReferences() >= 0)
