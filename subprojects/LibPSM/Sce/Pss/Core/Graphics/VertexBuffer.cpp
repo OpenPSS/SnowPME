@@ -519,13 +519,6 @@ namespace Sce::Pss::Core::Graphics {
 				return 0;
 		}
 	}
-	VertexBuffer::~VertexBuffer() {
-
-	}
-	int VertexBuffer::ActiveStateChanged(bool state) {
-		LOG_FUNCTION();
-		return PSM_ERROR_NO_ERROR;
-	}
 
 	bool VertexBuffer::translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale) {
 		bool changed = false;
@@ -787,7 +780,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			while (glGetError()) {};
 
-			glGenBuffers(1, &this->GLReference);
+			glGenBuffers(1, &this->GLHandle);
 
 			size_t sz = 0;
 

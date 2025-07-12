@@ -47,8 +47,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!Handles<PixelBuffer>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			std::shared_ptr<PixelBuffer> pix = Handles<PixelBuffer>::Get(handle);
-			PixelBuffer::Delete(pix);
+			PixelBuffer::Release(handle);
 
 			return PSM_ERROR_NO_ERROR;
 		}
@@ -65,7 +64,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (!Handles<PixelBuffer>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			std::shared_ptr<PixelBuffer> pixBuffer = Handles<PixelBuffer>::Get(handle);
+			PixelBuffer* pixBuffer = Handles<PixelBuffer>::GetRaw(handle);
 
 			return pixBuffer->GetInfo(type, width, height, level, format, option);
 		}

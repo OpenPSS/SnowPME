@@ -120,9 +120,6 @@
     <ClCompile Include="Sce\Pss\Core\Io\Sandbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Mono\MonoUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

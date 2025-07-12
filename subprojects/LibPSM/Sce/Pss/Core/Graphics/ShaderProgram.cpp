@@ -73,7 +73,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->fragmentSrc = src;
 		}
 
-		this->GLReference = glCreateProgram();
+		this->GLHandle = glCreateProgram();
 
 		// ugly hack - append #version 150 to the shaders
 		// required because the version directive is not included in CGX file's GLSL shaders
@@ -95,24 +95,24 @@ namespace Sce::Pss::Core::Graphics {
 			return 0;
 		}
 
-		glAttachShader(this->GLReference, compileFragmentShader);
-		glAttachShader(this->GLReference, compileVertexShader);
+		glAttachShader(this->GLHandle, compileFragmentShader);
+		glAttachShader(this->GLHandle, compileVertexShader);
 
-		glLinkProgram(this->GLReference);
+		glLinkProgram(this->GLHandle);
 
 		glDeleteShader(compileFragmentShader);
 		glDeleteShader(compileVertexShader);
 
 		int status = 0;
-		glGetProgramiv(this->GLReference, GL_LINK_STATUS, &status);
+		glGetProgramiv(this->GLHandle, GL_LINK_STATUS, &status);
 
 		if (status == GL_FALSE) {
 			char log[0x1000];
 			memset(log, 0, sizeof(log));
 
 			int sz = 0;
-			glGetProgramInfoLog(this->GLReference, 0xFFF, &sz, log);
-			glDeleteProgram(this->GLReference);
+			glGetProgramInfoLog(this->GLHandle, 0xFFF, &sz, log);
+			glDeleteProgram(this->GLHandle);
 
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			Logger::Error("Shader compile failed; " + std::string(log));
@@ -123,7 +123,7 @@ namespace Sce::Pss::Core::Graphics {
 		int uniformCount = 0;
 		int attributeCount = 0;
 
-		glGetProgramiv(this->GLReference, GL_ACTIVE_UNIFORMS, &uniformCount);
+		glGetProgramiv(this->GLHandle, GL_ACTIVE_UNIFORMS, &uniformCount);
 
 		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
 		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
@@ -135,8 +135,8 @@ namespace Sce::Pss::Core::Graphics {
 			int nameLen;
 			char name[0x100];
 
-			glGetActiveUniform(this->GLReference, i, sizeof(name), &nameLen, &uniform.Size, &uniform.Type, name);
-			uniform.Location = glGetUniformLocation(this->GLReference, name);
+			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &uniform.Size, &uniform.Type, name);
+			uniform.Location = glGetUniformLocation(this->GLHandle, name);
 			uniform.Index = i;
 			uniform.Name = std::string(name, nameLen);
 			size_t pos = uniform.Name.find('[');
@@ -148,7 +148,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->Uniforms.push_back(uniform);
 		}
 
-		glGetProgramiv(this->GLReference, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+		glGetProgramiv(this->GLHandle, GL_ACTIVE_ATTRIBUTES, &attributeCount);
 
 		for (int i = 0; i < attributeCount; i++) {
 			ProgramAttribute attribute = ProgramAttribute();
@@ -156,8 +156,8 @@ namespace Sce::Pss::Core::Graphics {
 			int nameLen;
 			char name[0x100];
 
-			glGetActiveAttrib(this->GLReference, i, sizeof(name), &nameLen, &attribute.Size, &attribute.Type, name);
-			attribute.Location = glGetAttribLocation(this->GLReference, name);
+			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &attribute.Size, &attribute.Type, name);
+			attribute.Location = glGetAttribLocation(this->GLHandle, name);
 			attribute.Index = i;
 			attribute.Name = std::string(name, nameLen);
 			size_t pos = attribute.Name.find('[');
@@ -170,13 +170,10 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		
 
-		return this->GLReference;
+		return this->GLHandle;
 	}
 
-	int ShaderProgram::ActiveStateChanged(bool state) {
-		return PSM_ERROR_NO_ERROR;
-	}
-
+	
 	uint8_t* ShaderProgram::LoadFile(char* shaderPath, int* shaderLen) {
 		if (shaderLen != nullptr)
 			*shaderLen = 0;
@@ -252,7 +249,7 @@ namespace Sce::Pss::Core::Graphics {
 		this->vertexCgxLen = vertexShaderSz;
 		this->fragmentCgxLen = fragmentShaderSz;
 
-		this->GLReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
+		this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 
 	}
 
@@ -272,7 +269,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->fragmentCgx = nullptr;
 		}
 
-		this->GLReference = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
+		this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
 
 	}
 
@@ -312,7 +309,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 
-		GL_CALL(glBindAttribLocation(this->GLReference, index, name.c_str()));
+		GL_CALL(glBindAttribLocation(this->GLHandle, index, name.c_str()));
 		if (attributeBindings.size() <= static_cast<size_t>(index)) attributeBindings.resize(index + 1);
 		attributeBindings[index] = name;
 		return PSM_ERROR_NO_ERROR;
@@ -338,7 +335,7 @@ namespace Sce::Pss::Core::Graphics {
 
     int ShaderProgram::GetAttributeLocation(std::string &name) const 
 	{
-		return glGetAttribLocation(this->GLReference, name.c_str());
+		return glGetAttribLocation(this->GLHandle, name.c_str());
     }
 
 	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const
@@ -363,7 +360,7 @@ namespace Sce::Pss::Core::Graphics {
 		GLchar nameBuf[0xff];
 		GLsizei nameLength;
 
-		GL_CALL(glGetActiveUniform(this->GLReference, index, sizeof(nameBuf), &nameLength, nullptr, nullptr, nameBuf));
+		GL_CALL(glGetActiveUniform(this->GLHandle, index, sizeof(nameBuf), &nameLength, nullptr, nullptr, nameBuf));
 		return std::string(nameBuf, nameLength);
 	}
 }

@@ -82,9 +82,9 @@ enum PsmError: uint32_t {
 };
 
 #ifndef UNIMPLEMENTED_AS_ERROR
-#define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR;
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR
 #else
-#define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED;
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED
 #endif
 
 #define UNIMPLEMENTED_MSG(msg) \

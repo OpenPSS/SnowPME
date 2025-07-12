@@ -8,7 +8,7 @@
 #include <Sce/Pss/Core/PsmObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
-	class PixelBuffer : public GraphicsObject, public PsmObject<PixelBuffer> {
+	class PixelBuffer : public GraphicsObject<PixelBuffer> {
 	private:
 		PixelBufferType type = PixelBufferType::None;
 		int width = 0;
@@ -23,8 +23,6 @@ namespace Sce::Pss::Core::Graphics {
 		int LoadFile(const char* fileName, uint8_t* &fileData, uint32_t &fileSize);
 		int LoadImage(uint8_t* data, uint64_t dataLen, int mipmap, PixelFormat format);
 		int GetInfo(PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option);
-
-		int ActiveStateChanged(bool state);
 	};
 }
 #endif

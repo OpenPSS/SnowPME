@@ -29,14 +29,15 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		
 		if (!Thread::IsMainThread()) {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n"); return PSM_ERROR_COMMON_INVALID_OPERATION;
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n"); 
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		};
 
 		char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
 		char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
 
-		std::shared_ptr<ShaderProgram> prog = ShaderProgram::Create(vertexProgramFileName, fragmentProgramFileName);
-		RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
+		ShaderProgram* prog = ShaderProgram::Create(vertexProgramFileName, fragmentProgramFileName);
+		RETURN_ERRORABLE_GRAPHICSOBJECT(prog, ShaderProgram);
 
 		*result = prog->Handle();
 
@@ -61,8 +62,8 @@ namespace Sce::Pss::Core::Graphics {
 		if(vpFileImage != nullptr) vertexShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(vpFileImage, 1, 0));
 		if(fpFileImage != nullptr) fragmentShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(fpFileImage, 1, 0));
 
-		std::shared_ptr<ShaderProgram> prog = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
-		RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
+		ShaderProgram* prog = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
+		RETURN_ERRORABLE_GRAPHICSOBJECT(prog, ShaderProgram);
 
 		*result = prog->Handle();
 		return PSM_ERROR_NO_ERROR;
@@ -74,8 +75,7 @@ namespace Sce::Pss::Core::Graphics {
 		if (Handles<ShaderProgram>::IsValid(handle)) {
 	
 			if (!Thread::IsMainThread()) {
-				std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
-				ShaderProgram::Delete(prog);
+				ShaderProgram::Release(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {
@@ -88,7 +88,12 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::AddRef(int handle){
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		if (Thread::IsMainThread()) {
+			return (ShaderProgram::AddRef(handle) != false) ? PSM_ERROR_NO_ERROR : PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+		ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
 
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
@@ -103,7 +108,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		*result = prog->UniformCount();
 		return PSM_ERROR_NO_ERROR;
@@ -121,7 +126,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		*result = prog->AttributeCount();
 		return PSM_ERROR_NO_ERROR;
@@ -168,7 +173,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 		
 		std::string uniformName;
 		MonoUtil::MonoStringToStdString(name, uniformName);
@@ -203,7 +208,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		} 
 		
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);;
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);;
 
 		std::string bindingName = prog->GetAttributeBinding(index);
 		if (!bindingName.empty()) {
@@ -228,7 +233,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
@@ -253,7 +258,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;

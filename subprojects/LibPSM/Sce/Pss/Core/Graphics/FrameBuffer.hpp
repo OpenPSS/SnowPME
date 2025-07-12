@@ -4,12 +4,9 @@
 
 namespace Sce::Pss::Core::Graphics {
 
-	class FrameBuffer : public GraphicsObject {
+	class FrameBuffer : public GraphicsObject<FrameBuffer> {
 	public:
 		bool unk12 = false;
-		int ActiveStateChanged(bool state);
-		FrameBuffer();
-		~FrameBuffer();
 	};
 }
 

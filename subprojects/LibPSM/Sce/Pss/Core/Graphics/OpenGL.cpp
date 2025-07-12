@@ -13,7 +13,7 @@ namespace Sce::Pss::Core::Graphics {
 			glUseProgram(0);
 		}
 		else {
-			glUseProgram(shaderProgram->GLReference);
+			glUseProgram(shaderProgram->GLHandle);
 		}
 	}
 
@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 		else {
-			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GLReference);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GLHandle);
 		}
 	}
 
@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindBuffer(GL_FRAMEBUFFER, 0);
 		}
 		else {
-			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLReference);
+			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLHandle);
 		}
 	}
 
@@ -43,7 +43,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		else {
-			glBindTexture(texture->GLTextureType(), texture->GLReference);
+			glBindTexture(texture->GLTextureType(), texture->GLHandle);
 		}
 	}
 

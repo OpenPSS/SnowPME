@@ -9,7 +9,7 @@
 
 namespace Sce::Pss::Core::Graphics {
 
-	class ShaderProgram : public GraphicsObject, public PsmObject<ShaderProgram> {
+	class ShaderProgram : public GraphicsObject<ShaderProgram> {
 	private:
 		uint8_t* vertexCgx = nullptr;
 		uint8_t* fragmentCgx = nullptr;
@@ -25,7 +25,6 @@ namespace Sce::Pss::Core::Graphics {
 
 		int compileShader(int type, char* source);
 	public:
-		int ActiveStateChanged(bool state);
 		int UniformCount();
 		int AttributeCount();
 

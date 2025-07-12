@@ -13,18 +13,17 @@
 
 namespace Sce::Pss::Core {
 	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<PsmObject<T>> {
+		template<typename U> friend class PsmObject;
 
 	protected:
 		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		PsmObject() = default;
 		~PsmObject() {
-			this->IsDisposed = true;
 			this->handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		};
 		
 	public:
-		bool IsDisposed = false;
-
+		
 		template <typename... Args, typename = T> static std::shared_ptr<T> Create(Args&&... args) {
 			std::shared_ptr<T> obj = std::make_shared<T>(std::forward<Args>(args)...);
 			obj->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
@@ -32,7 +31,7 @@ namespace Sce::Pss::Core {
 		}
 
 		static std::shared_ptr<T> Create(std::shared_ptr<T> obj) {
-			obj->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
+			std::reinterpret_pointer_cast<T>(obj)->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
 			return obj;
 		}
 

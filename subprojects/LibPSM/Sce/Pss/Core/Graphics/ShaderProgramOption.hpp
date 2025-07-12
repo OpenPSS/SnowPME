@@ -6,7 +6,7 @@
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
-	class ShaderProgramOption : public GraphicsObject {
+	class ShaderProgramOption {
 	private:
 
 

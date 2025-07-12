@@ -10,12 +10,21 @@
 #define PRINT_ERR(error) \
 		do { \
 			Shared::Debug::Logger::Error(std::string(__FUNCTION__) + " returned error: " + Shared::String::Format::Hex(error)); \
-		} while(0);
+		} while(0)
 
 #define RETURN_ERRORABLE_SMARTPTR(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \
 			PRINT_ERR(error); \
+			x = nullptr; \
+			return error; \
+		}
+
+#define RETURN_ERRORABLE_GRAPHICSOBJECT(x, t) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			PRINT_ERR(error); \
+			t::Release(x); \
 			x = nullptr; \
 			return error; \
 		}

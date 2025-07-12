@@ -36,18 +36,18 @@ namespace Sce::Pss::Core::Graphics {
 
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
-
-				std::shared_ptr<PixelBuffer> tex2d = PixelBuffer::Create(reinterpret_pointer_cast<PixelBuffer>(std::make_shared<Texture2D>(filename, mipmap, format)));				
-				RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
+				
+				PixelBuffer* tex2d = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
+				RETURN_ERRORABLE_GRAPHICSOBJECT(tex2d, PixelBuffer);
 
 				*result = tex2d->Handle();
 				return PSM_ERROR_NO_ERROR;
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				std::shared_ptr<PixelBuffer> texCube = PixelBuffer::Create(reinterpret_pointer_cast<PixelBuffer>(std::make_shared<TextureCube>(filename, mipmap, format)));
+				PixelBuffer* texCube = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
 
-				RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
+				RETURN_ERRORABLE_GRAPHICSOBJECT(texCube, PixelBuffer);
 				*result = texCube->Handle();
 
 				return PSM_ERROR_NO_ERROR;

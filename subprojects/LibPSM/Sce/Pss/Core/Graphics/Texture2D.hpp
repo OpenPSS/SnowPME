@@ -7,12 +7,12 @@
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
-	class Texture2D : private Texture {
+	class Texture2D : public Texture {
 	private:
 		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> image = nullptr;
 	public:
 		Texture2D(std::string& fileName, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
-		~Texture2D();
+		~Texture2D() = default;
 		int InitImage();
 		int LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		GLenum GLTextureType();

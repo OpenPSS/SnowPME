@@ -15,6 +15,7 @@ using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::Mono;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -22,21 +23,39 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmVertexBuffer::Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray* formats, int* result) {
 		LOG_FUNCTION();
 
-		VertexFormat* vertexFormats = (VertexFormat*)mono_array_addr_with_size(formats, 1, 0);
+		VertexFormat* vertexFormats = reinterpret_cast<VertexFormat*>(mono_array_addr_with_size(formats, 1, 0));
 		int vertexFormatsLen = mono_array_length(formats);
 
-		std::shared_ptr<VertexBuffer> vtxBuf = VertexBuffer::Create(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
-		RETURN_ERRORABLE_PSMOBJECT(vtxBuf, VertexBuffer);
+		VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
+		RETURN_ERRORABLE_GRAPHICSOBJECT(vtxBuf, VertexBuffer);
 
 		*result = vtxBuf->Handle();
 
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmVertexBuffer::Delete(int handle) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (Handles<VertexBuffer>::IsValid(handle)) {
+
+			if (!Thread::IsMainThread()) {
+				VertexBuffer::Release(handle);
+
+				return PSM_ERROR_NO_ERROR;
+			}
+			else {
+				UNIMPLEMENTED_MSG("Trying to delete VertexBuffer cross-thread (TODO: Notify main thread?)");
+			}
+		}
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmVertexBuffer::AddRef(int handle) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		if (Thread::IsMainThread()) {
+			return VertexBuffer::AddRef(handle) != false ? PSM_ERROR_NO_ERROR : PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+		ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
 	int PsmVertexBuffer::SetVertices(int handle, int* vertices, int to, int from, int count) {
 		UNIMPLEMENTED();
@@ -45,18 +64,18 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
-			std::shared_ptr<VertexBuffer> buffer = Handles<VertexBuffer>::Get(handle);
+			VertexBuffer* buffer = Handles<VertexBuffer>::GetRaw(handle);
 			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-			MonoType* type = Sce::Pss::Core::Mono::MonoUtil::MonoArrayElementsType(vertices);
+			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
 			
-			if (!Sce::Pss::Core::Mono::MonoUtil::MonoTypeIsValueType(type)) {
+			if (!MonoUtil::MonoTypeIsValueType(type)) {
 				Logger::Error("Vertex data need to be ValueType");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
 			void* verticesBuffer = reinterpret_cast<void*>(mono_array_addr_with_size(vertices, 1, 0));
-			size_t arrayLen = Sce::Pss::Core::Mono::MonoUtil::MonoArrayBytesLength(vertices);
+			size_t arrayLen = MonoUtil::MonoArrayBytesLength(vertices);
 
 			// if count < 0, set the count to the vertex count
 			if (count < 0) {
@@ -75,7 +94,7 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 			
-			return buffer->SetVerticies(stream, (float*)verticesBuffer, arrayLen, offset, stride, format, trans, scale, to, from, count);
+			return buffer->SetVerticies(stream, reinterpret_cast<float*>(verticesBuffer), arrayLen, offset, stride, format, trans, scale, to, from, count);
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");

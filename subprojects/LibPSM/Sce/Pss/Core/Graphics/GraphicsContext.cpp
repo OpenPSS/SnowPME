@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Graphics {
 				// clear the active flag
 				this->currentProgram->Active = false;
 				if (activeFlag) { // if the update flag was set, call the active state changed.
-					result = this->currentProgram->ActiveStateChanged(true);
+					result = this->currentProgram->ActiveStateChanged();
 				}
 			}
 
@@ -58,7 +58,7 @@ namespace Sce::Pss::Core::Graphics {
 				// clear the active flag
 				this->currentFrameBuffer->Active = false;
 				if (activeFlag) { // if the update flag was set, call the active state changed.
-					result = this->currentFrameBuffer->ActiveStateChanged(true);
+					result = this->currentFrameBuffer->ActiveStateChanged();
 				}
 			}
 
@@ -113,7 +113,7 @@ namespace Sce::Pss::Core::Graphics {
 						this->currentFrameBuffer->Active = false;
 						// if the flag was set, call ActiveStateChanged
 						if (activeFlag) {
-							this->currentFrameBuffer->ActiveStateChanged(true);
+							this->currentFrameBuffer->ActiveStateChanged();
 						}
 
 						// unset the current framebuffer.
@@ -140,7 +140,7 @@ namespace Sce::Pss::Core::Graphics {
 							bool activeFlg = currentVertexBuffer->Active;
 							currentVertexBuffer->Active = false;
 							if (activeFlg) {
-								currentVertexBuffer->ActiveStateChanged(true);
+								currentVertexBuffer->ActiveStateChanged();
 							}
 						}
 

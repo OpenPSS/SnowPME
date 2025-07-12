@@ -57,10 +57,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	Texture2D::~Texture2D() {
-		LOG_FUNCTION();
-	}
-
+	
 	GLenum Texture2D::GLTextureType() {
 		LOG_FUNCTION();
 		return GL_TEXTURE_2D;

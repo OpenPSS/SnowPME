@@ -80,7 +80,6 @@
     <ClCompile Include="Sce\Pss\Core\Memory\HeapAllocator.cpp" />
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsObject.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\OpenGL.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgram.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture.cpp" />

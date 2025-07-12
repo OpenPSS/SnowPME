@@ -9,19 +9,18 @@
 #include <Sce/Pss/Core/PsmObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core::Graphics;
-	using namespace Sce::Pss::Core;
 
 	typedef uint16_t half;
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
-	class VertexBuffer : public GraphicsObject, public PsmObject<VertexBuffer> {
+	class VertexBuffer : public GraphicsObject<VertexBuffer> {
 	private:
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
 	public:
 		VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen);
-		~VertexBuffer();
+		~VertexBuffer() = default;
+
 		static bool GetFormatIsValid(VertexFormat format);
 		static ElementType GetFormatElementType(VertexFormat format);
 		static int GetFormatVectorHeight(VertexFormat format);
@@ -29,7 +28,6 @@ namespace Sce::Pss::Core::Graphics {
 		static int GetFormatVectorSize(VertexFormat format);
 		static bool GetFormatElementNormalize(VertexFormat format);
 		static int GetFormatElementSize(VertexFormat format);
-		int ActiveStateChanged(bool state);
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		
 		std::vector<VertexFormat> VertexFormats;

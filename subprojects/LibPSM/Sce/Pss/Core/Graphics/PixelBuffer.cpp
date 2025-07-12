@@ -29,10 +29,6 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int PixelBuffer::ActiveStateChanged(bool state) {
-		UNIMPLEMENTED();
-	}
-
 	int PixelBuffer::LoadFile(const char* fileName, uint8_t* &fileData, uint32_t& fileSize) {
 		if (fileName != nullptr) {
 			// open the file

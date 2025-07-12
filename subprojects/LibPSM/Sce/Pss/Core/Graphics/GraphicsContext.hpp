@@ -35,7 +35,7 @@ using namespace Sce::Pss::Core::Timing;
 namespace Sce::Pss::Core::Graphics {
 
 	
-	class GraphicsContext : public GraphicsObject, public PsmUniqueObject<GraphicsContext>, public PsmObject<GraphicsContext> {
+	class GraphicsContext : public PsmObject<GraphicsContext>, public PsmUniqueObject<GraphicsContext> {
 	private:
 		const int shaderProgramHandleOffset = 0;
 		const int frameBufferHandleOffset = 1;

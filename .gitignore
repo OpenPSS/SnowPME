@@ -4,6 +4,10 @@ Debug/*
 build/*
 builddir/*
 
+SnowPME/dll/*
+SnowPME/psm/*
+SnowPME/SnowPME.cfg
+
 *.cfg
 *.aps
 *.obj
