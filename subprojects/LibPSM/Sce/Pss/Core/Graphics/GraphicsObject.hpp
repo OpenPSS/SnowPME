@@ -2,12 +2,11 @@
 #define LIB_PSS_GRAPHICSOBJECT_H 1
 #include <string>
 #include <vector>
+#include <atomic>
 #include <Sce/Pss/Core/Errorable.hpp>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-
-#include <atomic>
 
 namespace Sce::Pss::Core::Graphics {
 	template<typename T> class GraphicsObject : public PsmMutexObject<T>, public Errorable {
@@ -33,7 +32,6 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		virtual int ActiveStateChanged() {
-			LOCK_GUARD();
 			return PSM_ERROR_NO_ERROR; 
 		};
 
@@ -44,6 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 				object->totalReferences++;
 				return true;
 			}
+
 			return false;
 		}
 
@@ -52,6 +51,8 @@ namespace Sce::Pss::Core::Graphics {
 				T* object = Sce::Pss::Core::System::Handles<T>::GetRaw(handle);
 				return T::Release(object);
 			}
+
+			return false;
 		}
 
 		static bool Release(T* object) {
@@ -66,6 +67,7 @@ namespace Sce::Pss::Core::Graphics {
 				delete object;
 				return true;
 			}
+
 			return false;
 		}
 

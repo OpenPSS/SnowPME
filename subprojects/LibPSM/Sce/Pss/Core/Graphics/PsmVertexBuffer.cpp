@@ -57,8 +57,37 @@ namespace Sce::Pss::Core::Graphics {
 		ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
-	int PsmVertexBuffer::SetVertices(int handle, int* vertices, int to, int from, int count) {
-		UNIMPLEMENTED();
+	int PsmVertexBuffer::SetVertices(int handle, MonoArray* vertices, int to, int from, int count) {
+		LOG_FUNCTION();
+		if (Thread::IsMainThread()) {
+			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
+			VertexBuffer* buffer = Handles<VertexBuffer>::GetRaw(handle);
+			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+			void* verticiesBuffer = nullptr;
+
+			if (vertices != nullptr) {
+				MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
+
+				if (!MonoUtil::MonoTypeIsValueType(type)) {
+					ExceptionInfo::SetMessage("Vertex data need to be ValueType\n");
+					return PSM_ERROR_COMMON_INVALID_OPERATION;
+				}
+
+				verticiesBuffer = mono_array_addr_with_size(vertices, 1, 0);
+			}
+			size_t arrayLen = MonoUtil::MonoArrayBytesLength(vertices);
+
+			if (count > 0 || !vertices || arrayLen == (buffer->VertexCount * buffer->Size)) {
+				return buffer->SetVerticies(reinterpret_cast<float*>(verticiesBuffer), arrayLen, to, from);
+			}
+			ExceptionInfo::AddMessage("Vertex array has wrong size\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmVertexBuffer::SetVertices2(int handle, int stream, MonoArray* vertices, VertexFormat format, Vector4* trans, Vector4* scale, int offset, int stride, int to, int from, int count) {
 		LOG_FUNCTION();
@@ -70,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);
 			
 			if (!MonoUtil::MonoTypeIsValueType(type)) {
-				Logger::Error("Vertex data need to be ValueType");
+				ExceptionInfo::AddMessage("Vertex data need to be ValueType\n");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
@@ -88,9 +117,9 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			// Check the size is what is expected.
-			int formatSize = buffer->GetFormatVectorSize(buffer->VertexFormats.at(stream));
+			int formatSize = buffer->GetFormatVectorSize(buffer->VertexFormats[stream]);
 			if (arrayLen != buffer->VertexCount * formatSize) {
-				Logger::Error("Vertex array has wrong size");
+				ExceptionInfo::AddMessage("Vertex array has wrong size\n");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 			
@@ -102,7 +131,8 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		
 	}
-	int PsmVertexBuffer::SetIndices(int handle, uint16_t* indices, int to, int from, int count){
+	int PsmVertexBuffer::SetIndices(int handle, MonoArray* indices, int to, int from, int count) {
+		LOG_FUNCTION();
 		UNIMPLEMENTED();
 	}
 }

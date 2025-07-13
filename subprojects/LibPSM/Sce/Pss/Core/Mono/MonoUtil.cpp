@@ -8,10 +8,11 @@ namespace Sce::Pss::Core::Mono {
 
 
 	size_t MonoUtil::MonoArrayBytesLength(MonoArray* ar) {
-		if (ar == nullptr)
-			return 0;
+		if (ar == nullptr) return 0;
 
-		MonoClass* cls = mono_object_get_class((MonoObject*)ar);
+		MonoClass* cls = mono_object_get_class(reinterpret_cast<MonoObject*>(ar));
+		if (cls == nullptr) return 0;
+
 		size_t elmSize = mono_array_element_size(cls);
 		return mono_array_length(ar) * elmSize;
 	}
@@ -82,22 +83,22 @@ namespace Sce::Pss::Core::Mono {
 
 	MonoType* MonoUtil::MonoArrayElementsType(MonoArray* ar) {
 		if (ar == nullptr)
-			return NULL;
+			return nullptr;
 
-		MonoClass* cls = mono_object_get_class((MonoObject*)ar);
+		MonoClass* cls = mono_object_get_class(reinterpret_cast<MonoObject*>(ar));
 
 		if (cls == nullptr)
-			return NULL;
+			return nullptr;
 
 		MonoClass* elmClass = mono_class_get_element_class(cls);
 
 		if (elmClass == nullptr)
-			return NULL;
+			return nullptr;
 
 		MonoType* type = mono_class_get_type(elmClass);
 		
 		if (type == nullptr)
-			return NULL;
+			return nullptr;
 
 		return type;
 	}

@@ -684,21 +684,23 @@ namespace Sce::Pss::Core::Graphics {
 		return changed;
 	}
 
+	int VertexBuffer::SetVerticies(float* vertexBuffer, int vertexBufferSz, int to, int from) {
+		UNIMPLEMENTED();
+	}
+
 	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
 		// is the vertex buffer not null?
-		if (!vertexBuffer)
-			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		if (vertexBuffer == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// is selected stream actually in the stream set?
-		if (stream < 0 || stream >= static_cast<int>(this->VertexFormats.size()))
-			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		if (stream < 0 || stream >= static_cast<int>(this->VertexFormats.size())) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		// is the format valid?
-		if (!GetFormatIsValid(format))
-			return PSM_ERROR_COMMON_ARGUMENT;
+		if (!GetFormatIsValid(format)) return PSM_ERROR_COMMON_ARGUMENT;
 
 		// Get format for this specific stream
-		VertexFormat streamCurrentFormat = VertexFormats.at(stream);
+		VertexFormat streamCurrentFormat = VertexFormats[stream];
+
 		// normalize scale/trans ..
 		translationScaleNormalize(streamCurrentFormat, &format, &trans, &scale);
 		
@@ -715,11 +717,13 @@ namespace Sce::Pss::Core::Graphics {
 		if (to < 0 || from < 0 || count < 0 || offset < 0 || count + to > this->VertexCount || stride < formatVectorSize) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
+
 		// check vertex array is big enough
 		if (vertexBufferSz < (formatVectorSize + offset + (count + from - 1) * stride)) {
 			ExceptionInfo::AddMessage("Vertex array is smaller than required\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
+
 		// check the offset is properly aligned to the element size
 		int elmSz = GetFormatElementSize(format) - 1;
 		if ((elmSz & offset) != 0 || (elmSz & stride) != 0) {

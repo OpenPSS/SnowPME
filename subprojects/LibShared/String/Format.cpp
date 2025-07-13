@@ -6,11 +6,15 @@
 namespace Shared::String {
 
 	std::string Format::Hex(int val) {
-		return Format::Hex(static_cast<uint64_t>(val));
+		std::stringstream hexStream;
+		hexStream << std::hex << val;
+		return hexStream.str();
 	}
 
 	std::string Format::Hex(uint32_t val) {
-		return Format::Hex(static_cast<uint64_t>(val));
+		std::stringstream hexStream;
+		hexStream << std::hex << val;
+		return hexStream.str();
 	}
 
 	std::string Format::Hex(uint64_t val) {
