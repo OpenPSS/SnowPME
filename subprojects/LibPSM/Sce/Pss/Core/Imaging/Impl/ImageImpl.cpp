@@ -63,8 +63,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		implImg->allocator = alloc;
 
 		if (memcmp("MIG", data, 3) == 0) {
-			Logger::Todo("Implement .GIM parsing to the image library (how did you even trigger this?)");
-			ASSERT(false);
+			PANIC("Implement .GIM parsing to the image library (how did you even trigger this?)");
 		}
 
 		stbi_uc* stbImg = stbi_load_from_memory(data, dataLen, &implImg->imageSize.Width, &implImg->imageSize.Height, &implImg->channels, 4);

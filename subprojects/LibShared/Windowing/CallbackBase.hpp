@@ -6,6 +6,8 @@ namespace Shared::Windowing {
 	protected:
 		static bool isInitalized;
 		static void errorOnNotInitalized();
+	public:
+		static bool IsInitalized();
 	};
 
 }

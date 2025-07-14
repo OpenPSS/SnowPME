@@ -152,7 +152,7 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		ASSERT(false);
+		PANIC(sandboxedPath + " was not part of any filesystem.");
 		return this->filesystems.front();
 	}
 

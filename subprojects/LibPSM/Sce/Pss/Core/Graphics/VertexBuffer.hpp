@@ -32,11 +32,13 @@ namespace Sce::Pss::Core::Graphics {
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		
 		std::vector<VertexFormat> VertexFormats;
+
 		int VertexCount = 0;
 		int IndexCount = 0;
 		int NumStreams = 0;
 		int Option = 0;
-		size_t Size = 0;
+
+		size_t VertexSize = 0;
 		bool unk21 = true;
 	};
 

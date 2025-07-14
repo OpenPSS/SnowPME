@@ -19,9 +19,11 @@ namespace Shared::Windowing {
 							void(*endFrameCallback)(void),
 							bool (*showYesNoDialogCallback)(const char*, const char*)) {
 		
-		swapBufferCallback = swapBuffers;
-		getTimeCallback = getTime;
-		showYesNoDialogCallback = showYesNoDialogCallback;
+		WindowControl::swapBufferCallback = swapBuffers;
+		WindowControl::getTimeCallback = getTime;
+		WindowControl::showYesNoDialogCallback = showYesNoDialogCallback;
+		WindowControl::startFrameCallback = startFrameCallback;
+		WindowControl::endFrameCallback = endFrameCallback;
 
 		isInitalized = true;
 	}

@@ -41,31 +41,21 @@ namespace Sce::Pss::Core::Graphics {
 		const int frameBufferHandleOffset = 1;
 		const int vertexBufferHandleOffset = 4;
 		const int textureHandleOffset = 8;
-		const GLenum glEnableModes[7] = { GL_SCISSOR_TEST, GL_CULL_FACE, GL_BLEND, GL_DEPTH_TEST,
-										  GL_POLYGON_OFFSET_FILL, GL_STENCIL_TEST, GL_DITHER };
-		const GLenum glStencilOps[8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT,
-									  GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP };
-		const GLenum glDepthFuncs[8] = { GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_NOTEQUAL, GL_LESS,
-									  GL_GREATER, GL_LEQUAL, GL_GEQUAL };
-		const GLenum glBlendModes[4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
-		
-		const GLenum glBlendSFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
-										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
-										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE,
-										GL_ZERO, GL_ZERO, GL_ZERO };
 
-		const GLenum glBlendDFactor[16] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
-										GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
-										GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_ZERO, GL_ZERO,
-										GL_ZERO, GL_ZERO, GL_ZERO };
-		const GLenum glCullModes[4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
-		const GLenum glCullFrontFaceModes[2] = { GL_CW, GL_CCW };
+		static const GLenum glEnableModes[0x7];
+		static const GLenum glStencilOps[0x8];
+		static const GLenum glDepthFuncs[0x8];
+		static const GLenum glBlendModes[0x4];
+		static const GLenum glBlendSFactor[0x10];
+		static const GLenum glBlendDFactor[0x10];
+		static const GLenum glCullModes[0x4];
+		static const GLenum glCullFrontFaceModes[0x2];
 
 		std::shared_ptr<ShaderProgram> currentProgram = nullptr;
 		std::shared_ptr<FrameBuffer> currentFrameBuffer = nullptr;
 		
-		std::vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
-		std::vector<std::shared_ptr<Texture>> textures;
+		std::vector<std::weak_ptr<VertexBuffer>> vertexBuffers;
+		std::vector<std::weak_ptr<Texture>> textures;
 		EnableMode currentEnableModes = EnableMode::None;
 
 		int cullFaceBits = 0;
@@ -96,7 +86,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	public:
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
-		~GraphicsContext();
+		~GraphicsContext() = default;
 		int ActiveStateChanged(bool state);
 		
 		int EndFrame();
@@ -112,7 +102,7 @@ namespace Sce::Pss::Core::Graphics {
 		PixelFormat ColorFormat;
 		PixelFormat DepthFormat;
 		MultiSampleMode SampleMode;
-		GraphicsCapsState* CapsState;
+		std::unique_ptr<GraphicsCapsState> CapsState;
 
 		std::string Extensions = "";
 		std::string Renderer = "";

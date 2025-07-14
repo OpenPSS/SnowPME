@@ -3,25 +3,29 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstdint>
+#include <string>
 #include <Debug/Logger.hpp>
 
-#define RELEASE_ASSERT(expression) if(!(expression)) { \
-										Shared::Debug::Logger::Error("!!! ASSERT FAILED: " + std::string(#expression) + " in file: " + std::string(__FILE__) + " line: " + std::to_string((uint32_t)(__LINE__))); \
-										std::abort(); \
-									}
 
-#define DEBUG_ASSERT(expression) assert(expression);
+namespace Shared::Debug {
+	class Assert {
+	public:
+		static void CrossPlatformAssertDialog(std::string message, std::string file, uint32_t lineNumber);
+	};
 
-#ifdef NDEBUG
-#define ASSERT(expression) RELEASE_ASSERT(expression);
-#else
-#define ASSERT(expression) DEBUG_ASSERT(expression);
-#endif
+	#define _PANIC_MESSAGE(msg) Shared::Debug::Assert::CrossPlatformAssertDialog(msg, std::string(__FILE__), static_cast<uint32_t>(__LINE__))
 
-#ifdef NDEBUG
-#undef assert
-#define assert RELEASE_ASSERT
-#endif
+	#define ASSERT(expression) if(!(expression)) { \
+									_PANIC_MESSAGE(#expression); \
+								}
 
+	#ifdef NDEBUG
+	#undef assert
+	#define assert ASSERT
+	#endif
+
+	#define PANIC(message) _PANIC_MESSAGE(message);
+
+}
 
 #endif

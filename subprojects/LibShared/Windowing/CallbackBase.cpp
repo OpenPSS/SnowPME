@@ -9,4 +9,7 @@ namespace Shared::Windowing {
 		ASSERT(CallbackBase::isInitalized == true);
 	}
 
+	bool CallbackBase::IsInitalized() {
+		return CallbackBase::isInitalized;
+	}
 }

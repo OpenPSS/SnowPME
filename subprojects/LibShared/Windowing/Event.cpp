@@ -36,7 +36,7 @@ namespace Shared::Windowing {
 	}
 
 	std::byte Event::Arg(int index) {
-		ASSERT(index <= this->Count());
+		ASSERT(index <= static_cast<int>(this->Count()));
 		return this->arguments.at(index);
 	}
 

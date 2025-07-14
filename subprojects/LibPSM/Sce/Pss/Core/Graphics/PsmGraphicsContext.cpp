@@ -184,7 +184,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (Thread::IsMainThread()) {
-			memcpy(caps, GraphicsContext::UniqueObject()->CapsState, sizeof(GraphicsCapsState));
+			*caps = *GraphicsContext::UniqueObject()->CapsState;
 			return PSM_ERROR_NO_ERROR;
 		}
 		else {

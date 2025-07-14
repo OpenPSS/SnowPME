@@ -789,6 +789,7 @@ namespace Sce::Pss::Core::Graphics {
 			size_t sz = 0;
 
 			// Determine required buffer size
+			this->VertexFormats.reserve(vertexFormatsLen);
 			for (int i = 0; i < vertexFormatsLen; i++) {
 				VertexFormat format = vertexFormats[i];
 
@@ -806,7 +807,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			sz *= this->VertexCount;
 
-			this->Size = sz;
+			this->VertexSize = sz;
 
 			// Allocate array buffer in opengl.
 

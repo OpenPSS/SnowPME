@@ -1,7 +1,10 @@
 #ifndef LIB_PSS_VERTEXFORMAT_H
 #define LIB_PSS_VERTEXFORMAT_H 1
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
+#include <cstdint>
+
 namespace Sce::Pss::Core::Graphics {
-	enum class VertexFormat : unsigned int {
+	enum class VertexFormat : uint32_t {
 		None = 0x0,
 		Float = 0x100,
 		Float2 = 0x101,
@@ -44,6 +47,8 @@ namespace Sce::Pss::Core::Graphics {
 		UByte3N = 0x1902,
 		UByte4N = 0x1903
 	};
+
+	DEFINE_BITWISE_ENUM_OPERATOR(VertexFormat, uint32_t)
 }
 
 #endif

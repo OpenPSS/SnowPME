@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Debug\Assert.cpp" />
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="Windowing\CallbackBase.cpp" />
     <ClCompile Include="Windowing\Event.cpp" />

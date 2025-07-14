@@ -18,6 +18,27 @@ using namespace Shared::Windowing;
 
 namespace Sce::Pss::Core::Graphics {
 
+	const GLenum GraphicsContext::glEnableModes[0x7] = { GL_SCISSOR_TEST, GL_CULL_FACE, GL_BLEND, GL_DEPTH_TEST,
+							                           GL_POLYGON_OFFSET_FILL, GL_STENCIL_TEST, GL_DITHER };
+	const GLenum GraphicsContext::glStencilOps[0x8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT,
+								                      GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP };
+	const GLenum GraphicsContext::glDepthFuncs[0x8] = { GL_ALWAYS, GL_NEVER, GL_EQUAL, GL_NOTEQUAL, GL_LESS,
+								                      GL_GREATER, GL_LEQUAL, GL_GEQUAL };
+	const GLenum GraphicsContext::glBlendModes[0x4] = { GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD };
+
+	const GLenum GraphicsContext::glBlendSFactor[0x10] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+									                     GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
+									                     GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE,
+									                     GL_ZERO, GL_ZERO, GL_ZERO };
+
+	const GLenum GraphicsContext::glBlendDFactor[0x10] = { GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA,
+									                     GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
+									                     GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_ZERO, GL_ZERO,
+									                     GL_ZERO, GL_ZERO, GL_ZERO };
+	const GLenum GraphicsContext::glCullModes[0x4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
+	const GLenum GraphicsContext::glCullFrontFaceModes[0x2] = { GL_CW, GL_CCW };
+
+
 	int GraphicsContext::ActiveStateChanged(bool state) {
 		UNIMPLEMENTED();
 	}
@@ -128,7 +149,7 @@ namespace Sce::Pss::Core::Graphics {
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
 					std::shared_ptr<VertexBuffer> workingVertexBuffer = Handles<VertexBuffer>::Get(handles[GraphicsContext::vertexBufferHandleOffset + i]);
-					std::shared_ptr<VertexBuffer> currentVertexBuffer = this->vertexBuffers[i];
+					std::shared_ptr<VertexBuffer> currentVertexBuffer = this->vertexBuffers[i].lock();
 
 					if (currentVertexBuffer == workingVertexBuffer) {
 						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
@@ -192,7 +213,7 @@ namespace Sce::Pss::Core::Graphics {
 				int numAttributes = program->Attributes.size();
 			}
 
-			std::shared_ptr<VertexBuffer> vertexBuffer = this->vertexBuffers[0];
+			std::shared_ptr<VertexBuffer> vertexBuffer = this->vertexBuffers[0].lock();
 
 			int numStreams = 0;
 			if (vertexBuffer != nullptr) {
@@ -210,15 +231,10 @@ namespace Sce::Pss::Core::Graphics {
 				for (int i = 0; i < numAttributes; i++) {
 					int stream = program->GetAttributeStream(i);
 					if (stream >= 0) {
+						// set the specified stream ..
 						if (stream >= numStreams) {
-
-							// TODO: this is actually while(1) strId++ 
-							// if strId is >= 4, then it does a goto,
-							// perhaps something like do while, and an if statement?
-							// REF: sce::pss::core::graphics::GraphicsContext::UpdateHandles (psm.exe)
-
 							for (int strId = 0; strId < 4; strId++) {
-								vertexBuffer = this->vertexBuffers[i];
+								vertexBuffer = this->vertexBuffers[i].lock();
 								
 								if (vertexBuffer != nullptr) {
 									numStreams = vertexBuffer->NumStreams;
@@ -230,14 +246,58 @@ namespace Sce::Pss::Core::Graphics {
 								}
 
 							}
-
 						}
+						else {
+							VertexFormat format = vertexBuffer->VertexFormats[stream];
+							if (format != VertexFormat::None) {
+								if (vertexBuffer->VertexFormats[0] == VertexFormat::None) {
+									if (unk2 > vertexBuffer->VertexCount) {
+										unk2 = vertexBuffer->VertexCount;
+									}
+								}
+								else if(unk1 > vertexBuffer->VertexCount) {
+									unk1 = vertexBuffer->VertexCount;
+								}
+
+								Logger::Todo("index = *(_program->unk10 + 48 * *(v50 + _program->unk10) + 8)");
+								// TODO: wtf is index = *(_program->unk10 + 48 * *(v50 + _program->unk10) + 8); 
+								// ???
+								
+								int index = 0;
+								if (index >= 0) {
+									int vectorWidth = VertexBuffer::GetFormatVectorWidth(format);
+									GLenum formatVectorType = OpenGL::GetVertexFormatType(format);
+									GLenum formatVectorNormalized = OpenGL::GetVertexFormatNormalize(format);
+
+									int stride = vertexBuffer->VertexSize;
+									
+									Logger::Todo("pointer = *(vertexBuffer->unk14 + 4 * _stream);");
+
+									/* TODO wtf is this:
+										pointer = *(vertexBuffer->unk14 + 4 * _stream);
+										if ( vFormats )
+										pointer += stride * this->unk24;
+									*/
+
+									void* pointer = nullptr;
+
+									glVertexAttribPointer(index, vectorWidth, formatVectorType, formatVectorNormalized, stride, pointer);
+									glVertexAttribDivisorEXT(index, static_cast<uint32_t>(vertexBuffer->VertexFormats[0]));
+									glEnableVertexAttribArray(index);
+								}
+								
+
+
+							}
+						}
+						Logger::Todo("Implement  goto i_greater_than_4; here.");
 					}
+
 				}
 			}
 
-
 			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::VertexBuffer");
+
 		}
 
 		// check notifyFlag is Texture
@@ -575,10 +635,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	GraphicsContext::~GraphicsContext() {
-		if(this->CapsState != nullptr)
-			delete this->CapsState;
-	}
 	void GraphicsContext::ErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
 	}
@@ -592,7 +648,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->ColorFormat = colorFormat;
 			this->DepthFormat = depthFormat;
 			this->SampleMode = multiSampleMode;
-			this->CapsState = new GraphicsCapsState();
+			this->CapsState = std::make_unique<GraphicsCapsState>();
 
 			// Set width/height
 			if (width == 0)
