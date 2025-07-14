@@ -735,7 +735,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, int instDivisor, int option, VertexFormat* vertexFormats, int vertexFormatsLen) {
+	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, VertexFormat* formats, int formatsLength, int instDivisor, int option) {
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) {
 				this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
@@ -746,41 +746,47 @@ namespace Sce::Pss::Core::Graphics {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 
 			// Store state passed to parameters
-			this->VertexCount = vertexCount;
-			this->NumStreams = instDivisor;
-			this->Option = option;
 			this->IndexCount = indexCount;
-
+			this->FormatsLength = formatsLength;
+			this->InstDivisor = instDivisor;
+			this->VertexCount = vertexCount;
+			this->Option = option;
 
 			// Check arguments are valid
 
 			// is vertexFormats null, or less than 0 formats?
-			if (vertexFormats == nullptr && vertexFormatsLen > 0) {
+			if (formats == nullptr && formatsLength > 0) {
 				this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
 				return;
 			}
+
 
 			// Is there more than 0xFFFF vertexes, or indexes? 
 			// are there more than 0x100 unique formats?
 			// is the instDivisor > 1?
 			// if any of those are true, error
-			if (vertexCount > 0xFFFF || indexCount > 0xFFFF || vertexFormatsLen > 0x100 || instDivisor > 1) {
+			if (vertexCount > 0xFFFF || indexCount > 0xFFFF || formatsLength > 0x100 || instDivisor > 1) {
 				this->SetError(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
 				return;
 			}
 
-			// is option set?
-			if (option != 0) {
+			// if option is set then error
+			if (option) {
 				this->SetError(PSM_ERROR_COMMON_ARGUMENT);
 				return;
 			}
-
+		
+			// check have required extensions
 			int extensions = ctx->CapsState->Extension;
 			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
 				ExceptionInfo::AddMessage("Unsupported extension on this device\n");
 				this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 				return;
 			}
+
+			FormatVectors.resize(sizeof(int) * formatsLength);
+			memcpy(FormatVectors.data(), formats, FormatVectors.size());
+			int indexSize = (2 * indexCount + 3) & -4;
 
 			while (glGetError()) {};
 
@@ -789,9 +795,9 @@ namespace Sce::Pss::Core::Graphics {
 			size_t sz = 0;
 
 			// Determine required buffer size
-			this->VertexFormats.reserve(vertexFormatsLen);
-			for (int i = 0; i < vertexFormatsLen; i++) {
-				VertexFormat format = vertexFormats[i];
+			this->VertexFormats.reserve(formatsLength);
+			for (int i = 0; i < formatsLength; i++) {
+				VertexFormat format = formats[i];
 
 				int versionFormatSz = this->GetFormatVectorSize(format);
 
@@ -819,7 +825,6 @@ namespace Sce::Pss::Core::Graphics {
 				this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 				return;
 			}
-
 
 		}
 		else {

@@ -25,8 +25,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		VertexFormat* vertexFormats = reinterpret_cast<VertexFormat*>(mono_array_addr_with_size(formats, 1, 0));
 		int vertexFormatsLen = mono_array_length(formats);
-
-		VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, instDivisor, option, vertexFormats, vertexFormatsLen);
+		VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, vertexFormats, vertexFormatsLen, instDivisor, option);
 		RETURN_ERRORABLE_GRAPHICSOBJECT(vtxBuf, VertexBuffer);
 
 		*result = vtxBuf->Handle();

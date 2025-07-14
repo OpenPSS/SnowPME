@@ -18,7 +18,7 @@ namespace Sce::Pss::Core::Graphics {
 	private:
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
 	public:
-		VertexBuffer(int vertexCount, int indexCount, int numStreams, int option, VertexFormat* vertexFormats, int vertexFormatsLen);
+		VertexBuffer(int vertexCount, int indexCount, VertexFormat* vertexFormats, int vertexFormatsLen, int instDivisor, int option);
 		~VertexBuffer() = default;
 
 		static bool GetFormatIsValid(VertexFormat format);
@@ -32,10 +32,12 @@ namespace Sce::Pss::Core::Graphics {
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		
 		std::vector<VertexFormat> VertexFormats;
+		std::vector<VertexFormat> FormatVectors;
 
 		int VertexCount = 0;
 		int IndexCount = 0;
-		int NumStreams = 0;
+		int FormatsLength = 0;
+		int InstDivisor = 0;
 		int Option = 0;
 
 		size_t VertexSize = 0;

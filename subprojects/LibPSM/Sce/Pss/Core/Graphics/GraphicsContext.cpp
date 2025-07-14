@@ -217,7 +217,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			int numStreams = 0;
 			if (vertexBuffer != nullptr) {
-				numStreams = vertexBuffer->NumStreams;
+				numStreams = vertexBuffer->FormatsLength;
 			}
 
 			// TODO: what are these?
@@ -237,7 +237,7 @@ namespace Sce::Pss::Core::Graphics {
 								vertexBuffer = this->vertexBuffers[i].lock();
 								
 								if (vertexBuffer != nullptr) {
-									numStreams = vertexBuffer->NumStreams;
+									numStreams = vertexBuffer->FormatsLength;
 									if (stream < numStreams) {
 										if (strId > 0) numStreams = 0;
 										OpenGL::SetVertexBuffer(vertexBuffer.get());
