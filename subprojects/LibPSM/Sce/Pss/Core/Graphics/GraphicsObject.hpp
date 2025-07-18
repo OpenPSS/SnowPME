@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Graphics {
 	template<typename T> class GraphicsObject : public PsmMutexObject<T>, public Errorable {
 		template<typename U> friend class GraphicsObject;
 
-	protected: 
+	protected:
 		std::atomic<size_t> totalReferences = 0;
 		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 
@@ -32,7 +32,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		virtual int ActiveStateChanged() {
-			return PSM_ERROR_NO_ERROR; 
+			return PSM_ERROR_NO_ERROR;
 		};
 
 		static bool AddRef(int handle) {
@@ -74,7 +74,7 @@ namespace Sce::Pss::Core::Graphics {
 		size_t TotalReferences() {
 			return this->totalReferences;
 		}
-		
+
 		int Handle() {
 			return this->handle;
 		}
@@ -93,8 +93,8 @@ namespace Sce::Pss::Core::Graphics {
 			std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject();
 			alloc->sce_psm_free(ptr);
 		}
-		
+
 	};
-	template<typename T>
-}
+
+};
 #endif
