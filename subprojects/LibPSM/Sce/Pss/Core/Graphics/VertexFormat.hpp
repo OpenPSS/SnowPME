@@ -4,6 +4,7 @@
 #include <cstdint>
 
 namespace Sce::Pss::Core::Graphics {
+
 	enum class VertexFormat : uint32_t {
 		None = 0x0,
 		Float = 0x100,

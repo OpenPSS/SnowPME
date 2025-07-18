@@ -8,7 +8,7 @@
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 #endif
-
+using namespace Shared::String;
 namespace Sce::Pss::Core::System {
 
     int PlatformSpecific::ChangeFileAttributes(std::string RealFilePath, uint32_t attribute) {
@@ -82,9 +82,9 @@ namespace Sce::Pss::Core::System {
             url = "http://" + url;
         
         // escape URL (turn space into %20, newline into %0D and %0A)
-        url = Shared::String::Format::Replace(url, " ",  "%20");
-        url = Shared::String::Format::Replace(url, "\r", "%0D");
-        url = Shared::String::Format::Replace(url, "\n", "%0A");
+        url = Format::Replace(url, " ",  "%20");
+        url = Format::Replace(url, "\r", "%0D");
+        url = Format::Replace(url, "\n", "%0A");
 
         // because this is passed as an argument to a shell command ..
         // we must strip unsafe values from the shell command

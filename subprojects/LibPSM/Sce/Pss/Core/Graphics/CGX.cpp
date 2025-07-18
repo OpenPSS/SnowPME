@@ -8,9 +8,9 @@
 #include <cstring>
 #include <iostream>
 #include <algorithm>
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Shared::Debug;
 
 	inline std::string reversed(char* data, size_t len) {
 		std::string out(data, data + len);
@@ -121,7 +121,7 @@ namespace Sce::Pss::Core::Graphics {
 	const std::string CGX::FindVertexShader(const std::string& shaderLanguage) {
 		for(CGXVariant& variant : this->vertexVariants) {
 			if(reversed(variant.language, 4) == shaderLanguage) {
-				const char* shaderData = (char*)(this->cgxBuf + variant.sourcePtr);
+				const char* shaderData = reinterpret_cast<const char*>(this->cgxBuf + variant.sourcePtr);
 					return std::string(shaderData, variant.sourceSz);
 			}
 		}
@@ -133,7 +133,7 @@ namespace Sce::Pss::Core::Graphics {
 	const std::string CGX::FindFragmentShader(const std::string& shaderLanguage) {
 		for(CGXVariant& variant : this->fragmentVariants) {
 			if(reversed(variant.language, 4) == shaderLanguage) {
-				const char* shaderData = (char*)(this->cgxBuf + variant.sourcePtr);
+				const char* shaderData = reinterpret_cast<const char*>(this->cgxBuf + variant.sourcePtr);
 					return std::string(shaderData, variant.sourceSz);
 			}
 		}

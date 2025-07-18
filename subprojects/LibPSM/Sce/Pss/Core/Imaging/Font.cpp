@@ -2,7 +2,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Imaging {
-	int Font::NewFromFilenameSizeStyle(std::string filename, int size, FontStyle style, int* handle) {
+	int Font::NewFromFilenameSizeStyle(MonoString* filename, int size, FontStyle style, int* handle) {
 		UNIMPLEMENTED();
 	}
 	int Font::NewFromAliasSizeStyle(FontAlias alias, int size, FontStyle style, int* handle) {
@@ -14,7 +14,7 @@ namespace Sce::Pss::Core::Imaging {
 	int Font::ReleaseNative(int handle) {
 		UNIMPLEMENTED();
 	}
-	int Font::GetName(int handle, std::string* name) {
+	int Font::GetName(int handle, MonoString* name) {
 		UNIMPLEMENTED();
 	}
 	int Font::GetSize(int handle, int* size) {
@@ -26,10 +26,10 @@ namespace Sce::Pss::Core::Imaging {
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
 		UNIMPLEMENTED();
 	}
-	int Font::GetTextWidthNative(int handle, std::string text, int offset, int len, int* width) {
+	int Font::GetTextWidthNative(int handle, MonoString* text, int offset, int len, int* width) {
 		UNIMPLEMENTED();
 	}
-	int Font::GetTextMetricsNative(int handle, std::string text, int offset, int len, CharMetrics* charMetrics) {
+	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, CharMetrics* charMetrics) {
 		UNIMPLEMENTED();
 	}
 }

@@ -95,5 +95,6 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		
 	};
+	template<typename T>
 }
 #endif

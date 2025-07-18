@@ -16,7 +16,7 @@ using namespace Sce::Pss::Core::Imaging::Impl;
 
 namespace Sce::Pss::Core::Imaging {
 
-	void Image::normalizeColor(ImageColor* color) {
+	inline void Image::normalizeColor(ImageColor* color) {
 		
 		if (color->R >= 255) color->R = 255;
 		else color->R = (color->R < 0 ? 0 : color->R);
@@ -43,9 +43,12 @@ namespace Sce::Pss::Core::Imaging {
 		if (this->imageImpl->GetMode() != ImageImplMode::Rgba && this->imageImpl->GetMode() != ImageImplMode::A) {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
-		
+
+
 		ImageSize size;
 		this->imageImpl->GetExtent(&size);
+
+		Logger::Debug("Filling range: " + std::to_string(rect.X) + "," + std::to_string(rect.Y) + "[" + std::to_string(rect.Width) + "x" + std::to_string(rect.Height) + "] with color: " + Format::Hex(color.ToUint32()));
 
 		// caluclate absolute position on image.
 
@@ -71,9 +74,9 @@ namespace Sce::Pss::Core::Imaging {
 
 		this->normalizeColor(&color);
 
+
 		// handle 1bpp alpha only image
 		if (this->imageImpl->GetMode() == ImageImplMode::A) {
-			Logger::Debug("Filling range: " + std::to_string(rect.X) + "," + std::to_string(rect.Y) + "[" + std::to_string(rect.Width) + "x" + std::to_string(rect.Height) + "] with alpha: " + Format::Hex(color.ToUint32()));
 			for (int x = rect.X; x < rect.Width; x++) {
 				for (int y = rect.Y; y < rect.Height; y++) {
 					size_t pos = y + (x * size.Width);
@@ -85,15 +88,14 @@ namespace Sce::Pss::Core::Imaging {
 
 		// handle full rgba image
 		if (this->imageImpl->GetMode() == ImageImplMode::Rgba) {
-			Logger::Debug("Filling range: " + std::to_string(rect.X) + "," + std::to_string(rect.Y) + "[" + std::to_string(rect.Width) + "x" + std::to_string(rect.Height) + "] with color: " + Format::Hex(color.ToUint32()));
 
 			for (int y = rect.Y; y < rect.Height; y++) {
 				for (int x = rect.X; x < rect.Width; x++) {
 					size_t pos = y + (x * size.Width);
-					this->imageImpl->ImgBuffer[pos+0] = color.R;
-					this->imageImpl->ImgBuffer[pos+1] = color.G;
-					this->imageImpl->ImgBuffer[pos+2] = color.B;
-					this->imageImpl->ImgBuffer[pos+3] = color.A;
+					this->imageImpl->ImgBuffer[pos + 0] = color.R;
+					this->imageImpl->ImgBuffer[pos + 1] = color.G;
+					this->imageImpl->ImgBuffer[pos + 2] = color.B;
+					this->imageImpl->ImgBuffer[pos + 3] = color.A;
 				}
 			}
 
