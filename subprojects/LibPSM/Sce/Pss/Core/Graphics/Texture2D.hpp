@@ -9,7 +9,7 @@
 namespace Sce::Pss::Core::Graphics {
 	class Texture2D : public Texture {
 	private:
-		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> image = nullptr;
+		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> imageImpl = nullptr;
 	public:
 		Texture2D(std::string& fileName, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		~Texture2D() = default;

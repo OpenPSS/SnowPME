@@ -46,8 +46,8 @@ namespace Sce::Pss::Core::Graphics {
 	int Texture2D::LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, PixelFormat format) {
 		LOG_FUNCTION();
 
-		this->image = ImageImpl::Open(data, dataLen, HeapAllocator::UniqueObject());
-		RETURN_ERRORABLE_SMARTPTR(this->image);
+		this->imageImpl = ImageImpl::Open(data, dataLen, HeapAllocator::UniqueObject());
+		RETURN_ERRORABLE_SMARTPTR(this->imageImpl);
 
 		UNIMPLEMENTED();
 	}

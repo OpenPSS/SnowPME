@@ -15,13 +15,15 @@
 #include <memory>
 
 namespace Sce::Pss::Core::Imaging {
-	class Image : public PsmObject<Image>{
+	class Image : public PsmObject<Image> {
 	private:
-		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> image = nullptr;
+		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> imageImpl = nullptr;
 		void normalizeColor(ImageColor* color);
 	public:
 		int Decode();
+		int DrawRectangle(ImageColor color, ImageRect rect);
 		Image(ImageMode mode, ImageSize* size, ImageColor* color);
+		~Image() = default;
 
 		static int NewFromFilename(MonoString* filename, int* handle);
 		static int NewFromFileImage(MonoArray* fileImage, int* handle);
