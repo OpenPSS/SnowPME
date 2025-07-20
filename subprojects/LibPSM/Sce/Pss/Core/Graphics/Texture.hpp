@@ -8,8 +8,6 @@
 namespace Sce::Pss::Core::Graphics {
 	class Texture : public PixelBuffer {
 	public:
-		virtual GLenum GLTextureType() = 0;
-		std::string Filename;
 		int ActiveStateChanged(bool state);
 
 		Texture();

@@ -32,6 +32,18 @@ namespace Sce::Pss::Core::Imaging {
 
 	}
 
+	ImageSize Image::Size() {
+		ImageSize size;
+		if (this->imageImpl != nullptr) {
+			this->imageImpl->GetExtent(&size);
+		}
+		else {
+			size.Width = 0;
+			size.Height = 0;
+		}
+		return size;
+	}
+
 	int Image::Decode() {
 		UNIMPLEMENTED();
 	}
@@ -201,7 +213,14 @@ namespace Sce::Pss::Core::Imaging {
 		UNIMPLEMENTED();
 	}
 	int Image::GetSize(int handle, ImageSize* size){
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+		if (!Handles<Image>::IsValid(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		*size = img->Size();
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Image::SetDecodeSize(int handle, ImageSize* size) {
 		UNIMPLEMENTED();

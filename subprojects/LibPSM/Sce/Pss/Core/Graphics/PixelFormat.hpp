@@ -1,8 +1,9 @@
 #ifndef LIB_PSS_PIXELFORMAT_H
 #define LIB_PSS_PIXELFORMAT_H 1
-
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
+#include <cstdint>
 namespace Sce::Pss::Core::Graphics {
-	enum class PixelFormat : unsigned int {
+	enum class PixelFormat : uint32_t {
 		None = 0,
 		Rgba = 1,
 		RgbaH = 2,
@@ -25,6 +26,8 @@ namespace Sce::Pss::Core::Graphics {
 		Dxt4 = 19,
 		Dxt5 = 20
 	};
+	
+	DEFINE_BITWISE_ENUM_OPERATOR(PixelFormat, uint32_t);
 }
 
 #endif

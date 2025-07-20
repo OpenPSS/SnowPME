@@ -26,7 +26,23 @@ inline BaseType operator|=(BaseType& l, BaseType r) { return l = (BaseType)((Und
 inline BaseType operator&=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l & (UnderlyingType)r); }; \
 inline BaseType operator^=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l ^ (UnderlyingType)r); }; \
 inline BaseType operator>>=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l >> (UnderlyingType)r); }; \
-inline BaseType operator<<=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l << (UnderlyingType)r); }
+inline BaseType operator<<=(BaseType& l, BaseType r) { return l = (BaseType)((UnderlyingType)l << (UnderlyingType)r); }; \
+\
+inline BaseType operator *(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l * (UnderlyingType)r); }; \
+inline BaseType operator +(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l + (UnderlyingType)r); }; \
+inline BaseType operator -(BaseType l, BaseType r) { return (BaseType)((UnderlyingType)l - (UnderlyingType)r); }; \
+\
+inline BaseType operator *=(BaseType l, BaseType r) { return l = (BaseType)((UnderlyingType)l * (UnderlyingType)r); }; \
+inline BaseType operator +=(BaseType l, BaseType r) { return l = (BaseType)((UnderlyingType)l + (UnderlyingType)r); }; \
+inline BaseType operator -=(BaseType l, BaseType r) { return l = (BaseType)((UnderlyingType)l - (UnderlyingType)r); }; \
+\
+inline UnderlyingType operator *(UnderlyingType l, BaseType r) { return (UnderlyingType)((UnderlyingType)l * (UnderlyingType)r); }; \
+inline UnderlyingType operator +(UnderlyingType l, BaseType r) { return (UnderlyingType)((UnderlyingType)l + (UnderlyingType)r); }; \
+inline UnderlyingType operator -(UnderlyingType l, BaseType r) { return (UnderlyingType)((UnderlyingType)l - (UnderlyingType)r); }; \
+\
+inline UnderlyingType operator *=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l * (UnderlyingType)r); }; \
+inline UnderlyingType operator +=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l + (UnderlyingType)r); }; \
+inline UnderlyingType operator -=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l - (UnderlyingType)r); }
 
 
 #endif

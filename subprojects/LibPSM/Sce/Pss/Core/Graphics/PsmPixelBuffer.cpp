@@ -23,13 +23,17 @@ namespace Sce::Pss::Core::Graphics {
 			if (GraphicsContext::UniqueObject() != nullptr) {
 				switch (type) {
 				case PixelBufferType::Texture2D:
-					UNIMPLEMENTED_MSG("PixelBufferType::Texture2D");
+					*result = GraphicsObject<Texture2D>::Create(width, height, mipmap, format, option, option2)->Handle();
+					return PSM_ERROR_NO_ERROR;
 				case PixelBufferType::TextureCube:
 					UNIMPLEMENTED_MSG("PixelBufferType::TextureCube");
+					break;
 				case PixelBufferType::ColorBuffer:
 					UNIMPLEMENTED_MSG("PixelBufferType::ColorBuffer");
+					break;
 				case PixelBufferType::DepthBuffer:
 					UNIMPLEMENTED_MSG("PixelBufferType::DepthBuffer");
+					break;
 				}
 				return PSM_ERROR_COMMON_ARGUMENT;
 			}
@@ -74,5 +78,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
+
+
 
 }

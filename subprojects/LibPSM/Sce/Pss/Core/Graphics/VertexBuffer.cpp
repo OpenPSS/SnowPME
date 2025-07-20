@@ -777,8 +777,8 @@ namespace Sce::Pss::Core::Graphics {
 			}
 		
 			// check have required extensions
-			int extensions = ctx->CapsState->Extension;
-			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == 0) {
+			GraphicsExtension extensions = GraphicsContext::GetCaps().Extension;
+			if (instDivisor && (extensions & GraphicsExtension::InstancedArrays) == GraphicsExtension::None) {
 				ExceptionInfo::AddMessage("Unsupported extension on this device\n");
 				this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 				return;

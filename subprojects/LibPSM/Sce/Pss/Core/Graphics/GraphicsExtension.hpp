@@ -1,8 +1,10 @@
 #ifndef LIB_PSS_GRAPHICSEXTENSION_H
 #define LIB_PSS_GRAPHICSEXTENSION_H
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
+#include <cstdint>
 
 namespace Sce::Pss::Core::Graphics {
-    enum GraphicsExtension : unsigned int {
+    enum class GraphicsExtension : uint32_t {
         None = 0x0,
         DepthTexture = 0x1,
         Texture3D = 0x2,
@@ -23,6 +25,8 @@ namespace Sce::Pss::Core::Graphics {
         DrawInstanced = 0x10000,
         InstancedArrays = 0x20000
     };
+
+    DEFINE_BITWISE_ENUM_OPERATOR(GraphicsExtension, uint32_t);
 }
 
 #endif

@@ -46,7 +46,7 @@ namespace Sce::Pss::Core::Graphics {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		else {
-			glBindTexture(texture->GLTextureType(), texture->GLHandle);
+			glBindTexture(texture->GLPixelBufferType(), texture->GLHandle);
 		}
 	}
 

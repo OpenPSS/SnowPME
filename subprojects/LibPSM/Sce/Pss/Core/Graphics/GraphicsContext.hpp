@@ -84,6 +84,8 @@ namespace Sce::Pss::Core::Graphics {
 			const void* userParam
 		);
 
+		static GraphicsCapsState capsState;
+
 	public:
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
 		~GraphicsContext() = default;
@@ -99,10 +101,9 @@ namespace Sce::Pss::Core::Graphics {
 		int Width = Shared::Config::ScreenWidth(0);
 		int Height = Shared::Config::ScreenHeight(0);
 
-		PixelFormat ColorFormat;
-		PixelFormat DepthFormat;
-		MultiSampleMode SampleMode;
-		std::unique_ptr<GraphicsCapsState> CapsState;
+		PixelFormat ColorFormat = PixelFormat::None;
+		PixelFormat DepthFormat = PixelFormat::None;
+		MultiSampleMode SampleMode = MultiSampleMode::None;
 
 		std::string Extensions = "";
 		std::string Renderer = "";
@@ -111,6 +112,7 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsUpdate NotifyUpdate(GraphicsUpdate updateFlag);
 		GraphicsUpdate NotifyUpdateData(GraphicsUpdate updateDataFlag);
 
+		static GraphicsCapsState& GetCaps();
 
 		void CheckUpdate(GraphicsState* state);
 		void UpdateHandles(GraphicsUpdate notifyFlag);

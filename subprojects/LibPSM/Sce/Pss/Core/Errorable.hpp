@@ -83,9 +83,9 @@ namespace Sce::Pss::Core {
 	public:
 		Errorable() = default;
 		~Errorable() = default;
-		uint32_t GetClearError();
-		uint32_t SetError(uint32_t errorCode);
-		uint32_t GetError();
+		virtual uint32_t GetClearError();
+		virtual uint32_t SetError(uint32_t errorCode);
+		virtual uint32_t GetError();
 	};
 }
 

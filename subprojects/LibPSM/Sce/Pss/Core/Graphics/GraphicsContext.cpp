@@ -18,6 +18,8 @@ using namespace Shared::Windowing;
 
 namespace Sce::Pss::Core::Graphics {
 
+	GraphicsCapsState GraphicsContext::capsState;
+
 	const GLenum GraphicsContext::glEnableModes[0x7] = { GL_SCISSOR_TEST, GL_CULL_FACE, GL_BLEND, GL_DEPTH_TEST,
 							                           GL_POLYGON_OFFSET_FILL, GL_STENCIL_TEST, GL_DITHER };
 	const GLenum GraphicsContext::glStencilOps[0x8] = { GL_KEEP, GL_ZERO, GL_REPLACE, GL_INVERT,
@@ -639,6 +641,10 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
 	}
 
+	GraphicsCapsState& GraphicsContext::GetCaps() {
+		return GraphicsContext::capsState;
+	}
+
 	GraphicsContext::GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode) {
 
 		if (Thread::IsMainThread()) {
@@ -648,7 +654,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->ColorFormat = colorFormat;
 			this->DepthFormat = depthFormat;
 			this->SampleMode = multiSampleMode;
-			this->CapsState = std::make_unique<GraphicsCapsState>();
+			
 
 			// Set width/height
 			if (width == 0)
@@ -696,23 +702,23 @@ namespace Sce::Pss::Core::Graphics {
 					this->SampleMode = MultiSampleMode::Msaa4x;
 			}
 
-			// Populate CapsState
+			// Populate capsState
 
-			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &this->CapsState->MaxViewportWidth);
-			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->CapsState->MaxTextureSize);
-			glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &this->CapsState->MaxCubeMapTextureSize);
-			glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &this->CapsState->MaxRenderbufferSize);
-			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &this->CapsState->MaxVertexUniformVectors);
-			glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &this->CapsState->MaxFragmentUniformVectors);
-			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &this->CapsState->MaxVertexAttribs);
-			glGetIntegerv(GL_MAX_VARYING_VECTORS, &this->CapsState->MaxVaryingVectors);
-			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxCombinedTextureImageUnits);
-			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxTextureImageUnits);
-			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &this->CapsState->MaxVertexTextureImageUnits);
+			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &capsState.MaxViewportWidth);
+			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &capsState.MaxTextureSize);
+			glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &capsState.MaxCubeMapTextureSize);
+			glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &capsState.MaxRenderbufferSize);
+			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &capsState.MaxVertexUniformVectors);
+			glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &capsState.MaxFragmentUniformVectors);
+			glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &capsState.MaxVertexAttribs);
+			glGetIntegerv(GL_MAX_VARYING_VECTORS, &capsState.MaxVaryingVectors);
+			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &capsState.MaxCombinedTextureImageUnits);
+			glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &capsState.MaxTextureImageUnits);
+			glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &capsState.MaxVertexTextureImageUnits);
 
-			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &this->CapsState->MaxTextureMaxAnisotropy);
-			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &this->CapsState->MinAliasedLineWidth);
-			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &this->CapsState->MinAliasedPointSize);
+			glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &capsState.MaxTextureMaxAnisotropy);
+			glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, &capsState.MinAliasedLineWidth);
+			glGetFloatv(GL_ALIASED_POINT_SIZE_RANGE, &capsState.MinAliasedPointSize);
 
 			char* glExtensions = (char*)glGetString(GL_EXTENSIONS);
 
@@ -735,7 +741,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			this->Renderer = std::string((char*)glGetString(GL_RENDERER));
 
-			unsigned int gext = GraphicsExtension::None;
+			GraphicsExtension gext = GraphicsExtension::None;
 			for (const std::string& extension : extensionList) {
 
 				if (extension == "GL_OES_depth_texture")
@@ -790,33 +796,33 @@ namespace Sce::Pss::Core::Graphics {
 					gext |= GraphicsExtension::InstancedArrays;
 
 			}
-			if (this->CapsState->MaxTextureSize > 0x800)
-				this->CapsState->MaxTextureSize = 0x800;
-			if (this->CapsState->MaxCubeMapTextureSize > 0x800)
-				this->CapsState->MaxCubeMapTextureSize = 0x800;
-			if (this->CapsState->MaxRenderbufferSize > 0x800)
-				this->CapsState->MaxRenderbufferSize = 0x800;
-			if (this->CapsState->MaxVertexUniformVectors > 0x80)
-				this->CapsState->MaxVertexUniformVectors = 0x80;
-			if (this->CapsState->MaxFragmentUniformVectors > 0x40)
-				this->CapsState->MaxFragmentUniformVectors = 0x40;
-			if (this->CapsState->MaxVertexAttribs > 0x8)
-				this->CapsState->MaxVertexAttribs = 0x8;
-			if (this->CapsState->MaxVaryingVectors > 0x8)
-				this->CapsState->MaxVaryingVectors = 0x8;
-			if (this->CapsState->MaxCombinedTextureImageUnits > 0x8)
-				this->CapsState->MaxCombinedTextureImageUnits = 0x8;
-			if (this->CapsState->MaxTextureImageUnits > 0x8)
-				this->CapsState->MaxTextureImageUnits = 0x8;
-			if (this->CapsState->MaxVertexTextureImageUnits > 0x0)
-				this->CapsState->MaxVertexTextureImageUnits = 0x0;
+			if (capsState.MaxTextureSize > 0x800)
+				capsState.MaxTextureSize = 0x800;
+			if (capsState.MaxCubeMapTextureSize > 0x800)
+				capsState.MaxCubeMapTextureSize = 0x800;
+			if (capsState.MaxRenderbufferSize > 0x800)
+				capsState.MaxRenderbufferSize = 0x800;
+			if (capsState.MaxVertexUniformVectors > 0x80)
+				capsState.MaxVertexUniformVectors = 0x80;
+			if (capsState.MaxFragmentUniformVectors > 0x40)
+				capsState.MaxFragmentUniformVectors = 0x40;
+			if (capsState.MaxVertexAttribs > 0x8)
+				capsState.MaxVertexAttribs = 0x8;
+			if (capsState.MaxVaryingVectors > 0x8)
+				capsState.MaxVaryingVectors = 0x8;
+			if (capsState.MaxCombinedTextureImageUnits > 0x8)
+				capsState.MaxCombinedTextureImageUnits = 0x8;
+			if (capsState.MaxTextureImageUnits > 0x8)
+				capsState.MaxTextureImageUnits = 0x8;
+			if (capsState.MaxVertexTextureImageUnits > 0x0)
+				capsState.MaxVertexTextureImageUnits = 0x0;
 
-			if (this->CapsState->MaxAliasedLineWidth > 8.0)
-				this->CapsState->MaxAliasedLineWidth = 8.0;
-			if (this->CapsState->MaxAliasedPointSize > 128.0)
-				this->CapsState->MaxAliasedPointSize = 128.0;
+			if (capsState.MaxAliasedLineWidth > 8.0)
+				capsState.MaxAliasedLineWidth = 8.0;
+			if (capsState.MaxAliasedPointSize > 128.0)
+				capsState.MaxAliasedPointSize = 128.0;
 
-			this->CapsState->Extension = (gext & (GraphicsExtension::TextureFilterAnisotropic |
+			capsState.Extension = (gext & (GraphicsExtension::TextureFilterAnisotropic |
 													GraphicsExtension::Rgb8Rgba8 | 
 													GraphicsExtension::Depth24 | 
 													GraphicsExtension::PackedDepthStencil | 
