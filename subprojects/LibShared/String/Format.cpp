@@ -4,33 +4,58 @@
 #include <cstdint>
 
 namespace Shared::String {
-
-	std::string Format::Hex(int val) {
+	 std::string Format::Hex(int64_t val) {
 		std::stringstream hexStream;
 		hexStream << std::hex << val;
 		return hexStream.str();
 	}
 
-	std::string Format::Hex(uint32_t val) {
+	 std::string Format::Hex(int32_t val) {
 		std::stringstream hexStream;
 		hexStream << std::hex << val;
 		return hexStream.str();
 	}
 
-	std::string Format::Hex(uint64_t val) {
+	 std::string Format::Hex(int16_t val) {
 		std::stringstream hexStream;
 		hexStream << std::hex << val;
 		return hexStream.str();
 	}
 
-	std::string Format::ZFill(std::string val, char pad, size_t fillSize) {
+	 std::string Format::Hex(int8_t val) {
+		 return Format::Hex(static_cast<int32_t>(val));
+	}
+
+	 std::string Format::Hex(uint8_t val) {
+		 return Format::Hex(static_cast<int32_t>(val));
+	}
+
+	 std::string Format::Hex(uint16_t val) {
+		std::stringstream hexStream;
+		hexStream << std::hex << val;
+		return hexStream.str();
+	}
+
+	 std::string Format::Hex(uint32_t val) {
+		std::stringstream hexStream;
+		hexStream << std::hex << val;
+		return hexStream.str();
+	}
+
+	 std::string Format::Hex(uint64_t val) {
+		std::stringstream hexStream;
+		hexStream << std::hex << val;
+		return hexStream.str();
+	}
+
+	 std::string Format::ZFill(std::string val, char pad, size_t fillSize) {
 		// add remaining pad bytes to the original string,
 		for (size_t i = val.length(); i < fillSize; i++)
 			val = std::string(&pad, 1) + val;
 		return val;
 	}
 
-	std::string Format::Reverse(const std::string& str) {
+	 std::string Format::Reverse(const std::string& str) {
 		std::string littleEndainStr = str;
 		std::string bigEndianStr = "";
 
@@ -41,7 +66,7 @@ namespace Shared::String {
 		return bigEndianStr;
 	}
 
-	std::string Format::ToLower(const std::string& str) {
+	 std::string Format::ToLower(const std::string& str) {
 		// dont modify the original string
 		std::string strcopy = str;
 		
@@ -53,7 +78,7 @@ namespace Shared::String {
 		return strcopy;
 	}
 
-	std::string Format::ToUpper(const std::string& str) {
+	 std::string Format::ToUpper(const std::string& str) {
 		// dont modify the original string
 		std::string strcopy = str;
 
@@ -65,7 +90,7 @@ namespace Shared::String {
 		return strcopy;
 	}
 
-	std::string Format::Join(const std::vector<std::string> parts, const std::string& delimiter) {
+	 std::string Format::Join(const std::vector<std::string> parts, const std::string& delimiter) {
 		std::string str = "";
 		for (size_t i = 0; i < parts.size(); i++) {
 			str += parts.at(i);
@@ -75,7 +100,7 @@ namespace Shared::String {
 		return str;
 	}
 
-	std::vector<std::string> Format::Split(const std::string& str, const std::string& delimiter) {
+	 std::vector<std::string> Format::Split(const std::string& str, const std::string& delimiter) {
 		std::vector<std::string> strs;
 
 		// Dont modify the original string
@@ -95,7 +120,7 @@ namespace Shared::String {
 		return strs;
 	}
 
-	std::string Format::CreateRandomString(int length) {
+	 std::string Format::CreateRandomString(int length) {
 		std::string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		std::string str = "";
 		for (int i = 0; i < length; i++) {
@@ -104,7 +129,7 @@ namespace Shared::String {
 		return str;
 	}
 
-	std::string Format::Replace(const std::string& str, const std::string& find, const std::string& replace) {
+	 std::string Format::Replace(const std::string& str, const std::string& find, const std::string& replace) {
 		// Dont modify the original string
 		std::string strcopy = str;
 

@@ -19,7 +19,7 @@ namespace Shared::Debug
 	std::mutex Logger::logMutex;
 	std::mutex Logger::colorMutex;
 
-	void inline Logger::changeColor(ConsoleColor color) {
+	inline void Logger::changeColor(ConsoleColor color) {
 		std::scoped_lock<std::mutex> lock(Logger::colorMutex);
 #ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_ERROR_HANDLE);
@@ -102,6 +102,7 @@ namespace Shared::Debug
 #endif
 	}
 
+
 	void inline Logger::logMultiline(const std::string& channel, const std::string& msg, std::ostream& stream) {
 		std::scoped_lock<std::mutex> lock(Logger::logMutex);
 		std::string fixedStr = Format::Replace(msg, "\r", "");
@@ -119,11 +120,18 @@ namespace Shared::Debug
 		changeColor(ConsoleColor::White);
 	}
 
-	void Logger::Debug(const std::string& msg) {
-		if (Config::DebugLogging) {
-			changeColor(ConsoleColor::Gray);
-			logMultiline("DEBUG", msg, std::cerr);
+	inline std::string Logger::createHexString(const void* buffer, size_t size) {
+		std::string msg = "";
+		for (size_t i = 0; i < size; i++) {
+			msg += Format::ZFill(Format::Hex(reinterpret_cast<const uint8_t*>(buffer)[i]), '0', 2);
 		}
+		return msg;
+	}
+
+	void Logger::Debug(const std::string& msg) {
+		if (!Config::DebugLogging) return;
+		changeColor(ConsoleColor::Gray);
+		logMultiline("DEBUG", msg, std::cerr);
 	}
 	void Logger::Todo(const std::string& msg) {
 		changeColor(ConsoleColor::Yellow);
@@ -148,6 +156,26 @@ namespace Shared::Debug
 	void Logger::Game(const std::string& msg) {
 		changeColor(ConsoleColor::LightWhite);
 		logMultiline("GAME", msg, std::cout);
+	}
+
+	void Logger::Debug(const void* buffer, size_t size) {
+		if (!Config::DebugLogging) return;
+		Logger::Debug(createHexString(buffer, size));
+	}
+	void Logger::Error(const void* buffer, size_t size) {
+		Logger::Error(createHexString(buffer, size));
+	}
+	void Logger::Todo(const void* buffer, size_t size) {
+		Logger::Todo(createHexString(buffer, size));
+	}
+	void Logger::Warn(const void* buffer, size_t size) {
+		Logger::Warn(createHexString(buffer, size));
+	}
+	void Logger::Info(const void* buffer, size_t size) {
+		Logger::Info(createHexString(buffer, size));
+	}
+	void Logger::Game(const void* buffer, size_t size) {
+		Logger::Game(createHexString(buffer, size));
 	}
 
 }
