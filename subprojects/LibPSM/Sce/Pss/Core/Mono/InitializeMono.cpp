@@ -118,11 +118,15 @@ namespace Sce::Pss::Core::Mono {
 		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, systemLibPath.c_str());
 		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, psmCoreLibPath.c_str());
 
+		ASSERT(msCoreLib != nullptr && systemLib != nullptr && psmCoreLib != nullptr)
+
 		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
 		MonoImage* systemImage = mono_assembly_get_image(systemLib);
+		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
+
+		ASSERT(msCoreLibImage != nullptr && systemImage != nullptr && psmCoreLibImage != nullptr);
 
 		// Calls SetToConsole. 
-		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
 		MonoClass* psmLogClass = mono_class_from_name(psmCoreLibImage, "Sce.PlayStation.Core.Environment", "Log");
 		MonoMethod* psmSetToConsoleMethod = mono_class_get_method_from_name(psmLogClass, "SetToConsole", 0);
 		mono_runtime_invoke(psmSetToConsoleMethod, nullptr, nullptr, nullptr);

@@ -21,14 +21,22 @@ namespace SnowPME {
 		std::shared_ptr<Window> window = Window::GetMainWindow();
 		if (window == nullptr) return;
 
-		if (!window->IsOpenGLInitalized()) {
-			window->InitOpenGL();
+		Logger::Debug("Validating config file ...");
+		if (Config::ValidateConifg()) {
+
+			Logger::Debug("Initalizing OpenGL ...");
+			if (!window->IsOpenGLInitalized()) {
+				window->InitOpenGL();
+			}
+
+
+			Logger::Debug("Running mono program ...");
+			if (!this->programPath.empty()) {
+				this->exitCode = Application::LoadApplication(this->programPath);
+			}
+
 		}
 
-		Logger::Debug("Running mono program ...");
-		if (!this->programPath.empty()) {
-			this->exitCode = Application::LoadApplication(this->programPath);
-		}
 
 		this->threadRunning = false;
 	}
@@ -103,7 +111,7 @@ namespace SnowPME {
 		}
 
 		// wait for thread start ...
-		while (!this->threadRunning) {};
+		while (!this->threadRunning) {  };
 
 		while (this->threadRunning) {
 			if (this->gui != nullptr && !this->gui->Done()) {

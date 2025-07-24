@@ -21,6 +21,8 @@ using namespace Shared::Debug;
 #define SET_CFG_KEY_ENUM(str, name) SET_CFG_KEY_UINT64(str, name)
 #define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (Config::name ? "true" : "false") << std::endl;
 
+#define VALIDATE_FILESYSTEM(path, prettyDesc) if (!std::filesystem::exists(path)) { Logger::Error("Cannot find " prettyDesc " [" + std::string(path) + "]"); isValid = false; }
+
 namespace Shared
 {
 
@@ -35,9 +37,13 @@ namespace Shared
 
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
-
-	char Config::RuntimeLibPath[0x1028] = "./dll";
-	char Config::RuntimeConfigPath[0x1028] = "./dll";
+#ifdef _DEBUG
+	bool Config::DebugLogging = true;
+#else
+	bool Config::DebugLogging = false;
+#endif
+	char Config::RuntimeLibPath[0x1028] = "dll";
+	char Config::RuntimeConfigPath[0x1028] = "dll";
 
 	char Config::Username[0x1028] = "SnowPME";
 	char Config::SystemLanguage[0x1028] = "en-US";
@@ -48,7 +54,7 @@ namespace Shared
 	bool Config::MonoDebugger = false;
 	char Config::ProfilerSettings[0x1028] = "";
 
-	char Config::PsmApps[0x1028] = "./psm";
+	char Config::PsmApps[0x1028] = "psm";
 
 	void Config::parseKeyValuePair(std::string key, std::string value) {
 		GET_CFG_KEY_STR(Config::Username);
@@ -63,6 +69,7 @@ namespace Shared
 		GET_CFG_KEY_STR(Config::ProfilerSettings);
 		GET_CFG_KEY_BOOL(Config::MonoDebugger);
 		GET_CFG_KEY_STR(Config::SystemLanguage);
+		GET_CFG_KEY_BOOL(Config::DebugLogging);
 
 		GET_CFG_KEY_STR(Config::PsmApps);
 
@@ -117,19 +124,34 @@ namespace Shared
 			SET_CFG_KEY_STR(cfgStream, Config::PsmApps);
 			SET_CFG_KEY_ENUM(cfgStream, Config::TargetImplementation);
 			SET_CFG_KEY_STR(cfgStream, Config::SystemLanguage);
+			SET_CFG_KEY_BOOL(cfgStream, Config::DebugLogging);
+
 
 			cfgStream.close();
 		}
 
 	}
+
+	bool Config::ValidateConifg() {
+
+		bool isValid = true;
+
+		VALIDATE_FILESYSTEM(Config::MscorlibPath(), "mscorlib.dll");
+		VALIDATE_FILESYSTEM(Config::SystemLibPath(), "System.dll");
+		VALIDATE_FILESYSTEM(Config::PsmCoreLibPath(), "Sce.PlayStation.Core.dll");
+
+		VALIDATE_FILESYSTEM(Config::Mono21Folder(), "Mono 2.1 Folder");
+		VALIDATE_FILESYSTEM(Config::PsmApps, "PSM Application Folder");
+		VALIDATE_FILESYSTEM(Config::RuntimeLibPath, "Mono Runtime Library Folder");
+		VALIDATE_FILESYSTEM(Config::RuntimeConfigPath, "Mono Runtime Config Folder");
+
+		return isValid;
+	}
+	
 	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
 		Config::cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
 		Logger::Debug("Reading config file: "+ Config::cfgFilePath);
-
-		strncpy(Config::PsmApps, std::filesystem::absolute("psm").string().c_str(), sizeof(PsmApps));
-		strncpy(Config::RuntimeLibPath, std::filesystem::absolute("dll").string().c_str(), sizeof(RuntimeLibPath));
-		strncpy(Config::RuntimeConfigPath, std::filesystem::absolute("dll").string().c_str(), sizeof(RuntimeConfigPath));
 
 		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);
 		if (cfgStream.fail()) return WriteConfig(configFile);

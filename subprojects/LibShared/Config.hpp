@@ -15,7 +15,7 @@ namespace Shared
 
 	public:
 		static std::string RunningFromDirectory; // Path to the folder containing the main executable.
-
+		static bool DebugLogging; // if should provide extended logging (DEBUG channel)
 		static bool SecurityCritical; // If mono is allowed full access to native functions.
 		static char RuntimeLibPath[0x1028]; // Path to the folder containing all DLLs
 		static char RuntimeConfigPath[0x1028]; // Path to the folder containing the machine.config file.
@@ -44,8 +44,9 @@ namespace Shared
 		static void ReloadConfig();
 
 		static void WriteConfig(const std::string& configFile);
-		
 		static void ReadConfig(const std::string& runningFrom, const std::string& configFile);
+
+		static bool ValidateConifg();
 	};
 }
 #endif

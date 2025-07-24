@@ -1,9 +1,11 @@
 #include <Debug/ConsoleColor.hpp>
 #include <Debug/Logger.hpp>
+#include <Config.hpp>
 #include <String/Format.hpp>
 #include <iostream>
 #include <vector>
 #include <mutex>
+
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -20,7 +22,7 @@ namespace Shared::Debug
 	void inline Logger::changeColor(ConsoleColor color) {
 		std::scoped_lock<std::mutex> lock(Logger::colorMutex);
 #ifdef _WIN32
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		HANDLE hConsole = GetStdHandle(STD_ERROR_HANDLE);
 		SetConsoleTextAttribute(hConsole, static_cast<WORD>(color));
 #elif __linux__
 
@@ -118,10 +120,10 @@ namespace Shared::Debug
 	}
 
 	void Logger::Debug(const std::string& msg) {
-#ifdef _DEBUG
-		changeColor(ConsoleColor::Gray);
-		logMultiline("DEBUG", msg, std::cerr);
-#endif
+		if (Config::DebugLogging) {
+			changeColor(ConsoleColor::Gray);
+			logMultiline("DEBUG", msg, std::cerr);
+		}
 	}
 	void Logger::Todo(const std::string& msg) {
 		changeColor(ConsoleColor::Yellow);
