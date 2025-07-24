@@ -51,6 +51,9 @@ jobs:
   build_psm_tests:
     name: Test Suite (PSM SDK v2.00)
     runs-on: windows-latest
+    needs:
+        - ubuntu_meson_build
+        - windows_msvc_build
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -69,13 +72,10 @@ jobs:
         with:
           name: SnowPME-Tests
           path: tests/build
-  upload-release:
+  upload_release:
     name: upload-release
-    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     needs:
-      - ubuntu_meson_build
-      - windows_msvc_build
       - build_psm_tests
     steps:
       - name: Download All Artifacts
