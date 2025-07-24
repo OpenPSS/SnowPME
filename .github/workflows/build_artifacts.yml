@@ -86,6 +86,10 @@ jobs:
         - ubuntu_meson_build
         - windows_msvc_build
     steps:
+      - name: Install PlayStation Mobile SDK
+        uses: OpenPSS/install-psm-sdk@v1
+        with:
+            version: 2.00.00
       - name: Download Windows Artifact
         uses: actions/download-artifact@main
         with:
@@ -98,16 +102,17 @@ jobs:
             pattern: "SnowPME-Tests"
             path: ./psm
             merge-multiple: true
-      - name: Checkout Test Data
-        uses: actions/checkout@v4
-        with:
-            repository: 'OpenPSS/test-data'
-            token: ${{ secrets.ACCESS_TOKEN }}
-            path: '.'
+            
       - name: Setup SnowPME
         run: |
             mkdir testout
+            mkdir dll
+            mkdir dll/mono
+            mkdir dll/mono/2.1
             echo "Config::DebugLogging=true" >>SnowPME.cfg
+            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/mscorlib.dll dll/mono/2.1/mscorlib.dll
+            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/System.dll dll/mono/2.1/System.dll
+            copy $env:SCE_PSM_SDK/mono/lib/psm/2.1/Sce.PlayStation.Core.dll dll/mono/2.1/Sce.PlayStation.Core.dll
       - name: Run Tests
         continue-on-error: true
         run: ./psm/run_tests.cmd
@@ -119,46 +124,40 @@ jobs:
 #
 #   TODO: Fix linux test run
 #   UBUNTU-LATEST HAS NO GUI !!!
-#       
-  test_linux:
-    name: Run Test Suite (Linux)
-    runs-on: ubuntu-latest
-    needs:
-        - build_psm_tests
-        - ubuntu_meson_build
-        - windows_msvc_build
-    steps:
-      - name: Download Linux Artifact
-        uses: actions/download-artifact@main
-        with:
-            pattern: "SnowPME-Linux"
-            path: ./
-            merge-multiple: true
-      - name: Download Test Suite
-        uses: actions/download-artifact@main
-        with:
-            pattern: "SnowPME-Tests"
-            path: ./psm
-            merge-multiple: true
-      - name: Checkout Test Data
-        uses: actions/checkout@v4
-        with:
-            repository: 'OpenPSS/test-data'
-            token: ${{ secrets.ACCESS_TOKEN }}
-            path: '.'
-      - name: Setup SnowPME
-        run: |
-            chmod +x ./SnowPME
-            mkdir ./testout
-            echo "Config::DebugLogging=true" >>SnowPME.cfg
-      - name: Run Tests
-        continue-on-error: true
-        run: sh psm/run_tests.cmd
-      - name: Upload Test Logs
-        uses: actions/upload-artifact@v4
-        with:
-            name: SnowPME-TestLogs-Linux
-            path: testout
+##       
+#  test_linux:
+#    name: Run Test Suite (Linux)
+#    runs-on: ubuntu-latest
+#    needs:
+#        - build_psm_tests
+#        - ubuntu_meson_build
+#        - windows_msvc_build
+#    steps:
+#      - name: Download Linux Artifact
+#        uses: actions/download-artifact@main
+#        with:
+#            pattern: "SnowPME-Linux"
+#            path: ./
+#            merge-multiple: true
+#      - name: Download Test Suite
+#        uses: actions/download-artifact@main
+#        with:
+#            pattern: "SnowPME-Tests"
+#            path: ./psm
+#            merge-multiple: true
+#      - name: Setup SnowPME
+#        run: |
+#            chmod +x ./SnowPME
+#            mkdir ./testout
+#            echo "Config::DebugLogging=true" >>SnowPME.cfg
+#      - name: Run Tests
+#        continue-on-error: true
+#        run: sh psm/run_tests.cmd
+#      - name: Upload Test Logs
+#        uses: actions/upload-artifact@v4
+#        with:
+#            name: SnowPME-TestLogs-Linux
+#            path: testout
   ##
   ## Upload Continuous Release
   ##
