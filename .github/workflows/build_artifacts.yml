@@ -104,9 +104,9 @@ jobs:
             mkdir testout
             mkdir dll
             echo "Config::DebugLogging=true" >>SnowPME.cfg
-            wget "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -o pkg2zip.zip
-            wget "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -o psvpfsparser.zip
-            wget "${{ secrets.PSM_PKG }}" -o psm_runtime.pkg
+            iwr "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -o pkg2zip.zip
+            iwr "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -o psvpfsparser.zip
+            iwr "${{ secrets.PSM_PKG }}" -o psm_runtime.pkg
             Expand-Archive pkg2zip.zip -Force
             Expand-Archive psvpfsparser.zip -Force
             ./pkg2zip/pkg2zip.exe -x psm_runtime.pkg
@@ -122,43 +122,6 @@ jobs:
         with:
             name: SnowPME-TestLogs-Windows
             path: testout
-#
-#   TODO: Fix linux test run
-#   UBUNTU-LATEST HAS NO GUI !!!
-##       
-#  test_linux:
-#    name: Run Test Suite (Linux)
-#    runs-on: ubuntu-latest
-#    needs:
-#        - build_psm_tests
-#        - ubuntu_meson_build
-#        - windows_msvc_build
-#    steps:
-#      - name: Download Linux Artifact
-#        uses: actions/download-artifact@main
-#        with:
-#            pattern: "SnowPME-Linux"
-#            path: ./
-#            merge-multiple: true
-#      - name: Download Test Suite
-#        uses: actions/download-artifact@main
-#        with:
-#            pattern: "SnowPME-Tests"
-#            path: ./psm
-#            merge-multiple: true
-#      - name: Setup SnowPME
-#        run: |
-#            chmod +x ./SnowPME
-#            mkdir ./testout
-#            echo "Config::DebugLogging=true" >>SnowPME.cfg
-#      - name: Run Tests
-#        continue-on-error: true
-#        run: sh psm/run_tests.cmd
-#      - name: Upload Test Logs
-#        uses: actions/upload-artifact@v4
-#        with:
-#            name: SnowPME-TestLogs-Linux
-#            path: testout
   ##
   ## Upload Continuous Release
   ##
