@@ -98,6 +98,11 @@ jobs:
             pattern: "SnowPME-Tests"
             path: ./psm
             merge-multiple: true
+      - name: Checkout Test Data
+        uses: actions/checkout@v4
+        with:
+            repository: 'OpenPSS/test-data'
+            path: '.'
       - name: Setup SnowPME
         run: |
             mkdir testout
