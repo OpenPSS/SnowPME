@@ -12,9 +12,9 @@ using namespace Sce::Pss::Core::Mono;
 
 namespace SnowPME::Graphics::Gui {
 	void RuntimeLibsWindow::checkDlls() {
-		this->mscorlibValid				= Security::VerifyDll(Config::MscorlibPath(), PsmDlls::PssSystemFileEnum::MSCORLIB);
-		this->systemValid				= Security::VerifyDll(Config::SystemLibPath(), PsmDlls::PssSystemFileEnum::SYSTEM);
-		this->scePlayStationCoreValid	= Security::VerifyDll(Config::PsmCoreLibPath(), PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE);
+		this->mscorlibValid				= Security::VerifyDll(Config::GetMscorlibPath(), PsmDlls::PssSystemFileEnum::MSCORLIB);
+		this->systemValid				= Security::VerifyDll(Config::GetSystemLibPath(), PsmDlls::PssSystemFileEnum::SYSTEM);
+		this->scePlayStationCoreValid	= Security::VerifyDll(Config::GetPsmCoreLibPath(), PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE);
 	}
 
 	void RuntimeLibsWindow::installDll(PsmDlls::PssSystemFileEnum whatDll) {
@@ -29,13 +29,13 @@ namespace SnowPME::Graphics::Gui {
 
 				switch (whatDll) {
 					case PsmDlls::PssSystemFileEnum::MSCORLIB:
-						outputDir = Config::MscorlibPath();
+						outputDir = Config::GetMscorlibPath();
 						break;
 					case PsmDlls::PssSystemFileEnum::SYSTEM:
-						outputDir = Config::SystemLibPath();
+						outputDir = Config::GetSystemLibPath();
 						break;
 					case PsmDlls::PssSystemFileEnum::SCE_PLAYSTATON_CORE:
-						outputDir = Config::PsmCoreLibPath();
+						outputDir = Config::GetPsmCoreLibPath();
 						break;
 					case PsmDlls::PssSystemFileEnum::NONE:
 					default:

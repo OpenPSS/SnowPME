@@ -56,7 +56,7 @@ namespace SnowPME::Graphics::Gui {
 	void ProgramList::Refresh() {
 		this->programs.clear();
 		this->hasSelectedProgram = false;
-		this->parsePsmFolder(Config::PsmApps);
+		this->parsePsmFolder(Config::GetPsmAppsFolder());
 	}
 
 
@@ -70,7 +70,7 @@ namespace SnowPME::Graphics::Gui {
 
 	void ProgramList::RenderProgramList() {
 		if (this->programs.empty()) {
-			ImGui::MenuItem("No programs installed", nullptr, nullptr, false);
+			ImGui::MenuItem("No games installed", nullptr, nullptr, false);
 		}
 		else {
 			for (ProgramEntry progEntry : this->programs) {

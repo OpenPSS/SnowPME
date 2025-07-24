@@ -64,7 +64,7 @@ namespace Sce::Pss::Core::Mono {
 		mono_config_parse(nullptr);
 
 		// Set runtime install location
-		mono_set_dirs(Config::RuntimeLibPath, Config::RuntimeConfigPath);
+		mono_set_dirs(Config::GetRuntimeLibraryFolder().c_str(), Config::GetRuntimeConfigFolder().c_str());
 
 		// Create a domain in which this application will run under.
 		// be sure to specify the "playstation mobile" version not regular mono.
@@ -110,13 +110,9 @@ namespace Sce::Pss::Core::Mono {
 		InitalizeCsharp::Initalize();
 
 		// Load essential dlls
-		std::string msCorLibPath = Config::MscorlibPath();
-		std::string systemLibPath = Config::SystemLibPath();
-		std::string psmCoreLibPath = Config::PsmCoreLibPath();
-
-		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, msCorLibPath.c_str());
-		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, systemLibPath.c_str());
-		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, psmCoreLibPath.c_str());
+		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetMscorlibPath().c_str());
+		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetSystemLibPath().c_str());
+		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetPsmCoreLibPath().c_str());
 
 		ASSERT(msCoreLib != nullptr && systemLib != nullptr && psmCoreLib != nullptr)
 

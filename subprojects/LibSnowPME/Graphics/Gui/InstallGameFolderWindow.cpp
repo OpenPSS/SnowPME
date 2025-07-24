@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <vector>
 
+using namespace Shared;
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics::Gui {
@@ -12,7 +13,7 @@ namespace SnowPME::Graphics::Gui {
 		std::string rootDirectory = this->gameFile;
 		std::string applicationFolder = std::filesystem::path(rootDirectory).append("Application").string();
 		if (!std::filesystem::exists(applicationFolder)) applicationFolder = std::filesystem::path(rootDirectory).append("RO").append("Application").string();
-		std::string installDirectory = Shared::Config::PsmApps;
+		std::string installDirectory = Config::GetPsmAppsFolder();
 		Logger::Debug("Recursive copying " + rootDirectory + " the to " + installDirectory);
 
 		if (std::filesystem::exists(applicationFolder)) {
