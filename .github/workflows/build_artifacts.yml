@@ -86,10 +86,6 @@ jobs:
         - ubuntu_meson_build
         - windows_msvc_build
     steps:
-      - name: Install PlayStation Mobile SDK
-        uses: OpenPSS/install-psm-sdk@v1
-        with:
-            version: 2.00.00
       - name: Download Windows Artifact
         uses: actions/download-artifact@main
         with:
@@ -107,12 +103,17 @@ jobs:
         run: |
             mkdir testout
             mkdir dll
-            mkdir dll/mono
-            mkdir dll/mono/2.1
             echo "Config::DebugLogging=true" >>SnowPME.cfg
-            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/mscorlib.dll dll/mscorlib.dll
-            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/System.dll dll/System.dll
-            copy $env:SCE_PSM_SDK/mono/lib/psm/Sce.PlayStation.Core.dll dll/Sce.PlayStation.Core.dll
+            wget "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -o pkg2zip.zip
+            wget "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -o psvpfsparser.zip
+            wget "${{ secrets.PSM_PKG }}" -o psm_runtime.pkg
+            Expand-Archive pkg2zip.zip -Force
+            Expand-Archive psvpfsparser.zip -Force
+            ./pkg2zip/pkg2zip.exe -x psm_runtime.pkg
+            ./psvpfsparser/release_win64_7/psvpfsparser.exe --title_id_src=patch/PCSI00011 --title_id_dst=patch/PCSI00011_dec --f00d_url=cma.henkaku.xyz --klicensee=${{ secrets.PSM_KLIC }}
+            copy patch/PCSI00011_dec/dll/mscorlib.dll ./dll/mscorlib.dll
+            copy patch/PCSI00011_dec/dll/System.dll ./dll/System.dll
+            copy patch/PCSI00011_dec/dll/Sce.PlayStation.Core.dll ./dll/Sce.PlayStation.Core.dll
       - name: Run Tests
         continue-on-error: true
         run: ./psm/run_tests.cmd
