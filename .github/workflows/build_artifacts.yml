@@ -149,8 +149,8 @@ jobs:
     name: Update Continuous release
     runs-on: ubuntu-latest
     needs:
-      - test_psm
-      - test_windows
+      - ubuntu_meson_build
+      - windows_msvc_build
     steps:
       - name: Download Windows Artifact
         uses: actions/download-artifact@main
