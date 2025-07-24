@@ -10,16 +10,16 @@
 using namespace Shared::String;
 using namespace Shared::Debug;
 
-#define GET_CFG_KEY_STR(name) if (key == #name) strncpy(Config::name, value.c_str(), sizeof(Config::name)-1)
-#define GET_CFG_KEY_UINT64(name) if (key == #name) Config::name = strtoull(value.c_str(), NULL, 16)
-#define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) Config::name = (enumName)strtoull(value.c_str(), NULL, 16)
-#define GET_CFG_KEY_BOOL(name) if (key == #name) Config::name = (value == "true")
+#define GET_CFG_KEY_STR(name) if (key == #name) strncpy(name, value.c_str(), sizeof(name)-1)
+#define GET_CFG_KEY_UINT64(name) if (key == #name) name = strtoull(value.c_str(), nullptr, 16)
+#define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) name = (enumName)strtoull(value.c_str(), nullptr, 16)
+#define GET_CFG_KEY_BOOL(name) if (key == #name) name = (value == "true")
 
 #define SET_CFG_COMMENT(str, cmt) str << COMMENT << cmt << std::endl;
-#define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(Config::name) << std::endl;
-#define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << (uint64_t)Config::name << std::endl;
+#define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(name) << std::endl;
+#define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << static_cast<uint64_t>(name) << std::endl;
 #define SET_CFG_KEY_ENUM(str, name) SET_CFG_KEY_UINT64(str, name)
-#define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (Config::name ? "true" : "false") << std::endl;
+#define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (name ? "true" : "false") << std::endl;
 
 #define VALIDATE_FILESYSTEM(path, prettyDesc) if (!std::filesystem::exists(path)) { Logger::Error("Cannot find " prettyDesc " [" + std::string(path) + "]"); isValid = false; }
 
@@ -139,11 +139,6 @@ namespace Shared
 		VALIDATE_FILESYSTEM(Config::MscorlibPath(), "mscorlib.dll");
 		VALIDATE_FILESYSTEM(Config::SystemLibPath(), "System.dll");
 		VALIDATE_FILESYSTEM(Config::PsmCoreLibPath(), "Sce.PlayStation.Core.dll");
-
-		VALIDATE_FILESYSTEM(Config::Mono21Folder(), "Mono 2.1 Folder");
-		VALIDATE_FILESYSTEM(Config::PsmApps, "PSM Application Folder");
-		VALIDATE_FILESYSTEM(Config::RuntimeLibPath, "Mono Runtime Library Folder");
-		VALIDATE_FILESYSTEM(Config::RuntimeConfigPath, "Mono Runtime Config Folder");
 
 		return isValid;
 	}
