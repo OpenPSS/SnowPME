@@ -32,11 +32,11 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetFrameBuffer(FrameBuffer* frameBuffer) {
 		OpenGL::activeFrameBuffer = frameBuffer;
-		if (frameBuffer != nullptr) {
-			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLHandle);
+		if (frameBuffer == nullptr) {
+			glBindBuffer(GL_FRAMEBUFFER, 0);
 		}
 		else {
-			glBindBuffer(GL_FRAMEBUFFER, GL_NONE);
+			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLHandle);
 		}
 	}
 
