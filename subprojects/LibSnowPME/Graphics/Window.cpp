@@ -44,7 +44,7 @@ namespace SnowPME::Graphics {
 	}
 
 	void Window::InitOpenGL() {
-		Logger::Debug("Initalizing OpenGL");
+		Logger::Debug("Initalizing OpenG ...L");
 
 		this->glCtx = SDL_GL_CreateContext(this->sdlWindow);
 		ASSERT(this->glCtx != nullptr);

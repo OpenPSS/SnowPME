@@ -24,11 +24,9 @@ namespace SnowPME {
 		Logger::Debug("Validating config file ...");
 		if (Config::ValidateConifg()) {
 
-			Logger::Debug("Initalizing OpenGL ...");
 			if (!window->IsOpenGLInitalized()) {
 				window->InitOpenGL();
 			}
-
 
 			Logger::Debug("Running mono program ...");
 			if (!this->programPath.empty()) {
