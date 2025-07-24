@@ -104,9 +104,9 @@ jobs:
             mkdir testout
             mkdir dll
             echo "Config::DebugLogging=true" >>SnowPME.cfg
-            iwr "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -o pkg2zip.zip
-            iwr "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -o psvpfsparser.zip
-            iwr "${{ secrets.PSM_PKG }}" -o psm_runtime.pkg
+            Invoke-WebRequest "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -o pkg2zip.zip
+            Invoke-WebRequest "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -o psvpfsparser.zip
+            Invoke-WebRequest "${{ secrets.PSM_PKG }}" -o psm_runtime.pkg
             Expand-Archive pkg2zip.zip -Force
             Expand-Archive psvpfsparser.zip -Force
             ./pkg2zip/pkg2zip.exe -x psm_runtime.pkg
