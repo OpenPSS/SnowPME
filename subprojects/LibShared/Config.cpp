@@ -2,6 +2,7 @@
 #include <String/Path.hpp>
 #include <String/Format.hpp>
 #include <Debug/Logger.hpp>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <cstring>
@@ -28,9 +29,9 @@ namespace Shared
 
 	static int screenWidth = 960;
 	static int screenHeight = 544;
+	std::string Config::cfgFilePath = "";
 
 	std::string Config::RunningFromDirectory = "";
-	std::string Config::cfgFilePath = "";
 
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
@@ -125,6 +126,10 @@ namespace Shared
 		Config::RunningFromDirectory = runningFrom;
 		Config::cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
 		Logger::Debug("Reading config file: "+ Config::cfgFilePath);
+
+		strncpy(Config::PsmApps, std::filesystem::absolute("psm").string().c_str(), sizeof(PsmApps));
+		strncpy(Config::RuntimeLibPath, std::filesystem::absolute("dll").string().c_str(), sizeof(RuntimeLibPath));
+		strncpy(Config::RuntimeConfigPath, std::filesystem::absolute("dll").string().c_str(), sizeof(RuntimeConfigPath));
 
 		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);
 		if (cfgStream.fail()) return WriteConfig(configFile);
