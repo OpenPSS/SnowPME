@@ -1,5 +1,6 @@
 #include <String/Format.hpp>
 #include <String/Path.hpp>
+#include <filesystem>
 
 #include <vector>
 
@@ -14,6 +15,15 @@ namespace Shared::String {
 #else
 		return ChangeSlashesToPsmStyle(path); // *NIX and PSM use the same style.
 #endif
+	}
+
+	std::string Path::MakeAbsolute(const std::string& workDir, const std::string& path) {
+		std::string nativePath = Path::ChangeSlashesToNativeStyle(path);
+		std::string nativeWorkDir = Path::ChangeSlashesToNativeStyle(workDir);
+		if (!std::filesystem::path(nativePath).is_absolute()) {
+			return Path::ChangeSlashesToNativeStyle(Path::Combine(nativeWorkDir, nativePath));
+		}
+		return nativePath;
 	}
 
 	std::string Path::Combine(const std::string& path, const std::string& newPart) {

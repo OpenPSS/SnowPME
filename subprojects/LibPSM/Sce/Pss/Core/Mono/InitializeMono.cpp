@@ -111,9 +111,9 @@ namespace Sce::Pss::Core::Mono {
 		InitalizeCsharp::Initalize();
 
 		// Load essential dlls
-		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetMscorlibPath().c_str());
-		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetSystemLibPath().c_str());
-		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetPsmCoreLibPath().c_str());
+		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetCorlibDllPath().c_str());
+		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetSystemDllPath().c_str());
+		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetScePlaystationCoreDllPath().c_str());
 
 		ASSERT(msCoreLib != nullptr && systemLib != nullptr && psmCoreLib != nullptr)
 

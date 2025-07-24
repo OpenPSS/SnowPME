@@ -110,9 +110,9 @@ jobs:
             mkdir dll/mono
             mkdir dll/mono/2.1
             echo "Config::DebugLogging=true" >>SnowPME.cfg
-            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/mscorlib.dll dll/mono/2.1/mscorlib.dll
-            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/System.dll dll/mono/2.1/System.dll
-            copy $env:SCE_PSM_SDK/mono/lib/psm/Sce.PlayStation.Core.dll dll/mono/2.1/Sce.PlayStation.Core.dll
+            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/mscorlib.dll dll/mscorlib.dll
+            copy $env:SCE_PSM_SDK/mono/lib/mono/2.1/System.dll dll/System.dll
+            copy $env:SCE_PSM_SDK/mono/lib/psm/Sce.PlayStation.Core.dll dll/Sce.PlayStation.Core.dll
       - name: Run Tests
         continue-on-error: true
         run: ./psm/run_tests.cmd

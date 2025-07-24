@@ -37,10 +37,9 @@ namespace Shared
 		static std::string GetPsmAppsFolder(); // gets PSM/ folder Path
 		static std::string GetRuntimeLibraryFolder(); // gets Runtime Libraries Path
 		static std::string GetRuntimeConfigFolder(); // gets Runtime Configuration Path
-		static std::string GetMono21Folder(); // gets RuntimeLibPath /mono/2.1
-		static std::string GetPsmCoreLibPath(); // Path to Sce.PlayStation.Core.dll
-		static std::string GetSystemLibPath();  // Path to System.dll
-		static std::string GetMscorlibPath();  // Path to mscorlib.dll
+		static std::string GetScePlaystationCoreDllPath(); // Path to Sce.PlayStation.Core.dll
+		static std::string GetSystemDllPath();  // Path to System.dll
+		static std::string GetCorlibDllPath();  // Path to mscorlib.dll
 
 		static void SaveConfig();
 		static void ReloadConfig();

@@ -75,98 +75,23 @@ namespace Shared
 	}
 
 	std::string Config::GetPsmAppsFolder() {
-		if (std::filesystem::path(Config::PsmApps).is_relative()) return Path::Combine(Config::RunningFromDirectory, Config::PsmApps);
-		else return Config::PsmApps;
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::PsmApps);
 	}
-
 	std::string Config::GetRuntimeLibraryFolder() {
-		std::string expectedPath = std::filesystem::path(Config::RuntimeLibPath).is_relative() ? Path::Combine(Config::RunningFromDirectory, Config::RuntimeLibPath) : Config::RuntimeLibPath;
-
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "mono"), "2.1");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-
-		return expectedPath;
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeLibPath);
 	}
-
 	std::string Config::GetRuntimeConfigFolder() {
-		std::string expectedPath = std::filesystem::path(Config::RuntimeConfigPath).is_relative() ? Path::Combine(Config::RunningFromDirectory, Config::RuntimeConfigPath) : Config::RuntimeConfigPath;
-
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(psmSdk, "mono"), "etc");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-		return expectedPath;
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeConfigPath);
 	}
 
-	std::string Config::GetMono21Folder() {
-		std::string expectedPath = GetRuntimeLibraryFolder();
-
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "mono"), "2.1");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-
-		return expectedPath;
+	std::string Config::GetScePlaystationCoreDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "Sce.PlayStation.Core.dll"));
 	}
-
-	std::string Config::GetPsmCoreLibPath() {
-		std::string expectedPath = Path::Combine(GetMono21Folder() , "Sce.PlayStation.Core.dll");
-		
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "psm"), "Sce.PlayStation.Core.dll");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-		return expectedPath;
+	std::string Config::GetSystemDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "System.dll"));
 	}
-	std::string Config::GetSystemLibPath() {
-		std::string expectedPath = Path::Combine(GetMono21Folder(), "System.dll");
-
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "mono"), "2.1"), "System.dll");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-		return expectedPath;
-	}
-	std::string Config::GetMscorlibPath() {
-		std::string expectedPath = Path::Combine(GetMono21Folder(), "mscorlib.dll");
-
-		// if not found; lookup the file from inside the PSM SDK; (if installed)
-		if (!std::filesystem::exists(expectedPath)) {
-			char* psmSdk = getenv("SCE_PSM_SDK");
-			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "mono"), "2.1"), "mscorlib.dll");
-				if (std::filesystem::exists(gotPath)) return gotPath;
-			}
-		}
-
-		return expectedPath;
+	std::string Config::GetCorlibDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "mscorlib.dll"));
 	}
 
 	int Config::ScreenHeight(int idx) {
@@ -217,16 +142,16 @@ namespace Shared
 
 		bool isValid = true;
 
-		VALIDATE_FILESYSTEM(Config::GetMscorlibPath(), "mscorlib.dll");
-		VALIDATE_FILESYSTEM(Config::GetSystemLibPath(), "System.dll");
-		VALIDATE_FILESYSTEM(Config::GetPsmCoreLibPath(), "Sce.PlayStation.Core.dll");
+		VALIDATE_FILESYSTEM(Config::GetCorlibDllPath(), "mscorlib.dll");
+		VALIDATE_FILESYSTEM(Config::GetSystemDllPath(), "System.dll");
+		VALIDATE_FILESYSTEM(Config::GetScePlaystationCoreDllPath(), "Sce.PlayStation.Core.dll");
 
 		return isValid;
 	}
 	
 	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
-		Config::cfgFilePath = std::filesystem::path(configFile).is_relative() ? Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile)) : configFile;
+		Config::cfgFilePath = Path::MakeAbsolute(Config::RunningFromDirectory, configFile);
 		Logger::Debug("Reading config file: ["+ Config::cfgFilePath+"]");
 
 		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);

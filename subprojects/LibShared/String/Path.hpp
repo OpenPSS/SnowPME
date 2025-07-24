@@ -13,6 +13,7 @@ namespace Shared::String {
 	public:
 		static std::string ChangeSlashesToPsmStyle(const std::string& path);
 		static std::string ChangeSlashesToNativeStyle(const std::string& path);
+		static std::string MakeAbsolute(const std::string& workDir, const std::string& path);
 		static std::string Combine(const std::string& path, const std::string& newPart);
 		static std::string GetFilename(const std::string& path);
 		static std::string UpDirectory(const std::string& path);

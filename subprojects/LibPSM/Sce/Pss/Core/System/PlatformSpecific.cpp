@@ -68,7 +68,7 @@ namespace Sce::Pss::Core::System {
 #endif
 
         // loop over all special shell characters and replace them with escaped version
-        for (int i = 0; i < specialCharacters.length(); i++) {
+        for (size_t i = 0; i < specialCharacters.length(); i++) {
             std::string specialCharacter = std::string(1, specialCharacters.at(i));
             arg = Shared::String::Format::Replace(arg, specialCharacter, escapeSeq + specialCharacter);
         }
