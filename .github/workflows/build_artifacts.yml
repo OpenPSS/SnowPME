@@ -98,11 +98,12 @@ jobs:
             merge-multiple: true
       - name: Run Tests
         run: |
-            ./testbin/SnowPME -p psm/BgmTest-unsigned > testout/BgmTest.log
-            ./testbin/SnowPME -p psm/DeviceID-unsigned > testout/DeviceID.log
-            ./testbin/SnowPME -p psm/PmTest-unsigned > testout/PmTest.log
-            ./testbin/SnowPME -p psm/WaitTest-unsigned > testout/WaitTest.log
-            ./testbin/SnowPME -p psm/WebsiteOpen-unsigned > testout/WebsiteOpen.log
+            mkdir ./testout
+            ./testbin/SnowPME -p testbin/psm/BgmTest-unsigned > ./testout/BgmTest.log
+            ./testbin/SnowPME -p testbin/psm/DeviceID-unsigned > ./testout/DeviceID.log
+            ./testbin/SnowPME -p testbin/psm/PmTest-unsigned > ./testout/PmTest.log
+            ./testbin/SnowPME -p testbin/psm/WaitTest-unsigned > ./testout/WaitTest.log
+            ./testbin/SnowPME -p testbin/psm/WebsiteOpen-unsigned > ./testout/WebsiteOpen.log
       - name: Upload Test Logs
         uses: actions/upload-artifact@v4
         with:
@@ -132,11 +133,12 @@ jobs:
       - name: Run Tests
         run: |
             chmod +x ./testbin/SnowPME
-            ./testbin/SnowPME -p psm/BgmTest-unsigned > testout/BgmTest.log
-            ./testbin/SnowPME -p psm/DeviceID-unsigned > testout/DeviceID.log
-            ./testbin/SnowPME -p psm/PmTest-unsigned > testout/PmTest.log
-            ./testbin/SnowPME -p psm/WaitTest-unsigned > testout/WaitTest.log
-            ./testbin/SnowPME -p psm/WebsiteOpen-unsigned > testout/WebsiteOpen.log
+            mkdir ./testout
+            ./testbin/SnowPME -p testbin/psm/BgmTest-unsigned > ./testout/BgmTest.log
+            ./testbin/SnowPME -p testbin/psm/DeviceID-unsigned > ./testout/DeviceID.log
+            ./testbin/SnowPME -p testbin/psm/PmTest-unsigned > ./testout/PmTest.log
+            ./testbin/SnowPME -p testbin/psm/WaitTest-unsigned > ./testout/WaitTest.log
+            ./testbin/SnowPME -p testbin/psm/WebsiteOpen-unsigned > ./testout/WebsiteOpen.log
       - name: Upload Test Logs
         uses: actions/upload-artifact@v4
         with:
@@ -146,7 +148,7 @@ jobs:
   ## Upload Continuous Release
   ##
   upload_release:
-    name: Update Continuous release
+    name: Update Continuous Release
     runs-on: ubuntu-latest
     needs:
       - ubuntu_meson_build
