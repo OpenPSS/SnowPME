@@ -86,7 +86,7 @@ namespace Shared
 		if (!std::filesystem::exists(expectedPath)) {
 			char* psmSdk = getenv("SCE_PSM_SDK");
 			if (psmSdk != nullptr) {
-				std::string gotPath = Path::Combine(Path::Combine(psmSdk, "mono"), "lib");
+				std::string gotPath = Path::Combine(Path::Combine(Path::Combine(Path::Combine(psmSdk, "mono"), "lib"), "mono"), "2.1");
 				if (std::filesystem::exists(gotPath)) return gotPath;
 			}
 		}
@@ -111,7 +111,7 @@ namespace Shared
 	}
 
 	std::string Config::GetMono21Folder() {
-		std::string expectedPath = Path::Combine(Path::Combine(GetRuntimeLibraryFolder(), "mono"), "2.1");
+		std::string expectedPath = GetRuntimeLibraryFolder();
 
 		// if not found; lookup the file from inside the PSM SDK; (if installed)
 		if (!std::filesystem::exists(expectedPath)) {

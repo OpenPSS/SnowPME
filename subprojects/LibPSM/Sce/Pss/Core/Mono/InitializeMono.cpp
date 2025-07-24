@@ -64,6 +64,7 @@ namespace Sce::Pss::Core::Mono {
 		mono_config_parse(nullptr);
 
 		// Set runtime install location
+		mono_set_assemblies_path(Config::GetRuntimeLibraryFolder().c_str());
 		mono_set_dirs(Config::GetRuntimeLibraryFolder().c_str(), Config::GetRuntimeConfigFolder().c_str());
 
 		// Create a domain in which this application will run under.
@@ -211,7 +212,6 @@ namespace Sce::Pss::Core::Mono {
 		}
 		Logger::Debug("cxml : managed_heap_size : "+ std::to_string(heapSizeLimit));
 		Logger::Debug("cxml : resource_heap_size : "+ std::to_string(resourceSizeLimit));
-
 
 		int res = InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo->ResourceHeapSize);
 		if (res != PSM_ERROR_NO_ERROR) {
