@@ -86,6 +86,14 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawImageNative(int,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawImageNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawRectangleNative(int,Sce.PlayStation.Core.Imaging.ImageColor&,Sce.PlayStation.Core.Imaging.ImageRect&)", Sce::Pss::Core::Imaging::Image::DrawRectangleNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,int,int,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative ),
+
+#ifndef COMPAT_PSV_2_01
+		// Exclusive to PSVita PSM Runtime (v2.01) for some reason,
+		// 'private static extern int DrawTextNative(int handle, string text, uint offset, uint len, ref ImageColor color, int font_handle, ref ImagePosition position);'
+		// on the managed Sce.PlayStation.Core.dll, this is now uints instead of int; *why did they do this?*
+		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,uint,uint,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative),
+#endif
+
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::ExportNative(int,string,string)", Sce::Pss::Core::Imaging::Image::ExportNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::SaveAsNative(int,string)", Sce::Pss::Core::Imaging::Image::SaveAsNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Font::NewFromFilenameSizeStyle(string,int,Sce.PlayStation.Core.Imaging.FontStyle,int&)", Sce::Pss::Core::Imaging::Font::NewFromFilenameSizeStyle ),

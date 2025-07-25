@@ -94,16 +94,24 @@ enum PsmError: uint32_t {
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
 
+
+#ifndef UNIMPLEMENTED_AS_ERROR
+#define UNIMPLEMENTED_ERRORABLE(msg) \
+		do { \
+			std::string str = std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n"); \
+			Shared::Debug::Logger::Todo(str); \
+			return; \
+		} while (0)
+#else
 #define UNIMPLEMENTED_ERRORABLE(msg) \
 		do { \
 			std::string str = std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n"); \
 			Shared::Debug::Logger::Todo(str); \
 			Sce::Pss::Core::ExceptionInfo::AddMessage(str); \
 			this->SetError(PSM_ERROR_NOT_IMPLEMENTED); \
-			PANIC(str); \
 			return; \
 		} while (0)
-
+#endif
 #define LOG_FUNCTION() Shared::Debug::Logger::Debug(std::string(__FUNCTION__));
 
 

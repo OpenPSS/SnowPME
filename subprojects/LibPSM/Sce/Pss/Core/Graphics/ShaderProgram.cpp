@@ -76,7 +76,8 @@ namespace Sce::Pss::Core::Graphics {
 		this->GLHandle = glCreateProgram();
 
 		// in pure OGL, we have to append a version number to the start of the GL Shaders
-		// this is not required in GLES;
+		// this is not required in GLES; as 100 has the features we need already;
+		// (as PSM assumes GLES GLSL or CG.)
 		if (WindowControl::GetBackend() == "OpenGL") {
 			this->fragmentSrc = "#version 120\r\nprecision mediump float;\r\n" + this->fragmentSrc;
 			this->vertexSrc = "#version 120\r\nprecision mediump float;\r\n" + this->vertexSrc;

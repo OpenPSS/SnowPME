@@ -41,7 +41,9 @@ namespace Sce::Pss::Core::Imaging {
 		static int CropNative(int handle, ImageRect* rect, int *croppedImageHandle);
 		static int DrawImageNative(int handle, int source_handle, ImagePosition *position);
 		static int DrawRectangleNative(int handle, ImageColor *color, ImageRect *rect);
-		static int DrawTextNative(int handle, MonoString* text, int offset, int len, ImageColor *color, int font_handle, ImagePosition *position);
+
+		// NOTE: on SDK2.00 Windows; these are int offset and int len, its only uint on PSVita.
+		static int DrawTextNative(int handle, MonoString* text, uint32_t offset, uint32_t len, ImageColor* color, int font_handle, ImagePosition* position);
 		static int ExportNative(int handle, MonoString* albumname, MonoString* filename);
 		static int SaveAsNative(int handle, MonoString* filename);
 	};

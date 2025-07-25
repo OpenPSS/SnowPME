@@ -62,7 +62,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		short frameCount = 0;
 		int numScreens = 0;
-		bool hasFrameBuffer = false;
+		bool hasFrameBuffer = true;
 		bool hasShaderOrNoFrameBuffer = false;
 		bool frameInProgress = false;
 
@@ -114,9 +114,9 @@ namespace Sce::Pss::Core::Graphics {
 
 		static GraphicsCapsState& GetCaps();
 
-		void CheckUpdate(GraphicsState* state);
-		void UpdateHandles(GraphicsUpdate notifyFlag);
-		void UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
+		int CheckUpdate(GraphicsState* state);
+		int UpdateHandles(GraphicsUpdate notifyFlag);
+		int UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
 		int UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
 	};
 }

@@ -100,7 +100,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		size_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PSSE_SIGNATURE_SIZE * (blockPosition / PSSE_SIGNATURE_BLOCK_SIZE)));
 
 		if (blockNo >= this->totalBlocks) { // Is this the last block?
-			totalRead = this->header.FileSize - readAmount;
+			totalRead = static_cast<size_t>(this->header.FileSize) - readAmount;
 			trimTo = totalRead;
 			totalRead += ((CryptoLibrary::AesBlockSize)-(totalRead % (CryptoLibrary::AesBlockSize)));
 		}
