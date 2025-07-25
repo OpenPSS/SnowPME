@@ -21,7 +21,7 @@ namespace SnowPME::Graphics {
 		float refreshRate;
 		void onResized();
 	public:
-		std::unique_ptr<ImGuiBackend> ImGuiBackend = nullptr;
+		std::unique_ptr<ImGuiBackend> Backend = nullptr;
 
 		Window(int height, int width, const std::string& title);
 

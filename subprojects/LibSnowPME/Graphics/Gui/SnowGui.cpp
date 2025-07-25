@@ -18,7 +18,7 @@ namespace SnowPME::Graphics::Gui {
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		window->ImGuiBackend->Init();
+		window->Backend->Init();
 		ImGui_ImplSDL2_InitForOpenGL(this->window->GetSdlWindow(), this->window->GetGlCtx());
 	}
 
@@ -51,7 +51,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void SnowGui::NewFrame() {
-		this->window->ImGuiBackend->NewFrame();
+		this->window->Backend->NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 	}
@@ -61,7 +61,7 @@ namespace SnowPME::Graphics::Gui {
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		this->window->ImGuiBackend->EndFrame();
+		this->window->Backend->EndFrame();
 
 		window->SwapBuffers();
 	}
@@ -76,7 +76,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	SnowGui::~SnowGui() {
-		this->window->ImGuiBackend->Term();
+		this->window->Backend->Term();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 	}

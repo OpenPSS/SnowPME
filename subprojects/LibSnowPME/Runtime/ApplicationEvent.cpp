@@ -28,7 +28,7 @@ namespace SnowPME::Runtime {
 	}
 
 	std::string ApplicationEvent::GetBackend() {
-		return Window::GetMainWindow()->ImGuiBackend->Name();
+		return Window::GetMainWindow()->Backend->Name();
 	}
 	bool ApplicationEvent::YesNoMessageBox(const char* message, const char* caption) {
 		return Window::GetMainWindow()->ShowMessageBox(message, caption);
