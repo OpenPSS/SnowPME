@@ -16,17 +16,18 @@ namespace SnowPME {
 
 
 	void Program::progThreadFunc() {
-		threadRunning = true;
 
 		std::shared_ptr<Window> window = Window::GetMainWindow();
 		if (window == nullptr) return;
 
 		Logger::Debug("Validating config file ...");
 		if (Config::ValidateConifg()) {
-
+			
 			if (!window->IsOpenGLInitalized()) {
 				window->InitOpenGL();
 			}
+
+			this->threadRunning = true;
 
 			Logger::Debug("Running mono program ...");
 			if (!this->programPath.empty()) {
@@ -40,13 +41,21 @@ namespace SnowPME {
 	}
 
 	void Program::guiThreadFunc() {
-		this->threadRunning = true;
 		std::shared_ptr<Window> window = Window::GetMainWindow();
 		if (window == nullptr) return;
 
 		if (!window->IsOpenGLInitalized()) {
 			window->InitOpenGL();
 		}
+
+		Logger::Debug("Setting up Gui.");
+		this->gui = std::make_unique<SnowGui>(Window::GetMainWindow());
+
+		Logger::Debug("Initalizing ProgramSelectWindow.");
+		ProgramSelectWindow* progSelectWindow = new ProgramSelectWindow();
+		progSelectWindow->Register();
+
+		this->threadRunning = true;
 
 		Logger::Debug("Running GUI render loop.");
 		while (!gui->Done()) {
@@ -97,13 +106,6 @@ namespace SnowPME {
 			}
 
 			if (showGui) {
-				Logger::Debug("Setting up Gui.");
-				this->gui = std::make_unique<SnowGui>(Window::GetMainWindow());
-
-				Logger::Debug("Initalizing main window.");
-				ProgramSelectWindow* mainWindow = new ProgramSelectWindow();
-				mainWindow->Register();
-
 				this->guiThread = std::thread(&Program::guiThreadFunc, this);
 			}
 		}

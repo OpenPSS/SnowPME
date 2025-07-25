@@ -12,8 +12,6 @@ namespace Sce::Pss::Core::Crypto {
 	}
 
 	void AesCbc::SetIv(uint8_t iv[0x10]) {
-		Logger::Debug("New Iv:");
-		Logger::Debug(iv, 0x10);
 		memcpy(this->iv, iv, sizeof(this->iv));
 	}
 	

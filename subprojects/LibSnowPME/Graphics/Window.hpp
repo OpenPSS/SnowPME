@@ -6,6 +6,7 @@
 #include <memory>
 #include <atomic>
 
+#include <Graphics/ImGuiBackend.hpp>
 #include <SDL2/SDL.h>
 
 namespace SnowPME::Graphics {
@@ -20,6 +21,8 @@ namespace SnowPME::Graphics {
 		float refreshRate;
 		void onResized();
 	public:
+		std::unique_ptr<ImGuiBackend> ImGuiBackend = nullptr;
+
 		Window(int height, int width, const std::string& title);
 
 		void SwapBuffers();

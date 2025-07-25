@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Graphics {
 		std::vector<std::string> attributeBindings; 
 
 
-		int compileShader(int type, char* source);
+		int compileShader(int type, const char* source);
 	public:
 		int UniformCount();
 		int AttributeCount();

@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
 #include <Graphics/Window.hpp>
+#include <Graphics/ImGuiGLES2Backend.hpp>
+#include <Graphics/ImGuiGL2Backend.hpp>
+
 #include <LibShared.hpp>
 #include <glad/glad.h>
 #include <thread>
@@ -20,12 +23,21 @@ namespace SnowPME::Graphics {
 		ASSERT(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24) == 0);
 		ASSERT(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) == 0);
 
-		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES | SDL_GL_CONTEXT_PROFILE_CORE) != 0) {
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0)
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) == 0) {
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == 0);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+			this->ImGuiBackend = std::make_unique<ImGuiGLES2Backend>();
+
+		}
+		else {
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == 0);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+			this->ImGuiBackend = std::make_unique<ImGuiGL2Backend>();
+
+			Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0" + std::string(SDL_GetError()));
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0);
 		}
 
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
 
 		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
 		if (this->sdlWindow == nullptr) {
@@ -59,10 +71,14 @@ namespace SnowPME::Graphics {
 		if (this->glCtx == nullptr) {
 			PANIC(SDL_GetError());
 		}
-		ASSERT(gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)));
 
+		ASSERT(gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)));
 		ASSERT(SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx) == 0);
-		ASSERT(SDL_GL_SetSwapInterval(1) == 0);
+
+		if (SDL_GL_SetSwapInterval(1) != 0) {
+			Logger::Warn("Cannot use SDL_GL_SetSwapInterval " + std::string(SDL_GetError()) + " (Is your monitor unsupported?)");
+			Logger::Warn("Screen Tearing may occur, as vsync cannot be used.");
+		}
 
 		onResized();
 

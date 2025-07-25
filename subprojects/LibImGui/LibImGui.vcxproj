@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="backends\imgui_impl_gles2.h" />
     <ClInclude Include="backends\imgui_impl_opengl2.h" />
     <ClInclude Include="backends\imgui_impl_sdl2.h" />
     <ClInclude Include="imconfig.h" />
@@ -22,6 +23,7 @@
     <ClInclude Include="LibImGui.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="backends\imgui_impl_gles2.cpp" />
     <ClCompile Include="backends\imgui_impl_opengl2.cpp" />
     <ClCompile Include="backends\imgui_impl_sdl2.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -102,7 +104,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;LibGLAD.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
@@ -129,7 +131,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;LibGLAD.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

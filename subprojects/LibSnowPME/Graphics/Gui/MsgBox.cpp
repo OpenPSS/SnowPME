@@ -6,7 +6,7 @@ namespace SnowPME::Graphics::Gui {
 
 	std::string MsgBox::GetResult() {
 		std::string result = "";
-		if (!this->IsShown());
+		if (!this->IsShown()) return result;
 
 		if(this->result > 0)
 			result = this->buttons.at(this->result);

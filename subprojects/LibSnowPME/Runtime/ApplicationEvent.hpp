@@ -21,6 +21,7 @@ namespace SnowPME::Runtime {
 		static void SwapBuffers();
 		static uint64_t GetTime();
 		static bool YesNoMessageBox(const char* message, const char* caption);
+		static std::string GetBackend();
 
 		static void ProcessEvent();
 
