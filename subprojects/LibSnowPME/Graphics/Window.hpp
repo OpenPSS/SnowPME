@@ -20,6 +20,9 @@ namespace SnowPME::Graphics {
 
 		float refreshRate;
 		void onResized();
+
+		bool tryGl();
+		bool tryGles();
 	public:
 		std::unique_ptr<ImGuiBackend> Backend = nullptr;
 

@@ -9,7 +9,6 @@ dirbase = meson.current_source_dir()
 LibSDL2_dep = cpp.find_library('SDL2', required: true)
 LibOpenGL_dep = cpp.find_library('GL', required: true)
 
-
 LibGLAD = subproject('LibGLAD')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
 

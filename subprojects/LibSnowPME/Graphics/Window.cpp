@@ -16,6 +16,28 @@ namespace SnowPME::Graphics {
 		return Window::mainWindow;
 	}
 
+	bool Window::tryGl() {
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0) {
+			Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0" + std::string(SDL_GetError()));
+
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == 0);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+			this->Backend = std::make_unique<ImGuiGL2Backend>();
+			return true;
+		}
+		return false;
+	}
+
+	bool Window::tryGles() {
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) == 0) {
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == 0);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+			this->Backend = std::make_unique<ImGuiGLES2Backend>();
+			return true;
+		}
+		return false;
+	}
+
 	Window::Window(int height, int width, const std::string& title) {
 		ASSERT(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) == 0);
 
@@ -23,26 +45,18 @@ namespace SnowPME::Graphics {
 		ASSERT(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24) == 0);
 		ASSERT(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) == 0);
 
-		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) == 0) {
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == 0);
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
-			this->Backend = std::make_unique<ImGuiGLES2Backend>();
-
-		}
-		else {
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == 0);
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
-			this->Backend = std::make_unique<ImGuiGL2Backend>();
-
-			Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0" + std::string(SDL_GetError()));
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0);
-		}
-
+		if (!tryGles()) tryGl();
 
 		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
 		if (this->sdlWindow == nullptr) {
-			PANIC(SDL_GetError());
+			tryGl();
+
+			this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL | SDL_RENDERER_PRESENTVSYNC);
+			if (this->sdlWindow == nullptr) {
+				PANIC("Cannot create window" + std::string(SDL_GetError()));
+			}
 		}
+
 
 		int displayIndex = SDL_GetWindowDisplayIndex(this->sdlWindow);
 		if (displayIndex == -1) {
