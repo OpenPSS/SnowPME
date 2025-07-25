@@ -17,9 +17,9 @@ namespace SnowPME::Graphics {
 	}
 
 	bool Window::tryGl() {
-		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0) {
-			Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0" + std::string(SDL_GetError()));
+		Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0");
 
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0) {
 			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == 0);
 			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
 			this->Backend = std::make_unique<ImGuiGL2Backend>();
