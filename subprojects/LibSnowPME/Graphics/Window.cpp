@@ -97,7 +97,7 @@ namespace SnowPME::Graphics {
 		this->onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
-		Logger::Debug("OpenGL Version: " + this->openGlVersion);
+		Logger::Debug(this->openGlVersion);
 
 		this->glInitalized = true;
 	}
