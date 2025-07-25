@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImplMode.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 #include <LibShared.hpp>
 #include <cstdint>
 #include <string>
@@ -146,10 +147,12 @@ namespace Sce::Pss::Core::Imaging {
 		size_t bufferSize = channels * size->Width * size->Height;
 
 		// TODO: Remove this when fonts are implemented
+#ifdef INACCURATE_ALLOW_0BYTE_IMAGE
 		if (bufferSize <= 0) { 
 			Logger::Todo("Fonts are not implemented yet, resulting in trying to create 0 byte image; faking it as 1028 bytes instead to avoid a crash."); 
 			bufferSize = 1028; 
 		}
+#endif
 
 		std::vector<uint8_t> img(bufferSize);
 		if(img.data() != nullptr) {
@@ -266,8 +269,11 @@ namespace Sce::Pss::Core::Imaging {
 		return img->DrawRectangle(*color, *rect);
 	}
 
+#ifdef COMPAT_VITA_2_01_RUNTIME_FEATURES
 	int Image::DrawTextNative(int handle, MonoString* text, uint32_t offset, uint32_t len, ImageColor* color, int font_handle, ImagePosition* position) {
-		
+#else
+	int Image::DrawTextNative(int handle, MonoString * text, int offset, int len, ImageColor * color, int font_handle, ImagePosition * position) {
+#endif
 		UNIMPLEMENTED();
 	}
 	int Image::ExportNative(int handle, MonoString* albumname, MonoString* filename) {

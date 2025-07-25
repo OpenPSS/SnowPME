@@ -124,6 +124,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\LocationDeviceType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImplMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp" />
