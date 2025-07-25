@@ -27,9 +27,8 @@ namespace SnowPME {
 				window->InitOpenGL();
 			}
 
-			this->threadRunning = true;
-
 			Logger::Debug("Running mono program ...");
+			this->threadRunning = true;
 			if (!this->programPath.empty()) {
 				this->exitCode = Application::LoadApplication(this->programPath);
 			}
@@ -111,7 +110,7 @@ namespace SnowPME {
 		}
 
 		// wait for thread start ...
-		while (!this->threadRunning) {  };
+		while (!this->threadRunning) { /**/ };
 
 		while (this->threadRunning) {
 			if (this->gui != nullptr && !this->gui->Done()) {

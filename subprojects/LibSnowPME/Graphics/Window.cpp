@@ -94,9 +94,11 @@ namespace SnowPME::Graphics {
 			Logger::Warn("Screen Tearing may occur, as vsync cannot be used.");
 		}
 
-		onResized();
+		this->onResized();
 
 		this->openGlVersion = std::string((char*)glGetString(GL_VERSION));
+		Logger::Debug("OpenGL Version: " + this->openGlVersion);
+
 		this->glInitalized = true;
 	}
 
@@ -112,6 +114,7 @@ namespace SnowPME::Graphics {
 		int windowWidth = 0;
 		int windowHeight = 0;
 		SDL_GetWindowSize(this->sdlWindow, &windowWidth, &windowHeight);
+		Logger::Debug("onResized: new size (" + std::to_string(windowWidth) + "x" + std::to_string(windowHeight) + ")");
 		glViewport(0, 0, windowWidth, windowHeight);
 	}
 
