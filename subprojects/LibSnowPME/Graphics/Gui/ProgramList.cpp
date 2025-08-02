@@ -14,7 +14,7 @@ using namespace Sce::Pss::Core::Metadata;
 
 namespace SnowPME::Graphics::Gui {
 
-	void ProgramList::addMenuItem(std::string menuName, std::string programPath) {
+	ProgramEntry& ProgramList::addMenuItem(std::string menuName, std::string programPath) {
 		ProgramEntry progEntry;
 		progEntry.label = menuName + "##" + Format::CreateRandomString(10);
 		progEntry.programPath = programPath;
@@ -22,6 +22,7 @@ namespace SnowPME::Graphics::Gui {
 		progEntry.enabled = true;
 
 		this->programs.push_back(progEntry);
+		return progEntry;
 	}
 
 	void ProgramList::parsePsmFolder(std::string psmFolderPath) {
@@ -64,8 +65,15 @@ namespace SnowPME::Graphics::Gui {
 		return this->hasSelectedProgram;
 	}
 
-	ProgramEntry ProgramList::SelectedProgram() {
+	ProgramEntry& ProgramList::SelectedProgram() {
 		return this->selectedProgram;
+	}
+
+	void ProgramList::SpecifyProgramByPath(std::string gameFolder) {
+		ProgramEntry entry;
+		entry.programPath = gameFolder;
+		this->selectedProgram = entry;
+		this->hasSelectedProgram = true;
 	}
 
 	void ProgramList::RenderProgramList() {

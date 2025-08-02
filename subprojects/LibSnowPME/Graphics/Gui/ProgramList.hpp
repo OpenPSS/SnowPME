@@ -9,10 +9,10 @@
 namespace SnowPME::Graphics::Gui {
 
 	typedef struct ProgramEntry {
-		std::string label;
-		std::string programPath;
-		bool selected;
-		bool enabled;
+		std::string label = "";
+		std::string programPath = "";
+		bool selected = false;
+		bool enabled = true;
 	} ProgramEntry;
 
 	class ProgramList {
@@ -21,12 +21,13 @@ namespace SnowPME::Graphics::Gui {
 		std::vector<ProgramEntry> programs;
 		std::atomic<bool> hasSelectedProgram = false;
 
-		void addMenuItem(std::string menuName, std::string programPath);
+		ProgramEntry& addMenuItem(std::string menuName, std::string programPath);
 		void parsePsmFolder(std::string psmFolderPath);
 	public:
 		void Refresh();
 		void RenderProgramList();
-		ProgramEntry SelectedProgram();
+		void SpecifyProgramByPath(std::string gameFolder);
+		ProgramEntry& SelectedProgram();
 		bool HasSelectedProgram();
 	};
 

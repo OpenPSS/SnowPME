@@ -183,6 +183,7 @@ namespace Sce::Pss::Core::Mono {
 
 	int InitializeMono::ScePssMain(const char* gameFolder) {
 		int resCode = 0;
+
 		// create Sandbox object
 		std::shared_ptr<Sandbox> sandbox = Sandbox::MakeUniqueObject(std::make_shared<Sandbox>(gameFolder));
 

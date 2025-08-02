@@ -30,6 +30,11 @@ namespace SnowPME {
 			Logger::Debug("Running mono program ...");
 			this->threadRunning = true;
 			if (!this->programPath.empty()) {
+
+				if (std::filesystem::is_regular_file(this->programPath)) {
+					this->programPath = std::filesystem::path(this->programPath).parent_path().parent_path().string();
+				}
+
 				this->exitCode = Application::LoadApplication(this->programPath);
 			}
 

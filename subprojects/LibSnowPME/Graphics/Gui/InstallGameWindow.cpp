@@ -56,23 +56,19 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void InstallGameWindow::browseGame() {
-		pfd::select_folder* filepicker = new pfd::select_folder("Open Game Folder", "/", pfd::opt::none);
+		pfd::select_folder filepicker = pfd::select_folder("Open Game Folder", "/", pfd::opt::none);
 
-		if (!filepicker->result().empty()) {
-			this->gameFile = filepicker->result();
+		if (!filepicker.result().empty()) {
+			this->gameFile = filepicker.result();
 		}
-
-		delete filepicker;
 	}
 
 	void InstallGameWindow::browseRif() {
-		pfd::open_file* filepicker = new pfd::open_file("Open Rights Information File", "/", { "Rights Information Files (.rif)", "*.rif" }, pfd::opt::none);
+		pfd::open_file filepicker = pfd::open_file("Open Rights Information File", "/", { "Rights Information Files (.rif)", "*.rif" }, pfd::opt::none);
 
-		if (!filepicker->result().empty()) {
-			this->rifFile = filepicker->result().at(0);
+		if (!filepicker.result().empty()) {
+			this->rifFile = filepicker.result().front();
 		}
-
-		delete filepicker;
 	}
 
 	InstallGameWindow::InstallGameWindow() {
