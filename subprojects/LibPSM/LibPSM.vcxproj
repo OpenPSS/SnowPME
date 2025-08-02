@@ -124,6 +124,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\LocationDeviceType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImplMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp" />
@@ -344,7 +345,7 @@
       <AdditionalDependencies>LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;Mswsock.lib;ws2_32.lib;Psapi.lib;winmm.lib;version.lib;Imm32.lib;Setupapi.lib;libgc.lib;eglib.lib;monoposixhelper.lib;monosgen-2.0.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
+      <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibImGui.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -372,7 +373,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibGLAD.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
+      <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibImGui.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

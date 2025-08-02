@@ -4,11 +4,13 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImplMode.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 #include <LibShared.hpp>
 #include <cstdint>
 #include <string>
 #include <cstdio>
 
+using namespace Shared;
 using namespace Shared::String;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::System;
@@ -134,14 +136,26 @@ namespace Sce::Pss::Core::Imaging {
 			channels = 1;
 			implMode = ImageImplMode::A;
 		}
+		else {
+			PANIC("Unknown image mode: " + std::to_string(static_cast<uint32_t>(mode)));
+		}
 
 		if ((size->Width < 0 || size->Width > 0x1000) || (size->Height > 0x1000)) {
 			SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
 		}
 
-		size_t imageBufferSize = channels * size->Width * size->Height;
-		uint8_t* imageData = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(imageBufferSize));
-		if(imageData != nullptr) {
+		size_t bufferSize = channels * size->Width * size->Height;
+
+		// TODO: Remove this when fonts are implemented
+#ifdef INACCURATE_ALLOW_0BYTE_IMAGE
+		if (bufferSize <= 0) { 
+			Logger::Todo("Fonts are not implemented yet, resulting in trying to create 0 byte image; faking it as 1028 bytes instead to avoid a crash."); 
+			bufferSize = 1028; 
+		}
+#endif
+
+		std::vector<uint8_t> img(bufferSize);
+		if(img.data() != nullptr) {
 
 			ImageColor colorNormalized = *color;
 			this->normalizeColor(&colorNormalized);
@@ -154,7 +168,7 @@ namespace Sce::Pss::Core::Imaging {
 					for (int y = 0; y < size->Height; y++) {
 						for (int x = 0; x < size->Width; x++) {
 							size_t pos = y + (x * size->Width) + 0;
-							imageData[pos] = colorNormalized.A;
+							img.data()[pos] = colorNormalized.A;
 						}
 					}
 				}
@@ -166,21 +180,21 @@ namespace Sce::Pss::Core::Imaging {
 					for (int y = 0; y < size->Height; y++) {
 						for (int x = 0; x < size->Width; x++) {
 							size_t pos = y + (x * size->Width);
-							imageData[pos + 0] = colorNormalized.R;
-							imageData[pos + 1] = colorNormalized.G;
-							imageData[pos + 2] = colorNormalized.B;
-							imageData[pos + 3] = colorNormalized.A;
+							img.data()[pos + 0] = colorNormalized.R;
+							img.data()[pos + 1] = colorNormalized.G;
+							img.data()[pos + 2] = colorNormalized.B;
+							img.data()[pos + 3] = colorNormalized.A;
 						}
 					}
 				}
 
 			}
 
-			this->imageImpl = ImageImpl::CreateFromBuffer(imageData, size, implMode, HeapAllocator::UniqueObject());
-			HeapAllocator::UniqueObject()->sce_psm_free(imageData);
+			this->imageImpl = ImageImpl::CreateFromBuffer(img.data(), size, implMode, HeapAllocator::UniqueObject());
 			SET_ERROR_AND_RETURN(this->Decode());
 		}
 		else {
+			Logger::Error("ran out of memory;");
 			SET_ERROR_AND_RETURN(PSM_ERROR_OUT_OF_MEMORY);
 		}
 
@@ -254,7 +268,12 @@ namespace Sce::Pss::Core::Imaging {
 		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
 		return img->DrawRectangle(*color, *rect);
 	}
-	int Image::DrawTextNative(int handle, MonoString* text, int offset, int len, ImageColor* color, int font_handle, ImagePosition* position) {
+
+#ifdef COMPAT_VITA_2_01_RUNTIME_FEATURES
+	int Image::DrawTextNative(int handle, MonoString* text, uint32_t offset, uint32_t len, ImageColor* color, int font_handle, ImagePosition* position) {
+#else
+	int Image::DrawTextNative(int handle, MonoString * text, int offset, int len, ImageColor * color, int font_handle, ImagePosition * position) {
+#endif
 		UNIMPLEMENTED();
 	}
 	int Image::ExportNative(int handle, MonoString* albumname, MonoString* filename) {

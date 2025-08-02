@@ -20,7 +20,7 @@ namespace SnowPME::Graphics::Gui {
 			ImGui::InputTextWithHint("##usernameEntry", "Username", Config::Username, sizeof(Config::Username));
 			ImGui::Text("AccountID: ");
 			ImGui::SameLine();
-			ImGui::InputScalar("##accountIdEntry", ImGuiDataType_U64, &Config::AccountId, NULL, NULL, "%016" PRIX64, ImGuiInputTextFlags_CharsHexadecimal);
+			ImGui::InputScalar("##accountIdEntry", ImGuiDataType_U64, &Config::AccountId, nullptr, nullptr, "%016" PRIX64, ImGuiInputTextFlags_CharsHexadecimal);
 			ImGui::TreePop();
 		}
 
@@ -57,11 +57,11 @@ namespace SnowPME::Graphics::Gui {
 			ImGui::Text("System Language: ");
 			ImGui::SameLine();
 			ImGui::InputTextWithHint("##systemLanguage", "en-US", Config::SystemLanguage, sizeof(Config::SystemLanguage));
+			ImGui::Checkbox("Enable Debug Logs", &Config::DebugLogging);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::Button("Save Changes")) {
-			Config::SaveConfig();
 			this->Close();
 		}
 

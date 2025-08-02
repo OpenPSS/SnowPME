@@ -190,11 +190,10 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		this->NotifyUpdate(update);
-		this->CheckUpdate(state);
-		return PSM_ERROR_NO_ERROR;
+		return this->CheckUpdate(state);
 	}
 
-	void GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
+	int GraphicsContext::UpdateHandles(GraphicsUpdate notifyFlag) {
 		// check notifyFlag is ShaderProgram .
 		if ((notifyFlag & GraphicsUpdate::ShaderProgram) != GraphicsUpdate::None) {
 			Logger::Debug("notifyFlag & GraphicsUpdate::ShaderProgram");
@@ -298,13 +297,12 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::VertexBuffer");
-
+			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::VertexBuffer");
 		}
 
 		// check notifyFlag is Texture
 		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
-			UNIMPLEMENTED_ERRORABLE("notifyFlag & GraphicsUpdate::Texture");
+			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::Texture");
 		}
 
 		// check notifyFlag is FrameBuffer
@@ -318,6 +316,8 @@ namespace Sce::Pss::Core::Graphics {
 			this->hasFrameBuffer = (!this->currentFrameBuffer  || this->currentFrameBuffer->unk12 );
 			this->hasShaderOrNoFrameBuffer = (this->currentProgram == nullptr && this->hasFrameBuffer);
 		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int GraphicsContext::Clear(ClearMask mask) {
@@ -402,7 +402,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	void GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
+	int GraphicsContext::UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state) {
 		// check notify flag is Scissor, Viewport, Depthrange, ClearColor, ClearDepth, or ClearStencil
 		if ((notifyFlag & 
 			(GraphicsUpdate::Scissor |
@@ -466,8 +466,6 @@ namespace Sce::Pss::Core::Graphics {
 		if ((notifyFlag & 0xE000) != GraphicsUpdate::None) { // TODO: work out what 0xE000 is.
 			if ((notifyFlag & GraphicsUpdate::ColorMask) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::ColorMask");
-
-				using namespace Sce::Pss::Core::Graphics;
 
 				glColorMask(
 					(state->colorMask & ColorMask::R) != Sce::Pss::Core::Graphics::ColorMask::None,
@@ -573,6 +571,7 @@ namespace Sce::Pss::Core::Graphics {
 				);
 			}
 
+
 		}
 
 		if ((notifyFlag & GraphicsUpdate::Enable) != GraphicsUpdate::None) {
@@ -603,6 +602,8 @@ namespace Sce::Pss::Core::Graphics {
 				enableModeBitlist = enableModeBitlist >> 1;
 			};
 		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int GraphicsContext::UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk) {
@@ -610,20 +611,29 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	void GraphicsContext::CheckUpdate(GraphicsState* state) {
+	int GraphicsContext::CheckUpdate(GraphicsState* state) {
 		GraphicsUpdate notifyFlag = this->updateNotifyFlag;
+		int res = PSM_ERROR_NO_ERROR;
 		if (this->updateNotifyFlag != GraphicsUpdate::None) {
 			this->updateNotifyFlag = GraphicsUpdate::None;
 
-			if ((notifyFlag & 0xFFFF0000) != GraphicsUpdate::None)
-				this->UpdateHandles(notifyFlag);
+			if ((notifyFlag & 0xFFFF0000) != GraphicsUpdate::None) {
+				res = this->UpdateHandles(notifyFlag);
+				if (res != PSM_ERROR_NO_ERROR) return res;
+			}
 			
-			if (notifyFlag != GraphicsUpdate::None)
-				this->UpdateState(notifyFlag, state);
+			if (notifyFlag != GraphicsUpdate::None) {
+				res = this->UpdateState(notifyFlag, state);
+				if (res != PSM_ERROR_NO_ERROR) return res;
+			}
 
-			if (this->numScreens >= 2)
-				this->UpdateMultiScreen(notifyFlag, state, 0);
+			if (this->numScreens >= 2) {
+				res = this->UpdateMultiScreen(notifyFlag, state, 0);
+				if (res != PSM_ERROR_NO_ERROR) return res;
+			}
 		}
+
+		return res;
 	}
 
 	GraphicsUpdate GraphicsContext::NotifyUpdateData(GraphicsUpdate updateDataFlag) {

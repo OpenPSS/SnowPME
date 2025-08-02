@@ -1,10 +1,13 @@
 #include <Sce/Pss/Core/Crypto/AesCbc.hpp>
 #include <Sce/Pss/Core/Crypto/Algorithms/Algorithms.hpp>
+#include <LibShared.hpp>
+
+using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Crypto {
 
 	AesCbc::AesCbc(uint8_t key[0x10], uint8_t iv[0x10]) {
-		aes128_init(&this->ctx_dec, key);
+		aes128_init_dec(&this->ctx_dec, key);
 		memcpy(this->iv, iv, sizeof(this->iv));
 	}
 
@@ -13,10 +16,12 @@ namespace Sce::Pss::Core::Crypto {
 	}
 	
 	void AesCbc::Decrypt(uint8_t* data, uint32_t dataSize) {
+		ASSERT(dataSize % AES_BLOCKLEN == 0);
 		aes128_cbc_decrypt(&this->ctx_dec, this->iv, data, dataSize);
+
 	}
 
 	void AesCbc::Decrypt(std::vector<uint8_t>& data) {
-		aes128_cbc_decrypt(&this->ctx_dec, this->iv, data.data(), data.size());
+		this->Decrypt(data.data(), data.size());
 	}
 }

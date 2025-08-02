@@ -2,7 +2,43 @@
 #define LIB_PSS_PSMMONOFUNC_H 1
 
 #include <Sce/Pss/Core/InitializeCsharp.hpp>
-#include <LibPSM.hpp>
+#include <Sce/Pss/Core/Features.hpp>
+
+#include <Sce/Pss/Core/Environment/Log.hpp>
+#include <Sce/Pss/Core/Environment/SystemEvents.hpp>
+#include <Sce/Pss/Core/Environment/SystemParameters.hpp>
+#include <Sce/Pss/Core/Environment/SystemMemory.hpp>
+#include <Sce/Pss/Core/Environment/PersistentMemory.hpp>
+#include <Sce/Pss/Core/Environment/Shell.hpp>
+#include <Sce/Pss/Core/Environment/CommonDialog.hpp>
+#include <Sce/Pss/Core/Environment/TextInputDialog.hpp>
+#include <Sce/Pss/Core/Services/AccountInformation.hpp>
+#include <Sce/Pss/Core/Services/InAppPurchaseDialog.hpp>
+#include <Sce/Pss/Core/Environment/Clipboard.hpp>
+#include <Sce/Pss/Core/Environment/NetworkInformation.hpp>
+#include <Sce/Pss/Core/Device/CameraImportDialog.hpp>
+#include <Sce/Pss/Core/Device/PhotoImportDialog.hpp>
+#include <Sce/Pss/Core/Graphics/PsmGraphicsContext.hpp>
+#include <Sce/Pss/Core/Graphics/PsmShaderProgram.hpp>
+#include <Sce/Pss/Core/Graphics/PsmVertexBuffer.hpp>
+#include <Sce/Pss/Core/Graphics/PsmPixelBuffer.hpp>
+#include <Sce/Pss/Core/Graphics/PsmTexture.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFrameBuffer.hpp>
+#include <Sce/Pss/Core/Audio/Sound.hpp>
+#include <Sce/Pss/Core/Audio/SoundPlayer.hpp>
+#include <Sce/Pss/Core/Audio/Bgm.hpp>
+#include <Sce/Pss/Core/Audio/BgmPlayer.hpp>
+#include <Sce/Pss/Core/Input/Touch.hpp>
+#include <Sce/Pss/Core/Input/GamePad.hpp>
+#include <Sce/Pss/Core/Input/Motion.hpp>
+#include <Sce/Pss/Core/Imaging/Image.hpp>
+#include <Sce/Pss/Core/Imaging/Font.hpp>
+#include <Sce/Pss/Core/Device/Location.hpp>
+#include <Sce/Pss/Core/Device/Camera.hpp>
+#include <Sce/Pss/Core/Services/NetworkRequest.hpp>
+#include <Sce/Pss/Core/Services/Network.hpp>
+
+
 
 #define PSM_MONO_FUNCTION(str, func) { str, reinterpret_cast<void*>(func) }
 #define PSM_MONO_FUNC_END() { nullptr, nullptr }
@@ -85,7 +121,18 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::CropNative(int,Sce.PlayStation.Core.Imaging.ImageRect&,int&)", Sce::Pss::Core::Imaging::Image::CropNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawImageNative(int,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawImageNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawRectangleNative(int,Sce.PlayStation.Core.Imaging.ImageColor&,Sce.PlayStation.Core.Imaging.ImageRect&)", Sce::Pss::Core::Imaging::Image::DrawRectangleNative ),
+
+#ifdef COMPAT_WINDOWS_2_00_RUNTIME_FEATURES
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,int,int,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative ),
+#endif
+
+#ifdef COMPAT_VITA_2_01_RUNTIME_FEATURES
+		// Exclusive to PSVita PSM Runtime for some reason,
+		// 'private static extern int DrawTextNative(int handle, string text, uint offset, uint len, ref ImageColor color, int font_handle, ref ImagePosition position);'
+		// basically specifically on VITA's Sce.PlayStation.Core.dll, this is now uints instead of int; *why did they do this?*
+		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,uint,uint,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative),
+#endif
+
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::ExportNative(int,string,string)", Sce::Pss::Core::Imaging::Image::ExportNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::SaveAsNative(int,string)", Sce::Pss::Core::Imaging::Image::SaveAsNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Font::NewFromFilenameSizeStyle(string,int,Sce.PlayStation.Core.Imaging.FontStyle,int&)", Sce::Pss::Core::Imaging::Font::NewFromFilenameSizeStyle ),

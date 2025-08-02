@@ -2,6 +2,7 @@
 #define LIB_PSS_ERROR_H 1
 #include <LibShared.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 #include <cstdint>
 #include <string>
 #include <iostream>
@@ -81,7 +82,7 @@ enum PsmError: uint32_t {
 
 };
 
-#ifndef UNIMPLEMENTED_AS_ERROR
+#ifndef DEBUGGING_UNIMPLEMENTED_IS_ERROR
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(msg); return PSM_ERROR_NO_ERROR
 #else
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED
@@ -94,16 +95,24 @@ enum PsmError: uint32_t {
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
 
+
+#ifndef DEBUGGING_UNIMPLEMENTED_IS_ERROR
+#define UNIMPLEMENTED_ERRORABLE(msg) \
+		do { \
+			std::string str = std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n"); \
+			Shared::Debug::Logger::Todo(str); \
+			return; \
+		} while (0)
+#else
 #define UNIMPLEMENTED_ERRORABLE(msg) \
 		do { \
 			std::string str = std::string(__FUNCTION__) + ":" + std::string(msg) + std::string(" is not yet implemented.\n"); \
 			Shared::Debug::Logger::Todo(str); \
 			Sce::Pss::Core::ExceptionInfo::AddMessage(str); \
 			this->SetError(PSM_ERROR_NOT_IMPLEMENTED); \
-			PANIC(str); \
 			return; \
 		} while (0)
-
+#endif
 #define LOG_FUNCTION() Shared::Debug::Logger::Debug(std::string(__FUNCTION__));
 
 

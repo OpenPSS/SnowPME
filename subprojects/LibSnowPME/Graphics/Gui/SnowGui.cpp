@@ -3,6 +3,8 @@
 #include <Graphics/Gui/ImGuiWindow.hpp>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include <Graphics/ImGuiBackend.hpp>
+#include <Graphics/ImGuiGLES2Backend.hpp>
 
 namespace SnowPME::Graphics::Gui {
 	void SnowGui::setupImgui() {
@@ -16,8 +18,8 @@ namespace SnowPME::Graphics::Gui {
 		ImGui::StyleColorsDark();
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		window->Backend->Init();
 		ImGui_ImplSDL2_InitForOpenGL(this->window->GetSdlWindow(), this->window->GetGlCtx());
-		ImGui_ImplOpenGL2_Init();
 	}
 
 	void SnowGui::UpdateGui() {
@@ -49,7 +51,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void SnowGui::NewFrame() {
-		ImGui_ImplOpenGL2_NewFrame();
+		this->window->Backend->NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
 	}
@@ -59,7 +61,7 @@ namespace SnowPME::Graphics::Gui {
 
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+		this->window->Backend->EndFrame();
 
 		window->SwapBuffers();
 	}
@@ -74,7 +76,7 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	SnowGui::~SnowGui() {
-		ImGui_ImplOpenGL2_Shutdown();
+		this->window->Backend->Term();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 	}

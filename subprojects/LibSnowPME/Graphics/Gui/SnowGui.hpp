@@ -1,6 +1,7 @@
 #ifndef SNOW_PME_SNOWGUI_H
 #define SNOW_PME_SNOWGUI_H 1
 #include <Graphics/Window.hpp>
+#include <Graphics/ImGuiBackend.hpp>
 #include <atomic>
 
 namespace SnowPME::Graphics::Gui {
@@ -8,7 +9,6 @@ namespace SnowPME::Graphics::Gui {
 	private:
 		std::shared_ptr<Window> window = nullptr;
 		std::atomic<bool> done = false;
-
 		void setupImgui();
 	public:
 		SnowGui(std::shared_ptr<Window> guiWindow);

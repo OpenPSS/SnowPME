@@ -2,6 +2,7 @@
 #include <String/Path.hpp>
 #include <String/Format.hpp>
 #include <Debug/Logger.hpp>
+#include <filesystem>
 #include <fstream>
 #include <string>
 #include <cstring>
@@ -9,16 +10,18 @@
 using namespace Shared::String;
 using namespace Shared::Debug;
 
-#define GET_CFG_KEY_STR(name) if (key == #name) strncpy(Config::name, value.c_str(), sizeof(Config::name)-1)
-#define GET_CFG_KEY_UINT64(name) if (key == #name) Config::name = strtoull(value.c_str(), NULL, 16)
-#define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) Config::name = (enumName)strtoull(value.c_str(), NULL, 16)
-#define GET_CFG_KEY_BOOL(name) if (key == #name) Config::name = (value == "true")
+#define GET_CFG_KEY_STR(name) if (key == #name) strncpy(name, value.c_str(), sizeof(name)-1)
+#define GET_CFG_KEY_UINT64(name) if (key == #name) name = strtoull(value.c_str(), nullptr, 16)
+#define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) name = (enumName)strtoull(value.c_str(), nullptr, 16)
+#define GET_CFG_KEY_BOOL(name) if (key == #name) name = (value == "true")
 
 #define SET_CFG_COMMENT(str, cmt) str << COMMENT << cmt << std::endl;
-#define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(Config::name) << std::endl;
-#define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << (uint64_t)Config::name << std::endl;
+#define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(name) << std::endl;
+#define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << static_cast<uint64_t>(name) << std::endl;
 #define SET_CFG_KEY_ENUM(str, name) SET_CFG_KEY_UINT64(str, name)
-#define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (Config::name ? "true" : "false") << std::endl;
+#define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (name ? "true" : "false") << std::endl;
+
+#define VALIDATE_FILESYSTEM(path, prettyDesc) if (!std::filesystem::exists(path)) { Logger::Error("Cannot find " prettyDesc " [" + std::string(path) + "]"); isValid = false; }
 
 namespace Shared
 {
@@ -28,15 +31,19 @@ namespace Shared
 
 	static int screenWidth = 960;
 	static int screenHeight = 544;
+	std::string Config::cfgFilePath = "";
 
 	std::string Config::RunningFromDirectory = "";
-	std::string Config::cfgFilePath = "";
 
 	int Config::ScreenTotal = 1;
 	bool Config::SecurityCritical = false;
-
-	char Config::RuntimeLibPath[0x1028] = "./dll";
-	char Config::RuntimeConfigPath[0x1028] = "./dll";
+#ifdef _DEBUG
+	bool Config::DebugLogging = true;
+#else
+	bool Config::DebugLogging = false;
+#endif
+	char Config::RuntimeLibPath[0x1028] = "dll";
+	char Config::RuntimeConfigPath[0x1028] = "dll";
 
 	char Config::Username[0x1028] = "SnowPME";
 	char Config::SystemLanguage[0x1028] = "en-US";
@@ -46,8 +53,7 @@ namespace Shared
 
 	bool Config::MonoDebugger = false;
 	char Config::ProfilerSettings[0x1028] = "";
-
-	char Config::PsmApps[0x1028] = "./psm";
+	char Config::PsmApps[0x1028] = "psm";
 
 	void Config::parseKeyValuePair(std::string key, std::string value) {
 		GET_CFG_KEY_STR(Config::Username);
@@ -62,22 +68,30 @@ namespace Shared
 		GET_CFG_KEY_STR(Config::ProfilerSettings);
 		GET_CFG_KEY_BOOL(Config::MonoDebugger);
 		GET_CFG_KEY_STR(Config::SystemLanguage);
+		GET_CFG_KEY_BOOL(Config::DebugLogging);
 
 		GET_CFG_KEY_STR(Config::PsmApps);
 
 	}
-	std::string Config::Mono21Folder() {
-		return Path::Combine(std::string(Config::RunningFromDirectory), Path::Combine(Path::Combine(std::string(Config::RuntimeLibPath), "mono"), "2.1"));
+
+	std::string Config::GetPsmAppsFolder() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::PsmApps);
+	}
+	std::string Config::GetRuntimeLibraryFolder() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeLibPath);
+	}
+	std::string Config::GetRuntimeConfigFolder() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeConfigPath);
 	}
 
-	std::string Config::PsmCoreLibPath() {
-		return Path::Combine(Mono21Folder() , "Sce.PlayStation.Core.dll");
+	std::string Config::GetScePlaystationCoreDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "Sce.PlayStation.Core.dll"));
 	}
-	std::string Config::SystemLibPath() {
-		return Path::Combine(Mono21Folder(), "System.dll");
+	std::string Config::GetSystemDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "System.dll"));
 	}
-	std::string Config::MscorlibPath() {
-		return Path::Combine(Mono21Folder(), "mscorlib.dll");
+	std::string Config::GetCorlibDllPath() {
+		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "mscorlib.dll"));
 	}
 
 	int Config::ScreenHeight(int idx) {
@@ -96,8 +110,8 @@ namespace Shared
 	}
 
 	void Config::WriteConfig(const std::string& configFile) {
-		Logger::Debug("Writing config file: " + configFile);
-		std::ofstream cfgStream = std::ofstream(configFile);
+		Logger::Debug("Writing config file: [" + Config::cfgFilePath + "]");
+		std::ofstream cfgStream = std::ofstream(Config::cfgFilePath);
 		if (!cfgStream.fail()) {
 			SET_CFG_COMMENT(cfgStream, "- Account information -");
 			SET_CFG_KEY_STR(cfgStream, Config::Username);
@@ -116,15 +130,29 @@ namespace Shared
 			SET_CFG_KEY_STR(cfgStream, Config::PsmApps);
 			SET_CFG_KEY_ENUM(cfgStream, Config::TargetImplementation);
 			SET_CFG_KEY_STR(cfgStream, Config::SystemLanguage);
+			SET_CFG_KEY_BOOL(cfgStream, Config::DebugLogging);
+
 
 			cfgStream.close();
 		}
 
 	}
+
+	bool Config::ValidateConifg() {
+
+		bool isValid = true;
+
+		VALIDATE_FILESYSTEM(Config::GetCorlibDllPath(), "mscorlib.dll");
+		VALIDATE_FILESYSTEM(Config::GetSystemDllPath(), "System.dll");
+		VALIDATE_FILESYSTEM(Config::GetScePlaystationCoreDllPath(), "Sce.PlayStation.Core.dll");
+
+		return isValid;
+	}
+	
 	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
-		Config::cfgFilePath = Path::ChangeSlashesToNativeStyle(Path::Combine(Config::RunningFromDirectory, configFile));
-		Logger::Debug("Reading config file: "+ Config::cfgFilePath);
+		Config::cfgFilePath = Path::MakeAbsolute(Config::RunningFromDirectory, configFile);
+		Logger::Debug("Reading config file: ["+ Config::cfgFilePath+"]");
 
 		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);
 		if (cfgStream.fail()) return WriteConfig(configFile);

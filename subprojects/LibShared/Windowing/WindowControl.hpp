@@ -15,13 +15,17 @@ namespace Shared::Windowing {
 		static void(*startFrameCallback)(void);
 		static void(*endFrameCallback)(void);
 		static bool (*showYesNoDialogCallback)(const char*, const char*);
+		static std::string (*getBackend)(void);
+
 	public:
 		static void Init(void (*swapBuffers)(void),
 						uint64_t(*getTime)(void),
 						void(*startFrameCallback)(void),
 						void(*endFrameCallback)(void),
-						bool (*showYesNoDialogCallback)(const char*, const char*));
+						bool (*showYesNoDialogCallback)(const char*, const char*),
+						std::string (*isGles)(void));
 
+		static std::string GetBackend();
 		static int SwapBuffers();
 		static uint64_t GetTime();
 		static void StartFrame();

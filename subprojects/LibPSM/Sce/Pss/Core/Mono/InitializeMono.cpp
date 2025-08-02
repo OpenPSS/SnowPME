@@ -64,7 +64,8 @@ namespace Sce::Pss::Core::Mono {
 		mono_config_parse(nullptr);
 
 		// Set runtime install location
-		mono_set_dirs(Config::RuntimeLibPath, Config::RuntimeConfigPath);
+		mono_set_assemblies_path(Config::GetRuntimeLibraryFolder().c_str());
+		mono_set_dirs(Config::GetRuntimeLibraryFolder().c_str(), Config::GetRuntimeConfigFolder().c_str());
 
 		// Create a domain in which this application will run under.
 		// be sure to specify the "playstation mobile" version not regular mono.
@@ -110,19 +111,19 @@ namespace Sce::Pss::Core::Mono {
 		InitalizeCsharp::Initalize();
 
 		// Load essential dlls
-		std::string msCorLibPath = Config::MscorlibPath();
-		std::string systemLibPath = Config::SystemLibPath();
-		std::string psmCoreLibPath = Config::PsmCoreLibPath();
+		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetCorlibDllPath().c_str());
+		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetSystemDllPath().c_str());
+		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, Config::GetScePlaystationCoreDllPath().c_str());
 
-		MonoAssembly* msCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, msCorLibPath.c_str());
-		MonoAssembly* systemLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, systemLibPath.c_str());
-		MonoAssembly* psmCoreLib = MonoUtil::MonoAssemblyOpenFull(psmDomain, psmCoreLibPath.c_str());
+		ASSERT(msCoreLib != nullptr && systemLib != nullptr && psmCoreLib != nullptr)
 
 		MonoImage* msCoreLibImage = mono_assembly_get_image(msCoreLib);
 		MonoImage* systemImage = mono_assembly_get_image(systemLib);
+		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
+
+		ASSERT(msCoreLibImage != nullptr && systemImage != nullptr && psmCoreLibImage != nullptr);
 
 		// Calls SetToConsole. 
-		MonoImage* psmCoreLibImage = mono_assembly_get_image(psmCoreLib);
 		MonoClass* psmLogClass = mono_class_from_name(psmCoreLibImage, "Sce.PlayStation.Core.Environment", "Log");
 		MonoMethod* psmSetToConsoleMethod = mono_class_get_method_from_name(psmLogClass, "SetToConsole", 0);
 		mono_runtime_invoke(psmSetToConsoleMethod, nullptr, nullptr, nullptr);
@@ -211,7 +212,6 @@ namespace Sce::Pss::Core::Mono {
 		}
 		Logger::Debug("cxml : managed_heap_size : "+ std::to_string(heapSizeLimit));
 		Logger::Debug("cxml : resource_heap_size : "+ std::to_string(resourceSizeLimit));
-
 
 		int res = InitializeMono::ScePsmInitalize(realAppExePath.c_str(), appInfo->ResourceHeapSize);
 		if (res != PSM_ERROR_NO_ERROR) {

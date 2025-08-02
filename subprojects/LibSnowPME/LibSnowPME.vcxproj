@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\ImGuiBackend.hpp" />
+    <ClInclude Include="Graphics\ImGuiGLES2Backend.hpp" />
+    <ClInclude Include="Graphics\ImGuiGL2Backend.hpp" />
     <ClInclude Include="Runtime\ApplicationEvent.hpp" />
     <ClInclude Include="Graphics\Gui\ConfigurationWindow.hpp" />
     <ClInclude Include="Graphics\Gui\DemoWindow.hpp" />
@@ -28,6 +31,8 @@
     <ClInclude Include="Runtime\Application.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\ImGuiGL2Backend.cpp" />
+    <ClCompile Include="Graphics\ImGuiGLES2Backend.cpp" />
     <ClCompile Include="Runtime\ApplicationEvent.cpp" />
     <ClCompile Include="Graphics\Gui\ConfigurationWindow.cpp" />
     <ClCompile Include="Graphics\Gui\DemoWindow.cpp" />
@@ -110,7 +115,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -137,7 +142,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>LibImGui.lib;LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LibPSM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>

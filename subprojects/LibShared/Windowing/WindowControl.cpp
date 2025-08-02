@@ -7,25 +7,33 @@
 using namespace Shared::Debug;
 namespace Shared::Windowing {
 
-	void     (*WindowControl::swapBufferCallback)(void) = nullptr;
-	uint64_t (*WindowControl::getTimeCallback)(void) = nullptr;
-	void     (*WindowControl::startFrameCallback)(void);
-	void     (*WindowControl::endFrameCallback)(void);
-	bool     (*WindowControl::showYesNoDialogCallback)(const char*, const char*) = nullptr;
+	void		 (*WindowControl::swapBufferCallback)(void) = nullptr;
+	uint64_t	 (*WindowControl::getTimeCallback)(void) = nullptr;
+	void		 (*WindowControl::startFrameCallback)(void);
+	void		 (*WindowControl::endFrameCallback)(void);
+	bool		 (*WindowControl::showYesNoDialogCallback)(const char*, const char*) = nullptr;
+	std::string	 (*WindowControl::getBackend)(void) = nullptr;
 
 	void WindowControl::Init(void (*swapBuffers)(void),
 							uint64_t(*getTime)(void),
 							void(*startFrameCallback)(void),
 							void(*endFrameCallback)(void),
-							bool (*showYesNoDialogCallback)(const char*, const char*)) {
+							bool (*showYesNoDialogCallback)(const char*, const char*),
+							std::string (*getBackend)(void)) {
 		
 		WindowControl::swapBufferCallback = swapBuffers;
 		WindowControl::getTimeCallback = getTime;
 		WindowControl::showYesNoDialogCallback = showYesNoDialogCallback;
 		WindowControl::startFrameCallback = startFrameCallback;
 		WindowControl::endFrameCallback = endFrameCallback;
+		WindowControl::getBackend = getBackend;
 
 		isInitalized = true;
+	}
+
+	std::string WindowControl::GetBackend() {
+		errorOnNotInitalized();
+		return getBackend();
 	}
 
 	int WindowControl::SwapBuffers() {

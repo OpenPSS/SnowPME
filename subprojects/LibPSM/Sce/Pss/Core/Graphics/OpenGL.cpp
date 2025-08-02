@@ -5,10 +5,10 @@ namespace Sce::Pss::Core::Graphics {
 	const GLenum OpenGL::glFormatTypes[0x10] = { GL_ZERO, GL_FLOAT, GL_HALF_FLOAT_OES, GL_ZERO, GL_ZERO, GL_ZERO, GL_SHORT, GL_UNSIGNED_SHORT,
 												GL_BYTE, GL_UNSIGNED_BYTE, GL_ZERO, GL_ZERO, GL_ZERO, GL_ZERO, GL_ZERO };
 
-	ShaderProgram* OpenGL::activeShaderProgram;
-	VertexBuffer* OpenGL::activeVertexBuffer;
-	FrameBuffer* OpenGL::activeFrameBuffer;
-	Texture* OpenGL::activeTexture;
+	ShaderProgram* OpenGL::activeShaderProgram = nullptr;
+	VertexBuffer* OpenGL::activeVertexBuffer = nullptr;
+	FrameBuffer* OpenGL::activeFrameBuffer = nullptr;
+	Texture* OpenGL::activeTexture = nullptr;
 
 	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
 		OpenGL::activeShaderProgram = shaderProgram;
@@ -32,11 +32,11 @@ namespace Sce::Pss::Core::Graphics {
 
 	void OpenGL::SetFrameBuffer(FrameBuffer* frameBuffer) {
 		OpenGL::activeFrameBuffer = frameBuffer;
-		if (frameBuffer != nullptr) {
-			glBindBuffer(GL_FRAMEBUFFER, frameBuffer->GLHandle);
+		if (frameBuffer == nullptr) {
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 		else {
-			glBindBuffer(GL_FRAMEBUFFER, GL_NONE);
+			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer->GLHandle);
 		}
 	}
 

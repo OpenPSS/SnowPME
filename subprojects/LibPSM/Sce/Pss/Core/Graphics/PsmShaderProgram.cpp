@@ -314,6 +314,7 @@ namespace Sce::Pss::Core::Graphics {
 		MonoString* monoAttributeName = MonoUtil::StdStringToMonoString(attributeName);
 		mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoAttributeName));
 
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmShaderProgram::GetUniformSize(int handle, int index, int* result) {
 		UNIMPLEMENTED();

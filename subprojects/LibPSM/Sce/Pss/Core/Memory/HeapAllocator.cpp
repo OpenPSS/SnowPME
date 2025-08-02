@@ -1,4 +1,5 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 #include <string>
 #include <iostream>
 #include <mutex>
@@ -34,7 +35,7 @@ namespace Sce::Pss::Core::Memory {
 	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
 
-#ifdef ENFORCE_MEM_LIMIT
+#ifndef INACCURATE_DONT_ENFORCE_MEM_LIMIT
 		if (this->UsedSpace + sz > this->TotalHeapSize) {
 			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
 			return nullptr;

@@ -4,8 +4,11 @@ on:
     branches:
       - main
 jobs:
+  ##
+  ## BUILD SnowPME
+  ##
   ubuntu_meson_build:
-    name: Linux (GCC)
+    name: Build Linux (GCC)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -28,7 +31,7 @@ jobs:
           name: SnowPME-Linux
           path: build/SnowPME
   windows_msvc_build:
-    name: Windows (Microsoft Visual C++)
+    name: Build Windows (Microsoft Visual C++)
     runs-on: windows-latest
     steps:
       - name: Checkout Repo
@@ -49,7 +52,7 @@ jobs:
           name: SnowPME-Windows
           path: build/SnowPME/bin/SnowPME.exe
   build_psm_tests:
-    name: Test Suite (PSM SDK v2.00)
+    name: Build Test Suite (PSM SDK v2.00)
     runs-on: windows-latest
     steps:
       - name: Checkout Repo
@@ -64,35 +67,96 @@ jobs:
         run: $Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319" >> $Env:GITHUB_PATH
       - name: MSBuild PsmTestSuite
         run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
+      - name: Run Tests Script
+        run: copy tests/run_tests.cmd tests/build/run_tests.cmd
       - name: Upload Test Binaries
         uses: actions/upload-artifact@v4
         with:
           name: SnowPME-Tests
           path: tests/build
-  upload-release:
-    name: upload-release
-    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+          
+  ##
+  ## RUN Unit Tests
+  ##
+  test_windows:
+    name: Run Test Suite (Windows)
+    runs-on: windows-latest
+    needs:
+        - build_psm_tests
+        - ubuntu_meson_build
+        - windows_msvc_build
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@main
+        with:
+            pattern: "SnowPME-Windows"
+            path: ./
+            merge-multiple: true
+      - name: Download Test Suite
+        uses: actions/download-artifact@main
+        with:
+            pattern: "SnowPME-Tests"
+            path: ./psm
+            merge-multiple: true
+      - name: Install Mesa
+        run: |
+            curl.exe -L --output mesa.7z --url https://github.com/pal1000/mesa-dist-win/releases/download/25.1.6/mesa3d-25.1.6-release-msvc.7z
+            7z x mesa.7z
+            mv .\x86\opengl32.dll .\x86\opengl32_new.dll
+            (Get-Location).Path + "\x86" >> $env:GITHUB_PATH
+            echo "SDL_OPENGL_LIBRARY=opengl32_new.dll" >> $GITHUB_ENV
+      - name: Setup SnowPME
+        run: |
+            mkdir testout
+            mkdir dll
+            Invoke-WebRequest "https://github.com/lusid1/pkg2zip/releases/download/2.6/pkg2zip.zip" -OutFile pkg2zip.zip
+            Invoke-WebRequest "https://github.com/motoharu-gosuto/psvpfstools/releases/download/v2.0/release_win64_7.zip" -OutFile psvpfsparser.zip
+            Invoke-WebRequest "${{ secrets.PSM_PKG }}" -OutFile psm_runtime.pkg
+            Expand-Archive pkg2zip.zip -Force
+            Expand-Archive psvpfsparser.zip -Force
+            ./pkg2zip/pkg2zip.exe -x psm_runtime.pkg
+            ./psvpfsparser/release_win64_7/psvpfsparser.exe --title_id_src=patch/PCSI00011 --title_id_dst=patch/PCSI00011_dec --f00d_url=cma.henkaku.xyz --klicensee=${{ secrets.PSM_KLIC }}
+            copy patch/PCSI00011_dec/dll/mscorlib.dll ./dll/mscorlib.dll
+            copy patch/PCSI00011_dec/dll/System.dll ./dll/System.dll
+            copy patch/PCSI00011_dec/dll/Sce.PlayStation.Core.dll ./dll/Sce.PlayStation.Core.dll
+      - name: Run Tests
+        continue-on-error: true
+        run: ./psm/run_tests.cmd
+      - name: Upload Test Logs
+        uses: actions/upload-artifact@v4
+        with:
+            name: SnowPME-TestLogs-Windows
+            path: testout
+  ##
+  ## Upload Continuous Release
+  ##
+  upload_release:
+    name: Update Continuous Release
     runs-on: ubuntu-latest
     needs:
       - ubuntu_meson_build
       - windows_msvc_build
-      - build_psm_tests
     steps:
-      - name: Download All Artifacts
+      - name: Download Windows Artifact
         uses: actions/download-artifact@main
         with:
-          pattern: "*"
-          path: Release
-          merge-multiple: true
-
+            pattern: "SnowPME-Windows"
+            path: Release
+            merge-multiple: true
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@main
+        with:
+            pattern: "SnowPME-Linux"
+            path: Release
+            merge-multiple: true
       - name: Checkout uploadtool
         uses: actions/checkout@v4
         with:
-          repository: 'probonopd/uploadtool'
-          path: 'uploadtool'
+            repository: 'probonopd/uploadtool'
+            path: 'uploadtool'
 
       - name: Upload Releases
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./uploadtool/upload.sh Release/*
+            ./uploadtool/upload.sh Release/*

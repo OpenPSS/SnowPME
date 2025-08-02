@@ -80,9 +80,9 @@ namespace Sce::Pss::Core::Io::Edata {
 
 		this->block = blockNo;
 
-		uint64_t blockPosition = blockNo * PSSE_BLOCK_SIZE;
-		uint64_t totalRead = PSSE_BLOCK_SIZE;
-		uint64_t trimTo = totalRead;
+		size_t blockPosition = blockNo * PSSE_BLOCK_SIZE;
+		size_t totalRead = PSSE_BLOCK_SIZE;
+		size_t trimTo = totalRead;
 
 		// Handle special processing ...
 		if (blockNo == 0) {  
@@ -97,21 +97,21 @@ namespace Sce::Pss::Core::Io::Edata {
 		}
 
 		// total amount of bytes read so far
-		uint64_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PSSE_SIGNATURE_SIZE * (blockPosition / PSSE_SIGNATURE_BLOCK_SIZE)));
+		size_t readAmount = ((blockPosition - sizeof(EdataHeader)) - (PSSE_SIGNATURE_SIZE * (blockPosition / PSSE_SIGNATURE_BLOCK_SIZE)));
 
 		if (blockNo >= this->totalBlocks) { // Is this the last block?
-			totalRead = this->header.FileSize - readAmount;
+			totalRead = static_cast<size_t>(this->header.FileSize) - readAmount;
 			trimTo = totalRead;
 			totalRead += ((CryptoLibrary::AesBlockSize)-(totalRead % (CryptoLibrary::AesBlockSize)));
 		}
 
 		// setup current block buffer
-		this->currentBlock.resize(static_cast<size_t>(totalRead));
+		this->currentBlock.resize(totalRead);
 		this->osHandle->clear();
 		this->osHandle->seekg(blockPosition, std::ios::beg);
 
 		// decrypt block and copy to the currentBlock vector
-		this->osHandle->read((char*)this->currentBlock.data(), totalRead);
+		this->osHandle->read(reinterpret_cast<char*>(this->currentBlock.data()), totalRead);
 		
 		// decrypt the current block
 		aes->Decrypt(this->currentBlock);
@@ -213,7 +213,7 @@ namespace Sce::Pss::Core::Io::Edata {
 				memcpy(this->fileIv, this->header.FileIv, sizeof(EdataStream::fileIv));
 
 				// decrypt the IV from the file header
-				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, (uint8_t*)this->fileIv, sizeof(EdataStream::fileIv));
+				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, reinterpret_cast<uint8_t*>(this->fileIv), sizeof(EdataStream::fileIv));
 				this->aes = std::make_unique<AesCbc>(this->titleKey, this->fileIv);
 
 				// decrypt first block from the PSSE'd file
@@ -388,7 +388,7 @@ namespace Sce::Pss::Core::Io::Edata {
 			std::vector<uint8_t> data(this->Length());
 			uint8_t gotMd5[CryptoLibrary::Md5HashSize];
 
-			this->Read(data.data(), this->Length());
+			this->Read(data.data(), static_cast<uint32_t>(this->Length()));
 			CryptoLibrary::Md5Sum(data.data(), data.size(), gotMd5);
 
 			bool isValid = memcmp(this->header.Md5Hash, gotMd5, CryptoLibrary::Md5HashSize) == 0;

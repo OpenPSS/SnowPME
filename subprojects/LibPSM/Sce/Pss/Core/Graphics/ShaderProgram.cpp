@@ -1,6 +1,5 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-#include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/Graphics/CGX.hpp>
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
@@ -11,13 +10,14 @@
 #include <glad/glad.h>
 #include <string.h>
 
+using namespace Shared::Windowing;
 using namespace Shared::Debug;
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Memory;
 
 namespace Sce::Pss::Core::Graphics {
 
-	int ShaderProgram::compileShader(int type, char* source) {
+	int ShaderProgram::compileShader(int type, const char* source) {
 		
 		int shader = glCreateShader(type);
 		glShaderSource(shader, 1, &source, 0);
@@ -75,20 +75,22 @@ namespace Sce::Pss::Core::Graphics {
 
 		this->GLHandle = glCreateProgram();
 
-		// ugly hack - append #version 150 to the shaders
-		// required because the version directive is not included in CGX file's GLSL shaders
-		// i dont know why.
-		this->fragmentSrc = "#version 100\r\nprecision mediump float;\r\n" + this->fragmentSrc;
-		this->vertexSrc = "#version 100\r\nprecision mediump float;\r\n" + this->vertexSrc;
+		// in pure OGL, we have to append a version number to the start of the GL Shaders
+		// this is not required in GLES; as 100 has the features we need already;
+		// (as PSM assumes GLES GLSL or CG.)
+		if (WindowControl::GetBackend() == "OpenGL") {
+			this->fragmentSrc = "#version 120\r\nprecision mediump float;\r\n" + this->fragmentSrc;
+			this->vertexSrc = "#version 120\r\nprecision mediump float;\r\n" + this->vertexSrc;
+		}
 
-		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, (char*)this->fragmentSrc.c_str());
+		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, this->fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return 0;
 		}
 
-		int compileVertexShader = compileShader(GL_VERTEX_SHADER, (char*)this->vertexSrc.c_str());
+		int compileVertexShader = compileShader(GL_VERTEX_SHADER, this->vertexSrc.c_str());
 		if (compileVertexShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);

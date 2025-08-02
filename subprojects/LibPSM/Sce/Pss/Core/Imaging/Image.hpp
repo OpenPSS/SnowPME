@@ -11,6 +11,7 @@
 #include <Sce/Pss/Core/Imaging/ImageMode.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 #include <mono/mono.h>
 #include <memory>
 
@@ -41,7 +42,13 @@ namespace Sce::Pss::Core::Imaging {
 		static int CropNative(int handle, ImageRect* rect, int *croppedImageHandle);
 		static int DrawImageNative(int handle, int source_handle, ImagePosition *position);
 		static int DrawRectangleNative(int handle, ImageColor *color, ImageRect *rect);
-		static int DrawTextNative(int handle, MonoString* text, int offset, int len, ImageColor *color, int font_handle, ImagePosition *position);
+
+		// NOTE: on SDK2.00 Windows; these are int offset and int len, its only uint on PSVita.
+#ifdef COMPAT_VITA_2_01_RUNTIME_FEATURES
+		static int DrawTextNative(int handle, MonoString* text, uint32_t offset, uint32_t len, ImageColor* color, int font_handle, ImagePosition* position);
+#else
+		static int DrawTextNative(int handle, MonoString* text, int offset, int len, ImageColor* color, int font_handle, ImagePosition* position);
+#endif
 		static int ExportNative(int handle, MonoString* albumname, MonoString* filename);
 		static int SaveAsNative(int handle, MonoString* filename);
 	};

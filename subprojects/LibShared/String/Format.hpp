@@ -8,9 +8,17 @@
 namespace Shared::String {
 	class Format {
 	public:
-		static std::string Hex(int val);
+		static std::string Hex(int8_t val);
+		static std::string Hex(int16_t val);
+		static std::string Hex(int32_t val);
+		static std::string Hex(int64_t val);
+
+		static std::string Hex(uint8_t val);
+		static std::string Hex(uint16_t val);
 		static std::string Hex(uint32_t val);
 		static std::string Hex(uint64_t val);
+
+
 		static std::string ZFill(std::string val, char pad, size_t fillSize);
 		static std::string Join(const std::vector<std::string> parts, const std::string& delimiter);
 		static std::vector<std::string> Split(const std::string& str, const std::string& delimiter);
