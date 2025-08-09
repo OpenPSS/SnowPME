@@ -161,7 +161,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		// if stream errors, return error code
 
 		if (this->osHandle->fail() || !this->osHandle->is_open()) {
-			Logger::Debug("Failed to open: \"" + file + "\": (" + std::string(strerr(errno)) + ") " + strerror(errno));
+			Logger::Debug("Failed to open: \"" + file + "\": (" + std::to_string(errno) + ") " + strerror(errno));
 			this->osHandle = nullptr;
 
 			switch (errno) {
