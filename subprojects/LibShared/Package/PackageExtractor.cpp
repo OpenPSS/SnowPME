@@ -207,7 +207,10 @@ namespace Shared::Package {
 		this->size = std::filesystem::file_size(pkg_file);
 		this->stream.open(pkg_file, std::ios::in | std::ios::binary);
 
-		if (this->stream.fail()) return PKG_ERROR_OPEN_FAILED;
+		if (this->stream.fail()) { 
+			Logger::Error("[PkgErr] Could not open file: " + std::string(pkg_file));
+			return PKG_ERROR_OPEN_FAILED; 
+		}
 		if (this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
 			Logger::Error("[PkgErr] Size is wrong."); 
 			return PKG_ERROR_READ_SIZE_NO_MATCH;
