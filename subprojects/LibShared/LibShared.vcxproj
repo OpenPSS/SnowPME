@@ -20,9 +20,7 @@
     <ClCompile Include="Crypto\sha256.c" />
     <ClCompile Include="Debug\Assert.cpp" />
     <ClCompile Include="Debug\Logger.cpp" />
-    <ClCompile Include="Pkg\io.cpp" />
-    <ClCompile Include="Pkg\sceIo.cpp" />
-    <ClCompile Include="Pkg\pkg.c" />
+    <ClCompile Include="Package\PackageExtractor.cpp" />
     <ClCompile Include="Windowing\CallbackBase.cpp" />
     <ClCompile Include="Windowing\Event.cpp" />
     <ClCompile Include="Windowing\WindowControl.cpp" />
@@ -32,6 +30,7 @@
     <ClCompile Include="Windowing\EventQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CompilerCompat.hpp" />
     <ClInclude Include="Config.hpp" />
     <ClInclude Include="Crypto\aes.h" />
     <ClInclude Include="Crypto\Algorithms.hpp" />
@@ -42,12 +41,9 @@
     <ClInclude Include="Debug\Assert.hpp" />
     <ClInclude Include="Debug\ConsoleColor.hpp" />
     <ClInclude Include="Debug\Logger.hpp" />
-    <ClInclude Include="Pkg\err.h" />
-    <ClInclude Include="Pkg\io.h" />
-    <ClInclude Include="Pkg\Package.hpp" />
-    <ClInclude Include="Pkg\sceIo.hpp" />
-    <ClInclude Include="Pkg\pkg.h" />
-    <ClInclude Include="Pkg\sceTypes.hpp" />
+    <ClInclude Include="Package\PackageFile.hpp" />
+    <ClInclude Include="Package\PackageError.hpp" />
+    <ClInclude Include="Package\PackageExtractor.hpp" />
     <ClInclude Include="Windowing\CallbackBase.hpp" />
     <ClInclude Include="Windowing\Capture.hpp" />
     <ClInclude Include="Windowing\EventType.hpp" />

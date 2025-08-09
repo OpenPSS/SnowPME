@@ -2,7 +2,9 @@
 #include <LibImGui.hpp>
 #include <LibShared.hpp>
 #include <pfd/portable-file-dialogs.h>
+#include <filesystem>
 using namespace Shared;
+using namespace Shared::Package;
 
 namespace SnowPME::Graphics::Gui {
 	
@@ -17,8 +19,9 @@ namespace SnowPME::Graphics::Gui {
 	}
 
 	void InstallGamePackageWindow::installGame() {
+		PackageExtractor extractor;
 		std::string installDirectory = Config::GetPsmAppsFolder();
-		expand_package(this->gameFile.c_str(), installDirectory.c_str(), nullptr);
+		extractor.ExpandPackage(this->gameFile.c_str(), installDirectory.c_str(), nullptr);
 	}
 
 }

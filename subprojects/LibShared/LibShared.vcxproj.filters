@@ -45,7 +45,7 @@
     <ClCompile Include="Debug\Assert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pkg\pkg.c">
+    <ClCompile Include="Package\PackageExtractor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Crypto\aes.c">
@@ -64,12 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Crypto\sha256.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pkg\io.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pkg\sceIo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,10 +116,7 @@
     <ClInclude Include="Windowing\RunFunction.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pkg\err.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pkg\pkg.h">
+    <ClInclude Include="Package\PackageExtractor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Crypto\aes.h">
@@ -146,16 +137,13 @@
     <ClInclude Include="Crypto\sha256.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pkg\io.h">
+    <ClInclude Include="Package\PackageError.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pkg\sceTypes.hpp">
+    <ClInclude Include="Package\PackageFile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pkg\sceIo.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pkg\Package.hpp">
+    <ClInclude Include="CompilerCompat.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

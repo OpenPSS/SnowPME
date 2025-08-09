@@ -119,7 +119,6 @@ LibPSM = static_library('PSM',
 		LibPssMono_dep,
 		GlobalInclude_dep
 	],
-	c_args: ['-maes', '-mssse3']
 )
 	
 LibPSM_dep = declare_dependency(

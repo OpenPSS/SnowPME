@@ -1,9 +1,9 @@
-#ifndef SHARED_CRYPTO_ALGORITHMS_H
-#define SHARED_CRYPTO_ALGORITHMS_H 1
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifndef SHARED_CRYPTO_ALGORITHMS_H
+#define SHARED_CRYPTO_ALGORITHMS_H 1
 
 #define CBC 1
 #define ECB 1
@@ -15,8 +15,8 @@ extern "C" {
 #include "sha256.h"
 #include "md5.h"
 
-#ifdef __cplusplus
-}
 #endif
 
+#ifdef __cplusplus
+}
 #endif
