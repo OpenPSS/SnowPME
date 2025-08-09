@@ -13,7 +13,7 @@
 #ifdef __GNUC__
 #define swap16(x) __builtin_bswap16(x)
 #define swap32(x) __builtin_bswap32(x)
-#define swap32(x) __builtin_bswap64(x)
+#define swap64(x) __builtin_bswap64(x)
 #elif _MSC_VER
 #define swap16(x) _byteswap_ushort(x)
 #define swap32(x) _byteswap_ulong(x)
