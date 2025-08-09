@@ -21,7 +21,7 @@ fi
 
 autoreconf -i $PSS_MONO
 CFLAGS="-DTARGET_PSS -DPSS_USE_CRYPTO -std=gnu99 -fpermissive $CFLAGS" $PSS_MONO/configure \
-	--disable-boehm --with-sgen=yes --with-gc=sgen --with-mobile=yes --with-monotouch=yes --disable-shared --enable-static
+	--disable-boehm --with-sgen=yes --with-gc=sgen --with-mobile=yes --with-monotouch=yes --disable-shared --enable-static --disable-mcs-build
 
 cat <<EOF > Makefile
 all: libeglib-static.a libmonosgen-static.a libmonoruntimesgen.a
