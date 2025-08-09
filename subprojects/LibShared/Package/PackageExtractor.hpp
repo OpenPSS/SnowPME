@@ -43,7 +43,7 @@ namespace Shared::Package {
 		int pkgOpen(const char* pkgFile);
 		int pkgClose();
 		uint64_t pkgRead(void* buffer, size_t bufferSize);
-		uint64_t pkgSeek(uint64_t whence, std::ios::openmode mode);
+		uint64_t pkgSeek(uint64_t whence, std::ios::seekdir mode);
 		int pkgDecrypt(uint64_t offset, void* buffer, size_t bufferSize);
 		uint64_t pkgReadOffset(uint32_t offset, void* buffer, size_t bufferSize);
 		

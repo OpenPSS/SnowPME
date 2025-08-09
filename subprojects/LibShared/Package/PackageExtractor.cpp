@@ -110,7 +110,7 @@ namespace Shared::Package {
 		return PKG_ERROR_NO_ERROR;
 	}
 
-	uint64_t PackageExtractor::pkgSeek(uint64_t whence, std::ios::openmode mode) {
+	uint64_t PackageExtractor::pkgSeek(uint64_t whence, std::ios::seekdir mode) {
 		this->stream.seekg(whence, mode);
 
 		switch (mode) {
