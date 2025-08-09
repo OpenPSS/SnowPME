@@ -208,7 +208,7 @@ namespace Shared::Package {
 		this->stream.open(pkg_file, std::ios::in | std::ios::binary);
 
 		if (this->stream.fail()) { 
-			Logger::Error("[PkgErr] Could not open file: " + std::string(pkg_file));
+			Logger::Error("[PkgErr] Could not open file: " + std::string(pkg_file) + " with error: " + Format::Hex(errno));
 			return PKG_ERROR_OPEN_FAILED; 
 		}
 		if (this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
