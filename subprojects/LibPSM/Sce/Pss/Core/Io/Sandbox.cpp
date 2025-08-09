@@ -70,38 +70,12 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	std::string Sandbox::normalizePath(std::string sandboxedPath) {
-		std::vector<std::string> absolutePathComponents;
-
 		// Limit str to PSM_PATH_MAX.
 		sandboxedPath = sandboxedPath.substr(0, PSM_PATH_MAX);
 
 		std::string startDir = this->GetWorkingDirectory();
 
-		// Check if string starts with a /, and act as though the working direcory is the root
-		if (sandboxedPath.length() >= 1 && sandboxedPath[0] == '/')
-			startDir = "";
-
-		// Split path by the / seperator
-		std::vector<std::string> pathComponents = Shared::String::Format::Split(Shared::String::Path::ChangeSlashesToPsmStyle(sandboxedPath), PSM_PATH_SEPERATOR);
-
-		// if you think about it, file paths are essentially. just First-In-First-Out (FIFO);
-
-		for (std::string pathComponent : pathComponents) {
-			if (pathComponent == ".") { // . indicates the current directory, so just nop
-				continue;
-			}
-			else if (pathComponent == "..") { // .. indicates to go back one directory, basically, pop
-				if (absolutePathComponents.size() >= 1)
-					absolutePathComponents.pop_back();
-				continue;
-			}
-			else { // everything else is actually part of the path, basically push
-				absolutePathComponents.push_back(pathComponent);
-			}
-		}
-
-		std::string absolutePath = startDir + Format::Join(absolutePathComponents, PSM_PATH_SEPERATOR);
-		return absolutePath;
+		return Path::NormalizePath(startDir, sandboxedPath);
 	}
 	int Sandbox::readLicenseData() {
 		if (this->PathExist(FakeRifLocation, true)) {

@@ -17,6 +17,7 @@ namespace Shared::String {
 		static std::string Combine(const std::string& path, const std::string& newPart);
 		static std::string GetFilename(const std::string& path);
 		static std::string UpDirectory(const std::string& path);
+		static std::string NormalizePath(const std::string& workDir, const std::string& path);
 	};
 }
 

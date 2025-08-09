@@ -42,4 +42,28 @@ namespace Shared::String {
 		return fullPath.substr(0, fullPath.length() - (filename.length()+1));
 	}
 
+	std::string Path::NormalizePath(const std::string& workDir, const std::string& path) {
+		// Split path by the / seperator
+		std::vector<std::string> normalizedPathComponents;
+		std::vector<std::string> pathComponents = Format::Split(Path::ChangeSlashesToPsmStyle(path), PSM_PATH_SEPERATOR);
+
+		// if you think about it, file paths are essentially. just First-In-First-Out (FIFO);
+		for (std::string pathComponent : pathComponents) {
+			if (pathComponent == ".") { // . indicates the current directory, so just nop
+				continue;
+			}
+			else if (pathComponent == "..") { // .. indicates to go back one directory, basically, pop
+				if (normalizedPathComponents.size() >= 1)
+					normalizedPathComponents.pop_back();
+				continue;
+			}
+			else { // everything else is actually part of the path, basically push
+				normalizedPathComponents.push_back(pathComponent);
+			}
+		}
+
+		std::string normalizedPath = Path::Combine(workDir, Format::Join(normalizedPathComponents, PSM_PATH_SEPERATOR));
+		return normalizedPath;
+	}
+
 }
