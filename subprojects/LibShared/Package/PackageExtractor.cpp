@@ -205,6 +205,8 @@ namespace Shared::Package {
 
 	int PackageExtractor::pkgOpen(const char* pkg_file) {
 		this->size = std::filesystem::file_size(pkg_file);
+
+		errno = 0;
 		this->stream.open(pkg_file, std::ios::in | std::ios::binary);
 
 		if (this->stream.fail()) { 

@@ -156,6 +156,7 @@ namespace Sce::Pss::Core::Io::Edata {
 			this->totalFileSize = std::filesystem::file_size(file);
 			this->totalBlocks = (this->totalFileSize / PSSE_BLOCK_SIZE);
 		}
+		errno = 0;
 		this->osHandle = std::make_unique<std::fstream>(file, mode);
 
 		// if stream errors, return error code
