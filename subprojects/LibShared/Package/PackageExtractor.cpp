@@ -7,6 +7,7 @@
 #include <Debug/Assert.hpp>
 #include <Package/PackageExtractor.hpp>
 #include <Package/PackageError.hpp>
+#include <CompilerCompat.hpp>
 #include <filesystem>
 #include <vector>
 #include <cstdlib>
