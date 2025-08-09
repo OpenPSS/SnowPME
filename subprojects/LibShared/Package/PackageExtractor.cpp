@@ -124,6 +124,7 @@ namespace Shared::Package {
 	}
 
 	uint64_t PackageExtractor::pkgSeek(uint64_t whence, std::ios::seekdir mode) {
+		ASSERT(this->stream != nullptr);
 		this->stream->seekg(whence, mode);
 
 		switch (mode) {
@@ -142,6 +143,8 @@ namespace Shared::Package {
 	}
 
 	uint64_t PackageExtractor::pkgRead(void* buffer, size_t bufferSize) {
+		ASSERT(this->stream != nullptr);
+
 		uint64_t amtRead = this->stream->read(reinterpret_cast<char*>(buffer), bufferSize).gcount();
 		if (amtRead != bufferSize) return PKG_ERROR_READ_SIZE_NO_MATCH;
 
@@ -220,7 +223,7 @@ namespace Shared::Package {
 			return PKG_ERROR_READ_SIZE_NO_MATCH;
 		}
 
-		if (strncmp(this->pkgHeader.magic, "\x7f\PKG", sizeof(this->pkgHeader.magic)) != 0)  {
+		if (strncmp(this->pkgHeader.magic, "\x7f""PKG", sizeof(this->pkgHeader.magic)) != 0)  {
 			Logger::Error("[PkgErr] Invalid Header Magic.");
 			return PKG_ERROR_INVALID_MAGIC;
 		}
@@ -241,7 +244,7 @@ namespace Shared::Package {
 				return PKG_ERROR_READ_SIZE_NO_MATCH;
 			}
 
-			if (strncmp(this->pkgExtHeader.magic, "\x7f\ext", sizeof(this->pkgExtHeader.magic)) != 0) return PKG_ERROR_INVALID_EXT_MAGIC;
+			if (strncmp(this->pkgExtHeader.magic, "\x7f""ext", sizeof(this->pkgExtHeader.magic)) != 0) return PKG_ERROR_INVALID_EXT_MAGIC;
 			this->pkgExtHeader.unknown_01 = swap32(this->pkgExtHeader.unknown_01);
 			this->pkgExtHeader.header_size = swap32(this->pkgExtHeader.header_size);
 			this->pkgExtHeader.data_size = swap32(this->pkgExtHeader.data_size);
@@ -341,6 +344,10 @@ namespace Shared::Package {
 
 		this->pkgClose();
 		return PKG_ERROR_NO_ERROR;
+	}
+
+	PackageExtractor::~PackageExtractor() {
+		this->pkgClose();
 	}
 
 }

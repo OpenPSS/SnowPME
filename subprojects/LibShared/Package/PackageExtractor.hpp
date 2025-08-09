@@ -15,6 +15,7 @@
 #include <Package/PackageFile.hpp>
 #include <fstream>
 #include <list>
+#include <memory>
 
 namespace Shared::Package {
 	typedef struct PackageItem {
@@ -48,6 +49,7 @@ namespace Shared::Package {
 		uint64_t pkgReadOffset(uint32_t offset, void* buffer, size_t bufferSize);
 		
 	public:
+		~PackageExtractor();
 		int ExpandPackage(const char* pkgFile, const char* outputFolder, void (*progressCallback)(const char*, uint64_t, uint64_t));
 	};
 
