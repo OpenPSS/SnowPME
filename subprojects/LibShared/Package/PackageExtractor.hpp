@@ -17,12 +17,11 @@
 #include <list>
 
 namespace Shared::Package {
-
-	typedef struct PackageItemRecord {
+	typedef struct PackageItem {
 		PKG_ITEM_RECORD record;
-		std::string filename = "";
-		int index = 0;
-	} PackageItemRecord;
+		std::string filename;
+		int index;
+	} PackageItem;
 
 	class PackageExtractor {
 	private:
@@ -34,15 +33,11 @@ namespace Shared::Package {
 		PKG_FILE_HEADER pkgHeader;
 		PKG_EXT_HEADER pkgExtHeader;
 		PKG_METADATA pkgMetadata;
-		PKG_ITEM_RECORD pkgItem;
-		//std::list<PackageItemRecord> pkgItems;
-
+		std::list<PackageItem> pkgItems;
 		int readMetadata();
-		//int readItems();
+		int readItems();
 
-		int readItemByIndex(int index, std::string& decryptedFilename);
-		int extractCurrentItem(const char* outfile);
-
+		int extractItem(PKG_ITEM_RECORD* record, const char* outfile);
 		int derivePkgDecryptKey();
 
 		int pkgOpen(const char* pkgFile);
