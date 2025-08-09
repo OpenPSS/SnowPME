@@ -26,33 +26,34 @@ namespace Shared::Package {
 
 		// because we don't have sceNpDrmPackage 
 		// we have to do the decryption part ourselves,
-		uint8_t pkgKey[sizeof(this->pkgHeader.pkg_data_iv)];
-		memcpy(pkgKey, this->pkgHeader.pkg_data_iv, sizeof(pkgKey));
+		uint8_t pkgDecryptKey[sizeof(this->pkgHeader.pkg_data_iv)];
+		memcpy(pkgDecryptKey, this->pkgHeader.pkg_data_iv, sizeof(pkgDecryptKey));
 		aes128_key key;
 
 		switch (this->pkgExtHeader.data_type2 & 0x7) {
 		case PKG_KEYID_PS3:
-			memcpy(pkgKey, PKG_DECRYPT_KEY_PSP, sizeof(pkgKey));
+			memcpy(pkgDecryptKey, PKG_DECRYPT_KEY_PSP, sizeof(pkgDecryptKey));
 
 			aes128_init(&key, PKG_DECRYPT_KEY_PS3);
-			aes128_ecb_encrypt(&key, pkgKey, sizeof(pkgKey));
+			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA:
 			aes128_init(&key, PKG_DECRYPT_KEY_VITA);
-			aes128_ecb_encrypt(&key, pkgKey, sizeof(pkgKey));
+			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA_LIVEAREA:
 			aes128_init(&key, PKG_DECRYPT_KEY_LIVEAREA);
-			aes128_ecb_encrypt(&key, pkgKey, sizeof(pkgKey));
+			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_PSM:
 			aes128_init(&key, PKG_DECRYPT_KEY_PSM);
-			aes128_ecb_encrypt(&key, pkgKey, sizeof(pkgKey));
+			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		default:
 			return PKG_ERROR_UNKNOWN_KEY;
 		}
 
+		aes128_init(&this->pkgKey, pkgDecryptKey);
 		return PKG_ERROR_NO_ERROR;
 	}
 
@@ -63,8 +64,8 @@ namespace Shared::Package {
 			PKG_METADATA_ENTRY metaEntry;
 			CHECK_ERROR(pkgRead(&metaEntry, sizeof(PKG_METADATA_ENTRY)));
 
-			metaEntry.type = __builtin_bswap32(metaEntry.type);
-			metaEntry.size = __builtin_bswap32(metaEntry.size);
+			metaEntry.type = swap32(metaEntry.type);
+			metaEntry.size = swap32(metaEntry.size);
 			int rd = 0;
 
 			switch (metaEntry.type) {
@@ -92,13 +93,13 @@ namespace Shared::Package {
 
 			pkgSeek(metaEntry.size - rd, std::ios::cur);
 		}
-		this->pkgMetadata.drm_type = __builtin_bswap32(this->pkgMetadata.drm_type);
-		this->pkgMetadata.content_type = __builtin_bswap32(this->pkgMetadata.content_type);
-		this->pkgMetadata.package_flags = __builtin_bswap32(this->pkgMetadata.package_flags);
-		this->pkgMetadata.item_table_offset = __builtin_bswap32(this->pkgMetadata.item_table_offset);
-		this->pkgMetadata.item_table_size = __builtin_bswap32(this->pkgMetadata.item_table_size);
-		this->pkgMetadata.sfo_offset = __builtin_bswap32(this->pkgMetadata.sfo_offset);
-		this->pkgMetadata.sfo_size = __builtin_bswap32(this->pkgMetadata.sfo_size);
+		this->pkgMetadata.drm_type = swap32(this->pkgMetadata.drm_type);
+		this->pkgMetadata.content_type = swap32(this->pkgMetadata.content_type);
+		this->pkgMetadata.package_flags = swap32(this->pkgMetadata.package_flags);
+		this->pkgMetadata.item_table_offset = swap32(this->pkgMetadata.item_table_offset);
+		this->pkgMetadata.item_table_size = swap32(this->pkgMetadata.item_table_size);
+		this->pkgMetadata.sfo_offset = swap32(this->pkgMetadata.sfo_offset);
+		this->pkgMetadata.sfo_size = swap32(this->pkgMetadata.sfo_size);
 
 		return PKG_ERROR_NO_ERROR;
 	}
@@ -153,22 +154,23 @@ namespace Shared::Package {
 
 			this->pkgReadOffset(((this->pkgHeader.data_offset + this->pkgMetadata.item_table_offset) + (index * sizeof(PKG_ITEM_RECORD))), &item.record, sizeof(PKG_ITEM_RECORD));
 
-			item.record.flags = __builtin_bswap32(item.record.flags);
-			item.record.filename_offset = __builtin_bswap32(item.record.filename_offset);
-			item.record.filename_size = __builtin_bswap32(item.record.filename_size);
-			item.record.data_offset = __builtin_bswap64(item.record.data_offset);
-			item.record.data_size = __builtin_bswap64(item.record.data_size);
+			item.record.flags = swap32(item.record.flags);
+			item.record.filename_offset = swap32(item.record.filename_offset);
+			item.record.filename_size = swap32(item.record.filename_size);
+			item.record.data_offset = swap64(item.record.data_offset);
+			item.record.data_size = swap64(item.record.data_size);
 
 			std::vector<char> buffer = std::vector<char>(item.record.filename_size + 1);
-			CHECK_ERROR(this->pkgReadOffset((item.record.data_offset + item.record.filename_offset), buffer.data(), item.record.filename_size));
+			CHECK_ERROR(this->pkgReadOffset((this->pkgHeader.data_offset + item.record.filename_offset), buffer.data(), item.record.filename_size));
 
 			item.filename = std::string(buffer.data());
 			item.index = index;
 
-			this->pkgItems.push_back(item);
+			this->pkgItems.emplace_back(std::move(item));
 
-			return PKG_ERROR_NO_ERROR;
 		}
+		return PKG_ERROR_NO_ERROR;
+
 	}
 
 	int PackageExtractor::pkgClose() {
@@ -196,41 +198,41 @@ namespace Shared::Package {
 		if(this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) return PKG_ERROR_READ_SIZE_NO_MATCH;
 
 		if (strncmp(this->pkgHeader.magic, "\x7f\PKG", sizeof(this->pkgHeader.magic)) != 0) return PKG_ERROR_INVALID_MAGIC;
-		this->pkgHeader.revision = __builtin_bswap16(this->pkgHeader.revision);
-		this->pkgHeader.type = __builtin_bswap16(this->pkgHeader.type);
-		this->pkgHeader.meta_offset = __builtin_bswap32(this->pkgHeader.meta_offset);
-		this->pkgHeader.meta_count = __builtin_bswap32(this->pkgHeader.meta_count);
-		this->pkgHeader.meta_size = __builtin_bswap32(this->pkgHeader.meta_size);
-		this->pkgHeader.item_count = __builtin_bswap32(this->pkgHeader.item_count);
-		this->pkgHeader.total_size = __builtin_bswap64(this->pkgHeader.total_size);
-		this->pkgHeader.data_offset = __builtin_bswap64(this->pkgHeader.data_offset);
-		this->pkgHeader.data_size = __builtin_bswap64(this->pkgHeader.data_size);
+		this->pkgHeader.revision = swap16(this->pkgHeader.revision);
+		this->pkgHeader.type = swap16(this->pkgHeader.type);
+		this->pkgHeader.meta_offset = swap32(this->pkgHeader.meta_offset);
+		this->pkgHeader.meta_count = swap32(this->pkgHeader.meta_count);
+		this->pkgHeader.meta_size = swap32(this->pkgHeader.meta_size);
+		this->pkgHeader.item_count = swap32(this->pkgHeader.item_count);
+		this->pkgHeader.total_size = swap64(this->pkgHeader.total_size);
+		this->pkgHeader.data_offset = swap64(this->pkgHeader.data_offset);
+		this->pkgHeader.data_size = swap64(this->pkgHeader.data_size);
 
 		if (this->pkgHeader.type >= 2) {
 			if (this->stream.read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) return PKG_ERROR_READ_SIZE_NO_MATCH;
 
 			if (strncmp(this->pkgExtHeader.magic, "\x7f\ext", sizeof(this->pkgExtHeader.magic)) != 0) return PKG_ERROR_INVALID_EXT_MAGIC;
-			this->pkgExtHeader.unknown_01 = __builtin_bswap32(this->pkgExtHeader.unknown_01);
-			this->pkgExtHeader.header_size = __builtin_bswap32(this->pkgExtHeader.header_size);
-			this->pkgExtHeader.data_size = __builtin_bswap32(this->pkgExtHeader.data_size);
-			this->pkgExtHeader.data_offset = __builtin_bswap32(this->pkgExtHeader.data_offset);
-			this->pkgExtHeader.data_type = __builtin_bswap32(this->pkgExtHeader.data_type);
-			this->pkgExtHeader.pkg_data_size = __builtin_bswap64(this->pkgExtHeader.pkg_data_size);
-			this->pkgExtHeader.padding_01 = __builtin_bswap32(this->pkgExtHeader.padding_01);
-			this->pkgExtHeader.data_type2 = __builtin_bswap32(this->pkgExtHeader.data_type2);
-			this->pkgExtHeader.unknown_02 = __builtin_bswap32(this->pkgExtHeader.unknown_02);
-			this->pkgExtHeader.padding_02 = __builtin_bswap32(this->pkgExtHeader.padding_02);
-			this->pkgExtHeader.padding_03 = __builtin_bswap64(this->pkgExtHeader.padding_03);
-			this->pkgExtHeader.padding_04 = __builtin_bswap64(this->pkgExtHeader.padding_04);
+			this->pkgExtHeader.unknown_01 = swap32(this->pkgExtHeader.unknown_01);
+			this->pkgExtHeader.header_size = swap32(this->pkgExtHeader.header_size);
+			this->pkgExtHeader.data_size = swap32(this->pkgExtHeader.data_size);
+			this->pkgExtHeader.data_offset = swap32(this->pkgExtHeader.data_offset);
+			this->pkgExtHeader.data_type = swap32(this->pkgExtHeader.data_type);
+			this->pkgExtHeader.pkg_data_size = swap64(this->pkgExtHeader.pkg_data_size);
+			this->pkgExtHeader.padding_01 = swap32(this->pkgExtHeader.padding_01);
+			this->pkgExtHeader.data_type2 = swap32(this->pkgExtHeader.data_type2);
+			this->pkgExtHeader.unknown_02 = swap32(this->pkgExtHeader.unknown_02);
+			this->pkgExtHeader.padding_02 = swap32(this->pkgExtHeader.padding_02);
+			this->pkgExtHeader.padding_03 = swap64(this->pkgExtHeader.padding_03);
+			this->pkgExtHeader.padding_04 = swap64(this->pkgExtHeader.padding_04);
 		}
 		else {
 			return PKG_ERROR_INVALID_PACKAGE_TYPE;
 		}
 
-		CHECK_ERROR(readMetadata());
 		CHECK_ERROR(derivePkgDecryptKey());
-		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type))
-			return PKG_ERROR_INVALID_CONTENT_TYPE;
+		CHECK_ERROR(readMetadata());
+		CHECK_ERROR(readItems());
+		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type)) return PKG_ERROR_INVALID_CONTENT_TYPE;
 
 		return PKG_ERROR_NO_ERROR;
 	}
