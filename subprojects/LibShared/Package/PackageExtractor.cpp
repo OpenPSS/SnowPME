@@ -4,6 +4,7 @@
 * https://silica.codes/Li/real-PackageExtractor-installer/
 */
 
+#include <Debug/Logger.hpp>
 #include <Debug/Assert.hpp>
 #include <Package/PackageExtractor.hpp>
 #include <Package/PackageError.hpp>
@@ -14,6 +15,8 @@
 #include <cstdio>
 #include <cstring>
 
+using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Shared::Package {
 	static const uint8_t PKG_DECRYPT_KEY_PS3[0x10]		= { 0x2E, 0x7B, 0x71, 0xD7, 0xC9, 0xC9, 0xA1, 0x4E, 0xA3, 0x22, 0x1F, 0x18, 0x88, 0x28, 0xb8, 0xF8 };
@@ -24,7 +27,6 @@ namespace Shared::Package {
 
 
 	int PackageExtractor::derivePkgDecryptKey() {
-
 		// because we don't have sceNpDrmPackage 
 		// we have to do the decryption part ourselves,
 		uint8_t pkgDecryptKey[sizeof(this->pkgHeader.pkg_data_iv)];
@@ -33,24 +35,32 @@ namespace Shared::Package {
 
 		switch (this->pkgExtHeader.data_type2 & 0x7) {
 		case PKG_KEYID_PS3:
+			Logger::Debug("PkgDebug; PKG_KEYID_PS3");
 			memcpy(pkgDecryptKey, PKG_DECRYPT_KEY_PSP, sizeof(pkgDecryptKey));
 
 			aes128_init(&key, PKG_DECRYPT_KEY_PS3);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA:
+			Logger::Debug("PkgDebug; PKG_KEYID_VITA");
+
 			aes128_init(&key, PKG_DECRYPT_KEY_VITA);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA_LIVEAREA:
+			Logger::Debug("PkgDebug; PKG_KEYID_VITA_LIVEAREA");
+
 			aes128_init(&key, PKG_DECRYPT_KEY_LIVEAREA);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_PSM:
+			Logger::Debug("PkgDebug; PKG_KEYID_PSM");
+
 			aes128_init(&key, PKG_DECRYPT_KEY_PSM);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		default:
+			Logger::Error("PkgErr; Unknown Decryption Key");
 			return PKG_ERROR_UNKNOWN_KEY;
 		}
 
@@ -196,9 +206,16 @@ namespace Shared::Package {
 		this->stream.open(pkg_file, std::ios::in | std::ios::binary);
 
 		if (this->stream.fail()) return PKG_ERROR_OPEN_FAILED;
-		if(this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) return PKG_ERROR_READ_SIZE_NO_MATCH;
+		if (this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
+			Logger::Error("PkgErr; Size is wrong."); 
+			return PKG_ERROR_READ_SIZE_NO_MATCH;
+		}
 
-		if (strncmp(this->pkgHeader.magic, "\x7f\PKG", sizeof(this->pkgHeader.magic)) != 0) return PKG_ERROR_INVALID_MAGIC;
+		if (strncmp(this->pkgHeader.magic, "\x7f\PKG", sizeof(this->pkgHeader.magic)) != 0)  {
+			Logger::Error("PkgErr; Invalid Header Magic.");
+			return PKG_ERROR_INVALID_MAGIC;
+		}
+		
 		this->pkgHeader.revision = swap16(this->pkgHeader.revision);
 		this->pkgHeader.type = swap16(this->pkgHeader.type);
 		this->pkgHeader.meta_offset = swap32(this->pkgHeader.meta_offset);
@@ -210,7 +227,10 @@ namespace Shared::Package {
 		this->pkgHeader.data_size = swap64(this->pkgHeader.data_size);
 
 		if (this->pkgHeader.type >= 2) {
-			if (this->stream.read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) return PKG_ERROR_READ_SIZE_NO_MATCH;
+			if (this->stream.read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) {
+				Logger::Error("PkgErr; Size is wrong.");
+				return PKG_ERROR_READ_SIZE_NO_MATCH;
+			}
 
 			if (strncmp(this->pkgExtHeader.magic, "\x7f\ext", sizeof(this->pkgExtHeader.magic)) != 0) return PKG_ERROR_INVALID_EXT_MAGIC;
 			this->pkgExtHeader.unknown_01 = swap32(this->pkgExtHeader.unknown_01);
@@ -227,13 +247,17 @@ namespace Shared::Package {
 			this->pkgExtHeader.padding_04 = swap64(this->pkgExtHeader.padding_04);
 		}
 		else {
+			Logger::Error("PkgErr; Invalid Package Type.");
 			return PKG_ERROR_INVALID_PACKAGE_TYPE;
 		}
 
 		CHECK_ERROR(derivePkgDecryptKey());
 		CHECK_ERROR(readMetadata());
 		CHECK_ERROR(readItems());
-		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type)) return PKG_ERROR_INVALID_CONTENT_TYPE;
+		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type)) {
+			Logger::Error("PkgErr; Valid package, but not PSM content type, is (" + Format::Hex(this->pkgMetadata.content_type) + ")");
+			return PKG_ERROR_INVALID_CONTENT_TYPE;
+		}
 
 		return PKG_ERROR_NO_ERROR;
 	}
@@ -290,14 +314,17 @@ namespace Shared::Package {
 			case PKG_TYPE_PFS_CLEARSIGN:
 			case PKG_TYPE_SCESYS_RIGHT_SUPRX:
 			default:
+				Logger::Debug("PkgDebug; extracting file: " + item.filename + " -> " + outfile);
 				CHECK_ERROR(this->extractItem(&item.record, outfile.c_str()));
 				break;
 			case PKG_TYPE_DIR:
 			case PKG_TYPE_PFS_DIR:
+				Logger::Debug("PkgDebug; creating directory: " + item.filename + " -> " + outfile);
 				std::filesystem::create_directories(outfile);
 				break;
 			case PKG_TYPE_SCESYS_CERT_BIN:
 			case PKG_TYPE_SCESYS_DIGS_BIN:
+				Logger::Debug("PkgDebug; ignoring file: " + item.filename + " -> " + outfile);
 				// ignore these ..
 				break;
 			}

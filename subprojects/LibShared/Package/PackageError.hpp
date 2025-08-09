@@ -6,15 +6,17 @@
 
 #ifndef SHARED_PACKAGE_ERROR_H 
 #define SHARED_PACKAGE_ERROR_H 1
-
+#include <Debug/Logger.hpp>
+#include <String/Format.hpp>
 #include <cstdint>
 
-#define ERROR(x) { ret = x; goto error; }
+#define ERROR(x) { ret = x; Shared::Debug::Logger::Error("PkgErr; ERROR = " + Shared::String::Format::Hex(x)); goto error; }
 
 #define CHECK_ERROR(x) \
 	do { \
 		int ret = (int)(x);\
 		if(ret < 0) { \
+			Shared::Debug::Logger::Error("PkgErr; CHECK_ERROR = " + Shared::String::Format::Hex(x)); \
 			return ret; \
 		} \
 	} while(0);
