@@ -1,21 +1,24 @@
 #include <Graphics/Gui/InstallGamePackageWindow.hpp>
 #include <LibImGui.hpp>
+#include <LibShared.hpp>
 #include <pfd/portable-file-dialogs.h>
+using namespace Shared;
 
 namespace SnowPME::Graphics::Gui {
 	
 	void InstallGamePackageWindow::browseGame() {
-		pfd::open_file* filepicker = new pfd::open_file("Open Package File", "/", { "Package Files (.pkg)", "*.pkg" }, pfd::opt::none);
+		pfd::open_file filepicker("Open Package File", "/", { "Package Files (.pkg)", "*.pkg" }, pfd::opt::none);
 
-		if (!filepicker->result().empty()) {
-			this->gameFile = filepicker->result().at(0);
+		if (!filepicker.result().empty()) {
+			this->gameFile = filepicker.result().at(0);
+
 		}
 
-		delete filepicker;
 	}
 
 	void InstallGamePackageWindow::installGame() {
-		ASSERT(true);
+		std::string installDirectory = Config::GetPsmAppsFolder();
+		expand_package(this->gameFile.c_str(), installDirectory.c_str(), nullptr);
 	}
 
 }

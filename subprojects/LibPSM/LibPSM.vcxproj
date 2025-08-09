@@ -18,8 +18,6 @@
     <ClCompile Include="Sce\Pss\Core\Audio\SoundPlayer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesEcb.cpp" />
     <ClCompile Include="Sce\Pss\Core\Crypto\AesCbc.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\md5.c" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha1.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\Md5Hash.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Camera.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
@@ -64,11 +62,7 @@
     <ClCompile Include="Sce\Pss\Core\Services\InAppPurchaseInventory.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\Network.cpp" />
     <ClCompile Include="Sce\Pss\Core\Services\NetworkRequest.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes.c" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\aes_x86.c" />
     <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.c" />
-    <ClCompile Include="Sce\Pss\Core\Crypto\Algorithms\sha256.c" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
@@ -108,9 +102,6 @@
     <ClInclude Include="Sce\Pss\Core\Audio\SoundStatus.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesEcb.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\AesCbc.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\Algorithms.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\md5.h" />
-    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha1.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Md5Hash.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\Camera.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\CameraFacing.hpp" />
@@ -245,10 +236,8 @@
     <ClInclude Include="Sce\Pss\Core\Vector4.hpp" />
     <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp" />
     <ClInclude Include="Sce\Pss\Core\Bool.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\aes.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\CryptoLibrary.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.h" />
-    <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\sha256.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />

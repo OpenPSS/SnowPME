@@ -16,7 +16,8 @@ namespace Shared::Debug {
 				return;
 			}
 		}
-
+#ifdef _DEBUG
 		std::abort();
+#endif
 	}
 }

@@ -1,7 +1,7 @@
 #ifndef LIB_PSS_MD5_H 
 #define LIB_PSS_MD5_H
 #include <vector>
-#include <Sce/Pss/Core/Crypto/Algorithms/Algorithms.hpp>
+#include <LibShared.hpp>
 
 namespace Sce::Pss::Core::Crypto {
 	class Md5Hash {

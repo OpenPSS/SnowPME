@@ -13,6 +13,8 @@
 #include <Windowing/RunFunction.hpp>
 #include <Windowing/WindowControl.hpp>
 #include <Threading/ProgressTracker.hpp>
+#include <Crypto/Algorithms.hpp>
+#include <Pkg/Package.hpp>
 #include <Config.hpp>
 
 #endif

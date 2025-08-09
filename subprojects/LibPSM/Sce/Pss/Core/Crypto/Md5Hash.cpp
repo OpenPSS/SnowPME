@@ -1,4 +1,5 @@
 #include <Sce/Pss/Core/Crypto/Md5Hash.hpp>
+#include <LibShared.hpp>
 
 namespace Sce::Pss::Core::Crypto {
 	Md5Hash::Md5Hash() {
