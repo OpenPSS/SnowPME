@@ -26,7 +26,7 @@ namespace Shared::Package {
 	class PackageExtractor {
 	private:
 		char workBuffer[0x8000];
-		std::fstream stream;
+		std::unique_ptr<std::fstream> stream = nullptr;
 		uint64_t offset = 0;
 		uint64_t size = 0;
 		aes128_key pkgKey = { 0 };

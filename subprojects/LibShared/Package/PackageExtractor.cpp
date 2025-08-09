@@ -124,7 +124,7 @@ namespace Shared::Package {
 	}
 
 	uint64_t PackageExtractor::pkgSeek(uint64_t whence, std::ios::seekdir mode) {
-		this->stream.seekg(whence, mode);
+		this->stream->seekg(whence, mode);
 
 		switch (mode) {
 		case std::ios::beg:
@@ -142,7 +142,7 @@ namespace Shared::Package {
 	}
 
 	uint64_t PackageExtractor::pkgRead(void* buffer, size_t bufferSize) {
-		uint64_t amtRead = this->stream.read(reinterpret_cast<char*>(buffer), bufferSize).gcount();
+		uint64_t amtRead = this->stream->read(reinterpret_cast<char*>(buffer), bufferSize).gcount();
 		if (amtRead != bufferSize) return PKG_ERROR_READ_SIZE_NO_MATCH;
 
 		if (this->offset >= this->pkgHeader.data_offset) {
@@ -187,7 +187,9 @@ namespace Shared::Package {
 	}
 
 	int PackageExtractor::pkgClose() {
-		this->stream.close();
+		
+		if(this->stream != nullptr) this->stream->close();
+		this->stream = nullptr;
 
 		// clear current pkg variables
 		this->offset = 0;
@@ -207,13 +209,13 @@ namespace Shared::Package {
 		this->size = std::filesystem::file_size(pkg_file);
 
 		errno = 0;
-		this->stream.open(pkg_file, std::ios::in | std::ios::binary);
+		this->stream = std::make_unique<std::fstream>(pkg_file, std::ios::in | std::ios::binary);
 
-		if (this->stream.fail()) { 
+		if (this->stream->fail() || !this->stream->is_open()) { 
 			Logger::Error("[PkgErr] Could not open file: " + std::string(pkg_file) + " (" + std::to_string(errno) + ") " + strerror(errno));
 			return PKG_ERROR_OPEN_FAILED; 
 		}
-		if (this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
+		if (this->stream->read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
 			Logger::Error("[PkgErr] Size is wrong."); 
 			return PKG_ERROR_READ_SIZE_NO_MATCH;
 		}
@@ -234,7 +236,7 @@ namespace Shared::Package {
 		this->pkgHeader.data_size = swap64(this->pkgHeader.data_size);
 
 		if (this->pkgHeader.type >= 2) {
-			if (this->stream.read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) {
+			if (this->stream->read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) {
 				Logger::Error("[PkgErr] Size is wrong.");
 				return PKG_ERROR_READ_SIZE_NO_MATCH;
 			}
