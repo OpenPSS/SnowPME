@@ -33,34 +33,36 @@ namespace Shared::Package {
 		memcpy(pkgDecryptKey, this->pkgHeader.pkg_data_iv, sizeof(pkgDecryptKey));
 		aes128_key key;
 
+		Logger::Debug("[PkgDebug] Deriving PKG Decryption Key");
+
 		switch (this->pkgExtHeader.data_type2 & 0x7) {
 		case PKG_KEYID_PS3:
-			Logger::Debug("PkgDebug; PKG_KEYID_PS3");
+			Logger::Debug("[PkgDebug] PKG_KEYID_PS3");
 			memcpy(pkgDecryptKey, PKG_DECRYPT_KEY_PSP, sizeof(pkgDecryptKey));
 
 			aes128_init(&key, PKG_DECRYPT_KEY_PS3);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA:
-			Logger::Debug("PkgDebug; PKG_KEYID_VITA");
+			Logger::Debug("[PkgDebug] PKG_KEYID_VITA");
 
 			aes128_init(&key, PKG_DECRYPT_KEY_VITA);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_VITA_LIVEAREA:
-			Logger::Debug("PkgDebug; PKG_KEYID_VITA_LIVEAREA");
+			Logger::Debug("[PkgDebug] PKG_KEYID_VITA_LIVEAREA");
 
 			aes128_init(&key, PKG_DECRYPT_KEY_LIVEAREA);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		case PKG_KEYID_PSM:
-			Logger::Debug("PkgDebug; PKG_KEYID_PSM");
+			Logger::Debug("[PkgDebug] PKG_KEYID_PSM");
 
 			aes128_init(&key, PKG_DECRYPT_KEY_PSM);
 			aes128_ecb_encrypt(&key, pkgDecryptKey, sizeof(pkgDecryptKey));
 			break;
 		default:
-			Logger::Error("PkgErr; Unknown Decryption Key");
+			Logger::Error("[PkgErr] Unknown Decryption Key");
 			return PKG_ERROR_UNKNOWN_KEY;
 		}
 
@@ -207,12 +209,12 @@ namespace Shared::Package {
 
 		if (this->stream.fail()) return PKG_ERROR_OPEN_FAILED;
 		if (this->stream.read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
-			Logger::Error("PkgErr; Size is wrong."); 
+			Logger::Error("[PkgErr] Size is wrong."); 
 			return PKG_ERROR_READ_SIZE_NO_MATCH;
 		}
 
 		if (strncmp(this->pkgHeader.magic, "\x7f\PKG", sizeof(this->pkgHeader.magic)) != 0)  {
-			Logger::Error("PkgErr; Invalid Header Magic.");
+			Logger::Error("[PkgErr] Invalid Header Magic.");
 			return PKG_ERROR_INVALID_MAGIC;
 		}
 		
@@ -228,7 +230,7 @@ namespace Shared::Package {
 
 		if (this->pkgHeader.type >= 2) {
 			if (this->stream.read(reinterpret_cast<char*>(&this->pkgExtHeader), sizeof(PKG_EXT_HEADER)).gcount() != sizeof(PKG_EXT_HEADER)) {
-				Logger::Error("PkgErr; Size is wrong.");
+				Logger::Error("[PkgErr] Size is wrong.");
 				return PKG_ERROR_READ_SIZE_NO_MATCH;
 			}
 
@@ -247,7 +249,7 @@ namespace Shared::Package {
 			this->pkgExtHeader.padding_04 = swap64(this->pkgExtHeader.padding_04);
 		}
 		else {
-			Logger::Error("PkgErr; Invalid Package Type.");
+			Logger::Error("[PkgErr] Invalid Package Type.");
 			return PKG_ERROR_INVALID_PACKAGE_TYPE;
 		}
 
@@ -255,7 +257,7 @@ namespace Shared::Package {
 		CHECK_ERROR(readMetadata());
 		CHECK_ERROR(readItems());
 		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type)) {
-			Logger::Error("PkgErr; Valid package, but not PSM content type, is (" + Format::Hex(this->pkgMetadata.content_type) + ")");
+			Logger::Error("[PkgErr] Valid package, but not PSM content type, is (" + Format::Hex(this->pkgMetadata.content_type) + ")");
 			return PKG_ERROR_INVALID_CONTENT_TYPE;
 		}
 
@@ -314,17 +316,17 @@ namespace Shared::Package {
 			case PKG_TYPE_PFS_CLEARSIGN:
 			case PKG_TYPE_SCESYS_RIGHT_SUPRX:
 			default:
-				Logger::Debug("PkgDebug; extracting file: " + item.filename + " -> " + outfile);
+				Logger::Debug("[PkgDebug] extracting file: " + item.filename + " -> " + outfile);
 				CHECK_ERROR(this->extractItem(&item.record, outfile.c_str()));
 				break;
 			case PKG_TYPE_DIR:
 			case PKG_TYPE_PFS_DIR:
-				Logger::Debug("PkgDebug; creating directory: " + item.filename + " -> " + outfile);
+				Logger::Debug("[PkgDebug] creating directory: " + item.filename + " -> " + outfile);
 				std::filesystem::create_directories(outfile);
 				break;
 			case PKG_TYPE_SCESYS_CERT_BIN:
 			case PKG_TYPE_SCESYS_DIGS_BIN:
-				Logger::Debug("PkgDebug; ignoring file: " + item.filename + " -> " + outfile);
+				Logger::Debug("[PkgDebug] ignoring file: " + item.filename + " -> " + outfile);
 				// ignore these ..
 				break;
 			}
