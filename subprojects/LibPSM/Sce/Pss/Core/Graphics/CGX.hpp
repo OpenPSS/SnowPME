@@ -11,54 +11,55 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	enum class CGXVariantType : uint32_t {
+		None = 0x0,
 		Vertex = 0x1,
 		Fragment = 0x2
 	};
 
 	typedef struct CGXVariantTableEntry {
-		uint32_t nullSeperatorListPtr;
-		uint32_t VariantListPtr;
-		uint32_t VariantCount;
-		uint32_t unk0;
-		uint32_t unk1;
-		uint32_t unk2;
-		CGXVariantType VariantType;
-		uint32_t unk4;
+		uint32_t nullSeperatorListPtr = 0;
+		uint32_t VariantListPtr = 0;
+		uint32_t VariantCount = 0;
+		uint32_t unk0 = 0;
+		uint32_t unk1 = 0;
+		uint32_t unk2 = 0;
+		CGXVariantType VariantType = CGXVariantType::None;
+		uint32_t unk4 = 0;
 	} CGXVariantTableEntry;
 
 	typedef struct CGXVariant {
-		char language[CGX_MAGIC_LEN];
-		uint32_t sourcePtr;
-		uint32_t sourceSz;
-		uint32_t reserved;
+		char language[CGX_MAGIC_LEN] = { 0 };
+		uint32_t sourcePtr = 0;
+		uint32_t sourceSz = 0;
+		uint32_t reserved = 0;
 	} CGXVariant;
 
 	typedef struct CGXHeader {
-		char magic[CGX_MAGIC_LEN];
-		char cgVer[CGX_MAGIC_LEN];
-		char glesVer[CGX_MAGIC_LEN];
-		uint32_t flags;
-		uint32_t unk0;
-		uint32_t unk1;
+		char magic[CGX_MAGIC_LEN] = { 0 };
+		char cgVer[CGX_MAGIC_LEN] = { 0 };
+		char glesVer[CGX_MAGIC_LEN] = { 0 };
+		uint32_t flags = 0;
+		uint32_t unk0 = 0;
+		uint32_t unk1 = 0;
 
-		uint32_t vertexShaderVariantsPtr;
-		uint32_t unk2;
-		uint32_t fragmentShaderVariantsPtr;
-		uint32_t unk4;
+		uint32_t vertexShaderVariantsPtr = 0;
+		uint32_t unk2 = 0;
+		uint32_t fragmentShaderVariantsPtr = 0;
+		uint32_t unk4 = 0;
 
-		uint32_t headerSize;
-		uint32_t shaderDataPtr;
-		uint32_t nullTermListStartPtr;
-		uint32_t nullTermListStartPtr2;
-		uint32_t totalSize;
+		uint32_t headerSize = 0;
+		uint32_t shaderDataPtr = 0;
+		uint32_t nullTermListStartPtr = 0;
+		uint32_t nullTermListStartPtr2 = 0;
+		uint32_t totalSize = 0;
 
-		uint8_t hash[0x14];
+		uint8_t hash[0x14] = { 0 };
 	} CGXHeader;
 
 	class CGX : public Errorable {
 	private:
-		uint8_t* cgxBuf;
-		size_t cgxSz;
+		uint8_t* cgxBuf = nullptr;
+		size_t cgxSz = 0;
 
 		CGXHeader header;
 		CGXVariantTableEntry fragmentVariantTableEntry;

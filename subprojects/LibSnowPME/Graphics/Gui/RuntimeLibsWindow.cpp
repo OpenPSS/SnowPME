@@ -19,10 +19,10 @@ namespace SnowPME::Graphics::Gui {
 
 	void RuntimeLibsWindow::installDll(PsmDlls::PssSystemFileEnum whatDll) {
 
-		pfd::open_file* filepicker = new pfd::open_file("Open Runtime DLL", "/", { "Dynamic Link Libraries (.dll)", "*.dll" }, pfd::opt::none);
+		pfd::open_file filepicker("Open Runtime DLL", "/", { "Dynamic Link Libraries (.dll)", "*.dll" }, pfd::opt::none);
 		
-		if (!filepicker->result().empty()) {
-			std::string dllPath = filepicker->result().at(0);
+		if (!filepicker.result().empty()) {
+			std::string dllPath = filepicker.result().at(0);
 
 			if (Security::VerifyDll(dllPath, whatDll)) {
 				std::string outputDir = "";
@@ -43,7 +43,7 @@ namespace SnowPME::Graphics::Gui {
 				}
 
 				// create runtime folders ..
-				std::filesystem::create_directories(std::filesystem::path(outputDir).remove_filename());
+				std::filesystem::create_directories(std::filesystem::path(outputDir).parent_path());
 
 				// copy file to output location ..
 				std::filesystem::copy_file(dllPath, outputDir, std::filesystem::copy_options::overwrite_existing);
@@ -56,7 +56,6 @@ namespace SnowPME::Graphics::Gui {
 			}
 		}
 
-		delete filepicker;
 		checkDlls();
 	}
 

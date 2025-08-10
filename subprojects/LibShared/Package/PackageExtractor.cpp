@@ -6,6 +6,8 @@
 
 #include <Debug/Logger.hpp>
 #include <Debug/Assert.hpp>
+#include <String/Path.hpp>
+#include <String/Format.hpp>
 #include <Package/PackageExtractor.hpp>
 #include <Package/PackageError.hpp>
 #include <CompilerCompat.hpp>
@@ -15,8 +17,10 @@
 #include <cstdio>
 #include <cstring>
 
+using namespace Shared::String;
 using namespace Shared::Debug;
 using namespace Shared::String;
+using namespace Shared::Threading;
 
 namespace Shared::Package {
 	static const uint8_t PKG_DECRYPT_KEY_PS3[0x10]		= { 0x2E, 0x7B, 0x71, 0xD7, 0xC9, 0xC9, 0xA1, 0x4E, 0xA3, 0x22, 0x1F, 0x18, 0x88, 0x28, 0xb8, 0xF8 };
@@ -25,6 +29,65 @@ namespace Shared::Package {
 	static const uint8_t PKG_DECRYPT_KEY_LIVEAREA[0x10] = { 0x42, 0x3A, 0xCA, 0x3A, 0x2B, 0xD5, 0x64, 0x9F, 0x96, 0x86, 0xAB, 0xAD, 0x6F, 0xD8, 0x80, 0x1F };
 	static const uint8_t PKG_DECRYPT_KEY_PSM[0x10]		= { 0xAF, 0x07, 0xFD, 0x59, 0x65, 0x25, 0x27, 0xBA, 0xF1, 0x33, 0x89, 0x66, 0x8B, 0x17, 0xD9, 0xEA };
 
+
+	#define PKG_ERROR(x) { ret = x; Logger::Error("[PkgErr] ERROR = " + Format::Hex(x)); goto error; }
+
+	#define PKG_CHECK_ERROR(x) \
+	do { \
+		int ret = (int)(x);\
+		if(ret < 0) { \
+			Logger::Error("[PkgErr] CHECK_ERROR = " + Format::Hex(x)); \
+			return ret; \
+		} \
+	} while(0);
+
+	std::string PackageExtractor::GetErrorMessage() {
+		return GetErrorMessage(this->initError);
+	}
+
+	std::string PackageExtractor::GetErrorMessage(int err) {
+		switch(err) {
+		case PKG_ERROR_NO_ERROR:
+			return "";
+		case PKG_ERROR_INVALID_CONTENT_TYPE:
+			return "Package appears to be a PS3, PSP or Vita package, not a PlayStation Mobile package.";
+		case PKG_ERROR_UNKNOWN_KEY:
+			return "Package could not be decrypted.";
+		case PKG_ERROR_INVALID_MAGIC:
+			return "Package has an invalid Header.";
+		case PKG_ERROR_INVALID_EXT_MAGIC:
+			return "Package has an invalid Extended Header";
+		case PKG_ERROR_OPEN_FAILED:
+			return "The file could not be opened for reading.";
+		case PKG_ERROR_READ_SIZE_NO_MATCH:
+			return "The size of the Pacakge File is not what was expected.";
+		case PKG_ERROR_FILE_NOT_FOUND:
+			return "The file could not be found within the Package File.";
+		default:
+			return "Faiiled to extract package: " + Format::Hex(err);
+		}
+	}
+
+	PackageExtractor::PackageExtractor(const std::string& pkgFile) {
+		this->pkgFile = pkgFile;
+		this->initError = this->pkgOpen(pkgFile);
+	}
+
+	PackageExtractor::PackageExtractor(const char* pkgFile) {
+		this->pkgFile = std::string(pkgFile);
+		this->initError = this->pkgOpen(this->pkgFile);
+	}
+
+	PackageExtractor::~PackageExtractor() {
+		this->pkgClose();
+	}
+
+
+	bool PackageExtractor::isPkgOpened() {
+		if (this->stream == nullptr) return false;
+		if (!this->stream->is_open()) return false;
+		return true;
+	}
 
 	int PackageExtractor::derivePkgDecryptKey() {
 		// because we don't have sceNpDrmPackage 
@@ -75,7 +138,7 @@ namespace Shared::Package {
 
 		for (int i = 0; i < this->pkgHeader.meta_count; i++) {
 			PKG_METADATA_ENTRY metaEntry;
-			CHECK_ERROR(pkgRead(&metaEntry, sizeof(PKG_METADATA_ENTRY)));
+			PKG_CHECK_ERROR(pkgRead(&metaEntry, sizeof(PKG_METADATA_ENTRY)));
 
 			metaEntry.type = swap32(metaEntry.type);
 			metaEntry.size = swap32(metaEntry.size);
@@ -102,7 +165,7 @@ namespace Shared::Package {
 			default:
 				break;
 			}
-			CHECK_ERROR(rd);
+			PKG_CHECK_ERROR(rd);
 
 			pkgSeek(metaEntry.size - rd, std::ios::cur);
 		}
@@ -177,7 +240,7 @@ namespace Shared::Package {
 			item.record.data_size = swap64(item.record.data_size);
 
 			std::vector<char> buffer = std::vector<char>(item.record.filename_size + 1);
-			CHECK_ERROR(this->pkgReadOffset((this->pkgHeader.data_offset + item.record.filename_offset), buffer.data(), item.record.filename_size));
+			PKG_CHECK_ERROR(this->pkgReadOffset((this->pkgHeader.data_offset + item.record.filename_offset), buffer.data(), item.record.filename_size));
 
 			item.filename = std::string(buffer.data());
 			item.index = index;
@@ -208,14 +271,14 @@ namespace Shared::Package {
 		return 0;
 	}
 
-	int PackageExtractor::pkgOpen(const char* pkg_file) {
-		this->size = std::filesystem::file_size(pkg_file);
+	int PackageExtractor::pkgOpen(const std::string& pkgFile) {
+		this->size = std::filesystem::file_size(pkgFile);
 
 		errno = 0;
-		this->stream = std::make_unique<std::fstream>(pkg_file, std::ios::in | std::ios::binary);
+		this->stream = std::make_unique<std::fstream>(pkgFile, std::ios::in | std::ios::binary);
 
 		if (this->stream->fail() || !this->stream->is_open()) { 
-			Logger::Error("[PkgErr] Could not open file: " + std::string(pkg_file) + " (" + std::to_string(errno) + ") " + strerror(errno));
+			Logger::Error("[PkgErr] Could not open file: " + pkgFile + " (" + std::to_string(errno) + ") " + strerror(errno));
 			return PKG_ERROR_OPEN_FAILED; 
 		}
 		if (this->stream->read(reinterpret_cast<char*>(&this->pkgHeader), sizeof(PKG_FILE_HEADER)).gcount() != sizeof(PKG_FILE_HEADER)) {
@@ -263,9 +326,9 @@ namespace Shared::Package {
 			return PKG_ERROR_INVALID_PACKAGE_TYPE;
 		}
 
-		CHECK_ERROR(derivePkgDecryptKey());
-		CHECK_ERROR(readMetadata());
-		CHECK_ERROR(readItems());
+		PKG_CHECK_ERROR(derivePkgDecryptKey());
+		PKG_CHECK_ERROR(readMetadata());
+		PKG_CHECK_ERROR(readItems());
 		if (!IS_PSM_CONTENT_TYPE(this->pkgMetadata.content_type)) {
 			Logger::Error("[PkgErr] Valid package, but not PSM content type, is (" + Format::Hex(this->pkgMetadata.content_type) + ")");
 			return PKG_ERROR_INVALID_CONTENT_TYPE;
@@ -274,7 +337,7 @@ namespace Shared::Package {
 		return PKG_ERROR_NO_ERROR;
 	}
 
-	int PackageExtractor::extractItem(PKG_ITEM_RECORD* record, const char* outfile) {
+	int PackageExtractor::extractItem(PKG_ITEM_RECORD* record, const std::string& outfile) {
 		this->pkgSeek(this->pkgHeader.data_offset + record->data_offset, std::ios::beg);
 		std::fstream wfd(outfile, std::ios::out | std::ios::binary);
 		if (wfd.fail()) return PKG_ERROR_OPEN_FAILED;
@@ -288,7 +351,7 @@ namespace Shared::Package {
 
 			// read the data
 			int amtRead = this->pkgRead(this->workBuffer, readSize);
-			if (amtRead != readSize) ERROR(PKG_ERROR_READ_SIZE_NO_MATCH);
+			if (amtRead != readSize) PKG_ERROR(PKG_ERROR_READ_SIZE_NO_MATCH);
 
 			// write decrypted data
 			wfd.write(this->workBuffer, amtRead);
@@ -303,18 +366,83 @@ namespace Shared::Package {
 		return ret;
 	}
 
+	std::string PackageExtractor::ContentId() {
+		if (this->isPkgOpened()) {
+			return std::string(this->pkgHeader.content_id);
+		}
+		return "";
+	}
 
-	int PackageExtractor::ExpandPackage(const char* pkg_file, const char* output_folder, void (*progress_callback)(const char*, uint64_t, uint64_t)) {
-		if (progress_callback != nullptr) progress_callback(pkg_file, static_cast<uint64_t>(0), static_cast<uint64_t>(100));
+	std::string PackageExtractor::TitleId() {
+		std::string contentId = this->ContentId();
+		if (contentId.length() >= 16) {
+			return contentId.substr(7, 9);
+		}
+		return "";
+	}
 
-		std::filesystem::create_directories(output_folder);
-		CHECK_ERROR(this->pkgOpen(pkg_file));
+
+	int PackageExtractor::ExtractFolder(const std::string& folderPathInPkg, const std::string& outputFolderPath, ProgressTracker* progress) {
+		if (this->initError != PKG_ERROR_NO_ERROR) return this->initError;
+		if (!this->isPkgOpened()) return PKG_ERROR_OPEN_FAILED;
+		if(progress != nullptr) progress->Reset(this->pkgHeader.item_count);
+		if(progress != nullptr) progress->SetShowProgress(true);
 
 		for (PackageItem item : this->pkgItems) {
-			if (progress_callback != nullptr) progress_callback(pkg_file, (uint64_t)item.index, (uint64_t)this->pkgHeader.item_count);
+			if(progress != nullptr) progress->Increment();
+			int type = item.record.flags & 0x1F;
+			if (type == PKG_TYPE_DIR || type == PKG_TYPE_PFS_DIR) continue;
+
+			if (Format::ToLower(Path::ChangeSlashesToPsmStyle(item.filename)).starts_with(Format::ToLower(Path::ChangeSlashesToPsmStyle(folderPathInPkg)))) {
+				std::string nameStripped = item.filename.substr(folderPathInPkg.length());
+				if (!nameStripped.empty() && (Path::ChangeSlashesToPsmStyle(nameStripped)[0] == '/')) nameStripped = nameStripped.substr(1);
+				std::string outputFile = Path::ChangeSlashesToNativeStyle(std::filesystem::path(outputFolderPath).append(nameStripped).string());
+				std::filesystem::create_directories(std::filesystem::path(outputFile).parent_path());
+
+				Logger::Debug("[PkgDebug] Extracting: " + item.filename + " -> " + outputFile);
+				PKG_CHECK_ERROR(this->extractItem(&item.record, outputFile));
+			}
+
+		}
+
+		return PKG_ERROR_NO_ERROR;
+	}
+
+
+	int PackageExtractor::ExtractFile(const std::string& filePathInPkg, const std::string& outputFilePath) {
+		if (this->initError != PKG_ERROR_NO_ERROR) return this->initError;
+		if (!this->isPkgOpened()) return PKG_ERROR_OPEN_FAILED;
+
+		std::filesystem::create_directories(std::filesystem::path(outputFilePath).parent_path().string());
+
+		for (PackageItem item : this->pkgItems) {
+			int type = item.record.flags & 0x1F;
+			if (type == PKG_TYPE_DIR || type == PKG_TYPE_PFS_DIR) continue;
+
+			if (Format::ToLower(Path::ChangeSlashesToPsmStyle(item.filename)) == Format::ToLower(Path::ChangeSlashesToPsmStyle(filePathInPkg))) {
+				
+				Logger::Debug("[PkgDebug] Extracting: " + item.filename + " -> " + outputFilePath);
+
+				PKG_CHECK_ERROR(this->extractItem(&item.record, outputFilePath));
+				return PKG_ERROR_NO_ERROR;
+			}
+		}
+		return PKG_ERROR_FILE_NOT_FOUND;
+	}
+
+	int PackageExtractor::ExpandPackage(const std::string& outputFolderPath, ProgressTracker* progress) {
+		if (this->initError != PKG_ERROR_NO_ERROR) return this->initError;
+		if (!this->isPkgOpened()) return PKG_ERROR_OPEN_FAILED;
+		if(progress != nullptr) progress->Reset(this->pkgHeader.item_count);
+		if(progress != nullptr) progress->SetShowProgress(true);
+
+		std::filesystem::create_directories(outputFolderPath);
+
+		for (PackageItem item : this->pkgItems) {
+			if (progress != nullptr) progress->Increment();
 
 			// create directory that this file/directory is located within;
-			std::string outfile = std::filesystem::path(output_folder).append(item.filename).string();
+			std::string outfile = std::filesystem::path(outputFolderPath).append(item.filename).string();
 			std::filesystem::create_directories(std::filesystem::path(outfile).parent_path().string());
 
 			switch (item.record.flags & 0x1F) {
@@ -325,29 +453,24 @@ namespace Shared::Package {
 			case PKG_TYPE_PFS_TEMP_BIN:
 			case PKG_TYPE_PFS_CLEARSIGN:
 			case PKG_TYPE_SCESYS_RIGHT_SUPRX:
+			case PKG_TYPE_SCESYS_CERT_BIN:
+			case PKG_TYPE_SCESYS_DIGS_BIN:
 			default:
 				Logger::Debug("[PkgDebug] extracting file: " + item.filename + " -> " + outfile);
-				CHECK_ERROR(this->extractItem(&item.record, outfile.c_str()));
+				PKG_CHECK_ERROR(this->extractItem(&item.record, outfile));
 				break;
 			case PKG_TYPE_DIR:
 			case PKG_TYPE_PFS_DIR:
 				Logger::Debug("[PkgDebug] creating directory: " + item.filename + " -> " + outfile);
 				std::filesystem::create_directories(outfile);
 				break;
-			case PKG_TYPE_SCESYS_CERT_BIN:
-			case PKG_TYPE_SCESYS_DIGS_BIN:
-				Logger::Debug("[PkgDebug] ignoring file: " + item.filename + " -> " + outfile);
-				// ignore these ..
-				break;
 			}
 		}
 
-		this->pkgClose();
 		return PKG_ERROR_NO_ERROR;
 	}
 
-	PackageExtractor::~PackageExtractor() {
-		this->pkgClose();
+	int PackageExtractor::ExpandPackage(const char* outputFolder) {
+		return this->ExpandPackage(std::string(outputFolder));
 	}
-
 }

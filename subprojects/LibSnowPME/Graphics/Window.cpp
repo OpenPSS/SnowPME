@@ -151,6 +151,32 @@ namespace SnowPME::Graphics {
             SDL_Delay(frameDelay);
         }
 	}
+
+	void Window::ShowErrorMessage(const std::string& error, const std::string& caption) {
+		SDL_MessageBoxData data;
+		SDL_MessageBoxButtonData buttons;
+		memset(&data, 0x00, sizeof(data));
+		memset(&buttons, 0x00, sizeof(buttons));
+
+		buttons.buttonid = 0;
+		buttons.flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		buttons.text = "Ok";
+
+		data.flags = SDL_MESSAGEBOX_ERROR;
+		data.window = this->sdlWindow;
+		data.title = caption.c_str();
+		data.message = error.c_str();
+		data.numbuttons = 1;
+		data.buttons = &buttons;
+		data.colorScheme = nullptr;
+
+		int buttonSelected = -1;
+
+		if (SDL_ShowMessageBox(&data, &buttonSelected) == 0) {
+			Logger::Error(error);
+			Logger::Error("Failed to open messagebox; " + std::string(SDL_GetError()));
+		}
+	}
 	
 	bool Window::ShowMessageBox(const std::string& message, const std::string& caption) {
 		SDL_MessageBoxButtonData buttonData[2];
@@ -158,11 +184,11 @@ namespace SnowPME::Graphics {
 
 		buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 		buttonData[0].text = "Yes";
-		buttonData[0].buttonid = true;
+		buttonData[0].buttonid = 1;
 
 		buttonData[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
 		buttonData[1].text = "No";
-		buttonData[1].buttonid = false;
+		buttonData[1].buttonid = 0;
 
 		SDL_MessageBoxData data;
 		memset(&data, 0, sizeof(SDL_MessageBoxData));

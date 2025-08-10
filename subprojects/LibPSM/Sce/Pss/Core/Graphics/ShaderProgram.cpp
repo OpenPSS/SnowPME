@@ -218,7 +218,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	uint8_t* ShaderProgram::CopyFile(uint8_t* shaderSrc, int shaderLen) {
+	uint8_t* ShaderProgram::CopyOrMove(uint8_t* shaderSrc, int shaderLen) {
 		std::shared_ptr<HeapAllocator> resourceHeap = HeapAllocator::UniqueObject();
 		uint8_t* cgxData = reinterpret_cast<uint8_t*>(resourceHeap->sce_psm_malloc(shaderLen));
 		if (cgxData != nullptr) {
@@ -235,14 +235,14 @@ namespace Sce::Pss::Core::Graphics {
 	ShaderProgram::ShaderProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
 		LOCK_GUARD();
 		if (vertexShaderBuf != nullptr) {
-			this->vertexCgx = this->CopyFile(vertexShaderBuf, vertexShaderSz);
+			this->vertexCgx = this->CopyOrMove(vertexShaderBuf, vertexShaderSz);
 		}
 		else {
 			this->vertexCgx = nullptr;
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			this->fragmentCgx = this->CopyFile(fragmentShaderBuf, fragmentShaderSz);
+			this->fragmentCgx = this->CopyOrMove(fragmentShaderBuf, fragmentShaderSz);
 		}
 		else {
 			this->fragmentCgx = nullptr;

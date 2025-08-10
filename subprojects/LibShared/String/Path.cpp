@@ -18,12 +18,11 @@ namespace Shared::String {
 	}
 
 	std::string Path::MakeAbsolute(const std::string& workDir, const std::string& path) {
-		std::string nativePath = Path::ChangeSlashesToNativeStyle(path);
-		std::string nativeWorkDir = Path::ChangeSlashesToNativeStyle(workDir);
-		if (!std::filesystem::path(nativePath).is_absolute()) {
-			return Path::ChangeSlashesToNativeStyle(Path::Combine(nativeWorkDir, nativePath));
-		}
-		return nativePath;
+		std::string nativePath = Path::ChangeSlashesToPsmStyle(path);
+		std::string nativeWorkDir = Path::ChangeSlashesToPsmStyle(workDir);
+
+		if (std::filesystem::path(nativePath).is_absolute() || (!nativePath.empty() && nativePath[0] == '/')) return nativePath;
+		return Path::ChangeSlashesToPsmStyle(Path::Combine(nativeWorkDir, nativePath));
 	}
 
 	std::string Path::Combine(const std::string& path, const std::string& newPart) {
@@ -43,9 +42,11 @@ namespace Shared::String {
 	}
 
 	std::string Path::NormalizePath(const std::string& workDir, const std::string& path) {
+		std::string effectivePath = Path::MakeAbsolute(workDir, path);
+
 		// Split path by the / seperator
 		std::vector<std::string> normalizedPathComponents;
-		std::vector<std::string> pathComponents = Format::Split(Path::ChangeSlashesToPsmStyle(path), PSM_PATH_SEPERATOR);
+		std::vector<std::string> pathComponents = Format::Split(Path::ChangeSlashesToPsmStyle(effectivePath), PSM_PATH_SEPERATOR);
 
 		// if you think about it, file paths are essentially. just First-In-First-Out (FIFO);
 		for (std::string pathComponent : pathComponents) {
@@ -62,7 +63,7 @@ namespace Shared::String {
 			}
 		}
 
-		std::string normalizedPath = Path::Combine(workDir, Format::Join(normalizedPathComponents, PSM_PATH_SEPERATOR));
+		std::string normalizedPath = Format::Join(normalizedPathComponents, PSM_PATH_SEPERATOR);
 		return normalizedPath;
 	}
 

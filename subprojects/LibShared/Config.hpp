@@ -4,8 +4,7 @@
 #include <string>
 #include <cstdint>
 
-namespace Shared
-{
+namespace Shared {
 	class Config {
 	private:
 		static void parseKeyValuePair(std::string key, std::string value); // parses the line read from the cfg file

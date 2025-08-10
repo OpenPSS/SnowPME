@@ -5,7 +5,10 @@
 
 namespace SnowPME::Graphics::Gui {
 	class InstallGamePackageWindow : public InstallGameWindow {
+	private:
 	protected:
+		std::string windowTitle();
+		std::string selectionFormatString();
 		void browseGame();
 		void installGame();
 	};

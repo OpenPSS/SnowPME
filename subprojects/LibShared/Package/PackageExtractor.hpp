@@ -11,10 +11,12 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <Threading/ProgressTracker.hpp>
 #include <Crypto/Algorithms.hpp>
 #include <Package/PackageFile.hpp>
 #include <fstream>
 #include <list>
+#include <string>
 #include <memory>
 
 namespace Shared::Package {
@@ -26,10 +28,14 @@ namespace Shared::Package {
 
 	class PackageExtractor {
 	private:
+		int initError = 0;
+
 		char workBuffer[0x8000];
 		std::unique_ptr<std::fstream> stream = nullptr;
 		uint64_t offset = 0;
 		uint64_t size = 0;
+
+		std::string pkgFile;
 		aes128_key pkgKey = { 0 };
 		PKG_FILE_HEADER pkgHeader;
 		PKG_EXT_HEADER pkgExtHeader;
@@ -38,19 +44,34 @@ namespace Shared::Package {
 		int readMetadata();
 		int readItems();
 
-		int extractItem(PKG_ITEM_RECORD* record, const char* outfile);
+		int extractItem(PKG_ITEM_RECORD* record, const std::string& outfile);
 		int derivePkgDecryptKey();
 
-		int pkgOpen(const char* pkgFile);
+		bool isPkgOpened();
+
+		int pkgOpen(const std::string& pkgFile);
 		int pkgClose();
 		uint64_t pkgRead(void* buffer, size_t bufferSize);
 		uint64_t pkgSeek(uint64_t whence, std::ios::seekdir mode);
 		int pkgDecrypt(uint64_t offset, void* buffer, size_t bufferSize);
 		uint64_t pkgReadOffset(uint32_t offset, void* buffer, size_t bufferSize);
-		
+
+
 	public:
+		std::string GetErrorMessage();
+		static std::string GetErrorMessage(int err);
+
 		~PackageExtractor();
-		int ExpandPackage(const char* pkgFile, const char* outputFolder, void (*progressCallback)(const char*, uint64_t, uint64_t));
+		PackageExtractor(const char* pkgFile);
+		PackageExtractor(const std::string& pkgFile);
+
+		std::string ContentId();
+		std::string TitleId();
+
+		int ExtractFolder(const std::string& folderPathInPkg, const std::string& outputFolderPath, Shared::Threading::ProgressTracker* progress = nullptr);
+		int ExtractFile(const std::string& filePathInPkg, const std::string& outputFilePath);
+		int ExpandPackage(const std::string& outputFolder, Shared::Threading::ProgressTracker* progress = nullptr);
+		int ExpandPackage(const char* outputFolder);
 	};
 
 

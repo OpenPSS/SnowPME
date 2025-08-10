@@ -32,7 +32,8 @@ namespace SnowPME::Graphics {
 		void Vsync(uint32_t frameTaken);
 		uint32_t GetTime();
 
-		bool ShowMessageBox(const std::string& message, const std::string&  caption);
+		void ShowErrorMessage(const std::string& error, const std::string& caption);
+		bool ShowMessageBox(const std::string& message, const std::string& caption);
 		void InitOpenGL();
 		bool IsOpenGLInitalized();
 

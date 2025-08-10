@@ -13,8 +13,7 @@ using namespace Sce::Pss::Core::System;
 namespace Sce::Pss::Core::Io::Edata {
 	int EdataCallbacks::EdataOpen(const char* path, int flags, int mode, int* handle, int* type) {
 		if (handle != nullptr && type != nullptr) {
-			PsmDrm* drm = Sandbox::UniqueObject()->GameDrmProvider;
-			std::shared_ptr<EdataStream> stream = std::make_shared<EdataStream>(std::string(path), std::ios::binary | std::ios::in, drm, nullptr);
+			std::shared_ptr<EdataStream> stream = std::make_shared<EdataStream>(std::string(path), std::ios::binary | std::ios::in, Sandbox::UniqueObject()->GameDrmProvider->GetKlicensee(), true);
 			RETURN_ERRORABLE_SMARTPTR(stream);
 
 			*handle = Handles<EdataStream>::Create(stream);

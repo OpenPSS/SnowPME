@@ -38,10 +38,10 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int PersistentMemory::Flush() { // runs when the program exits.
-		Logger::Debug("Writing " + std::string(PM_DAT_FILE) + " from disk.");
+		Logger::Debug("Writing " + std::string(PersistentMemory::PmDatFile) + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t _ = 0;
-		if (IoCall::PsmFileOpen(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+		if (IoCall::PsmFileOpen(PersistentMemory::PmDatFile, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_ALWAYS_CREATE, &fileHandle, true) == PSM_ERROR_NO_ERROR) {
 			IoCall::PsmFileWrite(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
 			IoCall::PsmClose(fileHandle);
 		}
@@ -56,10 +56,10 @@ namespace Sce::Pss::Core::Environment {
 	}
 
 	int PersistentMemory::Initalize() { 
-		Logger::Debug("Reading " + std::string(PM_DAT_FILE) + " from disk.");
+		Logger::Debug("Reading " + std::string(PersistentMemory::PmDatFile) + " from disk.");
 		uint64_t fileHandle = 0;
 		uint32_t _ = 0;
-		if (IoCall::PsmFileOpen(PM_DAT_FILE, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
+		if (IoCall::PsmFileOpen(PersistentMemory::PmDatFile, SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ , &fileHandle, true) == PSM_ERROR_NO_ERROR) {
 			IoCall::PsmFileRead(fileHandle, PersistentMemory::memoryBuffer, sizeof(PersistentMemory::memoryBuffer), &_);
 			IoCall::PsmClose(fileHandle);
 		}

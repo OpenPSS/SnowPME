@@ -11,13 +11,13 @@ namespace Sce::Pss::Core::Io::Edata {
 
 	class PsmDrm : public Errorable {
 	private:
-		std::string psmContentId;
-		uint8_t titleKey[0x10];
+		std::string psmContentId = "";
+		uint8_t klicensee[0x10] = { 0 };
 	public:
 		PsmDrm(const std::string& licenseFile);
-		PsmDrm(const std::string& contentId, uint8_t* titleKey);
+		PsmDrm(const std::string& contentId, uint8_t klicensee[0x10]);
 		const std::string& GetContentId();
-		void GetTitleKey(uint8_t* outTitleKey);
+		uint8_t* GetKlicensee();
 	};
 }
 #endif

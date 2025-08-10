@@ -141,16 +141,12 @@ namespace Sce::Pss::Core::Io::Edata {
 		return length - totalRead;
 	}
 
-	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata) {
-		this->EncryptedDataList = edata;
+	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, uint8_t klicensee[0x10], bool inEdata) {
 
 		// copy the titlekey into this object
-		if (drm != nullptr) {
-			drm->GetTitleKey(this->titleKey);
+		if (this->klicensee != nullptr) {
+			memcpy(this->klicensee, klicensee, sizeof(this->klicensee));
 		}
-
-		memset(&this->header, 0x00, sizeof(EdataHeader));
- 
 
 		if (std::filesystem::exists(file)) {
 			this->totalFileSize = std::filesystem::file_size(file);
@@ -185,7 +181,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		}
 
 		// handle psse ;
-		if (this->EncryptedDataList == nullptr || this->EncryptedDataList->IsFileInEdata(file) && std::filesystem::exists(file)) {
+		if (inEdata && std::filesystem::exists(file)) {
 			this->osHandle->read((char*)&this->header, sizeof(EdataStream::header));
 
 			// check header is PSSE or PSME
@@ -206,7 +202,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 				// is runtime file?
 				if (strncmp(this->header.ContentId, Keys::RuntimeContentId.c_str(), sizeof(EdataHeader::ContentId)) == 0) {
-					memcpy(this->titleKey, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
+					memcpy(this->klicensee, Keys::RuntimeTitleKey, sizeof(Keys::RuntimeTitleKey)); // copy the runtime game key as gamekey
 				}
 
 				// if no content id set then this is psm developer assistant application
@@ -215,7 +211,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 				// decrypt the IV from the file header
 				CryptoLibrary::Aes128CbcDecrypt(this->psmDeveloperAssistant ? Keys::PsseHeaderKeyPsmDev : Keys::PsseHeaderKey, Keys::SequentialIv, reinterpret_cast<uint8_t*>(this->fileIv), sizeof(EdataStream::fileIv));
-				this->aes = std::make_unique<AesCbc>(this->titleKey, this->fileIv);
+				this->aes = std::make_unique<AesCbc>(this->klicensee, this->fileIv);
 
 				// decrypt first block from the PSSE'd file
 				decryptBlock(this->block);

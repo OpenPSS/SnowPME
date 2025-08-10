@@ -4,41 +4,39 @@
 #include <LibShared.hpp>
 #include <string.h>
 
+using namespace Sce::Pss::Core::Io;
+using namespace Shared::Debug;
+using namespace Shared::String;
+
 namespace Sce::Pss::Core::Io::Edata {
-	using namespace Sce::Pss::Core::Io;
-	using namespace Shared::Debug;
+
 
 	PsmDrm::PsmDrm(const std::string& licenseFile) {
-		uint64_t handle = -1;
 		ScePsmDrmLicense rifData;
-		uint32_t wasRead = 0;
-		Logger::Debug("Reading FAKE.rif ...");
-
-		int err = IoCall::PsmFileOpen((char*)licenseFile.c_str(), SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_BINARY, &handle, true);
-		if (err == PSM_ERROR_NO_ERROR) {
-			err = IoCall::PsmFileRead(handle, &rifData, sizeof(ScePsmDrmLicense), &wasRead);
-			
-			if (err == PSM_ERROR_NO_ERROR) {
+		Logger::Debug("[PsmDrm] Reading license [" + licenseFile + "] ...");
+		std::fstream licenseStream(licenseFile, std::ios::in | std::ios::binary);
+		
+		if (!licenseStream.fail()) {
+			uint64_t rd = licenseStream.read(reinterpret_cast<char*>(&rifData), sizeof(ScePsmDrmLicense)).gcount();
+			if (rd == sizeof(ScePsmDrmLicense)) {
 				this->psmContentId = std::string(rifData.ContentId, sizeof(rifData.ContentId));
-				memcpy(this->titleKey, rifData.Key, sizeof(this->titleKey));
-
-				Logger::Debug("RIF Content ID: " + this->psmContentId);
-
+				memcpy(this->klicensee, rifData.Key, sizeof(this->klicensee));
+				Logger::Debug("[PsmDrm] RIF Content ID: " + this->psmContentId);
 			}
 			else {
-				this->SetError(err);
+				Logger::Error("[PsmDrm] license was only: 0x" + Format::Hex(rd) + "bytes but expected 0x" + Format::Hex(sizeof(ScePsmDrmLicense)) + " bytes");
+				this->SetError(PSM_ERROR_COMMON_IO);
 			}
-
-			IoCall::PsmClose(handle);
 		}
 		else {
-			this->SetError(err);
+			Logger::Error("[PsmDrm] Failed to open file " + Format::Hex(errno) + " - " + strerror(errno));
+			this->SetError(PSM_ERROR_COMMON_IO);
 		}
 	}
 
-	PsmDrm::PsmDrm(const std::string& contentId, uint8_t* titleKey) {
+	PsmDrm::PsmDrm(const std::string& contentId, uint8_t klicensee[0x10]) {
 		this->psmContentId = contentId;
-		memcpy(this->titleKey, titleKey, sizeof(this->titleKey));
+		memcpy(this->klicensee, klicensee, sizeof(this->klicensee));
 	}
 	
 
@@ -46,8 +44,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		return this->psmContentId;
 	}
 
-	void PsmDrm::GetTitleKey(uint8_t* outTitleKey) {
-		memcpy(outTitleKey, this->titleKey, sizeof(this->titleKey));
+	uint8_t* PsmDrm::GetKlicensee() {
+		return this->klicensee;
 	}
-
 }

@@ -5,13 +5,12 @@
 #include <Sce/Pss/Core/Io/PsmFileHandle.hpp>
 #include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
-#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 #include <Sce/Pss/Core/Errorable.hpp>
 
 #include <vector>
 #include <fstream>
-
+#include <memory>
 #include <mono/mono.h>
 
 
@@ -21,13 +20,13 @@ namespace Sce::Pss::Core::Io {
 		std::string currentWorkingDirectory = "/";
 		std::vector<FileSystem> filesystems;
 		
-		FileSystem findFilesystem(std::string sandboxedPath, bool includeSystem);
+		FileSystem findFilesystem(std::string sandboxedPath, bool includeSystem = false);
 		void reopen(std::shared_ptr<PsmFileHandle> handle);
 		int readLicenseData();
 		std::string normalizePath(std::string sandboxedPath);
 
 	public:
-		Sce::Pss::Core::Io::Edata::PsmDrm* GameDrmProvider = nullptr;
+		std::unique_ptr<Sce::Pss::Core::Io::Edata::PsmDrm> GameDrmProvider = nullptr;
 		Sandbox(std::string gameFolder);
 		~Sandbox();
 
@@ -38,16 +37,16 @@ namespace Sce::Pss::Core::Io {
 		bool IsDirectory(std::string sandboxedPath);
 		int ChangeSize(std::shared_ptr<PsmFileHandle> handle, uint32_t newSize);
 		int RemoveFile(std::string sandboxedPath);
-		int CopyFile(std::string sandboxedSrcPath, std::string sandboxDestPath, bool move);
+		int CopyOrMove(std::string sandboxedSrcPath, std::string sandboxDestPath, bool move);
 		std::string GetWorkingDirectory();
 		int SetWorkingDirectory(std::string sandboxedPath);
 		int MakeDirectory(std::string sandboxedPath);
-		int RemoveDirectory(std::string sandboxedPath);
+		int DeleteDirectory(std::string sandboxedPath);
 		int SetAttributes(std::string sandboxedPath, uint32_t attributes);
 		int SetFileTimes(std::string sandboxedPath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime);
 		std::shared_ptr<PsmFileHandle> OpenDirectory(std::string sandboxedPath);
 		std::shared_ptr<PsmFileHandle> OpenFile(std::string sandboxedPath, ScePssFileOpenFlag_t flags, bool includeSystem);		
-		std::string LocateRealPath(std::string sandboxedPath, bool includeSystem);
+		std::string LocateRealPath(std::string sandboxedPath, bool includeSystem = false);
 	};
 
 }

@@ -29,7 +29,7 @@ namespace Sce::Pss::Core::Graphics {
 		int AttributeCount();
 
 		uint8_t* LoadFile(char* shaderPath, int* shaderLen);
-		uint8_t* CopyFile(uint8_t* shaderSrc, int shaderLen);
+		uint8_t* CopyOrMove(uint8_t* shaderSrc, int shaderLen);
 		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz);
 
 		ShaderProgram(char* vertexShaderPath, char* fragmentShaderPath);

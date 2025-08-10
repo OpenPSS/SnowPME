@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Io/PsmFileHandle.hpp>
 #include <Sce/Pss/Core/Io/EmulatedDirectory.hpp>
 #include <Sce/Pss/Core/Io/Edata/EdataStream.hpp>
+#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 
 #include <filesystem>
 #include <sys/stat.h>
@@ -67,20 +68,20 @@ namespace Sce::Pss::Core::Io {
 
 
 		this->readLicenseData();
+		EdataList::ReadPsseOrEdataList(this->GameDrmProvider->GetKlicensee(), this);
 	}
 
 	std::string Sandbox::normalizePath(std::string sandboxedPath) {
 		// Limit str to PSM_PATH_MAX.
 		sandboxedPath = sandboxedPath.substr(0, PSM_PATH_MAX);
-
 		std::string startDir = this->GetWorkingDirectory();
 
 		return Path::NormalizePath(startDir, sandboxedPath);
 	}
 	int Sandbox::readLicenseData() {
 		if (this->PathExist(FakeRifLocation, true)) {
-			this->GameDrmProvider = new PsmDrm(FakeRifLocation);
-			RETURN_ERRORABLE(this->GameDrmProvider);
+			this->GameDrmProvider = std::make_unique<PsmDrm>(this->LocateRealPath(FakeRifLocation, true));
+			RETURN_ERRORABLE_SMARTPTR(this->GameDrmProvider);
 		}
 		else {
 			Logger::Warn("No " + FakeRifLocation + " found. - This is normal if your running a pre-decrypted executable (i.e homebrew)");
@@ -89,9 +90,6 @@ namespace Sce::Pss::Core::Io {
 	}
 
 	Sandbox::~Sandbox() {
-		if (this->GameDrmProvider != nullptr) // delete game drm provider
-			delete this->GameDrmProvider;
-
 		this->filesystems.clear(); // Clear the filesystems vector
 	}
 	
@@ -102,11 +100,13 @@ namespace Sce::Pss::Core::Io {
 			// Close the file
 			EdataStream* edataStream = static_cast<EdataStream*>(handle->GetUnderlying());
 			uint64_t oldPos = edataStream->Tell();
-			EdataList* edataList = edataStream->EncryptedDataList;
 			delete edataStream;
 
 			// Open the file again
-			handle->SetUnderyling(new EdataStream(handle->PathOnDisk(), handle->OpenMode(), this->GameDrmProvider, edataList));
+			handle->SetUnderyling(new EdataStream(handle->PathOnDisk(), 
+												  handle->OpenMode(), 
+												  this->GameDrmProvider->GetKlicensee(),
+												  EdataList::IsFileInEdata(handle->PathOnDisk())));
 
 			// Seek to where we were.
 			static_cast<EdataStream*>(handle->GetUnderlying())->Seek(oldPos, SCE_PSS_FILE_SEEK_TYPE_BEGIN);
@@ -118,8 +118,8 @@ namespace Sce::Pss::Core::Io {
 	FileSystem Sandbox::findFilesystem(std::string sandboxedPath, bool includeSystem) {
 		std::string normPath = this->normalizePath(sandboxedPath);
 
-		for (FileSystem filesystem : this->filesystems) {
-			if (String::Format::ToLower(normPath).starts_with(String::Format::ToLower(filesystem.SandboxPath()))) {
+		for (FileSystem& filesystem : this->filesystems) {
+			if (Format::ToLower(normPath).starts_with(Format::ToLower(filesystem.SandboxPath()))) {
 				if (filesystem.IsSystem() && !includeSystem) continue;
 
 				return filesystem;
@@ -161,10 +161,8 @@ namespace Sce::Pss::Core::Io {
 		if (((stats.st_mode & S_IREAD) != 0 && (stats.st_mode & S_IWRITE) == 0) || !filesystem.IsWritable())
 			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_READONLY;
 
-		if (filesystem.GetEdataList(this->GameDrmProvider) != nullptr) {
-			if (filesystem.GetEdataList(this->GameDrmProvider)->IsFileInEdata(normPath)) {
-				psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
-			}
+		if (EdataList::IsFileInEdata(this->LocateRealPath(normPath))) {
+			psmPathInformation.uFlags |= SCE_PSS_FILE_FLAG_ENCRYPTED;
 		}
 
 		return psmPathInformation;
@@ -280,12 +278,14 @@ namespace Sce::Pss::Core::Io {
 			}
 		}
 
-		handle->SetUnderyling(new EdataStream(handle->PathOnDisk(), handle->OpenMode(), this->GameDrmProvider, filesystem.GetEdataList(this->GameDrmProvider)));
-
+		handle->SetUnderyling(new EdataStream(handle->PathOnDisk(), 
+							  handle->OpenMode(), 
+							  this->GameDrmProvider->GetKlicensee(), 
+							  EdataList::IsFileInEdata(handle->PathOnDisk())));
 		return handle;
 	}
 
-	int Sandbox::CopyFile(std::string sandboxedSrcPath, std::string sandboxDstPath, bool move) {
+	int Sandbox::CopyOrMove(std::string sandboxedSrcPath, std::string sandboxDstPath, bool move) {
 		// Find src and dest absoulte paths
 		std::string normSrc = this->normalizePath(sandboxedSrcPath);
 		std::string normDst = this->normalizePath(sandboxDstPath);
@@ -324,7 +324,7 @@ namespace Sce::Pss::Core::Io {
 			return PSM_ERROR_NO_ERROR;
 		}
 		else { // otherwise, its a copy operation..
-			char buffer[0x8000];
+			std::vector<uint8_t> buffer(0x8000);
 
 			std::shared_ptr<PsmFileHandle> srcHandle = this->OpenFile(normSrc, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_READ | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE | SCE_PSS_FILE_OPEN_FLAG_NOREPLACE), false);
 			std::shared_ptr<PsmFileHandle> dstHandle = this->OpenFile(normDst, (ScePssFileOpenFlag_t)(SCE_PSS_FILE_OPEN_FLAG_BINARY | SCE_PSS_FILE_OPEN_FLAG_WRITE | SCE_PSS_FILE_OPEN_FLAG_NOTRUNCATE), false);
@@ -332,8 +332,8 @@ namespace Sce::Pss::Core::Io {
 				
 			int totalRead = 0;
 			do {
-				totalRead = srcHandle->GetUnderlying()->Read(buffer, sizeof(buffer));
-				static_cast<EdataStream*>(dstHandle->GetUnderlying())->Write(buffer, totalRead);
+				totalRead = srcHandle->GetUnderlying()->Read(buffer.data(), buffer.size());
+				static_cast<EdataStream*>(dstHandle->GetUnderlying())->Write(buffer.data(), totalRead);
 			} while (totalRead != 0);
 				
 			PsmFileHandle::Delete(srcHandle);
@@ -400,7 +400,7 @@ namespace Sce::Pss::Core::Io {
 		return PlatformSpecific::ChangeFileTimes(PathOnDisk, CreationTime, LastAccessTime, LastWriteTime);
 	}
 
-	int Sandbox::RemoveDirectory(std::string sandboxedPath) {
+	int Sandbox::DeleteDirectory(std::string sandboxedPath) {
 		std::string normPath = this->normalizePath(sandboxedPath);
 		// Check the path is inside a rewritable filesystem.
 		FileSystem filesystem = this->findFilesystem(normPath, false);

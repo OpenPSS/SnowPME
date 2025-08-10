@@ -1,6 +1,5 @@
 #ifndef LIB_PSS_EDATASTREAM_H
 #define LIB_PSS_EDATASTREAM_H 1
-#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 #include <Sce/Pss/Core/Io/Edata/EdataHeader.hpp>
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
 #include <Sce/Pss/Core/Crypto/AesCbc.hpp>
@@ -26,7 +25,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		EdataHeader header;
 
 		uint8_t fileIv[0x10] = { 0 };
-		uint8_t titleKey[0x10] = { 0 };
+		uint8_t klicensee[0x10] = { 0 };
 
 		std::vector<std::uint8_t> currentBlock = std::vector<std::uint8_t>();
 
@@ -49,9 +48,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		uint64_t getBlockIdForOffset(uint64_t offset);
 
 	public:
-		EdataList* EncryptedDataList = nullptr;
-
-		EdataStream(const std::string& file, std::ios::openmode mode, PsmDrm* drm, EdataList* edata);
+		EdataStream(const std::string& file, std::ios::openmode mode, uint8_t klicensee[0x10] = nullptr, bool inEdata = false);
 		~EdataStream();
 
 		uint64_t Length();

@@ -15,6 +15,7 @@
 #include <Threading/ProgressTracker.hpp>
 #include <Crypto/Algorithms.hpp>
 #include <Package/PackageExtractor.hpp>
+#include <Package/PackageError.hpp>
 #include <Config.hpp>
 #include <CompilerCompat.hpp>
 

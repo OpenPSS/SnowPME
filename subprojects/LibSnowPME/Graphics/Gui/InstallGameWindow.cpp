@@ -2,13 +2,20 @@
 #include <pfd/portable-file-dialogs.h>
 #include <LibImGui.hpp>
 #include <cstdlib>
+#include <thread>
 #include <cstring>
 
 namespace SnowPME::Graphics::Gui {
 
+	std::string InstallGameWindow::selectionFormatString() {
+		return "GAME: %s";
+	}
+	std::string InstallGameWindow::windowTitle() {
+		return "Install Game";
+	}
 	void InstallGameWindow::renderWindow() {
 		uint32_t n = 0;
-		ImGui::Begin(this->createWindowTitle("Install Game").c_str(), &this->windowOpen);
+		ImGui::Begin(this->createWindowTitle(this->windowTitle()).c_str(), &this->windowOpen);
 
 		ImGui::Text("Specify license by: ");
 		ImGui::SameLine();
@@ -34,7 +41,7 @@ namespace SnowPME::Graphics::Gui {
 			}
 			ImGui::PopID();
 		}
-		ImGui::Text("GAME: %s", this->gameFile.c_str());
+		ImGui::Text(this->selectionFormatString().c_str(), this->gameFile.c_str());
 		ImGui::SameLine();
 
 		ImGui::PushID(n++);
@@ -44,8 +51,8 @@ namespace SnowPME::Graphics::Gui {
 		ImGui::PopID();
 
 		if (!this->progress.ShowProgress()) {
-			if (ImGui::Button("Install Game")) {
-				this->installGame();
+			if (ImGui::Button(this->windowTitle().c_str())) {
+				this->installThread = std::make_unique<std::thread>(&InstallGameWindow::installGame, this);
 			}
 		}
 		else if (this->progress.ShowProgress()) {
@@ -68,6 +75,14 @@ namespace SnowPME::Graphics::Gui {
 
 		if (!filepicker.result().empty()) {
 			this->rifFile = filepicker.result().front();
+		}
+	}
+
+
+	InstallGameWindow::~InstallGameWindow() {
+		if (this->installThread != nullptr) {
+			this->installThread->join();
+			this->installThread = nullptr;
 		}
 	}
 

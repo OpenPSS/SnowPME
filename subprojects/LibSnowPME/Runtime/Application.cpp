@@ -9,12 +9,12 @@
 #include <string>
 #include <thread>
 
-using namespace Sce::Pss::Core::Mono;
 using namespace Shared::Debug;
 using namespace Shared::Windowing;
 using namespace Shared;
 
 using namespace SnowPME::Graphics;
+using namespace Sce::Pss::Core::Mono;
 
 
 namespace SnowPME::Runtime {

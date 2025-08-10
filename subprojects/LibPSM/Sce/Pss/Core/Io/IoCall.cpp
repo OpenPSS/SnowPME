@@ -47,7 +47,7 @@ namespace Sce::Pss::Core::Io {
 
 		std::string sandboxPath = std::string(pszDirectoryPath);
 
-		return Sandbox::UniqueObject()->RemoveDirectory(sandboxPath);
+		return Sandbox::UniqueObject()->DeleteDirectory(sandboxPath);
 	}
 
 	int IoCall::PsmDirectoryOpen(const char* pszDirectoryPath, const char* pszFileExtension, uint64_t* pDirectory) {
@@ -312,7 +312,7 @@ namespace Sce::Pss::Core::Io {
 		std::string srcSandboxPath = std::string(pszOldName);
 		std::string dstSandboxPath = std::string(pszNewName);
 
-		return Sandbox::UniqueObject()->CopyFile(srcSandboxPath, dstSandboxPath, static_cast<bool>(bMove));
+		return Sandbox::UniqueObject()->CopyOrMove(srcSandboxPath, dstSandboxPath, static_cast<bool>(bMove));
 
 	}
 	int IoCall::PsmFileSetAttributes(const char* pszFileName, uint32_t uFlags) {

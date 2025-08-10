@@ -3,8 +3,8 @@
 
 #include <string>
 #include <filesystem>
+#include <memory>
 #include <Sce/Pss/Core/Io/Edata/PsmDrm.hpp>
-#include <Sce/Pss/Core/Io/Edata/EdataList.hpp>
 
 namespace Sce::Pss::Core::Io {
 	class FileSystem {
@@ -15,16 +15,12 @@ namespace Sce::Pss::Core::Io {
 		std::string pathOnDisk = "";
 		std::string pathInSandbox = "";
 		
-		Sce::Pss::Core::Io::Edata::EdataList* edataList = nullptr;
-		int readEdataList(Sce::Pss::Core::Io::Edata::PsmDrm* psmDrm = nullptr);
-
 	public:
 		FileSystem(const std::string& filesystemPath, const std::string& sandboxPathName, bool rewritable, bool root, bool system);
-		~FileSystem();
+		~FileSystem() = default;
 
 		std::string SandboxPath();
 		std::string PathOnDisk();
-		Sce::Pss::Core::Io::Edata::EdataList* GetEdataList(Sce::Pss::Core::Io::Edata::PsmDrm* psmDrm = nullptr);
 		bool IsWritable();
 		bool IsRoot();
 		bool IsSystem();

@@ -1,12 +1,13 @@
 #ifndef SHARED_RUNTIMEIMPLEMENTATION_H
 #define SHARED_RUNTIMEIMPLEMENTATION_H 1
+#include <cstdint>
 
 namespace Shared {
-	typedef enum class RuntimeImplementation : unsigned int {
+	enum class RuntimeImplementation : uint32_t {
 		PSVita = 0,
 		Android = 1,
 		Windows = 2
-	} RuntimeImplementation;
+	};
 }
 
 #endif

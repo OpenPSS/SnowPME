@@ -8,6 +8,12 @@ using namespace Shared;
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics::Gui {
+	std::string InstallGameFolderWindow::windowTitle() {
+		return "Install Package";
+	}
+	std::string InstallGameFolderWindow::selectionFormatString() {
+		return "PKG %s";
+	}
 
 	void InstallGameFolderWindow::installGame() {
 		std::string rootDirectory = this->gameFile;

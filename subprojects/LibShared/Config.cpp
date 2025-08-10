@@ -75,23 +75,23 @@ namespace Shared
 	}
 
 	std::string Config::GetPsmAppsFolder() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::PsmApps);
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Config::PsmApps));
 	}
 	std::string Config::GetRuntimeLibraryFolder() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeLibPath);
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Config::RuntimeLibPath));
 	}
 	std::string Config::GetRuntimeConfigFolder() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Config::RuntimeConfigPath);
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Config::RuntimeConfigPath));
 	}
 
 	std::string Config::GetScePlaystationCoreDllPath() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "Sce.PlayStation.Core.dll"));
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "Sce.PlayStation.Core.dll")));
 	}
 	std::string Config::GetSystemDllPath() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "System.dll"));
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "System.dll")));
 	}
 	std::string Config::GetCorlibDllPath() {
-		return Path::MakeAbsolute(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "mscorlib.dll"));
+		return Path::ChangeSlashesToNativeStyle(Path::NormalizePath(Config::RunningFromDirectory, Path::Combine(GetRuntimeLibraryFolder(), "mscorlib.dll")));
 	}
 
 	int Config::ScreenHeight(int idx) {

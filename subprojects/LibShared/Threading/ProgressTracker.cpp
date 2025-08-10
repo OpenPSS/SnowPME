@@ -4,7 +4,7 @@
 
 namespace Shared::Threading {
 	float ProgressTracker::Progress() {
-		return (float)((double)(this->NumDone()) / (double)(this->NumTotal()) * 100.0);
+		return (float)((double)(this->NumDone()) / (double)(this->NumTotal()) * 1.0);
 	}
 
 	uint64_t ProgressTracker::NumDone() {

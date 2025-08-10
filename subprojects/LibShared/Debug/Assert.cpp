@@ -8,6 +8,10 @@ namespace Shared::Debug {
 		std::string assertMsg = "ASSERTION FAILED!\n\n" + message + "\n\nin file: " + file + ":" + std::to_string(lineNumber);
 		Logger::Error(assertMsg);
 
+#ifdef _DEBUG
+		__debugbreak();
+#endif
+
 		if (WindowControl::IsInitalized()) {
 			if (WindowControl::YesNoDialog(assertMsg, "ASSERTION!")) {
 				std::exit(-1);
