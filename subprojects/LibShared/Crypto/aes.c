@@ -555,7 +555,8 @@ static void cmac_gfmul(uint8_t* block)
 static void aes128_cmac_done(aes128_cmac_ctx* ctx, uint8_t* mac)
 {
     uint8_t zero[16] = { 0 };
-    aes128_ecb_encrypt(&ctx->key, zero, mac);
+    aes128_ecb_encrypt(&ctx->key, zero, sizeof(zero));
+    memcpy(mac, zero, sizeof(zero));
 
     cmac_gfmul(mac);
 
