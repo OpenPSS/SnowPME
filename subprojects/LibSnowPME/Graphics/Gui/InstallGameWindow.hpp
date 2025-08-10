@@ -3,6 +3,8 @@
 #include <Graphics/Gui/ImGuiWindow.hpp>
 #include <LibShared.hpp>
 #include <string>
+#include <thread>
+#include <memory>
 
 namespace SnowPME::Graphics::Gui {
 	class InstallGameWindow : public ImGuiWindow {
