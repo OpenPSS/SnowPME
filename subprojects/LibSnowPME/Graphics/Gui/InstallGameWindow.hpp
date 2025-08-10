@@ -10,7 +10,7 @@ namespace SnowPME::Graphics::Gui {
 	class InstallGameWindow : public ImGuiWindow {
 	protected:
 		std::unique_ptr<std::thread> installThread = nullptr;
-		char zRIF[0x5000];
+		char zRIF[0x1028];
 		std::string rifFile = "";
 		std::string gameFile = "";
 

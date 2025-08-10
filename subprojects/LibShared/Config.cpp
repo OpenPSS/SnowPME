@@ -151,7 +151,7 @@ namespace Shared
 	
 	void Config::ReadConfig(const std::string& runningFrom, const std::string& configFile) {
 		Config::RunningFromDirectory = runningFrom;
-		Config::cfgFilePath = Path::MakeAbsolute(Config::RunningFromDirectory, configFile);
+		Config::cfgFilePath = Path::NormalizePath(Config::RunningFromDirectory, configFile);
 		Logger::Debug("Reading config file: ["+ Config::cfgFilePath+"]");
 
 		std::ifstream cfgStream = std::ifstream(Config::cfgFilePath);
