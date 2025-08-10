@@ -66,6 +66,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 
 	void EdataList::parseEdataList(const std::string& psseListData, Sandbox* sandbox) {
+		edataFilesList.clear();
 		std::vector<std::string> psseFilesList = Format::Split(Format::Replace(psseListData, "\r", ""), "\n");
 
 		for (const std::string& psseFile : psseFilesList) {

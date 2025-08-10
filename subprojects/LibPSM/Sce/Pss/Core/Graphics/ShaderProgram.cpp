@@ -361,8 +361,10 @@ namespace Sce::Pss::Core::Graphics {
     std::string ShaderProgram::GetUniformName(int index) {
 		GLchar nameBuf[0xff];
 		GLsizei nameLength;
+		GLint size;
+		GLenum type;
 
-		GL_CALL(glGetActiveUniform(this->GLHandle, index, sizeof(nameBuf), &nameLength, nullptr, nullptr, nameBuf));
+		GL_CALL(glGetActiveUniform(this->GLHandle, index, sizeof(nameBuf), &nameLength, &size, &type, nameBuf));
 		return std::string(nameBuf, nameLength);
 	}
 }

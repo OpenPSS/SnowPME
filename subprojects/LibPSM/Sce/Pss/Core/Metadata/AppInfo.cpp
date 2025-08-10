@@ -214,6 +214,7 @@ namespace Sce::Pss::Core::Metadata {
 	}
 	AppInfo::AppInfo(std::string appInfoFile) {
 		this->element = std::make_unique<CXMLElement>(appInfoFile, "PSMA");
+		this->readElements();
 	}
 
 }

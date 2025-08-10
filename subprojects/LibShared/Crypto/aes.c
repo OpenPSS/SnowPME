@@ -497,7 +497,7 @@ static void aes128_cmac_process(const aes128_key* ctx, uint8_t* block, const uin
         {
             block[k] ^= *buffer++;
         }
-        aes128_ecb_encrypt(ctx, block, block);
+        aes128_ecb_encrypt(ctx, block, size);
     }
 }
 

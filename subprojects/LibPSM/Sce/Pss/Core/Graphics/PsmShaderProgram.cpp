@@ -147,7 +147,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		std::string attributeName;
     	MonoUtil::MonoStringToStdString(name, attributeName);
@@ -280,7 +280,7 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		};
 
-		std::shared_ptr<ShaderProgram> prog = Handles<ShaderProgram>::Get(handle);
+		ShaderProgram* prog = Handles<ShaderProgram>::GetRaw(handle);
 
 		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
