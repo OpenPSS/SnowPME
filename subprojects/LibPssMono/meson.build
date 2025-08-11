@@ -9,7 +9,7 @@ mono_include_dir = include_directories('include')
 mod = import('unstable-external_project')
 p = mod.add_project('configure',
 	env: {
-		'CFLAGS': '-O3'
+		'CFLAGS': '-O2'
 	},
 	verbose: true
 )
