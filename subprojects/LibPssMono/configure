@@ -20,7 +20,7 @@ if [ -f Makefile ]; then
 fi
 
 autoreconf -ivf $PSS_MONO
-CFLAGS="-std=gnu99 -fpermissive $CFLAGS" $PSS_MONO/configure --enable-pss 
+$PSS_MONO/configure --enable-pss 
 
 cat <<EOF > Makefile
 all: libeglib-static.a libmonosgen-static.a libmonoruntimesgen.a
