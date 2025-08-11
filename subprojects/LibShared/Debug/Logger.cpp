@@ -21,10 +21,10 @@ namespace Shared::Debug
 
 	inline void Logger::changeColor(ConsoleColor color) {
 		std::scoped_lock<std::mutex> lock(Logger::colorMutex);
-#ifdef _WIN32
+#if defined(_WIN32)
 		HANDLE hConsole = GetStdHandle(STD_ERROR_HANDLE);
 		SetConsoleTextAttribute(hConsole, static_cast<WORD>(color));
-#elif __linux__
+#elif defined(__linux__) || defined(__APPLE__)
 
 		std::string COLOR_RESET = "\e[0m";
 		std::string COLOR_BLACK = "\e[30m";
@@ -98,7 +98,7 @@ namespace Shared::Debug
 
 
 #else
-		#warn cannot do colored text on this platform.
+#warning do not know how to do colored text on this platform.
 #endif
 	}
 
