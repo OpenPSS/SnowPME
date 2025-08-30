@@ -26,7 +26,7 @@
     <genre value="Apps:Productivity" />
   </genre_list>
   <developer>
-    <name value="" />
+    <name value="OpenPSS" />
   </developer>
   <website href="https://github.com/OpenPSS/SnowPME" />
   <copyright author="OpenPSS" text="README.txt" />
