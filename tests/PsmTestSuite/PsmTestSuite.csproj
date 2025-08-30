@@ -5,17 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98815CCB-152E-401B-AD63-1FE29C407AA3}</ProjectGuid>
+    <ProjectGuid>{3583778B-17A0-4597-826C-84062D71AC53}</ProjectGuid>
     <ProjectTypeGuids>{69878862-DA7D-4DC6-B0A1-50D8FAB4242F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PmTest</RootNamespace>
-    <AssemblyName>PmTest</AssemblyName>
+    <RootNamespace>PsmTestSuite</RootNamespace>
+    <AssemblyName>PsmTestSuite</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\build</OutputPath>
+    <OutputPath>..\build\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\build</OutputPath>
+    <OutputPath>..\build\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -37,9 +37,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMain.cs" />
+    <Compile Include="tests\DeviceID.cs" />
+    <Compile Include="PsmTest.cs" />
+    <Compile Include="tests\PM.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ShaderProgram Include="shaders\Simple.fcg" />
+    <ShaderProgram Include="shaders\Simple.vcg" />
   </ItemGroup>
   <ItemGroup>
     <PsmMetadata Include="app.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="tests\" />
+  </ItemGroup>
 </Project>
