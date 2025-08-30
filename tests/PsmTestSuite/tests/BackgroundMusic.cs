@@ -1,9 +1,7 @@
 using System;
+using System.Threading;
 
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Environment;
-using Sce.PlayStation.Core.Graphics;
-using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.Core.Audio;
 
 namespace PsmTestSuite
@@ -21,7 +19,8 @@ namespace PsmTestSuite
 		public override void Run() {
 			using(Bgm bgm = new Bgm("/Application/assets/test.mp3")) 
 			{
-				using(BgmPlayer player = bgm.CreatePlayer()) {
+				using(BgmPlayer player = bgm.CreatePlayer()) 
+				{
 					Log ("Status", player.Status);
 					player.Stop();
 					
@@ -44,7 +43,10 @@ namespace PsmTestSuite
 					Log("Duration", player.Duration);
 					Log("Time", player.Time);
 					Log("PlaybackRate", player.PlaybackRate);
-					Log("Volume", player.Volume);	
+					Log("Volume", player.Volume);
+					
+					Thread.Sleep(3000);
+					Log("Duration", player.Duration);
 				}
 			}
 		}

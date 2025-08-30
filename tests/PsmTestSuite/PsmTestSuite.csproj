@@ -41,6 +41,7 @@
     <Compile Include="PsmTest.cs" />
     <Compile Include="tests\PM.cs" />
     <Compile Include="tests\BackgroundMusic.cs" />
+    <Compile Include="tests\OpenWebsite.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -53,6 +54,7 @@
   <ItemGroup>
     <Folder Include="tests\" />
     <Folder Include="assets\" />
+    <Folder Include="results\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\test.mp3" />

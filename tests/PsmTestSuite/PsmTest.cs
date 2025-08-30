@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Sce.PlayStation.Core.Input;
 
 namespace PsmTestSuite
 {
@@ -18,11 +19,11 @@ namespace PsmTestSuite
 		}
 		public string TestFile {
 			get{
-				string path = "/Documents/"+TestName+".result";	
-				return path;
+				string path = "/Application/results/"+TestName+".result";
+				if(File.Exists(path)) return path;
+				else return "/Documents/"+TestName+".result";
 			}
 		}
-		
 		
 		public abstract void Run();
 		
