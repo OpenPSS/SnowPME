@@ -10,16 +10,14 @@ namespace PsmTestSuite
 			pm[0] = 0x1;
 			PersistentMemory.Write(pm);
 			
-			// check it worked
-			
 			byte[] pm2 = PersistentMemory.Read();
-			Log ("Value is: "+pm2[0].ToString());
+			Log ("Value is: "+pm2[0]);
 			
 			pm2[0] = 0x4;
 			PersistentMemory.Write(pm2);
 			
 			byte[] pm3 = PersistentMemory.Read();
-			Log ("Value is: "+pm3[0].ToString());
+			Log ("Value is: "+pm3[0]);
 			
 			
 		}

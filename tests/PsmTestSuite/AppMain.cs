@@ -16,6 +16,7 @@ namespace PsmTestSuite
 		{
 			tests.Add(new DeviceID());
 			tests.Add(new PM());
+			tests.Add(new BackgroundMusic());
 			
 			int passed = 0;
 			foreach(PsmTest test in tests) {

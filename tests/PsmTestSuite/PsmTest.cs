@@ -35,6 +35,14 @@ namespace PsmTestSuite
 			this.results.Add("["+tag+"] "+msg);
 			Console.WriteLine(TestName+": "+"["+tag+"] "+msg);
 		}
+
+		public virtual void Log(Object msg) {
+			Log(msg.ToString());	
+		}
+		
+		public virtual void Log(String tag, Object msg) {
+			Log(tag, msg.ToString());
+		}
 		
 		public virtual void TryRun() {
 			results.Clear();
@@ -63,11 +71,18 @@ namespace PsmTestSuite
 			String[] expected = File.ReadAllLines(TestFile);
 			TryRun();
 			
-			for(int i = 0; i < results.Count; i++){
-				if(expected[i] != results[i]) {
-					Console.WriteLine("got: "+results[i] + ", expected: "+expected[i]);
-					valid = false;
+			if(results.Count != expected.Length) {
+				valid = false;
+				Console.WriteLine ("err: expected result is not expacted length ("+expected.Length.ToString()+")");
+			}
+			else {
+				for(int i = 0; i < results.Count; i++){
+					if(expected[i] != results[i]) {
+						Console.WriteLine("err: got: "+results[i] + ", expected: "+expected[i]);
+						valid = false;
+					}
 				}
+				
 			}
 			
 			if(valid) {

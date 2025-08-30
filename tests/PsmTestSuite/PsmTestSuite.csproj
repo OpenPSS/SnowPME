@@ -40,6 +40,7 @@
     <Compile Include="tests\DeviceID.cs" />
     <Compile Include="PsmTest.cs" />
     <Compile Include="tests\PM.cs" />
+    <Compile Include="tests\BackgroundMusic.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -51,5 +52,9 @@
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
   <ItemGroup>
     <Folder Include="tests\" />
+    <Folder Include="assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\test.mp3" />
   </ItemGroup>
 </Project>
