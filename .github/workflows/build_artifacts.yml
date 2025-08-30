@@ -67,8 +67,6 @@ jobs:
         run: $Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319" >> $Env:GITHUB_PATH
       - name: MSBuild PsmTestSuite
         run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
-      - name: Run Tests Script
-        run: copy tests/run_tests.cmd tests/build/run_tests.cmd
       - name: Upload Test Binaries
         uses: actions/upload-artifact@v4
         with:
