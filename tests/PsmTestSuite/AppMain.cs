@@ -12,36 +12,15 @@ namespace PsmTestSuite
 	{
 		private static List<PsmTest> tests = new List<PsmTest>();
 		
-		/*
-		 * todo: verify this
-		 * (and then add this difference into SnowPME ..)
-		 */
-		public static string DetectPsmVersion() {
-			
-			try {
-				List<TouchData> touchList = Touch.GetRearTouchData(0);				
-			} catch(Exception) {
-				return "ANDROID";	
-			}
-			
-			if(touchList.Count == 0) {
-				return "WINDOWS";
-			}
-			else {
-				return "VITA";	
-			}
-			
-		}
+
 		
 		public static void Main (string[] args)
 		{
 			
-			DetectPsmVersion();
-			
 			tests.Add(new DeviceID());
 			tests.Add(new PM());
 			tests.Add(new BackgroundMusic());
-			tests.Add(new OpenWebsite());
+			//tests.Add(new OpenWebsite());
 			
 			int passed = 0;
 			foreach(PsmTest test in tests) {

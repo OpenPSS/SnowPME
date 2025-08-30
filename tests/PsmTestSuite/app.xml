@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<application project_name="*" version="1.00" default_locale="en-US">
-	<runtime_config>
-		<memory managed_heap_size="32768" resource_heap_size="65536" />
-	</runtime_config>
-	<feature_list>
-		<feature value="GamePad" />
-		<feature value="Touch" />
-	</feature_list>
+<application project_name="unit_tests" version="1.00" runtime_version="2.00" sdk_version="2.00.00" default_locale="en-US">
+  <app_xml_format version="1.00.00" sdk_type="PSM SDK" />
+  <name>
+    <localized_item locale="en-US" value="PlayStation Mobile Unit Tests" />
+  </name>
+  <short_name>
+    <localized_item locale="en-US" value="Unit Testing" />
+  </short_name>
+  <parental_control lock_level="9" />
+  <rating_list highest_age_limit="18" has_online_features="true">
+    <online_features chat="true" personal_info="true" user_location="true" exchange_content="true" minimum_age="20" />
+    <rating type="SELF" value="18" age="18">
+      <descriptor>Fear</descriptor>
+      <descriptor>Language</descriptor>
+      <descriptor>Violence</descriptor>
+      <descriptor>Gambling</descriptor>
+      <descriptor>Online</descriptor>
+      <descriptor>Drugs</descriptor>
+      <descriptor>Sex</descriptor>
+    </rating>
+  </rating_list>
+  <images icon_128x128="icon_128.png" icon_256x256="icon_256.png" icon_512x512="icon.png" splash_854x480="splash.png" />
+  <genre_list>
+    <genre value="Apps:Travel" />
+    <genre value="Apps:Productivity" />
+  </genre_list>
+  <developer>
+    <name value="" />
+  </developer>
+  <website href="https://github.com/OpenPSS/SnowPME" />
+  <copyright author="OpenPSS" text="README.txt" />
+  <purchase>
+    <product_list>
+      <product label="TRANS" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="Rights for transgender people" />
+        </name>
+      </product>
+      <product label="BANANA" type="consumable">
+        <name>
+          <localized_item locale="en-US" value="A Bannna" />
+        </name>
+      </product>
+      <product label="PERSON" type="normal">
+        <name>
+          <localized_item locale="en-US" value="Personhood" />
+        </name>
+      </product>
+    </product_list>
+  </purchase>
+  <runtime_config>
+    <memory managed_heap_size="32768" resource_heap_size="65536" />
+    <display max_screen_size="1920x1200" />
+    <camera max_capture_resolution="2048x1536" />
+  </runtime_config>
+  <feature_list>
+    <feature value="GamePad" />
+    <feature value="Touch" />
+    <feature value="Motion" />
+    <feature value="Location" />
+    <feature value="Camera" />
+    <feature value="PSVitaTV" />
+    <feature value="##SDKType:PSM SDK" />
+  </feature_list>
+  <psn_service_list />
 </application>

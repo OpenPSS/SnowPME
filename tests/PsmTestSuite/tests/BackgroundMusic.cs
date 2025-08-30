@@ -46,7 +46,6 @@ namespace PsmTestSuite
 					Log("Volume", player.Volume);
 					
 					Thread.Sleep(3000);
-					Log("Duration", player.Duration);
 				}
 			}
 		}

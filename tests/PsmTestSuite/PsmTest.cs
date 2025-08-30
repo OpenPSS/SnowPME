@@ -4,12 +4,35 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Sce.PlayStation.Core.Input;
+using Sce.PlayStation.Core.Environment;
 
 namespace PsmTestSuite
 {
 	public abstract class PsmTest
 	{		
 		private List<string> results = new List<string>(); 
+		
+		/*
+		 * todo: verify this
+		 * (and then add this difference into SnowPME ..)
+		 */
+		public static string DetectPsmVersion {
+			get{
+				try {
+					SystemEvents.CheckEvents();
+					List<TouchData> touchList = Touch.GetRearTouchData(0);
+					if(touchList.Count == 0) {
+						return "WINDOWS";
+					}
+					else {
+						return "VITA";	
+					}
+				} catch(Exception) {
+					return "ANDROID";	
+				}
+				
+			}
+		}
 		
 		public string TestName {
 			get{
@@ -64,6 +87,8 @@ namespace PsmTestSuite
 		}
 		public virtual bool Check(){
 			bool valid = true;
+			
+			Console.WriteLine(DetectPsmVersion);
 			
 			if(!File.Exists(TestFile)) {
 				this.Record();

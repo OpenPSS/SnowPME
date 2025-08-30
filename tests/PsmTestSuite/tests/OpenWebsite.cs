@@ -6,7 +6,7 @@ namespace PsmTestSuite
 	public class OpenWebsite : PsmTest
 	{
 		public override void Run() {
-			string url = "https://psmreborn.com";
+			string url = "http://github.com/OpenPSS";
 			Shell.Action action = Shell.Action.BrowserAction(url);
 			Shell.Execute(ref action);
 			Log ("Opening: " + url);
