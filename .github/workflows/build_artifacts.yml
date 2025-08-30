@@ -119,7 +119,7 @@ jobs:
             copy patch/PCSI00011_dec/dll/Sce.PlayStation.Core.dll ./dll/Sce.PlayStation.Core.dll
       - name: Run Tests
         continue-on-error: true
-        run: SnowPME -g psm/PsmTestSuite-unsigned
+        run: ./SnowPME -g psm/PsmTestSuite-unsigned
       - name: Upload Test Logs
         uses: actions/upload-artifact@v4
         with:
