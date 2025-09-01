@@ -2,6 +2,7 @@
 #include <String/Path.hpp>
 #include <String/Format.hpp>
 #include <Debug/Logger.hpp>
+#include <SdkVersion.hpp>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -51,7 +52,7 @@ namespace Shared
 	char Config::SystemLanguage[0x1028] = "en-US";
 
 	uint64_t Config::AccountId = 0x123456789ABCDEF0ull;
-	uint32_t Config::SdkVersion = 0x0201u;
+	uint32_t Config::SdkVersion = SDK_2_01_00;
 	RuntimeImplementation Config::TargetImplementation = RuntimeImplementation::PSVita;
 
 	bool Config::MonoDebugger = false;

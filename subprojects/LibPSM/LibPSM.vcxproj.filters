@@ -785,8 +785,5 @@
     <ClInclude Include="Sce\Pss\Core\Features.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\SdkVersion.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

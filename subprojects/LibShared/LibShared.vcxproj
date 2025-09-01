@@ -44,6 +44,7 @@
     <ClInclude Include="Package\PackageFile.hpp" />
     <ClInclude Include="Package\PackageError.hpp" />
     <ClInclude Include="Package\PackageExtractor.hpp" />
+    <ClInclude Include="SdkVersion.hpp" />
     <ClInclude Include="Windowing\CallbackBase.hpp" />
     <ClInclude Include="Windowing\Capture.hpp" />
     <ClInclude Include="Windowing\EventType.hpp" />

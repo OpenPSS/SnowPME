@@ -12,9 +12,9 @@ namespace SnowPME::Graphics::Gui {
 	static const char* RuntimeImplementationEntries[] = { "PlayStation Vita", "Android", "Windows" };
 
 	void ConfigurationWindow::updateWindow() {
-		if (Config::TargetImplementation == RuntimeImplementation::PSVita)	Config::SdkVersion = 0x0201u;
-		if (Config::TargetImplementation == RuntimeImplementation::Windows) Config::SdkVersion = 0x0200u;
-		if (Config::TargetImplementation == RuntimeImplementation::Android)	Config::SdkVersion = 0x0121u;
+		if (Config::TargetImplementation == RuntimeImplementation::PSVita)	Config::SdkVersion = SDK_2_01_00;
+		if (Config::TargetImplementation == RuntimeImplementation::Windows) Config::SdkVersion = SDK_2_00_00;
+		if (Config::TargetImplementation == RuntimeImplementation::Android)	Config::SdkVersion = SDK_1_21_02;
 	}
 
 	void ConfigurationWindow::renderWindow() {

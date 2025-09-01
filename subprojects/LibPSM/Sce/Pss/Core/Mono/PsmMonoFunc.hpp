@@ -37,8 +37,7 @@
 #include <Sce/Pss/Core/Device/Camera.hpp>
 #include <Sce/Pss/Core/Services/NetworkRequest.hpp>
 #include <Sce/Pss/Core/Services/Network.hpp>
-#include <Sce/Pss/Core/SdkVersion.hpp>
-
+#include <LibShared.hpp>
 
 #define PSM_MONO_FUNCTION_MIN_MAX_SDK(str, func, minsdk, maxsdk) { str, reinterpret_cast<void*>(func), minsdk, maxsdk }
 #define PSM_MONO_FUNCTION_MIN_SDK(str, func, minsdk) { str, reinterpret_cast<void*>(func), minsdk, MAX_SDK }

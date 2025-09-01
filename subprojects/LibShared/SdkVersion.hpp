@@ -1,5 +1,5 @@
-#ifndef LIB_PSS_SDK_VERSION_H
-#define LIB_PSS_SDK_VERSION_H 1
+#ifndef SHARED_SDK_VERSION_H
+#define SHARED_SDK_VERSION_H 1
 
 // SDK 2.00.XX (Windows & Vita Latest)
 #define SDK_2_01_00 (0x020100u) // vita exclusive

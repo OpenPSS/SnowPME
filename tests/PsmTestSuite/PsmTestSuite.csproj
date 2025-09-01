@@ -61,5 +61,6 @@
     <Content Include="results\BackgroundMusic.result" />
     <Content Include="results\DeviceID-VITA.result" />
     <Content Include="results\PM.result" />
+    <Content Include="results\DeviceID-ANDROID.result" />
   </ItemGroup>
 </Project>
