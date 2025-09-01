@@ -25,7 +25,10 @@ namespace Sce::Pss::Core::Audio::Impl {
 		std::atomic<uint32_t> sndLoopStart = 0;
 		std::atomic<uint32_t> sndLoopEnd = -1;;
 
+		std::atomic<uint32_t> sndLengthMilis = 0;
+
 		static void dataCallback(ma_device* device, void* output, const void* input, ma_uint32 frameCount);
+		uint32_t calculateTotalMiliseconds();
 	public:
 		AudioImpl(std::vector<uint8_t>& buf);
 		~AudioImpl();

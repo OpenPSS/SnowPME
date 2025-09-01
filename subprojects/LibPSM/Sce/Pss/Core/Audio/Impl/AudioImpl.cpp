@@ -2,9 +2,12 @@
 #define MA_NO_FLAC // PSM doesnt support FLAC, only mp3 and wav
 #include <miniaudio.h>
 #include <cstdint>
+#include <LibShared.hpp>
+
 #include <Sce/Pss/Core/Audio/Impl/AudioImpl.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 
+using namespace Shared::Debug;
 namespace Sce::Pss::Core::Audio::Impl {
 
 	void AudioImpl::dataCallback(ma_device* device, void* output, const void* input, ma_uint32 frameCount) {
@@ -20,6 +23,16 @@ namespace Sce::Pss::Core::Audio::Impl {
 		}
 	}
 
+	uint32_t AudioImpl::calculateTotalMiliseconds() {
+		uint64_t pcmFrames = 0;
+		double duration = 0;
+
+		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder.get(), reinterpret_cast<ma_uint64*>(&pcmFrames)) == MA_SUCCESS) {
+			duration = (static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0));
+		}
+
+		return static_cast<uint32_t>(duration);
+	}
 	AudioImpl::AudioImpl(std::vector<uint8_t>& buf) {
 		this->audioData = buf;
 
@@ -44,8 +57,10 @@ namespace Sce::Pss::Core::Audio::Impl {
 			this->SetError(PSM_ERROR_AUDIO_SYSTEM);
 		}
 
+		uint32_t duration = this->calculateTotalMiliseconds();
+		this->sndLengthMilis = duration;
 		this->sndLoopStart = 0;
-		this->sndLoopEnd = this->Duration();
+		this->sndLoopEnd = duration;
 	}
 
 	int AudioImpl::Play() {
@@ -134,14 +149,9 @@ namespace Sce::Pss::Core::Audio::Impl {
 	}
 
 	uint32_t AudioImpl::Duration() {
-		uint64_t pcmFrames = 0;
-		uint32_t duration = 0;
-
-		if (this->audioDecoder != nullptr && ma_decoder_get_length_in_pcm_frames(this->audioDecoder.get(), reinterpret_cast<ma_uint64*>(&pcmFrames)) == MA_SUCCESS) {
-			duration = static_cast<uint32_t>((static_cast<double>(pcmFrames) / (static_cast<double>(this->audioDecoder->outputSampleRate) / 1000.0)));
-		}
-		return duration;
+		return this->sndLengthMilis;
 	}
+
 
 	uint32_t AudioImpl::Time() {
 		uint64_t pcmFrames = 0;
