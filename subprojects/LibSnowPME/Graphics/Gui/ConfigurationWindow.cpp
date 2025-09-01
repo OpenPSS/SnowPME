@@ -9,7 +9,13 @@ using namespace Shared;
 using namespace Shared::Debug;
 
 namespace SnowPME::Graphics::Gui {
-	static const char* RUNTIME_IMPL_ENTRIES[] = { "PlayStation Vita", "Android", "Windows" };
+	static const char* RuntimeImplementationEntries[] = { "PlayStation Vita", "Android", "Windows" };
+
+	void ConfigurationWindow::updateWindow() {
+		if (Config::TargetImplementation == RuntimeImplementation::PSVita)	Config::SdkVersion = 0x0201u;
+		if (Config::TargetImplementation == RuntimeImplementation::Windows) Config::SdkVersion = 0x0200u;
+		if (Config::TargetImplementation == RuntimeImplementation::Android)	Config::SdkVersion = 0x0121u;
+	}
 
 	void ConfigurationWindow::renderWindow() {
 		ImGui::Begin(this->createWindowTitle("Configuration").c_str(), &this->windowOpen);
@@ -53,7 +59,7 @@ namespace SnowPME::Graphics::Gui {
 			ImGui::InputTextWithHint("##psmPath", "Game Install Folder", Config::PsmApps, sizeof(Config::PsmApps));
 			ImGui::Text("Target Implementation: ");
 			ImGui::SameLine();
-			ImGui::Combo("##targetImplEntry", reinterpret_cast<int*>(&Config::TargetImplementation), RUNTIME_IMPL_ENTRIES, IM_ARRAYSIZE(RUNTIME_IMPL_ENTRIES));
+			ImGui::Combo("##targetImplEntry", reinterpret_cast<int*>(&Config::TargetImplementation), RuntimeImplementationEntries, IM_ARRAYSIZE(RuntimeImplementationEntries));
 			ImGui::Text("System Language: ");
 			ImGui::SameLine();
 			ImGui::InputTextWithHint("##systemLanguage", "en-US", Config::SystemLanguage, sizeof(Config::SystemLanguage));

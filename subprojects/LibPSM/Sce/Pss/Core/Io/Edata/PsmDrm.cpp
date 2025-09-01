@@ -32,6 +32,7 @@ namespace Sce::Pss::Core::Io::Edata {
 			Logger::Error("[PsmDrm] Failed to open file " + Format::Hex(errno) + " - " + strerror(errno));
 			this->SetError(PSM_ERROR_COMMON_IO);
 		}
+		
 	}
 
 	PsmDrm::PsmDrm(const std::string& contentId, uint8_t klicensee[0x10]) {

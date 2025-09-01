@@ -84,6 +84,8 @@ namespace Sce::Pss::Core::Io {
 			RETURN_ERRORABLE_SMARTPTR(this->GameDrmProvider);
 		}
 		else {
+			this->GameDrmProvider = std::make_unique<PsmDrm>();
+			
 			Logger::Warn("No " + FakeRifLocation + " found. - This is normal if your running a pre-decrypted executable (i.e homebrew)");
 		}
 		return PSM_ERROR_NO_ERROR;
@@ -96,11 +98,12 @@ namespace Sce::Pss::Core::Io {
 	// Some functions require handling via filepath,
 	// in these cases, the fstream needs to be created again
 	void Sandbox::reopen(std::shared_ptr<PsmFileHandle> handle) {
-		if (handle->IsOpen() && !handle->IsDirectory() && handle->GetUnderlying() != nullptr) {
-			// Close the file
-			EdataStream* edataStream = static_cast<EdataStream*>(handle->GetUnderlying());
-			uint64_t oldPos = edataStream->Tell();
-			delete edataStream;
+		if (!handle->IsDirectory() && handle->GetUnderlying() != nullptr) {
+			// Get previous position
+			uint64_t oldPos = static_cast<EdataStream*>(handle->GetUnderlying())->Tell();
+
+			// Close the edata stream
+			delete static_cast<EdataStream*>(handle->GetUnderlying());
 
 			// Open the file again
 			handle->SetUnderyling(new EdataStream(handle->PathOnDisk(), 
@@ -232,7 +235,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->IsEncrypted() && handle->IsRewritable()) { // Check the file is writable.
 
 			// close becuase you cant resize the file while its open
-			handle->GetUnderlying()->Close();
+			if(handle->GetUnderlying() != nullptr) handle->GetUnderlying()->Close();
 
 			// Resize the file to new size ...
 			std::filesystem::resize_file(std::filesystem::path(handle->PathOnDisk()), newSize);

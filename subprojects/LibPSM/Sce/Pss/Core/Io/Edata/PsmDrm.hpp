@@ -14,6 +14,7 @@ namespace Sce::Pss::Core::Io::Edata {
 		std::string psmContentId = "";
 		uint8_t klicensee[0x10] = { 0 };
 	public:
+		PsmDrm() = default;
 		PsmDrm(const std::string& licenseFile);
 		PsmDrm(const std::string& contentId, uint8_t klicensee[0x10]);
 		const std::string& GetContentId();

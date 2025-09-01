@@ -20,6 +20,10 @@ namespace PsmTestSuite
 			tests.Add(new DeviceID());
 			tests.Add(new PM());
 			tests.Add(new BackgroundMusic());
+			
+			
+			// require user interaction: 
+			
 			//tests.Add(new OpenWebsite());
 			
 			int passed = 0;

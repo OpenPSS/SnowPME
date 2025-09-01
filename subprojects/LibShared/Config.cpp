@@ -12,12 +12,14 @@ using namespace Shared::Debug;
 
 #define GET_CFG_KEY_STR(name) if (key == #name) strncpy(name, value.c_str(), sizeof(name)-1)
 #define GET_CFG_KEY_UINT64(name) if (key == #name) name = strtoull(value.c_str(), nullptr, 16)
+#define GET_CFG_KEY_UINT32(name) if (key == #name) name = strtoul(value.c_str(), nullptr, 16)
 #define GET_CFG_KEY_ENUM(name, enumName) if (key == #name) name = (enumName)strtoull(value.c_str(), nullptr, 16)
 #define GET_CFG_KEY_BOOL(name) if (key == #name) name = (value == "true")
 
 #define SET_CFG_COMMENT(str, cmt) str << COMMENT << cmt << std::endl;
 #define SET_CFG_KEY_STR(str, name) str << #name << SEPERATOR << std::string(name) << std::endl;
 #define SET_CFG_KEY_UINT64(str, name) str << #name << SEPERATOR <<  std::hex << static_cast<uint64_t>(name) << std::endl;
+#define SET_CFG_KEY_UINT32(str, name) str << #name << SEPERATOR <<  std::hex << static_cast<uint32_t>(name) << std::endl;
 #define SET_CFG_KEY_ENUM(str, name) SET_CFG_KEY_UINT64(str, name)
 #define SET_CFG_KEY_BOOL(str, name) str << #name << SEPERATOR <<  (name ? "true" : "false") << std::endl;
 
@@ -49,6 +51,7 @@ namespace Shared
 	char Config::SystemLanguage[0x1028] = "en-US";
 
 	uint64_t Config::AccountId = 0x123456789ABCDEF0ull;
+	uint32_t Config::SdkVersion = 0x0201u;
 	RuntimeImplementation Config::TargetImplementation = RuntimeImplementation::PSVita;
 
 	bool Config::MonoDebugger = false;
@@ -62,6 +65,7 @@ namespace Shared
 		GET_CFG_KEY_STR(Config::RuntimeLibPath);
 		GET_CFG_KEY_STR(Config::RuntimeConfigPath);
 
+		GET_CFG_KEY_UINT32(Config::SdkVersion);
 		GET_CFG_KEY_ENUM(Config::TargetImplementation, RuntimeImplementation);
 		GET_CFG_KEY_BOOL(Config::SecurityCritical);
 
@@ -128,7 +132,10 @@ namespace Shared
 
 			SET_CFG_COMMENT(cfgStream, "- SnowPME -");
 			SET_CFG_KEY_STR(cfgStream, Config::PsmApps);
+
+			SET_CFG_KEY_UINT32(cfgStream, Config::SdkVersion);
 			SET_CFG_KEY_ENUM(cfgStream, Config::TargetImplementation);
+
 			SET_CFG_KEY_STR(cfgStream, Config::SystemLanguage);
 			SET_CFG_KEY_BOOL(cfgStream, Config::DebugLogging);
 

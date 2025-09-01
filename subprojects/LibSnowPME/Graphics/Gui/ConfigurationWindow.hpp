@@ -6,6 +6,7 @@ namespace SnowPME::Graphics::Gui {
 	protected:
 		void onWindowClose();
 		void renderWindow();
+		void updateWindow();
 	public:
 		ConfigurationWindow();
 		~ConfigurationWindow();

@@ -37,17 +37,21 @@
 #include <Sce/Pss/Core/Device/Camera.hpp>
 #include <Sce/Pss/Core/Services/NetworkRequest.hpp>
 #include <Sce/Pss/Core/Services/Network.hpp>
+#include <Sce/Pss/Core/SdkVersion.hpp>
 
 
-
-#define PSM_MONO_FUNCTION(str, func) { str, reinterpret_cast<void*>(func) }
-#define PSM_MONO_FUNC_END() { nullptr, nullptr }
+#define PSM_MONO_FUNCTION_MIN_MAX_SDK(str, func, minsdk, maxsdk) { str, reinterpret_cast<void*>(func), minsdk, maxsdk }
+#define PSM_MONO_FUNCTION_MIN_SDK(str, func, minsdk) { str, reinterpret_cast<void*>(func), minsdk, MAX_SDK }
+#define PSM_MONO_FUNCTION(str, func) { str, reinterpret_cast<void*>(func), MIN_SDK, MAX_SDK }
+#define PSM_MONO_FUNC_END() { nullptr, nullptr, 0x00 }
 
 namespace Sce::Pss::Core::Mono {
 	
 	typedef struct PsmMonoFunc {
 		const char* functionSignature;
 		void* functionPointer;
+		uint32_t minSdkVerison;
+		uint32_t maxSdkVersion;
 	} PsmMonoFunc;
 
 	inline PsmMonoFunc ErrorFunctions[] {
@@ -121,17 +125,14 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::CropNative(int,Sce.PlayStation.Core.Imaging.ImageRect&,int&)", Sce::Pss::Core::Imaging::Image::CropNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawImageNative(int,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawImageNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawRectangleNative(int,Sce.PlayStation.Core.Imaging.ImageColor&,Sce.PlayStation.Core.Imaging.ImageRect&)", Sce::Pss::Core::Imaging::Image::DrawRectangleNative ),
-
-#ifdef COMPAT_WINDOWS_2_00_RUNTIME_FEATURES
-		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,int,int,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative ),
-#endif
-
-#ifdef COMPAT_VITA_2_01_RUNTIME_FEATURES
-		// Exclusive to PSVita PSM Runtime for some reason,
-		// 'private static extern int DrawTextNative(int handle, string text, uint offset, uint len, ref ImageColor color, int font_handle, ref ImagePosition position);'
-		// basically specifically on VITA's Sce.PlayStation.Core.dll, this is now uints instead of int; *why did they do this?*
-		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,uint,uint,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative),
-#endif
+		
+		/*
+		* Exclusive to PSVita PSM Runtime for some reason,
+		* 'private static extern int DrawTextNative(int handle, string text, uint offset, uint len, ref ImageColor color, int font_handle, ref ImagePosition position);'
+		* basically specifically on VITA's Sce.PlayStation.Core.dll, this is now uints instead of int; *why did they do this?*
+		*/
+		PSM_MONO_FUNCTION_MIN_MAX_SDK("Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,int,int,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative, MIN_SDK, SDK_2_00_00),
+		PSM_MONO_FUNCTION_MIN_SDK( "Sce.PlayStation.Core.Imaging.Image::DrawTextNative(int,string,uint,uint,Sce.PlayStation.Core.Imaging.ImageColor&,int,Sce.PlayStation.Core.Imaging.ImagePosition&)", Sce::Pss::Core::Imaging::Image::DrawTextNative, SDK_2_01_00),
 
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::ExportNative(int,string,string)", Sce::Pss::Core::Imaging::Image::ExportNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Imaging.Image::SaveAsNative(int,string)", Sce::Pss::Core::Imaging::Image::SaveAsNative ),
@@ -150,7 +151,7 @@ namespace Sce::Pss::Core::Mono {
 
 	inline PsmMonoFunc InputFunctions[] {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.Touch::GetDataNative(int,Sce.PlayStation.Core.Input.TouchData[],int,int&)", Sce::Pss::Core::Input::Touch::GetDataNative ),
-		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.Touch::GetRearTouchDataNative(int,Sce.PlayStation.Core.Input.TouchData[],int,int&)", Sce::Pss::Core::Input::Touch::GetRearTouchDataNative ),
+		PSM_MONO_FUNCTION_MIN_SDK( "Sce.PlayStation.Core.Input.Touch::GetRearTouchDataNative(int,Sce.PlayStation.Core.Input.TouchData[],int,int&)", Sce::Pss::Core::Input::Touch::GetRearTouchDataNative, SDK_2_00_00 ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.GamePad::GetDataNative(int,Sce.PlayStation.Core.Input.GamePadData&)", Sce::Pss::Core::Input::GamePad::GetDataNative ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Input.Motion::GetDataNative(int,Sce.PlayStation.Core.Input.MotionData&)", Sce::Pss::Core::Input::Motion::GetDataNative ),
 		PSM_MONO_FUNC_END()
@@ -208,7 +209,7 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::Clear(int,Sce.PlayStation.Core.Graphics.ClearMask)", Sce::Pss::Core::Graphics::PsmGraphicsContext::Clear ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::DrawArrays(int,Sce.PlayStation.Core.Graphics.DrawMode,int,int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::DrawArrays ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::DrawArrays2(int,Sce.PlayStation.Core.Graphics.Primitive[],int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::DrawArrays2 ),
-		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::DrawArraysInstanced(int,Sce.PlayStation.Core.Graphics.DrawMode,int,int,int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::DrawArraysInstanced ),
+		PSM_MONO_FUNCTION_MIN_SDK( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::DrawArraysInstanced(int,Sce.PlayStation.Core.Graphics.DrawMode,int,int,int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::DrawArraysInstanced, SDK_2_00_00 ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::ReadPixels(int,byte[],Sce.PlayStation.Core.Graphics.PixelFormat,int,int,int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::ReadPixels ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::ReadPixels2(int,int,int,Sce.PlayStation.Core.Graphics.TextureCubeFace,int,int,int,int,int,int)", Sce::Pss::Core::Graphics::PsmGraphicsContext::ReadPixels2 ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmGraphicsContext::GetMaxScreenSize(int&,int&)", Sce::Pss::Core::Graphics::PsmGraphicsContext::GetMaxScreenSize ),
@@ -251,7 +252,14 @@ namespace Sce::Pss::Core::Mono {
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmShaderProgram::GetUniformTexture(int,int,int&)", Sce::Pss::Core::Graphics::PsmShaderProgram::GetUniformTexture ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmShaderProgram::GetAttributeStream(int,int,int&)", Sce::Pss::Core::Graphics::PsmShaderProgram::GetAttributeStream ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmShaderProgram::SetAttributeStream(int,int,int)", Sce::Pss::Core::Graphics::PsmShaderProgram::SetAttributeStream ),
-		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmVertexBuffer::Create(int,int,int,int,Sce.PlayStation.Core.Graphics.VertexFormat[],int&)", Sce::Pss::Core::Graphics::PsmVertexBuffer::Create ),
+		
+		/*
+		* changelogs says something about adding VertexBuffer.VertexBuffer(int,int,int,VertexFormat[]) in SDK2.00
+		* as well as VertexBuffer.InstanceDivisor;
+		* not sure exactly what that is about however;
+		*/
+		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmVertexBuffer::Create(int,int,int,int,Sce.PlayStation.Core.Graphics.VertexFormat[],int&)", Sce::Pss::Core::Graphics::PsmVertexBuffer::Create),
+
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmVertexBuffer::Delete(int)", Sce::Pss::Core::Graphics::PsmVertexBuffer::Delete ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmVertexBuffer::AddRef(int)", Sce::Pss::Core::Graphics::PsmVertexBuffer::AddRef ),
 		PSM_MONO_FUNCTION( "Sce.PlayStation.Core.Graphics.PsmVertexBuffer::SetVertices(int,System.Array,int,int,int)", Sce::Pss::Core::Graphics::PsmVertexBuffer::SetVertices ),

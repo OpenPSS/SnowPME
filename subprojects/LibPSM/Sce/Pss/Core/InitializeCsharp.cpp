@@ -15,6 +15,7 @@ using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Environment;
 
+using namespace Shared;
 using namespace Shared::Debug;
 using namespace Shared::String;
 
@@ -24,7 +25,15 @@ namespace Sce::Pss::Core {
 			if ( functionsList[i].functionSignature == nullptr) return PSM_ERROR_NO_ERROR;
 			if ( functionsList[i].functionPointer == nullptr ) return PSM_ERROR_COMMON_ARGUMENT;
 
-			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> " + Format::Hex(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer)));
+			// Check if current SDK matches allowed SDK
+#ifndef INACCURATE_DONT_ENFORCE_MAX_SDK
+			if (Config::SdkVersion <= functionsList[i].maxSdkVersion) continue;
+#endif
+#ifndef INACCURATE_DONT_ENFORCE_MIN_SDK
+			if (Config::SdkVersion >= functionsList[i].minSdkVerison) continue;
+#endif
+
+			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> 0x" + Format::Hex(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer))+ " (SDK <= "+Format::Hex(functionsList[i].minSdkVerison) + " && SDK >= "+Format::Hex(functionsList[i].maxSdkVersion)+")");
 			mono_add_internal_call(functionsList[i].functionSignature, reinterpret_cast<void*>(functionsList[i].functionPointer));
 		}
 	}

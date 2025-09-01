@@ -5,7 +5,6 @@
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #include <Debug/Logger.hpp>
-
 #include <mono/mono.h>
 #include <LibShared.hpp>
 
@@ -20,7 +19,7 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles<PsmFileHandle>::IsValid(handle)) return PSM_ERROR_INVALID_PARAMETER;
 		std::shared_ptr<PsmFileHandle> fd = Handles<PsmFileHandle>::Get(handle);
 	
-		if (fd != nullptr) return PSM_ERROR_INVALID_PARAMETER;
+		if (fd == nullptr) return PSM_ERROR_INVALID_PARAMETER;
 		if (!fd->IsOpen()) return PSM_ERROR_INVALID_PARAMETER;
 		fd->GetUnderlying()->Close();
 
@@ -177,7 +176,6 @@ namespace Sce::Pss::Core::Io {
 		if (!Handles<PsmFileHandle>::IsValid(file) || buffer == nullptr || uBytesToRead == 0 || puBytesRead == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-
 		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
 
 		if (!handle->IsOpen())
@@ -299,9 +297,7 @@ namespace Sce::Pss::Core::Io {
 		if (!handle->IsRewritable())
 			return PSM_ERROR_ACCESS_DENIED;
 
-		int errorcode = Sandbox::UniqueObject()->ChangeSize(handle, uSize);
-
-		return errorcode;
+		return Sandbox::UniqueObject()->ChangeSize(handle, uSize);
 	}
 	int IoCall::PsmFileCopy(const char* pszOldName, const char* pszNewName, int32_t bMove) {
 		LOG_FUNCTION();

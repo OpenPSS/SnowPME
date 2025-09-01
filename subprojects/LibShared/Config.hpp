@@ -26,6 +26,7 @@ namespace Shared {
 		static int ScreenTotal; // How many screens? 
 		static char Username[0x1028]; // Username
 		static uint64_t AccountId; // Account Name
+		static uint32_t SdkVersion; // What SDK Version is this?
 		static RuntimeImplementation TargetImplementation; // What version of psm runtime are we emulating?
 		
 		static int ScreenWidth(int idx);

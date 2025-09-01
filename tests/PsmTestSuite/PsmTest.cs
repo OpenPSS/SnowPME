@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.Core.Environment;
+using Sce.PlayStation.Core.Services;
 
 namespace PsmTestSuite
 {
@@ -13,24 +14,36 @@ namespace PsmTestSuite
 		private List<string> results = new List<string>(); 
 		
 		/*
-		 * todo: verify this
-		 * (and then add this difference into SnowPME ..)
+		 * Fingerprint SDK Target
+		 * PSM does not offer a function to check what your running on
+		 * However, certain functions in PSM behave differnetly on differnet platforms
+		 * as we are unit-testing SnowPME; i need to make sure we select the right expected result, 
+		 * for the right "Config::TargetImplementation" setting.
 		 */
-		public static string DetectPsmVersion {
+		public static string PsmPlatform {
 			get{
-				try {
-					SystemEvents.CheckEvents();
-					List<TouchData> touchList = Touch.GetRearTouchData(0);
-					if(touchList.Count == 0) {
-						return "WINDOWS";
-					}
-					else {
-						return "VITA";	
-					}
-				} catch(Exception) {
+				
+				// NOTE: this is more of a fingerprint of SDK1.21 than anything else;
+				// Android never got SDK2.00; and no android device has a Rear Touchpad,
+				// but technically this check will fail on Vita 1.21, or Simulator on SDK 1.21.
+				try{
+					Touch.GetRearTouchData(0);						
+				}
+				catch(Exception) {
 					return "ANDROID";	
 				}
 				
+				// Otherwise, on Windows UniqueID is your windows username;
+				// on Vita it is a CMAC hash calculated from your Account ID.
+				byte[] uid = AccountInformation.UniqueID;
+				for(int i = 0; i < uid.Length; i++) { 
+					if(uid[i] == 0x00) continue;
+					
+					if(uid[i] < 0x20 || uid[i] >= 0x7F) {
+						return "VITA"; 
+					}
+				}
+				return "WINDOWS";				
 			}
 		}
 		
@@ -42,9 +55,20 @@ namespace PsmTestSuite
 		}
 		public string TestFile {
 			get{
-				string path = "/Application/results/"+TestName+".result";
+				string fnamePlatform = TestName+"-"+PsmPlatform+".result";
+				string fname = TestName+".result";
+				string applicationResults = "/Application/results/";
+				string documents = "/Documents/";
+				
+				string path = applicationResults+fnamePlatform;
 				if(File.Exists(path)) return path;
-				else return "/Documents/"+TestName+".result";
+				
+				path = applicationResults+fname;
+				if(File.Exists(path)) return path;
+				
+				path = documents+fnamePlatform;
+				
+				return path;
 			}
 		}
 		
@@ -87,8 +111,6 @@ namespace PsmTestSuite
 		}
 		public virtual bool Check(){
 			bool valid = true;
-			
-			Console.WriteLine(DetectPsmVersion);
 			
 			if(!File.Exists(TestFile)) {
 				this.Record();

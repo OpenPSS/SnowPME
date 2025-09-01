@@ -36,16 +36,17 @@ namespace PsmTestSuite
 					
 					player.Loop = true;
 					player.PlaybackRate = 3;
-					
+
+					Thread.Sleep(3000);
+
 					Log("Looping", player.Loop);
 					Log("LoopStart", player.LoopStart);
 					Log("LoopEnd", player.LoopEnd);
 					Log("Duration", player.Duration);
-					Log("Time", player.Time);
+					Log("Time > 0.5", player.Time > 0.5);
 					Log("PlaybackRate", player.PlaybackRate);
 					Log("Volume", player.Volume);
 					
-					Thread.Sleep(3000);
 				}
 			}
 		}

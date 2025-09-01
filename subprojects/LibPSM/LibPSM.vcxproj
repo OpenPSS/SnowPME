@@ -219,6 +219,7 @@
     <ClInclude Include="Sce\Pss\Core\PsmMutexObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmObject.hpp" />
     <ClInclude Include="Sce\Pss\Core\PsmUniqueObject.hpp" />
+    <ClInclude Include="Sce\Pss\Core\SdkVersion.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\AccountInformation.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandArguments.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseCommandResults.hpp" />

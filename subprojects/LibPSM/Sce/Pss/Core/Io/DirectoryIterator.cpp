@@ -42,7 +42,6 @@ namespace Sce::Pss::Core::Io {
 		LOCK_GUARD();
 		if (!this->opened) return;
 		this->folderStack.clear();
-
 		this->opened = false;
 	}
 

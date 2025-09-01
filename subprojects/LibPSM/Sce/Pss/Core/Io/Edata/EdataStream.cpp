@@ -144,7 +144,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, uint8_t klicensee[0x10], bool inEdata) {
 
 		// copy the titlekey into this object
-		if (this->klicensee != nullptr) {
+		if (klicensee != nullptr) {
 			memcpy(this->klicensee, klicensee, sizeof(this->klicensee));
 		}
 
@@ -346,6 +346,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	bool EdataStream::IsOpen() {
+		if (this->osHandle == nullptr) return false;
 		return this->osHandle->is_open();
 	}
 
@@ -362,12 +363,14 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	void EdataStream::Flush() {
-		if (!this->fileEncrypted) {
+		if (!this->fileEncrypted && this->osHandle != nullptr) {
 			this->osHandle->flush();
 		}
 	}
 	void EdataStream::Close() {
 		LOCK_GUARD();
+		if (!this->IsOpen()) return;
+
 		if (this->fileEncrypted) {
 			this->currentBlock.clear();
 			this->osHandle->close();

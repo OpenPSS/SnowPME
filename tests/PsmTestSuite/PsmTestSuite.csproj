@@ -58,5 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\test.mp3" />
+    <Content Include="results\BackgroundMusic.result" />
+    <Content Include="results\DeviceID-VITA.result" />
+    <Content Include="results\PM.result" />
   </ItemGroup>
 </Project>
