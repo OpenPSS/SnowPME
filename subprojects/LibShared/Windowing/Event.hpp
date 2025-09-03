@@ -45,6 +45,7 @@ namespace Shared::Windowing {
 		void PutResponse(std::vector<std::byte>& response);
 		void PutResponse(void* response, size_t length);
 
+		bool HasResponse();
 		void WaitResponse();
 
 	};

@@ -79,20 +79,27 @@ namespace Shared::Windowing {
 
 	void Event::PutResponse(std::vector<std::byte>& response) {
 		this->response = response;
+
 		this->notifier.release();
+		hasResponded = true;
 	}
 
 
 	void Event::PutResponse(void* response, size_t length) {
 		this->response.resize(length);
 		memcpy(this->response.data(), response, length);
+
 		this->notifier.release();
+		hasResponded = true;
+	}
+
+	bool Event::HasResponse() {
+		return this->hasResponded;
 	}
 
 	void Event::WaitResponse() {
 		if (!hasResponded) {
 			this->notifier.acquire();
-			hasResponded = true;
 		}
 	}
 
