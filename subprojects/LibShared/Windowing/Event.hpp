@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <string>
 #include <semaphore>
+#include <atomic>
 
 namespace Shared::Windowing {
 
