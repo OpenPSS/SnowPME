@@ -2,11 +2,11 @@
 #define SHARED_SDK_VERSION_H 1
 
 // SDK 2.00.XX (Windows & Vita Latest)
-#define SDK_2_01_00 (0x020100u) // vita exclusive
-#define SDK_2_00_00 (0x020000u)
+#define SDK_2_01_00 (0x020100u) // psvita exclusive version.
+#define SDK_2_00_00 (0x020000u) // windows latest version.
 
 // SDK 1.21.XX (Android latest)
-#define SDK_1_21_02 (0x012102u)
+#define SDK_1_21_02 (0x012102u) // android latest version.
 #define SDK_1_21_01 (0x012101u)
 #define SDK_1_21_00 (0x012100u)
 

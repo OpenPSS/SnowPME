@@ -63,22 +63,22 @@ namespace Shared::Windowing {
 	}
 
 	uintptr_t WindowControl::RunOnMainThread(uintptr_t(*ptr)(uintptr_t, uintptr_t, uintptr_t, uintptr_t), uintptr_t arg0, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3) {
-		RunFunction function;
-		function.functionPointer = ptr;
-		function.arg0 = arg0;
-		function.arg1 = arg1;
-		function.arg2 = arg2;
-		function.arg3 = arg3;
+		RunFunction args;
+		args.functionPointer = ptr;
+		args.arg0 = arg0;
+		args.arg1 = arg1;
+		args.arg2 = arg2;
+		args.arg3 = arg3;
 
-		std::shared_ptr<Event> response = EventQueue::DispatchEvent(std::make_shared<Event>(EventType::RunFunction));
-		return reinterpret_cast<uintptr_t*>(response->ArgsArray())[0];
+		std::shared_ptr<Event> response = EventQueue::DispatchEvent(std::make_shared<Event>(EventType::RunFunction, &args, sizeof(args)));
+		return reinterpret_cast<uintptr_t*>(response->ResponseArray())[0];
 	}
 
 	Capture WindowControl::CaptureWindowState() {
 		Capture capture;
 
 		std::shared_ptr<Event> response = EventQueue::DispatchEvent(std::make_shared<Event>(EventType::Capture));
-		memcpy(&capture, response->ArgsArray(), sizeof(Capture));
+		memcpy(&capture, response->ResponseArray(), sizeof(Capture));
 
 		return capture;
 	}

@@ -42,7 +42,7 @@
 #define PSM_MONO_FUNCTION_MIN_MAX_SDK(str, func, minsdk, maxsdk) { str, reinterpret_cast<void*>(func), minsdk, maxsdk }
 #define PSM_MONO_FUNCTION_MIN_SDK(str, func, minsdk) { str, reinterpret_cast<void*>(func), minsdk, MAX_SDK }
 #define PSM_MONO_FUNCTION(str, func) { str, reinterpret_cast<void*>(func), MIN_SDK, MAX_SDK }
-#define PSM_MONO_FUNC_END() { nullptr, nullptr, 0x00 }
+#define PSM_MONO_FUNC_END() { nullptr, nullptr, 0, 0 }
 
 namespace Sce::Pss::Core::Mono {
 	

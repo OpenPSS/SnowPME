@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <semaphore>
 
 namespace Shared::Windowing {
 
@@ -16,6 +17,9 @@ namespace Shared::Windowing {
 		EventType typeId = EventType::None;
 		uint32_t uid = rand();
 		std::vector<std::byte> arguments;
+		std::vector<std::byte> response;
+		std::binary_semaphore notifier{0};
+		std::atomic<bool> hasResponded = false;
 	public:
 		uint32_t Uid();
 		EventType TypeID();
@@ -24,13 +28,24 @@ namespace Shared::Windowing {
 		Event(EventType typeId, void* args, size_t length);
 		Event(EventType typeId);
 
-		std::vector<std::byte>& Args();
-		std::byte* ArgsArray();
-		std::byte Arg(int index);
-		size_t Count();
+		std::vector<std::byte>& ArgumentVec();
+		std::byte* ArgumentArray();
+		std::byte ArgumentByte(int index);
+		size_t ArgumentCount();
 
-		void ArgsReplace(std::vector<std::byte>& args);
-		void ArgsReplace(void* args, size_t length);
+		std::vector<std::byte>& ResponseVec();
+		std::byte* ResponseArray();
+		std::byte ResponseByte(int index);
+		size_t ResponseCount();
+
+
+		void PutArguments(std::vector<std::byte>& args);
+		void PutArguments(void* args, size_t length);
+
+		void PutResponse(std::vector<std::byte>& response);
+		void PutResponse(void* response, size_t length);
+
+		void WaitResponse();
 
 	};
 

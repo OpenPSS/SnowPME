@@ -109,14 +109,14 @@ namespace SnowPME::Runtime {
 				switch (psmEvt->TypeID()) {
 					case EventType::Capture: // capture current window state
 					{
-						psmEvt->ArgsReplace(&state, sizeof(Capture));
+						psmEvt->PutResponse(&state, sizeof(Capture));
 						break;
 					}
 					case EventType::RunFunction: // run arbitary function on main thread ..
 					{
-						RunFunction* func = reinterpret_cast<RunFunction*>(psmEvt->ArgsArray());
+						RunFunction* func = reinterpret_cast<RunFunction*>(psmEvt->ArgumentArray());
 						uintptr_t res = func->functionPointer(func->arg0, func->arg1, func->arg2, func->arg3);
-						psmEvt->ArgsReplace(&res, sizeof(res));
+						psmEvt->PutResponse(&res, sizeof(res));
 
 						break;
 					}
@@ -126,9 +126,6 @@ namespace SnowPME::Runtime {
 						break;
 					}
 				}
-
-				// push response.
-				EventQueue::PushResponse(psmEvt);
 
 			}
 
