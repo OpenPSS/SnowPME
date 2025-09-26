@@ -47,6 +47,21 @@ namespace Sce::Pss::Core::Imaging {
 	}
 
 	int Image::Decode() {
+		ImageSize extent;
+		void* pngBuffer = nullptr;
+
+		this->imageImpl->GetExtent(&extent);
+		if (extent.Width > 0x1000u || extent.Height > 0x1000u) {
+			this->SetError(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		ImageImplMode mode = this->imageImpl->GetMode();
+		if (mode == ImageImplMode::Rgba || mode == ImageImplMode::A) {
+			this->imageImpl->ToBuffer(&pngBuffer, 1);
+		}
+
+
 		UNIMPLEMENTED();
 	}
 

@@ -24,9 +24,9 @@ namespace Shared::Windowing {
 		return request;
 	}
 	void EventQueue::PushRequest(std::shared_ptr<Event> request) {
-		std::lock_guard<std::mutex> lock(lockRequestQueue);
 		ASSERT(!request->HasResponse());
 
+		std::lock_guard<std::mutex> lock(lockRequestQueue);
 		requestQueue.push(request);
 	}
 
