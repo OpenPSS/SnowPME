@@ -5,7 +5,9 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImplMode.hpp>
 #include <Sce/Pss/Core/Features.hpp>
+#include <Sce/Pss/Core/Imaging/PixelData.hpp>
 #include <LibShared.hpp>
+#include <mono/mono.h>
 #include <cstdint>
 #include <string>
 #include <cstdio>
@@ -257,8 +259,31 @@ namespace Sce::Pss::Core::Imaging {
 	int Image::DecodeNative(int handle) {
 		UNIMPLEMENTED();
 	}
-	int Image::GetPixelData(int handle, uint8_t* buffer, uint32_t bufferSize) {
-		UNIMPLEMENTED();
+
+	int Image::GetPixelData(PixelData& data) {
+		data.data = this->imageImpl->ImgBuffer;
+		data.size = this->imageImpl->ImgBufferSize;
+		return PSM_ERROR_NO_ERROR;
+	}
+
+	int Image::GetPixelData(int handle, MonoArray* buffer, uint32_t bufferSize) {
+		Logger::Debug(__FUNCTION__);
+		if (!Handles<Image>::IsValid(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		PixelData pixelData;
+
+		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		img->GetPixelData(pixelData);
+		
+		if (bufferSize >= pixelData.size) {
+			char* buf = mono_array_addr_with_size(buffer, 1, 0);
+			size_t length = mono_array_length(buffer);
+			memcpy(buf, pixelData.data, pixelData.size);
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Image::GetPixelDataSize(int handle, uint32_t* bufferSize) {
 		UNIMPLEMENTED();

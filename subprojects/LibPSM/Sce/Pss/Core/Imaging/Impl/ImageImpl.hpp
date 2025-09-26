@@ -25,6 +25,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		int ToBuffer(void* pngBuffer, int unk0);
 
 		uint8_t* ImgBuffer = nullptr;
+		size_t ImgBufferSize = 0;
 
 		ImageImpl(ImageImplMode mode);
 		virtual ~ImageImpl();

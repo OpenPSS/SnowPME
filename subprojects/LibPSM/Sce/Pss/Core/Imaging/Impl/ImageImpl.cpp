@@ -51,11 +51,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		implImg->imgSize = *size;
 		implImg->channels = (mode == ImageImplMode::Rgba ? sizeof(uint32_t) : sizeof(uint8_t));
 
-		size_t imgSize = size->Width * size->Height * implImg->channels;
-		implImg->ImgBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(imgSize));
+		implImg->ImgBufferSize = size->Width * size->Height * implImg->channels;
+		implImg->ImgBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(implImg->ImgBufferSize));
 
 		if (implImg->ImgBuffer != nullptr) {
-			memcpy(implImg->ImgBuffer, imageBuffer, imgSize);
+			memcpy(implImg->ImgBuffer, imageBuffer, implImg->ImgBufferSize);
 		}
 
 		return implImg;
@@ -72,11 +72,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 		stbi_uc* stbImg = stbi_load_from_memory(data, dataLen, &implImg->imgSize.Width, &implImg->imgSize.Height, &implImg->channels, 4);
 
-		size_t totalSz = implImg->imgSize.Width * implImg->imgSize.Height * implImg->channels;
-		implImg->ImgBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(totalSz));
+		implImg->ImgBufferSize = implImg->imgSize.Width * implImg->imgSize.Height * implImg->channels;
+		implImg->ImgBuffer = reinterpret_cast<uint8_t*>(alloc->sce_psm_malloc(implImg->ImgBufferSize));
 
 		if (implImg->ImgBuffer != nullptr) {
-			memcpy(implImg->ImgBuffer, stbImg, totalSz);
+			memcpy(implImg->ImgBuffer, stbImg, implImg->ImgBufferSize);
 		}
 
 		stbi_image_free(stbImg);

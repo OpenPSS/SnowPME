@@ -11,6 +11,7 @@
 #include <Sce/Pss/Core/Imaging/ImageMode.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
+#include <Sce/Pss/Core/Imaging/PixelData.hpp>
 #include <Sce/Pss/Core/Features.hpp>
 #include <mono/mono.h>
 #include <memory>
@@ -23,6 +24,7 @@ namespace Sce::Pss::Core::Imaging {
 	public:
 		int Decode();
 		int DrawRectangle(ImageColor color, ImageRect rect);
+		int GetPixelData(PixelData& data);
 		ImageSize Size();
 		Image(ImageMode mode, ImageSize* size, ImageColor* color);
 		~Image() = default;
@@ -36,7 +38,7 @@ namespace Sce::Pss::Core::Imaging {
 		static int GetSize(int handle, ImageSize* size);
 		static int SetDecodeSize(int handle, ImageSize* size);
 		static int DecodeNative(int handle);
-		static int GetPixelData(int handle, uint8_t *buffer, uint32_t bufferSize);
+		static int GetPixelData(int handle, MonoArray *buffer, uint32_t bufferSize);
 		static int GetPixelDataSize(int handle, uint32_t *bufferSize);
 		static int ResizeNative(int handle, ImageSize* size, int *resizedImageHandle);
 		static int CropNative(int handle, ImageRect* rect, int *croppedImageHandle);
