@@ -217,6 +217,11 @@ namespace Sce::Pss::Core::Imaging {
 
 	}
 
+	int Image::GetPixelData(PixelData& data) {
+		data.data = this->imageImpl->ImgBuffer;
+		data.size = this->imageImpl->ImgBufferSize;
+		return PSM_ERROR_NO_ERROR;
+	}
 
 	int Image::NewFromFilename(MonoString* filename, int* handle) {
 		UNIMPLEMENTED();
@@ -260,19 +265,13 @@ namespace Sce::Pss::Core::Imaging {
 		UNIMPLEMENTED();
 	}
 
-	int Image::GetPixelData(PixelData& data) {
-		data.data = this->imageImpl->ImgBuffer;
-		data.size = this->imageImpl->ImgBufferSize;
-		return PSM_ERROR_NO_ERROR;
-	}
-
 	int Image::GetPixelData(int handle, MonoArray* buffer, uint32_t bufferSize) {
-		Logger::Debug(__FUNCTION__);
+		LOG_FUNCTION();
+		PixelData pixelData;
+
 		if (!Handles<Image>::IsValid(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
-
-		PixelData pixelData;
 
 		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
 		img->GetPixelData(pixelData);
@@ -286,7 +285,19 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Image::GetPixelDataSize(int handle, uint32_t* bufferSize) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		PixelData pixelData;
+
+		if (!Handles<Image>::IsValid(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		img->GetPixelData(pixelData);
+
+		*bufferSize = pixelData.size;
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Image::ResizeNative(int handle, ImageSize* size, int* resizedImageHandle) {
 		UNIMPLEMENTED();
