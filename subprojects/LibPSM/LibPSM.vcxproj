@@ -118,6 +118,7 @@
     <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImplMode.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\PixelData.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataList.hpp" />
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp" />

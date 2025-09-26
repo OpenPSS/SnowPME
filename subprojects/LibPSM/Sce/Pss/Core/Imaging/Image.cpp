@@ -217,7 +217,7 @@ namespace Sce::Pss::Core::Imaging {
 
 	}
 
-	int Image::GetPixelData(PixelData& data) {
+	int Image::GetPixelDataInternal(PixelData& data) {
 		data.data = this->imageImpl->ImgBuffer;
 		data.size = this->imageImpl->ImgBufferSize;
 		return PSM_ERROR_NO_ERROR;
@@ -274,7 +274,7 @@ namespace Sce::Pss::Core::Imaging {
 		}
 
 		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
-		img->GetPixelData(pixelData);
+		img->GetPixelDataInternal(pixelData);
 		
 		if (bufferSize >= pixelData.size) {
 			char* buf = mono_array_addr_with_size(buffer, 1, 0);
@@ -293,7 +293,7 @@ namespace Sce::Pss::Core::Imaging {
 		}
 
 		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
-		img->GetPixelData(pixelData);
+		img->GetPixelDataInternal(pixelData);
 
 		*bufferSize = pixelData.size;
 

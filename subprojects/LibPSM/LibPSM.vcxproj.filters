@@ -785,5 +785,8 @@
     <ClInclude Include="Sce\Pss\Core\Features.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Imaging\PixelData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
