@@ -267,6 +267,8 @@ namespace Sce::Pss::Core::Imaging {
 
 	int Image::GetPixelData(int handle, MonoArray* buffer, uint32_t bufferSize) {
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		PixelData pixelData;
 
 		if (!Handles<Image>::IsValid(handle)) {
@@ -286,6 +288,8 @@ namespace Sce::Pss::Core::Imaging {
 	}
 	int Image::GetPixelDataSize(int handle, uint32_t* bufferSize) {
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		PixelData pixelData;
 
 		if (!Handles<Image>::IsValid(handle)) {
