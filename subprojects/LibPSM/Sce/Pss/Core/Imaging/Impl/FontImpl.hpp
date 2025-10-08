@@ -14,12 +14,12 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		static std::unordered_map<std::string, FontFileNames> entries;
 		FontFileNames files;
 		
-		uint8_t* ttfFileBuffer;
-		size_t ttfFileSize;
+		uint8_t* ttfFileBuffer = nullptr;
+		size_t ttfFileSize = 0;
 
 		stbtt_fontinfo font;
-		void lookupAndLoadFile(const std::string& ttfFilepath);
-		void loadFontFile(const std::string& ttfFilepath);
+		int lookupAndLoadFile(const std::string& ttfFilepath);
+		int loadFontFile(const std::string& ttfFilepath);
 	public:
 
 		FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style);

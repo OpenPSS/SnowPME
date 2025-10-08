@@ -16,36 +16,38 @@ using namespace Sce::Pss::Core::Imaging;
 namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
 
-	void FontImpl::lookupAndLoadFile(const std::string& ttfFilepath) {
+	int FontImpl::lookupAndLoadFile(const std::string& ttfFilepath) {
 		if (ttfFilepath.starts_with("embed:")) {
-			Logger::Error("Trying to load embeded font. not yet supported.");
-			return;
+			Logger::Todo("Trying to load embeded font. not yet supported.");
+			return PSM_ERROR_NOT_IMPLEMENTED;
 		}
 		else {
-			this->loadFontFile(ttfFilepath);
+			return this->loadFontFile(ttfFilepath);
 		}
 	}
-	void FontImpl::loadFontFile(const std::string& ttfFilePath) {
+	int FontImpl::loadFontFile(const std::string& ttfFilePath) {
 		// read ttf file
-		std::fstream ttf(ttfFilePath, std::ios::binary | std::ios::in);
-		ttf.read(reinterpret_cast<char*>(this->ttfFileBuffer), this->ttfFileSize);
-		ttf.close();
+		std::error_code ec;
+		this->ttfFileSize = std::filesystem::file_size(this->files.fontFile1, ec);
+		if (ec) {
+			this->ttfFileBuffer = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->ttfFileSize));
+
+			std::fstream ttf(ttfFilePath, std::ios::binary | std::ios::in);
+			ttf.read(reinterpret_cast<char*>(this->ttfFileBuffer), this->ttfFileSize);
+			ttf.close();
+			return PSM_ERROR_NO_ERROR;
+		}
+		return PSM_ERROR_FILE_NOT_FOUND;
 	}
 
 	FontImpl::FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style) {
 		entries.emplace(fontName, filenames);
 		this->files = filenames;
 
-		// get ttf size
-		this->ttfFileSize = std::filesystem::file_size(this->files.fontFile1);
-		this->ttfFileBuffer = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->ttfFileSize));
-
-		if (files.fontFile1.starts_with("embed:")) {
-			loadFontFile(this->files.fontFile1);
-
+		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
+			stbtt_InitFont(&this->font, this->ttfFileBuffer, stbtt_GetFontOffsetForIndex(this->ttfFileBuffer, 0));
 		}
-
-		stbtt_InitFont(&this->font, this->ttfFileBuffer, stbtt_GetFontOffsetForIndex(this->ttfFileBuffer, 0));
+		
 	}
 
 	FontFileNames* FontImpl::Find(const std::string& name, int size, FontStyle style) {

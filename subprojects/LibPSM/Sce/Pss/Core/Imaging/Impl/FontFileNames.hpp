@@ -3,8 +3,8 @@
 #include <cstdint>
 namespace Sce::Pss::Core::Imaging::Impl {
 	typedef struct FontFileNames {
-		std::string fontFile1;
-		std::string fontFile2;
+		std::string fontFile1 = "";
+		std::string fontFile2 = "";
 	} FontFileNames;
 }
 #endif
