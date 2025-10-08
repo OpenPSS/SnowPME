@@ -13,6 +13,7 @@
 
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
+
 namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
 
