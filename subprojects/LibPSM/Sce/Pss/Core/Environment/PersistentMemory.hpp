@@ -10,7 +10,7 @@ namespace Sce::Pss::Core::Environment {
 	private:
 		static uint8_t memoryBuffer[0x10000];
 	public:
-		static inline char* PmDatFile = "/System/pm.dat";
+		static inline const char* PM_DAT_FILE = "/System/pm.dat";
 
 		static int WriteNative(MonoArray* fileImage);
 		static int ReadNative(MonoArray* fileImage);

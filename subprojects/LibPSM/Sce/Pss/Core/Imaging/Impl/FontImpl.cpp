@@ -45,7 +45,6 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 		}
 
-
 		stbtt_InitFont(&this->font, this->ttfFileBuffer, stbtt_GetFontOffsetForIndex(this->ttfFileBuffer, 0));
 	}
 
