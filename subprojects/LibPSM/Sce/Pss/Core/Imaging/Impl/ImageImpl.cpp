@@ -1,16 +1,28 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
 #include <Sce/Pss/Core/Imaging/ImageSize.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <LibShared.hpp>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
 using namespace Sce::Pss::Core::Memory;
 using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::Imaging::Impl {
+
+	int ImageImpl::errorType = PSM_ERROR_NO_ERROR;
+
+	int ImageImpl::SetErrorType(int error) {
+		ImageImpl::errorType = error;
+		return 1;
+	}
+
+	int ImageImpl::GetErrorType() {
+		return ImageImpl::errorType;
+	}
 
 	ImageImpl::ImageImpl(ImageImplMode mode) {
 		this->imgSize.Width = 0;
@@ -33,6 +45,19 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	}
 	
 
+	int ImageImpl::SetDecExtent(const ImageSize& extent, int resizeType) {
+		if (extent.Width < 0 || extent.Height < 0) {
+			ImageImpl::SetErrorType(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
+			return 0;
+		}
+		else {
+			UNIMPLEMENTED_MSG("yet to figure out SetDecExtent.");
+			return 1;
+		}
+
+		return 0;
+	}
+
 	int ImageImpl::GetExtent(ImageSize* extent) {
 		if (extent != nullptr) {
 			*extent = this->imgSize;
@@ -40,7 +65,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int ImageImpl::ToBuffer(void* pngBuffer, int unk0) {
+	int ImageImpl::ToBuffer(void* pngBuffer, bool unk0) {
 		UNIMPLEMENTED();
 	}
 

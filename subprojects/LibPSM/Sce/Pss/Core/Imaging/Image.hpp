@@ -26,6 +26,7 @@ namespace Sce::Pss::Core::Imaging {
 		int DrawRectangle(ImageColor color, ImageRect rect);
 		int GetPixelDataInternal(PixelData& data);
 		ImageSize Size();
+		int SetSize(const ImageSize& size);
 		Image(ImageMode mode, ImageSize* size, ImageColor* color);
 		~Image() = default;
 

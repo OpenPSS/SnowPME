@@ -8,6 +8,7 @@
 #include <Sce/Pss/Core/Imaging/PixelData.hpp>
 #include <LibShared.hpp>
 #include <mono/mono.h>
+
 #include <cstdint>
 #include <string>
 #include <cstdio>
@@ -157,7 +158,7 @@ namespace Sce::Pss::Core::Imaging {
 			PANIC("Unknown image mode: " + std::to_string(static_cast<uint32_t>(mode)));
 		}
 
-		if ((size->Width < 0 || size->Width > 0x1000) || (size->Height > 0x1000)) {
+		if ((size->Width < 0 || size->Width > 0x1000u) || (size->Height > 0x1000u)) {
 			SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
 		}
 
@@ -223,6 +224,28 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_NO_ERROR;
 	}
 
+	int Image::SetSize(const ImageSize& size) {
+		
+		if (size.Width < 0 || size.Width > 0x1000 || size.Height > 0x1000) {
+			this->SetError(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		if (this->imageImpl->SetDecExtent(size, 1))
+			return PSM_ERROR_NO_ERROR;
+		
+		int err = ImageImpl::GetErrorType();
+		if (err != PSM_ERROR_NO_ERROR) {
+			this->SetError(err);
+		}
+		else {
+			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		return err;
+	}
+
 	int Image::NewFromFilename(MonoString* filename, int* handle) {
 		UNIMPLEMENTED();
 	}
@@ -248,6 +271,7 @@ namespace Sce::Pss::Core::Imaging {
 	int Image::ReleaseNative(int handle){
 		UNIMPLEMENTED();
 	}
+
 	int Image::GetSize(int handle, ImageSize* size){
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
@@ -258,8 +282,19 @@ namespace Sce::Pss::Core::Imaging {
 		*size = img->Size();
 		return PSM_ERROR_NO_ERROR;
 	}
+
+
+
 	int Image::SetDecodeSize(int handle, ImageSize* size) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Image>::IsValid(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		return img->SetSize(*size);
 	}
 	int Image::DecodeNative(int handle) {
 		UNIMPLEMENTED();

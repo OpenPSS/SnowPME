@@ -23,6 +23,7 @@
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\FontImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataList.cpp" />
     <ClCompile Include="Sce\Pss\Core\Environment\Clipboard.cpp" />
@@ -117,6 +118,8 @@
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontFileNames.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontImpl.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\ImageImplMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\PixelData.hpp" />
     <ClInclude Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.hpp" />

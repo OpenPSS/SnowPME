@@ -4,16 +4,25 @@
 
 #include <string>
 #include <iostream>
+#include <mono/mono.h>
 
+#include <Sce/Pss/Core/Imaging/Impl/FontImpl.hpp>
 #include <Sce/Pss/Core/Imaging/FontAlias.hpp>
 #include <Sce/Pss/Core/Imaging/FontStyle.hpp>
 #include <Sce/Pss/Core/Imaging/FontMetrics.hpp>
 #include <Sce/Pss/Core/Imaging/CharMetrics.hpp>
-#include <mono/mono.h>
+#include <Sce/Pss/Core/PsmObject.hpp>
+#include <memory>
 
 namespace Sce::Pss::Core::Imaging {
-	class Font {
+	class Font : public PsmObject<Font> {
+	private:
+		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::FontImpl> fontImpl = nullptr;
 	public:
+		Font(const std::string& filename, int size, FontStyle style);
+		Font(FontAlias alias, int size, FontStyle style);
+		~Font() = default;
+
 		static int NewFromFilenameSizeStyle(MonoString* filename, int size, FontStyle style, int *handle);
 		static int NewFromAliasSizeStyle(FontAlias alias, int size, FontStyle style, int *handle);
 		static int AddRefNative(int handle);
