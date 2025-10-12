@@ -1,7 +1,7 @@
 /*
 * PKG extraction code based on
-* Real-PackageExtractor-Installer by LiEnby.
-* https://silica.codes/Li/real-PackageExtractor-installer/
+* Real-Package-Installer by LiEnby.
+* https://silica.codes/Li/real-package-installer/
 */
 
 #ifndef SHARED_PACKAGE_FILE_H 
@@ -68,13 +68,13 @@ typedef struct PKG_METADATA_ENTRY {
 } PKG_METADATA_ENTRY;
 
 typedef struct PKG_METADATA {
-	uint32_t drm_type = 0;           //Record type 0x1 (for trial-enabled packages, drm is either 0x3 or 0xD)
-	uint32_t content_type = 0;       //Record type 0x2
-	uint32_t package_flags = 0;      //Record type 0x3
-	uint32_t item_table_offset = 0;  //Record type 0xD, offset 0x0
-	uint32_t item_table_size = 0;	 //Record type 0xD, offset 0x4
-	uint32_t sfo_offset = 0;         //Plaintext SFO copy, record type 0xE, offset 0x0
-	uint32_t sfo_size = 0;           //Record type 0xE, offset 0x4
+	uint32_t drm_type = 0;           // Record type 0x1 (for trial-enabled packages, drm is either 0x3 or 0xD)
+	uint32_t content_type = 0;       // Record type 0x2
+	uint32_t package_flags = 0;      // Record type 0x3
+	uint32_t item_table_offset = 0;  // Record type 0xD, offset 0x0
+	uint32_t item_table_size = 0;	 // Record type 0xD, offset 0x4
+	uint32_t sfo_offset = 0;         // Plaintext SFO copy, record type 0xE, offset 0x0
+	uint32_t sfo_size = 0;           // Record type 0xE, offset 0x4
 } PKG_METADATA;
 
 typedef enum PKG_TYPE {

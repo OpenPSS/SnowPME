@@ -1,7 +1,7 @@
 /*
 * PKG extraction code based on
-* Real-PackageExtractor-Installer by LiEnby.
-* https://silica.codes/Li/real-PackageExtractor-installer/
+* Real-Package-Installer by LiEnby.
+* https://silica.codes/Li/real-package-installer/
 */
 
 #ifndef SHARED_PACKAGE_ERROR_H 
