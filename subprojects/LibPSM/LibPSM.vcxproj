@@ -340,6 +340,9 @@
     <Lib>
       <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibImGui.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
@@ -368,6 +371,7 @@
     <Lib>
       <AdditionalDependencies>LibShared.lib;LibCXML.lib;LibImGui.lib;LibMonoBridge.lib;MonoPosixHelper.lib;monosgen-2.0.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
