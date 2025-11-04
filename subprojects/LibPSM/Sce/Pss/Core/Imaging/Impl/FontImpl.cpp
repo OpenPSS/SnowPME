@@ -7,25 +7,43 @@
 #include <Sce/Pss/Core/Imaging/Impl/FontImpl.hpp>
 #include <Sce/Pss/Core/Imaging/FontStyle.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
+#include <Sce/Pss/Core/Imaging/Impl/EmbeddedFonts.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION 1
 #include <stb/stb_truetype.h>
 
+#include <LibShared.hpp>
+
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
+using namespace Shared;
 
 namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
 
 	int FontImpl::lookupAndLoadFile(const std::string& ttfFilepath) {
 		if (ttfFilepath.starts_with("embed:")) {
-			Logger::Todo("Trying to load embeded font. not yet supported.");
-			return PSM_ERROR_NOT_IMPLEMENTED;
+			std::string embedFont = ttfFilepath.substr(6);
+			std::string fontPath = std::filesystem::path(Config::GetRuntimeConfigFolder()).append("font").append(embedFont).string();
+			if (std::filesystem::exists(fontPath)) {
+				return this->loadFontFile(fontPath);
+			}
+			else {
+				return loadFontMemory(font_default_data, font_default_size);
+			}
 		}
 		else {
 			return this->loadFontFile(ttfFilepath);
 		}
 	}
+	int FontImpl::loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize) {
+		this->ttfFileSize = ttfSize;
+		this->ttfFileBuffer = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->ttfFileSize));
+		memcpy(this->ttfFileBuffer, reinterpret_cast<const void*>(ttfBuffer), this->ttfFileSize);
+
+		return PSM_ERROR_NO_ERROR;
+	}
+
 	int FontImpl::loadFontFile(const std::string& ttfFilePath) {
 		// read ttf file
 		std::error_code ec;

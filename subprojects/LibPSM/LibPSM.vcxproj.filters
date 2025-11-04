@@ -255,6 +255,9 @@
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\FontImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -795,6 +798,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontFileNames.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

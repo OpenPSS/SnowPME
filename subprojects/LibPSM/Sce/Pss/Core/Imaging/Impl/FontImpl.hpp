@@ -20,6 +20,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		stbtt_fontinfo font;
 		int lookupAndLoadFile(const std::string& ttfFilepath);
 		int loadFontFile(const std::string& ttfFilepath);
+		int loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize);
 	public:
 
 		FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style);
