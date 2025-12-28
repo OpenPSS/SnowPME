@@ -1,4 +1,4 @@
-project('LibPSM', 
+	project('LibPSM', 
   ['cpp', 'c'],
   version: '0.1',
   default_options:  {
@@ -78,6 +78,7 @@ LibPSM = static_library('PSM',
 	'Sce/Pss/Core/Imaging/Image.cpp',
 	'Sce/Pss/Core/Imaging/Impl/ImageImpl.cpp',
 	'Sce/Pss/Core/Imaging/Impl/FontImpl.cpp',
+	'Sce/Pss/Core/Imaging/Impl/EmbeddedFonts.c'
 	'Sce/Pss/Core/InitializeCsharp.cpp',
 	'Sce/Pss/Core/Input/GamePad.cpp',
 	'Sce/Pss/Core/Input/Motion.cpp',
