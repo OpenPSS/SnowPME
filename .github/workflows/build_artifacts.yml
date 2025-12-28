@@ -152,9 +152,9 @@ jobs:
         with:
             repository: 'probonopd/uploadtool'
             path: 'uploadtool'
-
       - name: Upload Releases
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            UPLOADTOOL_ISPRERELEASE: true
         run: |
             ./uploadtool/upload.sh Release/*

@@ -3,10 +3,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define INCBIN_PREFIX font_
-#define INCBIN_STYLE INCBIN_STYLE_SNAKE
-#include <incbin.h>
-INCBIN(default, "OpenSans-Light.ttf");
+	extern unsigned char font_default_data[];
 #ifdef __cplusplus
 }
 #endif
