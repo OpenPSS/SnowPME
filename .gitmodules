@@ -14,3 +14,6 @@
 	path = subprojects/LibSDL2-Static/SDL2
 	url = https://github.com/libsdl-org/SDL.git
 	branch = SDL2
+[submodule "subprojects/LibSDL2-Static/SDL_ttf"]
+	path = subprojects/LibSDL2-Static/SDL2_ttf
+	url = https://github.com/libsdl-org/SDL_ttf.git

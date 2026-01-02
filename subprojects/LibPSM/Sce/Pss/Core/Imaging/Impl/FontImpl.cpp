@@ -66,6 +66,8 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
 			stbtt_InitFont(&this->font, this->ttfFileBuffer, stbtt_GetFontOffsetForIndex(this->ttfFileBuffer, 0));
 		}
+
+
 		
 	}
 

@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_Static|Win32">
+      <Configuration>Debug_Static</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Static|x64">
+      <Configuration>Debug_Static</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Static|Win32">
+      <Configuration>Release_Static</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Static|x64">
+      <Configuration>Release_Static</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>SDL2_ttf</ProjectName>
+    <ProjectGuid>{DDDBD07D-DC76-4AF6-8D02-3E2DEB6EE255}</ProjectGuid>
+    <RootNamespace>SDL_ttf</RootNamespace>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' != '10.0'">$(DefaultPlatformToolset)</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' != '10.0'">$(DefaultPlatformToolset)</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' != '10.0'">$(DefaultPlatformToolset)</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' != '10.0'">$(DefaultPlatformToolset)</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)build\$(SolutionName)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)build\inter\$(SolutionName)\$(ProjectName)-$(Platform)-$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">$(SolutionDir)build\$(SolutionName)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">$(SolutionDir)build\inter\$(SolutionName)\$(ProjectName)-$(Platform)-$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)build\$(SolutionName)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)build\inter\$(SolutionName)\$(ProjectName)-$(Platform)-$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">$(SolutionDir)build\$(SolutionName)\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">$(SolutionDir)build\inter\$(SolutionName)\$(ProjectName)-$(Platform)-$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
+    <IncludePath>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)SDL2\VisualC\$(PlatformName)\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
+    <IncludePath>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)SDL2\VisualC\$(PlatformName)\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
+    <IncludePath>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)SDL2\VisualC\$(PlatformName)\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
+    <IncludePath>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)SDL2\VisualC\$(PlatformName)\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_Debug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug_Static/SDL2_ttf.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug_Static</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Debug_StaticInformationFormat>OldStyle</Debug_StaticInformationFormat>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_Debug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>usp10.lib;gdi32.lib;rpcrt4.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebug_StaticInformation>true</GenerateDebug_StaticInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_Debug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>X64</TargetEnvironment>
+      <TypeLibraryName>.\Debug_Static/SDL2_ttf.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug_Static</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Debug_StaticInformationFormat>OldStyle</Debug_StaticInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_Debug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>usp10.lib;gdi32.lib;rpcrt4.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebug_StaticInformation>true</GenerateDebug_StaticInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDebug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release_Static/SDL2_ttf.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDebug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>usp10.lib;gdi32.lib;rpcrt4.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDebug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>X64</TargetEnvironment>
+      <TypeLibraryName>.\Release_Static/SDL2_ttf.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDebug_Static;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>usp10.lib;gdi32.lib;rpcrt4.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>external\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- <CustomBuild Include="external\lib\x86\LICENSE.freetype.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="external\lib\x86\LICENSE.harfbuzz.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="external\lib\x86\LICENSE.zlib.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="external\lib\x64\LICENSE.freetype.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="external\lib\x64\LICENSE.harfbuzz.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="external\lib\x64\LICENSE.zlib.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">Copying %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">copy %(FullPath) $(SolutionDir)\$(Platform)\$(Configuration)\</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">$(SolutionDir)\$(Platform)\$(Configuration)\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild> -->
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\autofit\autofit.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftbase.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftbbox.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftbdf.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftcid.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftdebug.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftfstype.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftgasp.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftglyph.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftgxval.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftinit.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftmm.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftotval.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftpatent.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftpfr.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftstroke.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftsynth.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftsystem.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\fttype1.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\base\ftwinfnt.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\bdf\bdf.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\cache\ftcache.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\cff\cff.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\cid\type1cid.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\gzip\ftgzip.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\lzw\ftlzw.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\pcf\pcf.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\pfr\pfr.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\psaux\psaux.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\psnames\psmodule.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\raster\raster.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\sdf\sdf.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\svg\svg.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\smooth\smooth.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\truetype\truetype.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\type1\type1.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\type42\type42.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\freetype\src\winfonts\winfnt.c" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\graph\gsubgpos-context.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-aat-layout.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-aat-map.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-blob.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-buffer-serialize.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-buffer-verify.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-buffer.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-cairo-utils.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-cairo.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-common.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-coretext.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-directwrite.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-draw.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-face-builder.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-face.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-fallback-shape.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-font.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ft.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-gdi.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-glib.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-gobject-structs.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-graphite2.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-icu.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-map.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-number.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-cff1-table.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-cff2-table.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-color.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-face.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-font.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-layout.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-map.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-math.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-meta.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-metrics.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-name.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shape-fallback.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shape-normalize.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shape.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-arabic.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-default.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-hangul.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-hebrew.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-indic-table.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-indic.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-khmer.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-myanmar.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-syllabic.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-thai.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-use.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-shaper-vowel-constraints.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-tag.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ot-var.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-outline.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-paint-extents.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-paint.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-set.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-shape-plan.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-shape.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-shaper.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-static.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-style.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-cff-common.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-cff1.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-cff2.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-input.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-instancer-solver.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-plan.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset-repacker.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-subset.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-ucd.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-unicode.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-uniscribe.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-wasm-api.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\external\harfbuzz\src\hb-wasm-shape.cc" />
+    <ClCompile Include="$(ProjectDir)SDL2_ttf\SDL_ttf.c">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="$(ProjectDir)SDL2_ttf\VisualC\Version.rc">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(ProjectDir)SDL2_ttf\SDL_ttf.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
