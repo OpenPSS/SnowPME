@@ -113,7 +113,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_STATIC_LIB;WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug_Static</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <Debug_StaticInformationFormat>OldStyle</Debug_StaticInformationFormat>
@@ -142,7 +142,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_STATIC_LIB;WIN32;_Debug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug_Static</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <Debug_StaticInformationFormat>OldStyle</Debug_StaticInformationFormat>
@@ -169,7 +169,7 @@
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_STATIC_LIB;WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
@@ -197,7 +197,7 @@
       </HeaderFileName>
     </Midl>
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_STATIC_LIB;WIN32;NDebug_Static;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TTF_USE_HARFBUZZ=1;HAVE_CONFIG_H;FT_PUBLIC_FUNCTION_ATTRIBUTE=;FT_CONFIG_OPTION_USE_HARFBUZZ;FT2_BUILD_LIBRARY;HAVE_FREETYPE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>$(ProjectDir)SDL2_ttf\external\freetype\include;$(ProjectDir)SDL2_ttf\external\harfbuzz;$(ProjectDir)SDL2_ttf\external\harfbuzz\src;$(ProjectDir)SDL2\include;$(IncludePath)</AdditionalIncludeDirectories>

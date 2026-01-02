@@ -7,7 +7,7 @@
 #include <atomic>
 
 #include <Graphics/ImGuiBackend.hpp>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace SnowPME::Graphics {
 	class Window {

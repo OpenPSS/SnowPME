@@ -110,8 +110,8 @@
 #endif
 
 // SDL
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_syswm.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 #include <stdio.h>              // for snprintf()
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -130,7 +130,7 @@
 #define SDL_HAS_VULKAN                      SDL_VERSION_ATLEAST(2,0,6)
 #define SDL_HAS_OPEN_URL                    SDL_VERSION_ATLEAST(2,0,14)
 #if SDL_HAS_VULKAN
-#include <SDL2/SDL_vulkan.h>
+#include <SDL_vulkan.h>
 #endif
 
 // SDL Data

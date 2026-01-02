@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <Graphics/Window.hpp>
 #include <Graphics/ImGuiGLES2Backend.hpp>
 #include <Graphics/ImGuiGL2Backend.hpp>

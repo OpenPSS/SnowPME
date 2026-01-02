@@ -1,8 +1,8 @@
 #include <LibImGui.hpp>
 #include <Graphics/Gui/SnowGui.hpp>
 #include <Graphics/Gui/ImGuiWindow.hpp>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
 #include <Graphics/ImGuiBackend.hpp>
 #include <Graphics/ImGuiGLES2Backend.hpp>
 
