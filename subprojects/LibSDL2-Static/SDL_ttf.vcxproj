@@ -392,12 +392,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="$(ProjectDir)SDL2_ttf\VisualC\Version.rc">
+    <!--<ResourceCompile Include="$(ProjectDir)SDL2_ttf\VisualC\Version.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
+    </ResourceCompile>-->
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(ProjectDir)SDL2_ttf\SDL_ttf.h" />

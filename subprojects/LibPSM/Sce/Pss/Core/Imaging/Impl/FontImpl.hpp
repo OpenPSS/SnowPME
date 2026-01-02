@@ -6,7 +6,6 @@
 #include <Sce/Pss/Core/Imaging/FontStyle.hpp>
 #include <string>
 #include <unordered_map>
-#include <stb/stb_truetype.h>
 
 namespace Sce::Pss::Core::Imaging::Impl {
 	class FontImpl : public Errorable {
