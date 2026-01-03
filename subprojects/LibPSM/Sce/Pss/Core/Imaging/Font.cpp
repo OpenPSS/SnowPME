@@ -41,7 +41,7 @@ namespace Sce::Pss::Core::Imaging {
 	}
 	int Font::Metrics(FontMetrics* metrics) {
 		if (this->fontImpl != nullptr) {
-			return this->fontImpl->GetMetrics(*metrics);
+			return this->fontImpl->GetMetrics(metrics);
 		}
 		return PSM_ERROR_FONT_SYSTEM;
 	}

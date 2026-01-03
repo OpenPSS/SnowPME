@@ -30,7 +30,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		int loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize);
 	public:
 
-		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics& metrics);
+		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics* metrics);
 		int GetStyle(Sce::Pss::Core::Imaging::FontStyle& style);
 		int GetCharSize(std::wstring& text, int* width);
 

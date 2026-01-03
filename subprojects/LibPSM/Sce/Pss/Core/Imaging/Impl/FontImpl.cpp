@@ -102,8 +102,16 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 
-	int FontImpl::GetMetrics(FontMetrics& metrics) {
-		UNIMPLEMENTED();
+	int FontImpl::GetMetrics(FontMetrics* metrics) {
+		if (metrics != nullptr && this->font != nullptr) {
+			metrics->Ascent = TTF_FontAscent(this->font);
+			metrics->Descent = TTF_FontDescent(this->font);
+			metrics->Leading = TTF_FontLineSkip(this->font);
+			return PSM_ERROR_NO_ERROR;
+		}
+
+		return PSM_ERROR_FONT_SYSTEM;
+
 	}
 
 	int FontImpl::GetStyle(FontStyle& style) {
@@ -120,7 +128,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 				style |= FontStyle::Regular;
 			}
 		}
-		return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		return PSM_ERROR_FONT_SYSTEM;
 	}
 
 	FontFileNames* FontImpl::Find(const std::string& name, int size, FontStyle style) {

@@ -164,14 +164,6 @@ namespace Sce::Pss::Core::Imaging {
 
 		size_t bufferSize = channels * size->Width * size->Height;
 
-		// TODO: Remove this when fonts are implemented
-#ifdef INACCURATE_ALLOW_0BYTE_IMAGE
-		if (bufferSize <= 0) { 
-			Logger::Todo("Fonts are not implemented yet, resulting in trying to create 0 byte image; faking it as 1028 bytes instead to avoid a crash."); 
-			bufferSize = 1028; 
-		}
-#endif
-
 		std::vector<uint8_t> img(bufferSize);
 		if(img.data() != nullptr) {
 

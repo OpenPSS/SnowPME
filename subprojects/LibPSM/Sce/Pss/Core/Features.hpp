@@ -13,7 +13,6 @@
 //#define INACCURATE_DONT_ENFORCE_MIN_SDK // include SDK functions, even if their only added in a newer SDK.
 
 #define INACCURATE_DONT_ENFORCE_MEM_LIMIT // it's currently broken, 
-#define INACCURATE_ALLOW_0BYTE_IMAGE // remove once fonts are implemented.
 
 
 #endif
