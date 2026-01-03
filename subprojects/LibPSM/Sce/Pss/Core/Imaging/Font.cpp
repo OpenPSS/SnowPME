@@ -142,6 +142,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		*size = Handles<Font>::Get(handle)->Size();
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {
 		LOG_FUNCTION();
@@ -151,6 +152,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		*style = Handles<Font>::Get(handle)->Style();
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
 		LOG_FUNCTION();
@@ -160,6 +162,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		*fontMetrics = Handles<Font>::Get(handle)->Metrics();
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int Font::GetTextWidthNative(int handle, MonoString* text, int offset, int len, int* width) {
