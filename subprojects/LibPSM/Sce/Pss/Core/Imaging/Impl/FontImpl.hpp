@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Imaging/Impl/FontFileNames.hpp>
 #include <Sce/Pss/Core/Imaging/FontStyle.hpp>
 #include <Sce/Pss/Core/Imaging/FontMetrics.hpp>
+#include <Sce/Pss/Core/Imaging/CharMetrics.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -23,6 +24,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		size_t ttfFileSize = 0;
 		TTF_Font* font = nullptr;
 
+		size_t fontSize = 0;
 		std::string name;
 
 		void initFonts();
@@ -36,6 +38,8 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics& metrics);
 		int GetStyle(Sce::Pss::Core::Imaging::FontStyle& style);
 		int GetCharSize(std::wstring& text, int* width);
+		int GetSize(size_t* size);
+		int GetCharMetrics(std::wstring& text, Sce::Pss::Core::Imaging::CharMetrics* metrics);
 
 		FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style);
 		~FontImpl();

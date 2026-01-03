@@ -41,7 +41,11 @@ namespace Sce::Pss::Core::Imaging {
 
 
 	int Font::Size() {
-		UNIMPLEMENTED();
+		size_t size = 0;
+		assert(this->fontImpl != nullptr);
+
+		this->fontImpl->GetSize(&size);
+		return static_cast<int>(size);
 	}
 	
 	
@@ -50,11 +54,10 @@ namespace Sce::Pss::Core::Imaging {
 		assert(this->fontImpl != nullptr);
 		
 		this->fontImpl->GetMetrics(metrics);
-
 		return metrics;
 	}
 
-	int Font::CalcTextWidth(const std::wstring& text, int offset, int len, int* width) {
+	int Font::GetTextWidth(const std::wstring& text, int offset, int len, int* width) {
 		if (offset < 0 || offset > text.length() || len < 0 || (offset + len) > text.length())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
@@ -68,8 +71,18 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_FONT_SYSTEM;
 	}
 
+	int Font::GetTextMetrics(const std::wstring& text, int offset, int len, CharMetrics* charMetrics) {
+		if (offset < 0 || offset > text.length() || len < 0 || offset + len > text.length())
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
-	int Font::CalcTextMetrics(const std::wstring& text, int offset, CharMetrics* charMetrics) {
+		if (this->fontImpl != nullptr) {
+			// get formatted text
+			std::wstring fmtText = text.substr(offset, len);
+
+			// calculate the width of the string in pixels.
+			return this->fontImpl->GetCharMetrics(fmtText, charMetrics);
+		}
+		return PSM_ERROR_FONT_SYSTEM;
 		UNIMPLEMENTED();
 	}
 
@@ -155,16 +168,33 @@ namespace Sce::Pss::Core::Imaging {
 
 		if (!Handles<Font>::IsValid(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (text == nullptr)
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
+		// get text
 		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
 		int chkLen = mono_string_length(text);
 
-		const std::wstring textToRender(chkTxt, chkLen);
-		Handles<Font>::Get(handle)->CalcTextWidth(textToRender, offset, len, width);
-
-		return PSM_ERROR_NO_ERROR;
+		const std::wstring textForCalc(chkTxt, chkLen);
+		return Handles<Font>::Get(handle)->GetTextWidth(textForCalc, offset, len, width);
 	}
-	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, CharMetrics* charMetrics) {
-		UNIMPLEMENTED();
+	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, MonoArray* charMetrics) {
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (text == nullptr) 
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+
+		// get text
+		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
+		int chkLen = mono_string_length(text);
+		const std::wstring textForCalc(chkTxt, chkLen);
+
+		// get metrics
+		CharMetrics* metrics = reinterpret_cast<CharMetrics*>(mono_array_addr_with_size(charMetrics, sizeof(CharMetrics), 0));
+
+		return Handles<Font>::Get(handle)->GetTextMetrics(textForCalc, offset, len, metrics);
 	}
 }
