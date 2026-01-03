@@ -328,7 +328,7 @@
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL-Static\SDL2_ttf\include\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibGLAD\;$(SolutionDir)subprojects\LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibGLAD\;$(SolutionDir)subprojects\LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -358,7 +358,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL-Static\SDL2_ttf\include\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibGLAD\;$(SolutionDir)subprojects\LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)subprojects\GlobalInclude\;$(SolutionDir)subprojects\LibPssMono\include\;$(SolutionDir)subprojects\LibSDL2-Static\include\;$(SolutionDir)subprojects\LibCXML\;$(SolutionDir)subprojects\LibShared\;$(SolutionDir)subprojects\LibGLAD\;$(SolutionDir)subprojects\LibMonoBridge\;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

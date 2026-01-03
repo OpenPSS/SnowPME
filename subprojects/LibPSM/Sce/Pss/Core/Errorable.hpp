@@ -47,6 +47,15 @@
 			return error; \
 		}
 
+#define PASS_ERRORABLE_SMARTPTR(x) \
+		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
+			int error = x->GetError(); \
+			this->SetError(error); \
+			PRINT_ERR(error); \
+			x = nullptr; \
+			return; \
+		} 
+
 #define PASS_ERRORABLE(x) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
 			int error = x->GetError(); \

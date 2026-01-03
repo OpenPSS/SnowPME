@@ -17,11 +17,18 @@
 namespace Sce::Pss::Core::Imaging {
 	class Font : public PsmObject<Font> {
 	private:
-		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::FontImpl> fontImpl = nullptr;
+		std::unique_ptr<Sce::Pss::Core::Imaging::Impl::FontImpl> fontImpl = nullptr;
 	public:
 		Font(const std::string& filename, int size, FontStyle style);
 		Font(FontAlias alias, int size, FontStyle style);
 		~Font() = default;
+
+		int Style(FontStyle* style);
+		int Size(int* size);
+		int Metrics(FontMetrics* metrics);
+
+		int CalcTextWidth(std::wstring& text, int offset, int len, int* width);
+		int CalcTextMetrics(std::wstring& text, int offset, CharMetrics* charMetrics);
 
 		static int NewFromFilenameSizeStyle(MonoString* filename, int size, FontStyle style, int *handle);
 		static int NewFromAliasSizeStyle(FontAlias alias, int size, FontStyle style, int *handle);

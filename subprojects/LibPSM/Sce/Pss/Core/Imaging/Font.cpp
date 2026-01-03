@@ -2,9 +2,11 @@
 #include <Sce/Pss/Core/Imaging/Impl/FontImpl.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 #include <string.h>
 
 using namespace Sce::Pss::Core::Imaging::Impl;
+using namespace Sce::Pss::Core::System;
 
 namespace Sce::Pss::Core::Imaging {
 	Font::Font(const std::string& filename, int size, FontStyle style) {
@@ -22,11 +24,44 @@ namespace Sce::Pss::Core::Imaging {
 		FontFileNames* fnames = FontImpl::Find(fontName, size, style);
 
 		if (fnames == nullptr) {
-			this->fontImpl = std::make_shared<FontImpl>(fontName, filenames, size, style);
+			this->fontImpl = std::make_unique<FontImpl>(fontName, filenames, size, style);
+			PASS_ERRORABLE_SMARTPTR(this->fontImpl);
 		}
 
-		UNIMPLEMENTED_ERRORABLE("creating font from filealias not implemented.");
 	}
+
+	int Font::Style(FontStyle* style) {
+		if (this->fontImpl != nullptr) {
+			return this->fontImpl->GetStyle(*style);
+		}
+		return PSM_ERROR_FONT_SYSTEM;
+	}
+	int Font::Size(int* size) {
+		UNIMPLEMENTED();
+	}
+	int Font::Metrics(FontMetrics* metrics) {
+		if (this->fontImpl != nullptr) {
+			return this->fontImpl->GetMetrics(*metrics);
+		}
+		return PSM_ERROR_FONT_SYSTEM;
+	}
+
+	int Font::CalcTextWidth(std::wstring& text, int offset, int len, int* width) {
+		if (offset < 0 || offset > text.length() || len < 0 || (offset + len) > text.length())
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+
+		if (this->fontImpl != nullptr) {
+			// substring to the offset and length specified.
+			return this->fontImpl->GetCharSize(text.substr(offset, len), width);
+		}
+		return PSM_ERROR_FONT_SYSTEM;
+	}
+
+
+	int Font::CalcTextMetrics(std::wstring& text, int offset, CharMetrics* charMetrics) {
+		UNIMPLEMENTED();
+	}
+
 
 	int Font::NewFromFilenameSizeStyle(MonoString* filename, int size, FontStyle style, int* handle) {
 		LOG_FUNCTION();
@@ -64,13 +99,38 @@ namespace Sce::Pss::Core::Imaging {
 		UNIMPLEMENTED();
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+		return Handles<Font>::Get(handle)->Style(style);
 	}
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+		return Handles<Font>::Get(handle)->Metrics(fontMetrics);
 	}
+
 	int Font::GetTextWidthNative(int handle, MonoString* text, int offset, int len, int* width) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
+		int chkLen = mono_string_length(text);
+
+		std::wstring textToRender(chkTxt, chkLen);
+		Handles<Font>::Get(handle)->CalcTextWidth(textToRender, offset, len, width);
+
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, CharMetrics* charMetrics) {
 		UNIMPLEMENTED();

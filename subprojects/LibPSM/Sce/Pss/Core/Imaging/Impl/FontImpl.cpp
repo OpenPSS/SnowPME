@@ -9,10 +9,10 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/EmbeddedFonts.h>
 
-#define STB_TRUETYPE_IMPLEMENTATION 1
-#include <stb/stb_truetype.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <LibShared.hpp>
+#include <Sce/Pss/Core/Imaging/FontMetrics.hpp>
 
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
@@ -20,6 +20,14 @@ using namespace Shared;
 
 namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
+	bool FontImpl::isInitalized = false;
+
+	void FontImpl::initFonts() {
+		if (!FontImpl::isInitalized) {
+			TTF_Init();
+			FontImpl::isInitalized = true;
+		}
+	}
 
 	int FontImpl::lookupAndLoadFile(const std::string& ttfFilepath) {
 		if (ttfFilepath.starts_with("embed:")) {
@@ -60,15 +68,59 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	}
 
 	FontImpl::FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style) {
+		initFonts();
+		
 		entries.emplace(fontName, filenames);
 		this->files = filenames;
 
-		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
-			stbtt_InitFont(&this->font, this->ttfFileBuffer, stbtt_GetFontOffsetForIndex(this->ttfFileBuffer, 0));
-		}
-
-
 		
+		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
+			SDL_RWops* ops = SDL_RWFromConstMem(ttfFileBuffer, ttfFileSize);
+			if (ops == nullptr) this->SetError(PSM_ERROR_FONT_SYSTEM);
+
+			this->font = TTF_OpenFontRW(ops, 1, size);
+			if (this->font == nullptr) this->SetError(PSM_ERROR_FONT_SYSTEM);
+		}
+		
+	}
+
+	FontImpl::~FontImpl() {
+		if (this->font != nullptr) {
+			TTF_CloseFont(this->font);
+		}
+	}
+
+	int FontImpl::GetCharSize(std::wstring& text, int* width) {
+		if (this->font != nullptr) {
+			if (TTF_MeasureUNICODE(this->font, reinterpret_cast<const uint16_t*>(text.c_str()), Config::ScreenWidth(0), width, nullptr) == 0) {
+				return PSM_ERROR_NO_ERROR;
+			}
+			else {
+				return PSM_ERROR_FONT_SYSTEM;
+			}
+		}
+		return PSM_ERROR_COMMON_ARGUMENT_NULL;
+	}
+
+	int FontImpl::GetMetrics(FontMetrics& metrics) {
+		UNIMPLEMENTED();
+	}
+
+	int FontImpl::GetStyle(FontStyle& style) {
+		if (this->font != nullptr) {
+			int s = TTF_GetFontStyle(this->font);
+
+			if ((s & TTF_STYLE_BOLD) != 0) {
+				style |= FontStyle::Bold;
+			}
+			if ((s & TTF_STYLE_ITALIC) != 0) {
+				style |= FontStyle::Italic;
+			}
+			if ((s & TTF_STYLE_NORMAL) != 0) {
+				style |= FontStyle::Regular;
+			}
+		}
+		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 
 	FontFileNames* FontImpl::Find(const std::string& name, int size, FontStyle style) {
