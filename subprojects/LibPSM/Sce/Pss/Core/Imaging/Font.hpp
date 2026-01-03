@@ -23,9 +23,9 @@ namespace Sce::Pss::Core::Imaging {
 		Font(FontAlias alias, int size, FontStyle style);
 		~Font() = default;
 
-		int Style(FontStyle* style);
-		int Size(int* size);
-		int Metrics(FontMetrics* metrics);
+		FontStyle Style();
+		int Size();
+		FontMetrics Metrics();
 
 		int CalcTextWidth(const std::wstring& text, int offset, int len, int* width);
 		int CalcTextMetrics(const std::wstring& text, int offset, CharMetrics* charMetrics);

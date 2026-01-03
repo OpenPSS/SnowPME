@@ -33,7 +33,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	public:
 		const std::string Name();
 
-		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics* metrics);
+		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics& metrics);
 		int GetStyle(Sce::Pss::Core::Imaging::FontStyle& style);
 		int GetCharSize(std::wstring& text, int* width);
 

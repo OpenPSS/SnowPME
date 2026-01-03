@@ -31,21 +31,27 @@ namespace Sce::Pss::Core::Imaging {
 
 	}
 
-
-	int Font::Style(FontStyle* style) {
-		if (this->fontImpl != nullptr) {
-			return this->fontImpl->GetStyle(*style);
-		}
-		return PSM_ERROR_FONT_SYSTEM;
+	FontStyle Font::Style() {
+		FontStyle style = FontStyle::Regular;
+		assert(this->fontImpl != nullptr);
+		
+		this->fontImpl->GetStyle(style);
+		return style;
 	}
-	int Font::Size(int* size) {
+
+
+	int Font::Size() {
 		UNIMPLEMENTED();
 	}
-	int Font::Metrics(FontMetrics* metrics) {
-		if (this->fontImpl != nullptr) {
-			return this->fontImpl->GetMetrics(metrics);
-		}
-		return PSM_ERROR_FONT_SYSTEM;
+	
+	
+	FontMetrics Font::Metrics() {
+		FontMetrics metrics = { 0 };
+		assert(this->fontImpl != nullptr);
+		
+		this->fontImpl->GetMetrics(metrics);
+
+		return metrics;
 	}
 
 	int Font::CalcTextWidth(const std::wstring& text, int offset, int len, int* width) {
@@ -53,8 +59,11 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (this->fontImpl != nullptr) {
-			// finally run GetCharSize on resulting string
-			return this->fontImpl->GetCharSize(text.substr(offset, len), width);
+			// get formatted text
+			std::wstring fmtText = text.substr(offset, len);
+			
+			// calculate the width of the string in pixels.
+			return this->fontImpl->GetCharSize(fmtText, width);
 		}
 		return PSM_ERROR_FONT_SYSTEM;
 	}
@@ -113,9 +122,13 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int Font::GetSize(int handle, int* size) {
-		// TODO: Figure out what they mean by "size" here, documentation isnt very useful either
-		// is it file size? size in height? .. ??? what??
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+
+		*size = Handles<Font>::Get(handle)->Size();
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {
 		LOG_FUNCTION();
@@ -124,7 +137,7 @@ namespace Sce::Pss::Core::Imaging {
 		if (!Handles<Font>::IsValid(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		return Handles<Font>::Get(handle)->Style(style);
+		*style = Handles<Font>::Get(handle)->Style();
 	}
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
 		LOG_FUNCTION();
@@ -133,7 +146,7 @@ namespace Sce::Pss::Core::Imaging {
 		if (!Handles<Font>::IsValid(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		return Handles<Font>::Get(handle)->Metrics(fontMetrics);
+		*fontMetrics = Handles<Font>::Get(handle)->Metrics();
 	}
 
 	int Font::GetTextWidthNative(int handle, MonoString* text, int offset, int len, int* width) {

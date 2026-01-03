@@ -106,11 +106,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_COMMON_ARGUMENT_NULL;
 	}
 
-	int FontImpl::GetMetrics(FontMetrics* metrics) {
-		if (metrics != nullptr && this->font != nullptr) {
-			metrics->Ascent = TTF_FontAscent(this->font);
-			metrics->Descent = TTF_FontDescent(this->font);
-			metrics->Leading = TTF_FontLineSkip(this->font);
+	int FontImpl::GetMetrics(FontMetrics& metrics) {
+		if (this->font != nullptr) {
+			metrics.Ascent = TTF_FontAscent(this->font);
+			metrics.Descent = TTF_FontDescent(this->font);
+			metrics.Leading = TTF_FontLineSkip(this->font);
 			return PSM_ERROR_NO_ERROR;
 		}
 
