@@ -20,7 +20,7 @@ namespace PsmTestSuite
 			tests.Add(new DeviceID());
 			tests.Add(new PM());
 			tests.Add(new BackgroundMusic());
-			
+			tests.Add(new FontInfo());
 			
 			// require user interaction: 
 			

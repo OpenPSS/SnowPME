@@ -42,6 +42,7 @@
     <Compile Include="tests\PM.cs" />
     <Compile Include="tests\BackgroundMusic.cs" />
     <Compile Include="tests\OpenWebsite.cs" />
+    <Compile Include="tests\FontInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
