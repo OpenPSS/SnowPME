@@ -120,6 +120,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 	int FontImpl::GetCharMetrics(std::wstring& text, CharMetrics* metrics) {
 		if (this->font != nullptr) {
+			Logger::Warn("Font Glyph Metrics are not completely accurate yet!!");
 			int x, width, y, height, advance = 0;
 
 			for (size_t i = 0; i < text.length(); i++) {
@@ -133,7 +134,6 @@ namespace Sce::Pss::Core::Imaging::Impl {
 				if (TTF_GlyphMetrics(this->font, static_cast<uint16_t>(chr), &x, &width, &y, &height, &advance) == 0) {
 					memset(&metrics[i], 0, sizeof(CharMetrics));
 					
-					Logger::Warn("Font Glyph Metrics are not completely accurate yet!!");
 
 					// copy it over ...
 					metrics[i].X = x;
@@ -142,13 +142,12 @@ namespace Sce::Pss::Core::Imaging::Impl {
 					metrics[i].Height = height;
 					metrics[i].HorizontalAdvance = advance;
 
-					return PSM_ERROR_NO_ERROR;
 				}
 				else {
 					return PSM_ERROR_FONT_SYSTEM;
 				}
-
 			}
+			return PSM_ERROR_NO_ERROR;
 		}
 		return PSM_ERROR_FONT_SYSTEM;
 	}
