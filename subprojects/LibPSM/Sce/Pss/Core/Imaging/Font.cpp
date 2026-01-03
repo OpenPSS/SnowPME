@@ -3,7 +3,8 @@
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-#include <string.h>
+#include <string>
+#include <cstring>
 
 using namespace Sce::Pss::Core::Imaging::Impl;
 using namespace Sce::Pss::Core::System;
@@ -53,7 +54,10 @@ namespace Sce::Pss::Core::Imaging {
 
 		if (this->fontImpl != nullptr) {
 			// substring to the offset and length specified.
-			return this->fontImpl->GetCharSize(text.substr(offset, len), width);
+			std::wstring nstring = text.substr(offset, len);
+
+			// finally run GetCharSize on resulting string
+			return this->fontImpl->GetCharSize(nstring, width);
 		}
 		return PSM_ERROR_FONT_SYSTEM;
 	}
