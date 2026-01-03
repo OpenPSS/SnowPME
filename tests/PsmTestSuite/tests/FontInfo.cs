@@ -5,9 +5,9 @@ using Sce.PlayStation.Core.Imaging;
 namespace PsmTestSuite
 {
 	public class FontInfo : PsmTest
-	{
+	{		
 		public override void Run() {
-			Font fnt = new Font(FontAlias.System, 1, FontStyle.Bold);
+			Font fnt = new Font(FontAlias.System, 24, FontStyle.Bold);
 			
 			Log("Name", fnt.Name);
 			Log("Style", fnt.Style);
@@ -17,7 +17,19 @@ namespace PsmTestSuite
 			Log("Metrics.Leading", fnt.Metrics.Leading);
 			
 			Log("GetTextWidth", fnt.GetTextWidth("Trans Rights"));
-			Log("GetTextMetrics", fnt.GetTextMetrics("Trans Rights"));
+			
+			CharMetrics[] metrics = fnt.GetTextMetrics("Trans Rights");
+			foreach(CharMetrics metric in metrics) {
+				Log("Metric.X", metric.X);				
+				Log("Metric.Y", metric.Y);				
+				Log("Metric.HorizontalBearingX", metric.HorizontalBearingX);				
+				Log("Metric.HorizontalBearingY", metric.HorizontalBearingY);	
+				Log("Metric.HorizontalAdvance", metric.HorizontalAdvance);	
+				Log("Metric.Width", metric.Width);				
+				Log("Metric.Height", metric.Height);
+
+			}
+			
 			
 			Log ("Shallow Clone");
 			Font fnt2 = (Font)fnt.ShallowClone();

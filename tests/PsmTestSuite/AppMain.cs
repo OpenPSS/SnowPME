@@ -12,11 +12,8 @@ namespace PsmTestSuite
 	{
 		private static List<PsmTest> tests = new List<PsmTest>();
 		
-
-		
 		public static void Main (string[] args)
 		{
-			
 			tests.Add(new DeviceID());
 			tests.Add(new PM());
 			tests.Add(new BackgroundMusic());
