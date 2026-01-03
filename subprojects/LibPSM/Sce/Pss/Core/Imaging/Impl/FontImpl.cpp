@@ -67,12 +67,16 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_FILE_NOT_FOUND;
 	}
 
+	std::string FontImpl::Name() {
+		return this->name;
+	}
+
 	FontImpl::FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style) {
 		initFonts();
 		
 		entries.emplace(fontName, filenames);
 		this->files = filenames;
-
+		this->name = fontName;
 		
 		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
 			SDL_RWops* ops = SDL_RWFromConstMem(ttfFileBuffer, ttfFileSize);

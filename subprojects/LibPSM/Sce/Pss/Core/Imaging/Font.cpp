@@ -22,13 +22,14 @@ namespace Sce::Pss::Core::Imaging {
 		};
 
 		FontFileNames* fnames = FontImpl::Find(fontName, size, style);
-
+		
 		if (fnames == nullptr) {
 			this->fontImpl = std::make_unique<FontImpl>(fontName, filenames, size, style);
 			PASS_ERRORABLE_SMARTPTR(this->fontImpl);
 		}
 
 	}
+
 
 	int Font::Style(FontStyle* style) {
 		if (this->fontImpl != nullptr) {
@@ -93,9 +94,26 @@ namespace Sce::Pss::Core::Imaging {
 		UNIMPLEMENTED();
 	}
 	int Font::GetName(int handle, MonoString* name) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Handles<Font>::IsValid(handle))
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		
+		if (Handles<Font>::Get(handle)->fontImpl != nullptr) {
+			std::string sFontName = Handles<Font>::Get(handle)->fontImpl->Name();
+
+			MonoString* msFontName = mono_string_new_wrapper(sFontName.c_str());
+			mono_gc_wbarrier_generic_store(name, reinterpret_cast<MonoObject*>(msFontName));
+
+			return PSM_ERROR_NO_ERROR;
+		}
+
+		return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 	}
 	int Font::GetSize(int handle, int* size) {
+		// TODO: Figure out what they mean by "size" here, documentation isnt very useful either
+		// is it file size? size in height? .. ??? what??
 		UNIMPLEMENTED();
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {

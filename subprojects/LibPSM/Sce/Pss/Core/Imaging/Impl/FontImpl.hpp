@@ -23,12 +23,15 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		size_t ttfFileSize = 0;
 		TTF_Font* font = nullptr;
 
+		std::string name;
+
 		void initFonts();
 
 		int lookupAndLoadFile(const std::string& ttfFilepath);
 		int loadFontFile(const std::string& ttfFilepath);
 		int loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize);
 	public:
+		std::string Name();
 
 		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics* metrics);
 		int GetStyle(Sce::Pss::Core::Imaging::FontStyle& style);
