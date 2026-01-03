@@ -18,7 +18,7 @@ jobs:
           submodules: true
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: build-essential meson libsdl2-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext libc++-dev libc-dev
+          packages: build-essential meson libsdl2-dev libsdl2-ttf-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext libc++-dev libc-dev
           version: 1.0
       - name: Meson Build
         run: |
