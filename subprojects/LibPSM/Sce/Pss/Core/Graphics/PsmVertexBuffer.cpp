@@ -37,9 +37,8 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (Handles<VertexBuffer>::IsValid(handle)) {
 
-			if (!Thread::IsMainThread()) {
+			if (Thread::IsMainThread()) {
 				VertexBuffer::Release(handle);
-
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {

@@ -90,7 +90,7 @@ enum PsmError: uint32_t {
 
 #define UNIMPLEMENTED_MSG(msg) \
 	do { \
-		_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + std::string(msg) + " is not yet implemented."); \
+		_UNIMPLEMENETED_MACRO_BODY(std::string(__FUNCTION__) + " " + std::string(msg) + " is not yet implemented."); \
 	} while (0)
 
 #define UNIMPLEMENTED()	UNIMPLEMENTED_MSG("")
