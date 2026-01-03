@@ -83,7 +83,6 @@ namespace Sce::Pss::Core::Imaging {
 			return this->fontImpl->GetCharMetrics(fmtText, charMetrics);
 		}
 		return PSM_ERROR_FONT_SYSTEM;
-		UNIMPLEMENTED();
 	}
 
 
