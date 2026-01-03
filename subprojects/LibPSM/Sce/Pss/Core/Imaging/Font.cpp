@@ -48,22 +48,19 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_FONT_SYSTEM;
 	}
 
-	int Font::CalcTextWidth(std::wstring& text, int offset, int len, int* width) {
+	int Font::CalcTextWidth(const std::wstring& text, int offset, int len, int* width) {
 		if (offset < 0 || offset > text.length() || len < 0 || (offset + len) > text.length())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (this->fontImpl != nullptr) {
-			// substring to the offset and length specified.
-			std::wstring nstring = text.substr(offset, len);
-
 			// finally run GetCharSize on resulting string
-			return this->fontImpl->GetCharSize(nstring, width);
+			return this->fontImpl->GetCharSize(text.substr(offset, len), width);
 		}
 		return PSM_ERROR_FONT_SYSTEM;
 	}
 
 
-	int Font::CalcTextMetrics(std::wstring& text, int offset, CharMetrics* charMetrics) {
+	int Font::CalcTextMetrics(const std::wstring& text, int offset, CharMetrics* charMetrics) {
 		UNIMPLEMENTED();
 	}
 
@@ -73,7 +70,7 @@ namespace Sce::Pss::Core::Imaging {
 		LOCK_GUARD_STATIC();
 
 		const char* cfontname = mono_string_to_utf8(filename);
-		std::string fname = std::string(cfontname);
+		const std::string fname = std::string(cfontname);
 
 		std::shared_ptr<Font> fnt = Font::Create(fname, size, style);
 		RETURN_ERRORABLE_PSMOBJECT(fnt, Font);
@@ -105,7 +102,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		
 		if (Handles<Font>::Get(handle)->fontImpl != nullptr) {
-			std::string sFontName = Handles<Font>::Get(handle)->fontImpl->Name();
+			const std::string sFontName = Handles<Font>::Get(handle)->fontImpl->Name();
 
 			MonoString* msFontName = mono_string_new_wrapper(sFontName.c_str());
 			mono_gc_wbarrier_generic_store(name, reinterpret_cast<MonoObject*>(msFontName));
@@ -149,7 +146,7 @@ namespace Sce::Pss::Core::Imaging {
 		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
 		int chkLen = mono_string_length(text);
 
-		std::wstring textToRender(chkTxt, chkLen);
+		const std::wstring textToRender(chkTxt, chkLen);
 		Handles<Font>::Get(handle)->CalcTextWidth(textToRender, offset, len, width);
 
 		return PSM_ERROR_NO_ERROR;

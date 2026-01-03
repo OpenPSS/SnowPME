@@ -67,7 +67,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_FILE_NOT_FOUND;
 	}
 
-	std::string FontImpl::Name() {
+	const std::string FontImpl::Name() {
 		return this->name;
 	}
 
