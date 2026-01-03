@@ -9,7 +9,7 @@ namespace PsmTestSuite
 		public override void Run() {
 			
 			Font fnt = new Font(FontAlias.System, 1, FontStyle.Bold);
-			Sce.PlayStation.Core.Imaging.
+			
 			Log("Name", fnt.Name);
 			Log("Style", fnt.Style);
 			Log("Size", fnt.Size);
@@ -20,11 +20,11 @@ namespace PsmTestSuite
 			Log("GetTextWidth", fnt.GetTextWidth("Trans Rights"));
 			Log("GetTextMetrics", fnt.GetTextMetrics("Trans Rights"));
 			
-			//Log ("Shallow Clone");
-			//Font fnt2 = (Font)fnt.ShallowClone();
-
-			//Log ("Dispose Clone");
-			//fnt2.Dispose();
+			Log ("Shallow Clone");
+			Font fnt2 = (Font)fnt.ShallowClone();
+			
+			Log ("Dispose");
+			fnt2.Dispose();
 
 		}
 	}
