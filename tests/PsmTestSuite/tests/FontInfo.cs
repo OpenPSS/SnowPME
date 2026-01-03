@@ -7,7 +7,6 @@ namespace PsmTestSuite
 	public class FontInfo : PsmTest
 	{
 		public override void Run() {
-			
 			Font fnt = new Font(FontAlias.System, 1, FontStyle.Bold);
 			
 			Log("Name", fnt.Name);
