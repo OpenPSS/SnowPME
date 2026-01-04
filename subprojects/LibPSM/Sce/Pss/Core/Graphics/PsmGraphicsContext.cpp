@@ -40,6 +40,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::Delete(int handle){
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 
@@ -56,6 +57,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles) {
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -76,6 +78,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::SwapBuffers(int handle){
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -92,6 +95,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::Clear(int handle, ClearMask mask) {
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -120,6 +124,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::GetMaxScreenSize(int* width, int* height) {
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			*height = Shared::Config::ScreenHeight(0);
@@ -134,6 +139,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::GetScreenSizes(MonoArray* sizes, int* result) {
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 			int numScreens = Shared::Config::ScreenTotal;
@@ -162,6 +168,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::GetScreenInfo(int handle, int* width, int* height, PixelFormat* colorFormat, PixelFormat* depthFormat, MultiSampleMode* multiSampleMode) {
 		LOG_FUNCTION();
+
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 
@@ -182,6 +189,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmGraphicsContext::GetCaps(int handle, GraphicsCapsState* caps) {
 		LOG_FUNCTION();
+		
 		if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
 		if (Thread::IsMainThread()) {
 			*caps = GraphicsContext::GetCaps();

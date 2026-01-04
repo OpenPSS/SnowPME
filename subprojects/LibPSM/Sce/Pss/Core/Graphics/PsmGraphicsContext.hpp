@@ -15,9 +15,9 @@
 #include <Sce/Pss/Core/Graphics/GraphicsCapsState.hpp>
 #include <Sce/Pss/Core/Graphics/MultiSampleMode.hpp>
 #include <Sce/Pss/Core/Imaging/ImageSize.hpp>
+#include <Sce/Pss/Core/PsmMutexObject.hpp>
 
 #include <LibShared.hpp>
-
 #include <mono/mono.h>
 
 namespace Sce::Pss::Core::Graphics {

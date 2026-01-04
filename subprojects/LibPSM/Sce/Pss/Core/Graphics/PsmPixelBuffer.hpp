@@ -13,7 +13,7 @@
 
 
 namespace Sce::Pss::Core::Graphics {
-	class PsmPixelBuffer : public PsmMutexObject<PsmPixelBuffer> {
+	class PsmPixelBuffer {
 	public:
 		static int Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int *result);
 		static int Delete(int handle);

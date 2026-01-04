@@ -19,7 +19,6 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() != nullptr) {
@@ -51,7 +50,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::Delete(int handle) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (Thread::IsMainThread()) {
 			if (!PixelBuffer::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
@@ -67,7 +65,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::AddRef(int handle) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
+
 		if (Thread::IsMainThread()) {
 			PixelBuffer::AddRef(handle);
 			return PSM_ERROR_NO_ERROR;
@@ -80,7 +78,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (Thread::IsMainThread()) {
 			if (!PixelBuffer::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
