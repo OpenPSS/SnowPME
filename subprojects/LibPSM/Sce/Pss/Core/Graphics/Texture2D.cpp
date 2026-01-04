@@ -110,9 +110,8 @@ namespace Sce::Pss::Core::Graphics {
 			this->needsHalfFloat = ((extension & GraphicsExtension::TextureHalfFloat) == GraphicsExtension::None);
 		}
 
-		// TODO: Figure out why PSM Checks this?? 
-		if (((width - 1) & width) != 0 || ((height - 1) & height) != 0) {
-			this->usesRgba = (extension & GraphicsExtension::TextureNpot) == GraphicsExtension::None;
+		if (!this->CheckPowerOfTwo(width, height)) {
+			this->npot = (extension & GraphicsExtension::TextureNpot) == GraphicsExtension::None;
 			if (extension < GraphicsExtension::None)
 				this->mipmapLevel = 1;
 		}

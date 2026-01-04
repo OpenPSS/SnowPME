@@ -82,14 +82,15 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	bool PixelBuffer::CheckFormatSizeError(PixelFormat format, int width, int height) {
-		// What is this size check actually checking for?
-
-		if (format < PixelFormat::Dxt1 || ((width - 1) & width) == 0 && ((height - 1) & height) == 0)
+		if (format < PixelFormat::Dxt1 || this->CheckPowerOfTwo(width, height))
 			return true;
 		ExceptionInfo::AddMessage("Unsupported size for compressed texture\n");
 		return PixelBuffer::SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 	}
 
+	bool PixelBuffer::CheckPowerOfTwo(int width, int height) {
+		return (IS_POW_2(width) && IS_POW_2(height));
+	}
 
 	bool PixelBuffer::CheckGlError() {
 		GLenum err = glGetError();

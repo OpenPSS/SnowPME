@@ -9,6 +9,8 @@
 #include <Sce/Pss/Core/PsmObject.hpp>
 #include <glad/glad.h>
 
+#define IS_POW_2(x) (((x - 1) & x) == 0)
+
 namespace Sce::Pss::Core::Graphics {
 	class PixelBuffer : public GraphicsObject<PixelBuffer> {
 	private:
@@ -22,7 +24,7 @@ namespace Sce::Pss::Core::Graphics {
 		int mipmapLevel = 0;
 		int unk11 = 0;
 		bool needsHalfFloat = false;
-		bool usesRgba = false;
+		bool npot = false;
 
 		size_t cacheSize = 0;
 		uint8_t* cachePtr = nullptr;
@@ -39,6 +41,7 @@ namespace Sce::Pss::Core::Graphics {
 		bool CheckFormatError(PixelFormat format, PixelBufferOption option);
 		bool CheckSizeError(int width, int height, int min, int max);
 		bool CheckFormatSizeError(PixelFormat format, int width, int height);
+		bool CheckPowerOfTwo(int width, int height);
 		bool CheckGlError();
 		bool AllocCache(InternalOption opt);
 
