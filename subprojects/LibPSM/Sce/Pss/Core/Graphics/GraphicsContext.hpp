@@ -74,15 +74,6 @@ namespace Sce::Pss::Core::Graphics {
 		int setCurrentObject(std::shared_ptr<ShaderProgram> program);
 		int setCurrentObject(std::shared_ptr<FrameBuffer> frameBuffer);
 
-		static void ErrorCallback(
-			GLenum source,
-			GLenum type,
-			GLuint id,
-			GLenum severity,
-			GLsizei length,
-			const GLchar* message,
-			const void* userParam
-		);
 
 		static GraphicsCapsState capsState;
 

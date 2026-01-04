@@ -3,12 +3,14 @@
 #include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsCapsState.hpp>
+#include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
 
 using namespace Shared::Debug;
+using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
 using namespace Sce::Pss::Core::Imaging::Impl;
@@ -62,7 +64,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2, int unk0) {
+	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption intOption, int unk0) {
 		LOG_FUNCTION();
 		
 		if (!this->CheckSizeError(width, height, 0, 0x800)) {
@@ -98,15 +100,65 @@ namespace Sce::Pss::Core::Graphics {
 			mipmapLevel = this->CalculateTotalMipMaps(width, height);
 		}
 
-		this->level = mipmapLevel;
+		this->mipmapLevel = mipmapLevel;
 		this->unk11 = 1;
 		this->glPixelBufferType = GL_TEXTURE_2D;
 		
 		GraphicsExtension extension = GraphicsContext::GetCaps().Extension;
 
-		UNIMPLEMENTED();
+		if (this->GetFormatHasHalfFloat(format)) {
+			this->needsHalfFloat = ((extension & GraphicsExtension::TextureHalfFloat) == GraphicsExtension::None);
+		}
 
-		return PSM_ERROR_NO_ERROR;
+		// TODO: Figure out why PSM Checks this?? 
+		if (this->CheckSizeError(width, height)) {
+			this->usesRgba = (extension & GraphicsExtension::TextureNpot) == GraphicsExtension::None;
+			if (extension < GraphicsExtension::None)
+				this->mipmapLevel = 1;
+		}
+
+
+		// clear all gl errors
+		while (glGetError());
+
+		// generate GL Handle ...
+		glGenTextures(1, &this->GLHandle);
+
+		int formatComponent = OpenGL::GetTextureFormatComponent(format);
+		int formatType = OpenGL::GetTextureFormatType(format);
+		int bitsPerPixel = this->GetFormatBitsPerPixel(format);
+
+		PixelFormat pixFormat = (format < PixelFormat::Dxt1) ? PixelFormat::None : PixelFormat::Rgba4444;
+		
+		// start using this texture
+		Texture* prev = OpenGL::SetTexture(this);
+
+		if (mipmapLevel > 0) {
+			// TODO: Implement mipmap part of the code (it looks scary...)
+			UNIMPLEMENTED_MSG("Mip-Mapping not yet implemented");
+		}
+
+		bool needsHalfFloat = this->needsHalfFloat;
+		bool needsMipMap = this->mipmapLevel > 1;
+
+		GLenum minFilter = GL_NONE;
+		GLenum magFilter = needsHalfFloat ? GL_NEAREST : GL_LINEAR;
+
+		if (needsHalfFloat)
+			minFilter = needsMipMap ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST;
+		else
+			minFilter = needsMipMap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR;
+
+
+		glTexParameteri(this->glPixelBufferType, GL_TEXTURE_MAG_FILTER, magFilter);
+		glTexParameteri(this->glPixelBufferType, GL_TEXTURE_MIN_FILTER, minFilter);
+		glTexParameteri(this->glPixelBufferType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(this->glPixelBufferType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		// change texture back to prebious texture
+		OpenGL::SetTexture(prev);
+
+		return this->CheckGlError() && this->AllocCache(intOption);
 	}
 
 

@@ -16,6 +16,8 @@ namespace Sce::Pss::Core::Graphics {
 		static Texture* activeTexture;
 
 		static const GLenum glFormatTypes[0x10];
+		static const GLenum glTextureTypes[0x20];
+		static const GLenum glTextureFormatComponents[0x20];
 
 
 	public:
@@ -23,10 +25,16 @@ namespace Sce::Pss::Core::Graphics {
 		static void SetShaderProgram(ShaderProgram* shaderProgram);
 		static void SetVertexBuffer(VertexBuffer* vertexBuffer);
 		static void SetFrameBuffer(FrameBuffer* frameBuffer);
-		static void SetTexture(Texture* texture);
+
+		// Returns: Previous Texture
+		static Texture* SetTexture(Texture* texture);
 
 		static GLenum GetVertexFormatType(VertexFormat fmt);
 		static GLenum GetVertexFormatNormalize(VertexFormat fmt);
+		
+		static GLenum GetTextureFormatComponent(PixelFormat fmt);
+		static GLenum GetTextureFormatType(PixelFormat fmt);
+
 
 	};
 

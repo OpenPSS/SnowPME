@@ -136,11 +136,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 					
 
 					// copy it over ...
-					metrics[i].X = x;
-					metrics[i].Width = width;
-					metrics[i].Y = y;
-					metrics[i].Height = height;
-					metrics[i].HorizontalAdvance = advance;
+					metrics[i].X = static_cast<float>(x);
+					metrics[i].Width = static_cast<float>(width);
+					metrics[i].Y = static_cast<float>(y);
+					metrics[i].Height = static_cast<float>(height);
+					metrics[i].HorizontalAdvance = static_cast<float>(advance);
 
 				}
 				else {

@@ -647,10 +647,6 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	void GraphicsContext::ErrorCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-		Logger::Error("[" + std::string((type == GL_DEBUG_TYPE_ERROR ? "OPENGL ERROR" : "")) + " type : " + std::to_string(type) + " severity : " + std::to_string(severity) + "] " + std::string(message));
-	}
-
 	GraphicsCapsState& GraphicsContext::GetCaps() {
 		return GraphicsContext::capsState;
 	}
@@ -849,12 +845,6 @@ namespace Sce::Pss::Core::Graphics {
 			
 			
 			this->minFrameDelta = std::make_unique<DeltaTime>(60);
-
-
-#ifdef _DEBUG
-			glEnable(GL_DEBUG_OUTPUT);
-			glDebugMessageCallback((GLDEBUGPROC) (GraphicsContext::ErrorCallback), nullptr);
-#endif
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");

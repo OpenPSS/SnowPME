@@ -8,6 +8,8 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 
+#include <glad/glad.h>
+
 namespace Sce::Pss::Core::Graphics {
 	template<typename T> class GraphicsObject : public PsmMutexObject<T>, public Errorable {
 		template<typename U> friend class GraphicsObject;
@@ -80,7 +82,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		bool Active;
-		uint32_t GLHandle = 0;
+		GLenum GLHandle;
 
 		void* operator new(size_t size) {
 			Logger::Debug("Allocating: " + std::to_string(size) + " // " + typeid(T).name());

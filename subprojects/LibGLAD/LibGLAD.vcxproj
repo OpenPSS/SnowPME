@@ -11,11 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c" />
+    <ClInclude Include="glad\glad.h" />
+    <ClInclude Include="glad\gles2.h" />
+    <ClInclude Include="KHR\khrplatform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="glad\glad.h" />
-    <ClInclude Include="KHR\khrplatform.h" />
+    <ClCompile Include="glad.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

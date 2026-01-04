@@ -42,7 +42,11 @@ inline UnderlyingType operator -(UnderlyingType l, BaseType r) { return (Underly
 \
 inline UnderlyingType operator *=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l * (UnderlyingType)r); }; \
 inline UnderlyingType operator +=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l + (UnderlyingType)r); }; \
-inline UnderlyingType operator -=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l - (UnderlyingType)r); }
+inline UnderlyingType operator -=(UnderlyingType l, BaseType r) { return l = (UnderlyingType)((UnderlyingType)l - (UnderlyingType)r); }; \
+\
+inline UnderlyingType operator ==(UnderlyingType l, BaseType r) { return (UnderlyingType)l == (UnderlyingType)r; }; \
+inline UnderlyingType operator ==(BaseType l, UnderlyingType r) { return (UnderlyingType)l == (UnderlyingType)r; }
+
 
 
 #endif
