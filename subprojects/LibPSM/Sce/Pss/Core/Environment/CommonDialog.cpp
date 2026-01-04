@@ -120,9 +120,9 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::ReleaseNative(CommonDialogType type, int handle) {
 		LOG_FUNCTION();
-		if (!Handles<CommonDialog>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = Handles<CommonDialog>::Get(handle);
+		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		CommonDialog::Delete(cDialog);
@@ -140,9 +140,9 @@ namespace Sce::Pss::Core::Environment {
 
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT; 
 		if (cmdArg == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		if (!Handles<CommonDialog>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = Handles<CommonDialog>::Get(handle);
+		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// I think this is actually a bit inaccurate for some InAppPurchaseDialog commands ...
@@ -161,9 +161,9 @@ namespace Sce::Pss::Core::Environment {
 	}
 	int CommonDialog::AbortNative(CommonDialogType type, int handle) {
 		LOG_FUNCTION();
-		if (!Handles<CommonDialog>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = Handles<CommonDialog>::Get(handle);
+		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		int err = cDialog->CheckAbort();
@@ -177,9 +177,9 @@ namespace Sce::Pss::Core::Environment {
 		LOG_FUNCTION();
 
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-		if (!Handles<CommonDialog>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = Handles<CommonDialog>::Get(handle);
+		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		int err = cDialog->CheckState();
@@ -195,9 +195,9 @@ namespace Sce::Pss::Core::Environment {
 		if (result == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (results == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
-		if (!Handles<CommonDialog>::IsValid(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = Handles<CommonDialog>::Get(handle);
+		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 

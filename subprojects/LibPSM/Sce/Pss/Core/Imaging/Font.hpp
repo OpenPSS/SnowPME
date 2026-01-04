@@ -11,11 +11,11 @@
 #include <Sce/Pss/Core/Imaging/FontStyle.hpp>
 #include <Sce/Pss/Core/Imaging/FontMetrics.hpp>
 #include <Sce/Pss/Core/Imaging/CharMetrics.hpp>
-#include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/PsmRefCount.hpp>
 #include <memory>
 
 namespace Sce::Pss::Core::Imaging {
-	class Font : public PsmObject<Font> {
+	class Font : public PsmRefCount<Font> {
 	private:
 		std::unique_ptr<Sce::Pss::Core::Imaging::Impl::FontImpl> fontImpl = nullptr;
 	public:

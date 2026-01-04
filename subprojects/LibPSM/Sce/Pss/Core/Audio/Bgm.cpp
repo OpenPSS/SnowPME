@@ -142,8 +142,8 @@ namespace Sce::Pss::Core::Audio {
 	int Bgm::ReleaseNative(int handle) {
 		LOG_FUNCTION();
 		
-		if (Handles<Bgm>::IsValid(handle)) {
-			std::shared_ptr<Bgm> bgm = Handles<Bgm>::Get(handle);
+		if (Bgm::CheckHandle(handle)) {
+			std::shared_ptr<Bgm> bgm = Bgm::LookupHandle(handle);
 			if (bgm == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 			Bgm::Delete(bgm);
@@ -156,8 +156,8 @@ namespace Sce::Pss::Core::Audio {
 		if (playerHandle == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
-		if (Handles<Bgm>::IsValid(handle)) {
-			std::shared_ptr<Bgm> bgm = Handles<Bgm>::Get(handle);
+		if (Bgm::CheckHandle(handle)) {
+			std::shared_ptr<Bgm> bgm = Bgm::LookupHandle(handle);
 			std::shared_ptr<BgmPlayer> player = BgmPlayer::Create(std::weak_ptr<Bgm>(bgm));
 			RETURN_ERRORABLE_PSMOBJECT(player, BgmPlayer);
 

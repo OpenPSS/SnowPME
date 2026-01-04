@@ -16,8 +16,8 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmClose(uint64_t handle) {
 		LOG_FUNCTION();
-		if (!Handles<PsmFileHandle>::IsValid(handle)) return PSM_ERROR_INVALID_PARAMETER;
-		std::shared_ptr<PsmFileHandle> fd = Handles<PsmFileHandle>::Get(handle);
+		if (!PsmFileHandle::CheckHandle(handle)) return PSM_ERROR_INVALID_PARAMETER;
+		std::shared_ptr<PsmFileHandle> fd = PsmFileHandle::LookupHandle(handle);
 	
 		if (fd == nullptr) return PSM_ERROR_INVALID_PARAMETER;
 		if (!fd->IsOpen()) return PSM_ERROR_INVALID_PARAMETER;
@@ -73,10 +73,10 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmDirectoryRead(uint64_t directory, ScePssFileInformation_t* pFileInfo) {
 		LOG_FUNCTION();
-		if (pFileInfo == nullptr || !Handles<PsmFileHandle>::IsValid(directory))
+		if (pFileInfo == nullptr || !PsmFileHandle::CheckHandle(directory))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(directory);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(directory);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -153,10 +153,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileGetInformation(uint64_t file, ScePssFileInformation_t* pFileInfo) { 
 		LOG_FUNCTION();
 
-		if (!Handles<PsmFileHandle>::IsValid(file) || pFileInfo == nullptr)
+		if (!PsmFileHandle::CheckHandle(file) || pFileInfo == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -173,10 +173,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileRead(uint64_t file, void* buffer, uint32_t uBytesToRead, uint32_t* puBytesRead) {
 		LOG_FUNCTION();
 
-		if (!Handles<PsmFileHandle>::IsValid(file) || buffer == nullptr || uBytesToRead == 0 || puBytesRead == nullptr)
+		if (!PsmFileHandle::CheckHandle(file) || buffer == nullptr || uBytesToRead == 0 || puBytesRead == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -192,10 +192,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileWrite(uint64_t file, void* buffer, uint32_t uBytesToWrite, uint32_t* puBytesWritten) {
 		LOG_FUNCTION();
 
-		if (!Handles<PsmFileHandle>::IsValid(file) || buffer == nullptr || uBytesToWrite == 0 || puBytesWritten == 0)
+		if (!PsmFileHandle::CheckHandle(file) || buffer == nullptr || uBytesToWrite == 0 || puBytesWritten == 0)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 
 		if (!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -216,10 +216,10 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmFileSeek(uint64_t file, int32_t nOffset, ScePssFileSeekType_t seekType) {
 		LOG_FUNCTION();
-		if (!Handles<PsmFileHandle>::IsValid(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
+		if (!PsmFileHandle::CheckHandle(file) || seekType > SCE_PSS_FILE_SEEK_TYPE_CURRENT)
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 		
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -235,10 +235,10 @@ namespace Sce::Pss::Core::Io {
 
 	int IoCall::PsmFileFlush(uint64_t file) {
 		LOG_FUNCTION();
-		if (!Handles<PsmFileHandle>::IsValid(file))
+		if (!PsmFileHandle::CheckHandle(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 		
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -261,10 +261,10 @@ namespace Sce::Pss::Core::Io {
 	
 	int IoCall::PsmFileGetSize(uint64_t file, uint32_t* puSize) {
 		LOG_FUNCTION();
-		if (puSize == nullptr || !Handles<PsmFileHandle>::IsValid(file))
+		if (puSize == nullptr || !PsmFileHandle::CheckHandle(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 		
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 
 		if (handle == nullptr)
 			return PSM_ERROR_INVALID_PARAMETER;
@@ -283,10 +283,10 @@ namespace Sce::Pss::Core::Io {
 	int IoCall::PsmFileTruncate(uint64_t file, uint32_t uSize) {
 		LOG_FUNCTION();
 
-		if (!Handles<PsmFileHandle>::IsValid(file))
+		if (!PsmFileHandle::CheckHandle(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		std::shared_ptr<PsmFileHandle> handle = Handles<PsmFileHandle>::Get(file);
+		std::shared_ptr<PsmFileHandle> handle = PsmFileHandle::LookupHandle(file);
 
 		if(!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;

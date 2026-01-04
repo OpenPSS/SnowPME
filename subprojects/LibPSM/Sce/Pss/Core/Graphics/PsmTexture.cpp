@@ -38,7 +38,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("type is PixelBufferType::Texture2D");
 				
 				PixelBuffer* tex2d = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
-				RETURN_ERRORABLE_GRAPHICSOBJECT(tex2d, PixelBuffer);
+				RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
 
 				*result = tex2d->Handle();
 				return PSM_ERROR_NO_ERROR;
@@ -47,7 +47,7 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("type is PixelBufferType::TextureCube");
 				PixelBuffer* texCube = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
 
-				RETURN_ERRORABLE_GRAPHICSOBJECT(texCube, PixelBuffer);
+				RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
 				*result = texCube->Handle();
 
 				return PSM_ERROR_NO_ERROR;

@@ -267,10 +267,10 @@ namespace Sce::Pss::Core::Imaging {
 	int Image::GetSize(int handle, ImageSize* size){
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
-		if (!Handles<Image>::IsValid(handle)) {
+		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
-		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		std::shared_ptr<Image> img = Image::LookupHandle(handle);
 		*size = img->Size();
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -281,11 +281,11 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Image>::IsValid(handle)) {
+		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		std::shared_ptr<Image> img = Image::LookupHandle(handle);
 		return img->SetSize(*size);
 	}
 	int Image::DecodeNative(int handle) {
@@ -298,11 +298,11 @@ namespace Sce::Pss::Core::Imaging {
 
 		PixelData pixelData;
 
-		if (!Handles<Image>::IsValid(handle)) {
+		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		std::shared_ptr<Image> img = Image::LookupHandle(handle);
 		img->GetPixelDataInternal(pixelData);
 		
 		if (bufferSize >= pixelData.size) {
@@ -319,11 +319,11 @@ namespace Sce::Pss::Core::Imaging {
 
 		PixelData pixelData;
 
-		if (!Handles<Image>::IsValid(handle)) {
+		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		std::shared_ptr<Image> img = Image::LookupHandle(handle);
 		img->GetPixelDataInternal(pixelData);
 
 		*bufferSize = pixelData.size;
@@ -343,11 +343,11 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Image>::IsValid(handle)) {
+		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Handles<Image>::Get(handle);
+		std::shared_ptr<Image> img = Image::LookupHandle(handle);
 		return img->DrawRectangle(*color, *rect);
 	}
 

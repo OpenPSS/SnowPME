@@ -49,12 +49,12 @@ namespace Sce::Pss::Core::Io::Edata {
 			}
 
 			// allocate memory for the full psse.list file
-			std::vector<char> fileData(str->Length());
+			std::vector<char> psseListData(str->Length());
 
 			// read the psse.list into the memory just allocated.
-			uint32_t totalRead = str->Read(fileData.data(), static_cast<uint32_t>(str->Length()));
+			uint32_t totalRead = str->Read(psseListData.data(), static_cast<uint32_t>(str->Length()));
 			if (totalRead == str->Length()) { // if the total bytes read is the same as the filesize
-				std::string edataList = std::string(fileData.data(), static_cast<size_t>(str->Length())); // create a std::string from the psse.list data
+				std::string edataList = std::string(psseListData.data(), static_cast<size_t>(str->Length())); // create a std::string from the psse.list data
 				parseEdataList(edataList, sandbox); // create a psse.list object.
 			}
 			else {

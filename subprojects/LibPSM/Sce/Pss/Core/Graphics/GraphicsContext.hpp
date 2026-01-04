@@ -51,11 +51,11 @@ namespace Sce::Pss::Core::Graphics {
 		static const GLenum glCullModes[0x4];
 		static const GLenum glCullFrontFaceModes[0x2];
 
-		std::shared_ptr<ShaderProgram> currentProgram = nullptr;
-		std::shared_ptr<FrameBuffer> currentFrameBuffer = nullptr;
+		ShaderProgram* currentProgram = nullptr;
+		FrameBuffer* currentFrameBuffer = nullptr;
 		
-		std::vector<std::weak_ptr<VertexBuffer>> vertexBuffers;
-		std::vector<std::weak_ptr<Texture>> textures;
+		std::vector<VertexBuffer*> vertexBuffers;
+		std::vector<Texture*> textures;
 		EnableMode currentEnableModes = EnableMode::None;
 
 		int cullFaceBits = 0;
@@ -71,8 +71,8 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::unique_ptr<DeltaTime> minFrameDelta = nullptr;
 
-		int setCurrentObject(std::shared_ptr<ShaderProgram> program);
-		int setCurrentObject(std::shared_ptr<FrameBuffer> frameBuffer);
+		int setCurrentObject(ShaderProgram* program);
+		int setCurrentObject(FrameBuffer* frameBuffer);
 
 
 		static GraphicsCapsState capsState;

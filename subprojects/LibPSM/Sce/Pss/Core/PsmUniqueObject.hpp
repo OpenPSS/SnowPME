@@ -9,7 +9,7 @@ namespace Sce::Pss::Core {
 
 	template<typename T> class PsmUniqueObject {
 	private:
-		static std::shared_ptr<T> uObjPtr;
+		inline static std::shared_ptr<T> uObjPtr = nullptr;
 	public:
 		~PsmUniqueObject() {
 			if (PsmUniqueObject<T>::UniqueObjectExists()) {
@@ -43,6 +43,5 @@ namespace Sce::Pss::Core {
 
 	};
 
-	template<typename T> std::shared_ptr<T> PsmUniqueObject<T>::uObjPtr = nullptr;
 }
 #endif

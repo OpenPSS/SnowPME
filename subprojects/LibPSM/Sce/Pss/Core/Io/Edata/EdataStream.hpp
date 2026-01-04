@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 		int blockPosition();
 		int bytesLeftInBlock();
-		uint64_t getRemainLength(uint64_t length, uint64_t totalRead);
+		int getRemainLength(uint64_t length, uint64_t totalRead);
 		void decryptBlock(uint64_t blockNo);
 		void rollIv(uint64_t blockNo, uint8_t blockIv[0x10]);
 		

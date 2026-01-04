@@ -26,7 +26,7 @@ namespace Sce::Pss::Core::Graphics {
 		VertexFormat* vertexFormats = reinterpret_cast<VertexFormat*>(mono_array_addr_with_size(formats, 1, 0));
 		int vertexFormatsLen = mono_array_length(formats);
 		VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, vertexFormats, vertexFormatsLen, instDivisor, option);
-		RETURN_ERRORABLE_GRAPHICSOBJECT(vtxBuf, VertexBuffer);
+		RETURN_ERRORABLE_PSMOBJECT(vtxBuf, VertexBuffer);
 
 		*result = vtxBuf->Handle();
 
@@ -35,10 +35,10 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmVertexBuffer::Delete(int handle) {
 		LOG_FUNCTION();
 
-		if (Handles<VertexBuffer>::IsValid(handle)) {
+		if (VertexBuffer::CheckHandle(handle)) {
 
 			if (Thread::IsMainThread()) {
-				VertexBuffer::Release(handle);
+				VertexBuffer::Delete(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {
@@ -59,7 +59,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
-			VertexBuffer* buffer = Handles<VertexBuffer>::GetRaw(handle);
+			VertexBuffer* buffer = VertexBuffer::LookupHandle(handle);
 			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 			void* verticiesBuffer = nullptr;
@@ -91,7 +91,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
-			VertexBuffer* buffer = Handles<VertexBuffer>::GetRaw(handle);
+			VertexBuffer* buffer = VertexBuffer::LookupHandle(handle);
 			if (buffer == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 			MonoType* type = MonoUtil::MonoArrayElementsType(vertices);

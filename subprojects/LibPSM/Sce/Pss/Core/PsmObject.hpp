@@ -9,7 +9,6 @@
 #include <mutex>
 #include <memory>
 #include <utility>
-#include <type_traits>
 
 namespace Sce::Pss::Core {
 	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<PsmObject<T>> {
@@ -36,14 +35,31 @@ namespace Sce::Pss::Core {
 		}
 
 		static void Delete(std::shared_ptr<T> obj) {
-			if (Sce::Pss::Core::System::Handles<T>::IsValid(obj->Handle())) {
+			if (CheckHandle(obj->Handle()))
 				Sce::Pss::Core::System::Handles<T>::Delete(obj->Handle());
-			}
+			obj = nullptr;
 		}
 		
 		int Handle() {
 			return this->handle;
 		}
+
+		static std::shared_ptr<T> LookupHandle(uint64_t handle) {
+			return T::LookupHandle(static_cast<int>(handle));
+		}
+
+		static std::shared_ptr<T> LookupHandle(int handle) {
+			return Sce::Pss::Core::System::Handles<T>::Get(handle);
+		}
+
+		static bool CheckHandle(uint64_t handle) {
+			return T::CheckHandle(static_cast<int>(handle));
+		}
+
+		static bool CheckHandle(int handle) {
+			return Sce::Pss::Core::System::Handles<T>::IsValid(handle);
+		}
+
 
 		void* operator new(size_t size) {
 			Logger::Debug("Allocating: " + std::to_string(size) + " // " + typeid(T).name());

@@ -122,7 +122,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 
 	int EdataStream::blockPosition() {
-		int blockPosition = static_cast<int>(this->position - this->getBlockDecryptedFileOffset(this->block));
+		uint64_t blockPosition = this->position - this->getBlockDecryptedFileOffset(this->block);
 
 		if (blockPosition > this->currentBlock.size())
 			blockPosition = this->currentBlock.size();
@@ -130,15 +130,15 @@ namespace Sce::Pss::Core::Io::Edata {
 		if (blockPosition < 0)
 			blockPosition = 0;
 
-		return blockPosition;
+		return static_cast<int>(blockPosition);
 	}
 
 	int EdataStream::bytesLeftInBlock() {
-		return this->currentBlock.size() - this->blockPosition();
+		return static_cast<int>(this->currentBlock.size() - this->blockPosition());
 	}
 
-	uint64_t EdataStream::getRemainLength(uint64_t length, uint64_t totalRead) {
-		return length - totalRead;
+	int EdataStream::getRemainLength(uint64_t length, uint64_t totalRead) {
+		return static_cast<int>(length - totalRead);
 	}
 
 	EdataStream::EdataStream(const std::string& file, std::ios::openmode mode, uint8_t klicensee[0x10], bool inEdata) {

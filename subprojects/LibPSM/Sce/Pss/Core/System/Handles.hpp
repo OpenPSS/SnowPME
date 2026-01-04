@@ -2,6 +2,8 @@
 #define LIB_PSS_HANDLES_H 1
 #include <cstddef>
 #include <cstdint>
+#include <memory>
+
 #include <unordered_map>
 #include <LibShared.hpp>
 
@@ -47,7 +49,7 @@ namespace Sce::Pss::Core::System {
 
 		static std::shared_ptr<T> Get(int handle) {
 			if (Handles::IsValid(handle)) {
-				return handles[handle];
+				return std::dynamic_pointer_cast<T>(handles[handle]);
 			}
 			return nullptr;
 		}
@@ -58,7 +60,7 @@ namespace Sce::Pss::Core::System {
 
 		static T* GetRaw(int handle) {
 			if (Handles::IsValid(handle)) {
-				return reinterpret_cast<T*>(rawHandles[handle]);
+				return dynamic_cast<T*>(rawHandles[handle]);
 			}
 			return nullptr;
 		}

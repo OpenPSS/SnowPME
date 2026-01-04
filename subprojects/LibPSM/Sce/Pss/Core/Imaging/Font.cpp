@@ -93,7 +93,7 @@ namespace Sce::Pss::Core::Imaging {
 		const char* cfontname = mono_string_to_utf8(filename);
 		const std::string fname = std::string(cfontname);
 
-		std::shared_ptr<Font> fnt = Font::Create(fname, size, style);
+		Font* fnt = Font::Create(fname, size, style);
 		RETURN_ERRORABLE_PSMOBJECT(fnt, Font);
 
 		*handle = fnt->Handle();
@@ -103,27 +103,36 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 		
-		std::shared_ptr<Font> fnt = Font::Create(alias, size, style);
+		Font* fnt = Font::Create(alias, size, style);
 		RETURN_ERRORABLE_PSMOBJECT(fnt, Font);
 
 		*handle = fnt->Handle();
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::AddRefNative(int handle) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+		
+		Font::AddRef(handle);
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::ReleaseNative(int handle) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		Font::Delete(handle);
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetName(int handle, MonoString* name) {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		
-		if (Handles<Font>::Get(handle)->fontImpl != nullptr) {
-			const std::string sFontName = Handles<Font>::Get(handle)->fontImpl->Name();
+		Font* fnt = Font::LookupHandle(handle);
+		if (fnt != nullptr) {
+			const std::string sFontName = fnt->fontImpl->Name();
 
 			MonoString* msFontName = mono_string_new_wrapper(sFontName.c_str());
 			mono_gc_wbarrier_generic_store(name, reinterpret_cast<MonoObject*>(msFontName));
@@ -137,30 +146,30 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		*size = Handles<Font>::Get(handle)->Size();
+		*size = Font::LookupHandle(handle)->Size();
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetStyle(int handle, FontStyle* style) {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		*style = Handles<Font>::Get(handle)->Style();
+		*style = Font::LookupHandle(handle)->Style();
 		return PSM_ERROR_NO_ERROR;
 	}
 	int Font::GetMetrics(int handle, FontMetrics* fontMetrics) {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		*fontMetrics = Handles<Font>::Get(handle)->Metrics();
+		*fontMetrics = Font::LookupHandle(handle)->Metrics();
 		return PSM_ERROR_NO_ERROR;
 	}
 
@@ -168,7 +177,7 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		if (text == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -178,13 +187,13 @@ namespace Sce::Pss::Core::Imaging {
 		int chkLen = mono_string_length(text);
 
 		const std::wstring textForCalc(chkTxt, chkLen);
-		return Handles<Font>::Get(handle)->GetTextWidth(textForCalc, offset, len, width);
+		return Font::LookupHandle(handle)->GetTextWidth(textForCalc, offset, len, width);
 	}
 	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, MonoArray* charMetrics) {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		if (!Handles<Font>::IsValid(handle))
+		if (!Font::CheckHandle(handle))
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		if (text == nullptr) 
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -197,6 +206,6 @@ namespace Sce::Pss::Core::Imaging {
 		// get metrics
 		CharMetrics* metrics = reinterpret_cast<CharMetrics*>(mono_array_addr_with_size(charMetrics, sizeof(CharMetrics), 0));
 
-		return Handles<Font>::Get(handle)->GetTextMetrics(textForCalc, offset, len, metrics);
+		return Font::LookupHandle(handle)->GetTextMetrics(textForCalc, offset, len, metrics);
 	}
 }

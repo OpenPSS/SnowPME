@@ -20,14 +20,6 @@
 			return error; \
 		}
 
-#define RETURN_ERRORABLE_GRAPHICSOBJECT(x, t) \
-		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
-			int error = x->GetError(); \
-			PRINT_ERR(error); \
-			t::Release(x); \
-			x = nullptr; \
-			return error; \
-		}
 
 #define RETURN_ERRORABLE_PSMOBJECT(x, t) \
 		if(x->GetError() != PSM_ERROR_NO_ERROR) { \
