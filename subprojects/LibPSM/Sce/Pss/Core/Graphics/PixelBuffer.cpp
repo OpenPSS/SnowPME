@@ -82,6 +82,9 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	bool PixelBuffer::CheckFormatSizeError(PixelFormat format, int width, int height) {
+		// if it is not a DXT texture, or the texture is not a power of two,
+		// then this check succeeds, otherwise it fails;
+
 		if (format < PixelFormat::Dxt1 || this->CheckPowerOfTwo(width, height))
 			return true;
 		ExceptionInfo::AddMessage("Unsupported size for compressed texture\n");
