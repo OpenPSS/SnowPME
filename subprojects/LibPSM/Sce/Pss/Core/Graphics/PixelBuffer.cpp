@@ -90,10 +90,6 @@ namespace Sce::Pss::Core::Graphics {
 		return PixelBuffer::SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 	}
 
-	bool PixelBuffer::CheckSizeError(int width, int height) {
-		// What is this size check actually checking for?
-		return ((width - 1) & width) != 0 || ((height - 1) & height) != 0;
-	}
 
 	bool PixelBuffer::CheckGlError() {
 		GLenum err = glGetError();

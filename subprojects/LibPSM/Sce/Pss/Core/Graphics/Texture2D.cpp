@@ -111,7 +111,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		// TODO: Figure out why PSM Checks this?? 
-		if (this->CheckSizeError(width, height)) {
+		if (((width - 1) & width) != 0 || ((height - 1) & height) != 0) {
 			this->usesRgba = (extension & GraphicsExtension::TextureNpot) == GraphicsExtension::None;
 			if (extension < GraphicsExtension::None)
 				this->mipmapLevel = 1;
@@ -133,9 +133,10 @@ namespace Sce::Pss::Core::Graphics {
 		// start using this texture
 		Texture* prev = OpenGL::SetTexture(this);
 
+		// generate mipmaps
 		if (mipmapLevel > 0) {
 			// TODO: Implement mipmap part of the code (it looks scary...)
-			UNIMPLEMENTED_MSG("Mip-Mapping not yet implemented");
+			UNIMPLEMENTED_MSG("Generation of mip maps is not yet implemented");
 		}
 
 		bool needsHalfFloat = this->needsHalfFloat;

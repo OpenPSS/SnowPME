@@ -39,7 +39,6 @@ namespace Sce::Pss::Core::Graphics {
 		bool CheckFormatError(PixelFormat format, PixelBufferOption option);
 		bool CheckSizeError(int width, int height, int min, int max);
 		bool CheckFormatSizeError(PixelFormat format, int width, int height);
-		bool CheckSizeError(int width, int height);
 		bool CheckGlError();
 		bool AllocCache(InternalOption opt);
 
