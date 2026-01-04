@@ -19,6 +19,8 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmPixelBuffer::Create(PixelBufferType type, int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption option2, int* result) {
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() != nullptr) {
 				switch (type) {
@@ -49,6 +51,8 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::Delete(int handle) {
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		if (Thread::IsMainThread()) {
 			if (!PixelBuffer::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			PixelBuffer::Delete(handle);
@@ -63,11 +67,21 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::AddRef(int handle) {
 		LOG_FUNCTION();
-		PixelBuffer::AddRef(handle);
-		return PSM_ERROR_NO_ERROR;
+		LOCK_GUARD_STATIC();
+		if (Thread::IsMainThread()) {
+			PixelBuffer::AddRef(handle);
+			return PSM_ERROR_NO_ERROR;
+		}
+		else
+		{
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmPixelBuffer::GetInfo(int handle, PixelBufferType* type, int* width, int* height, int* level, PixelFormat* format, PixelBufferOption* option){
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		if (Thread::IsMainThread()) {
 			if (!PixelBuffer::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 			PixelBuffer* pixBuffer = PixelBuffer::LookupHandle(handle);
