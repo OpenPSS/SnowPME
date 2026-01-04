@@ -5,6 +5,8 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/PsmMutexObject.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
+#include <Sce/Pss/Core/Errorable.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 #include <memory>
 #include <atomic>
 
