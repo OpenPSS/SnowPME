@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Graphics/PixelFormats.hpp>
 #include <Sce/Pss/Core/Vector4.hpp>
 #include <LibShared.hpp>
 #include <glad/glad.h>

@@ -6,7 +6,7 @@
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 #include <Sce/Pss/Core/Features.hpp>
-#include <Sce/Pss/Core/Graphics/PixelFormatStructs.hpp>
+#include <Sce/Pss/Core/Graphics/PixelFormats.hpp>
 
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Memory;

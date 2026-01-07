@@ -1,24 +1,22 @@
 #ifndef LIB_PSS_PIXELFORMATS_H
 #define LIB_PSS_PIXELFORMATS_H 1
 #include <cstdint>
+#include <LibShared.hpp>
 #include <Sce/Pss/Core/System/PlatformSpecific.hpp>
 
 #define SIZE_CHK(type, size) static_assert(sizeof(type) == size, "sizeof(" #type ") is not " #size " bytes")
 
-namespace Sce::Pss::Core::Graphics::PixelFormats {
-	typedef uint16_t half;
-	typedef int8_t byte;
-	typedef uint8_t ubyte;
+typedef uint16_t half;
+typedef int8_t byte;
+typedef uint8_t ubyte;
 
+namespace Sce::Pss::Core::Graphics::PixelFormats {
 	typedef PACK(struct {
-#ifdef _MSC_VER
-		uint16_t val : 24; // what the fuck is msvc; this is the only way i found to make this work; it doesnt work as a uint32_t.
-#else
-		uint32_t val : 24; // very sane, good compiler ... 
-#endif
+		uint8_t b1;
+		uint8_t b2;
+		uint8_t b3;
 	}) uint24_t;
 	SIZE_CHK(uint24_t, 3);
-
 
 	typedef PACK(struct Rgba {
 		uint8_t r;

@@ -120,7 +120,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormatStructs.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormats.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.h" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontFileNames.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontImpl.hpp" />

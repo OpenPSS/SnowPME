@@ -2,11 +2,13 @@
 #define SHARED_COMPILER_H 1
 
 #ifdef __GNUC__
-#define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
+#define PACK( declaration ) declaration __attribute__((__packed__))
+#elif _MSC_VER
+#define PACK( declaration ) __pragma(pack(push, 1)) declaration __pragma(pack(pop))
 #endif
 
 #ifdef _MSC_VER
-#define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop))
+typedef wchar_t wchar;
 #endif
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
