@@ -14,5 +14,6 @@
 
 #define INACCURATE_DONT_ENFORCE_MEM_LIMIT // it's currently broken, 
 
+#define USE_DX1 // not sure what this is about, but the implementation in PSM seems maybe wrong.
 
 #endif

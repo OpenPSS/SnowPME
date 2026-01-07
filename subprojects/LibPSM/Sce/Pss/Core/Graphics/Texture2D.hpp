@@ -15,7 +15,7 @@ namespace Sce::Pss::Core::Graphics {
 		Texture2D(std::string& fileName, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		Texture2D(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2);
 		~Texture2D() = default;
-		int InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2, int unk0);
+		int InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2, void* unk0);
 		int LoadImage(uint8_t* data, uint32_t dataLen, bool mipmap, Sce::Pss::Core::Graphics::PixelFormat format);
 		int ActiveStateChanged(bool state);
 	};

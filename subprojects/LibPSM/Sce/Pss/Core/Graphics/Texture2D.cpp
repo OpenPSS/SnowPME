@@ -4,12 +4,14 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsCapsState.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
 
 using namespace Shared::Debug;
+using namespace Shared::String;
 using namespace Sce::Pss::Core::Graphics;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
@@ -21,7 +23,8 @@ namespace Sce::Pss::Core::Graphics {
 
 	Texture2D::Texture2D(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2) {
 		LOCK_GUARD();
-		this->InitImage(width, height, mipmap, format, option, option2, 0);
+		LOG_FUNCTION();
+		this->InitImage(width, height, mipmap, format, option, option2, nullptr);
 	}
 
 	Texture2D::Texture2D(std::string& fileName, bool mipmap, PixelFormat format) {
@@ -64,7 +67,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption intOption, int unk0) {
+	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption intOption, void* unk0) {
 		LOG_FUNCTION();
 		
 		if (!this->CheckSizeError(width, height, 0, 0x800)) {
@@ -95,15 +98,22 @@ namespace Sce::Pss::Core::Graphics {
 		this->width = width;
 		this->height = height;
 
+
 		int mipmapLevel = 1;
 		if (mipmap != 0) {
 			mipmapLevel = this->CalculateTotalMipMaps(width, height);
 		}
 
 		this->mipmapLevel = mipmapLevel;
-		this->unk11 = 1;
 		this->glPixelBufferType = GL_TEXTURE_2D;
-		
+		this->unk11 = 1;
+
+		Logger::Debug("Option: " + Format::Hex(static_cast<int>(this->option)));
+		Logger::Debug("Type: " + Format::Hex(static_cast<int>(this->type)));
+		Logger::Debug("Format: " + Format::Hex(static_cast<int>(this->format)));
+		Logger::Debug("Width: " + Format::Hex(static_cast<int>(this->width)));
+		Logger::Debug("Height: " + Format::Hex(static_cast<int>(this->height)));
+
 		GraphicsExtension extension = GraphicsContext::GetCaps().Extension;
 
 		if (this->GetFormatHasHalfFloat(format)) {
@@ -127,15 +137,60 @@ namespace Sce::Pss::Core::Graphics {
 		int formatType = OpenGL::GetTextureFormatType(format);
 		int bitsPerPixel = this->GetFormatBitsPerPixel(format);
 
-		PixelFormat pixFormat = (format < PixelFormat::Dxt1) ? PixelFormat::None : PixelFormat::Rgba4444;
-		
+		Logger::Debug("formatComponent: 0x" + Format::Hex(formatComponent));
+		Logger::Debug("formatType: 0x" + Format::Hex(formatType));
+		Logger::Debug("bitsPerPixel: 0x" + Format::Hex(bitsPerPixel));
+
+		bool isDxt = (format >= PixelFormat::Dxt1);
+		if (isDxt) UNIMPLEMENTED_MSG("DXT1 is unimplemented for now.");
+
 		// start using this texture
 		Texture* prev = OpenGL::SetTexture(this);
 
 		// generate mipmaps
 		if (mipmapLevel > 0) {
-			// TODO: Implement mipmap part of the code (it looks scary...)
-			UNIMPLEMENTED_MSG("Generation of mip maps is not yet implemented");
+
+			for (int i = 0; i <= this->mipmapLevel; i++) {
+				Logger::Debug("Generating MipMap " + std::to_string(i)+ " of " + std::to_string(this->mipmapLevel));
+
+				// require valid positive number for height
+				if (width < 1) width = 1;
+				if (height < 1) height = 1;
+
+				// TODO: if(unk0 != null, pixels = *(unk0 + 0x1c);
+				if (unk0 != nullptr) UNIMPLEMENTED_MSG("unk0 != null unimplemented if(unk0 != null, pixels = *(unk0 + 0x1c);");
+				GLvoid* pixels = nullptr;
+
+				// TODO: implement dxt size calculation;
+				// imageSz = (pixFmtI & (pixFmtN + height)) * ((bits_per_pixel * (pixFmtI & (pixFmtN + width)) + 7) / 8);
+
+				// calculate the image size
+				this->imageSize += bitsPerPixel * height * width;
+				Logger::Debug("Current image size: " + Format::Hex(this->imageSize));
+
+
+				// generate current mipmap;
+				if (isDxt) {
+					glCompressedTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, imageSize, pixels);
+				}
+				else {
+					glTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, formatComponent, formatType, pixels);
+				}
+
+				// half the image size for the next mipmap;
+
+				width /= 2;
+				height /= 2;
+
+				// if there is an error in OpenGL
+				if (!this->CheckGLError()) {
+					OpenGL::SetTexture(prev);
+					return PSM_ERROR_NO_ERROR;
+				}
+				else if (glGetError() != GL_NO_ERROR) { // can this even run? 
+					this->mipmapLevel = 1;
+				}
+			}
 		}
 
 		bool needsHalfFloat = this->needsHalfFloat;
@@ -158,7 +213,7 @@ namespace Sce::Pss::Core::Graphics {
 		// change texture back to prebious texture
 		OpenGL::SetTexture(prev);
 
-		return this->CheckGlError() && this->AllocCache(intOption);
+		return this->CheckGLError() && this->AllocCache(intOption);
 	}
 
 

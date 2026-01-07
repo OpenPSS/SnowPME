@@ -26,8 +26,8 @@ namespace Sce::Pss::Core::Graphics {
 		bool needsHalfFloat = false;
 		bool npot = false;
 
-		size_t cacheSize = 0;
-		uint8_t* cachePtr = nullptr;
+		size_t imageSize = 0;
+		uint8_t* imagePtr = nullptr;
 
 		GLenum glPixelBufferType;
 		PixelFormat format = PixelFormat::None;
@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 		bool CheckSizeError(int width, int height, int min, int max);
 		bool CheckFormatSizeError(PixelFormat format, int width, int height);
 		bool CheckPowerOfTwo(int width, int height);
-		bool CheckGlError();
+		bool CheckGLError();
 		bool AllocCache(InternalOption opt);
 
 		int GetFormatHasDepth(PixelFormat format);

@@ -95,7 +95,7 @@ namespace Sce::Pss::Core::Graphics {
 		return (IS_POW_2(width) && IS_POW_2(height));
 	}
 
-	bool PixelBuffer::CheckGlError() {
+	bool PixelBuffer::CheckGLError() {
 		GLenum err = glGetError();
 		if (err == GL_NO_ERROR) {
 			return true;
@@ -112,8 +112,8 @@ namespace Sce::Pss::Core::Graphics {
 		if ((opt & InternalOption::SystemResource) != InternalOption::None)
 			return false;
 
-		this->cachePtr = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->cacheSize));
-		if (this->cachePtr != nullptr) {
+		this->imagePtr = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->imageSize));
+		if (this->imagePtr != nullptr) {
 			return true;
 		}
 		return this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);

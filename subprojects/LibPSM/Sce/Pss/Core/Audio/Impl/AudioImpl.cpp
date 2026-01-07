@@ -1,5 +1,8 @@
-#define MINIAUDIO_IMPLEMENTATION
-#define MA_NO_FLAC // PSM doesnt support FLAC, only mp3 and wav
+#define MINIAUDIO_IMPLEMENTATION // using MiniAudio for playback of audio files ...
+#define MA_NO_FLAC 1 // PSM doesnt support FLAC, only mp3 and wav
+#define MA_NO_ENCODING 1 // we dont need to encode audio.
+#define MA_NO_GENERATION 1 // no generation of audio samples
+
 #include <miniaudio.h>
 #include <cstdint>
 #include <LibShared.hpp>
@@ -10,7 +13,7 @@
 using namespace Shared::Debug;
 namespace Sce::Pss::Core::Audio::Impl {
 
-	void AudioImpl::dataCallback(ma_device* device, void* output, const void* input, ma_uint32 frameCount) {
+	void AudioImpl::dataCallback(ma_device* device, void* output, const void* input, uint32_t frameCount) {
 		AudioImpl* audioObj = reinterpret_cast<AudioImpl*>(device->pUserData);
 		if (audioObj == nullptr) return;
 		if (audioObj->audioDecoder == nullptr) return;
@@ -45,7 +48,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 			this->audioDeviceCfg->playback.format = this->audioDecoder->outputFormat;
 			this->audioDeviceCfg->playback.channels = this->audioDecoder->outputChannels;
 			this->audioDeviceCfg->sampleRate = this->audioDecoder->outputSampleRate;
-			this->audioDeviceCfg->dataCallback = AudioImpl::dataCallback;
+			this->audioDeviceCfg->dataCallback = reinterpret_cast<ma_device_data_proc>(AudioImpl::dataCallback);
 			this->audioDeviceCfg->pUserData = this;
 
 			this->audioDevice = std::make_unique<ma_device>();
