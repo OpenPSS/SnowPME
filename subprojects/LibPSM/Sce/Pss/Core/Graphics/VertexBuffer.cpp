@@ -1,5 +1,5 @@
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
-
+#include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Graphics/VertexBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
@@ -12,6 +12,7 @@
 
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
+using namespace Sce::Pss::Core::Memory;
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Graphics {
@@ -537,8 +538,7 @@ namespace Sce::Pss::Core::Graphics {
 
 				if ((!isValid || type != ElementType::Float) ||
 					(formatVectorWidth != VertexBuffer::GetFormatVectorWidth(inputFormat)) ||
-					(formatVectorHeight != VertexBuffer::GetFormatVectorHeight(inputFormat))
-					) {
+					(formatVectorHeight != VertexBuffer::GetFormatVectorHeight(inputFormat))) {
 					*outputFormat = VertexFormat::None;
 					return false;
 				}
@@ -756,8 +756,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			// is vertexFormats null, or less than 0 formats?
 			if (formats == nullptr && formatsLength > 0) {
-				this->SetError(PSM_ERROR_COMMON_ARGUMENT_NULL);
-				return;
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_ARGUMENT_NULL);
 			}
 
 
@@ -766,14 +765,12 @@ namespace Sce::Pss::Core::Graphics {
 			// is the instDivisor > 1?
 			// if any of those are true, error
 			if (vertexCount > 0xFFFF || indexCount > 0xFFFF || formatsLength > 0x100 || instDivisor > 1) {
-				this->SetError(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
-				return;
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
 			}
 
 			// if option is set then error
-			if (option) {
-				this->SetError(PSM_ERROR_COMMON_ARGUMENT);
-				return;
+			if (option != 0) {
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_ARGUMENT);
 			}
 		
 			// check have required extensions
@@ -784,6 +781,7 @@ namespace Sce::Pss::Core::Graphics {
 				return;
 			}
 
+
 			FormatVectors.resize(sizeof(int) * formatsLength);
 			memcpy(FormatVectors.data(), formats, FormatVectors.size());
 			int indexSize = (2 * indexCount + 3) & -4;
@@ -792,7 +790,6 @@ namespace Sce::Pss::Core::Graphics {
 
 			glGenBuffers(1, &this->GLHandle);
 
-			size_t sz = 0;
 
 			// Determine required buffer size
 			this->VertexFormats.reserve(formatsLength);
@@ -806,24 +803,32 @@ namespace Sce::Pss::Core::Graphics {
 					return;
 
 				if (versionFormatSz > 0)
-					sz += versionFormatSz;
+					this->VertexBufferSize += versionFormatSz;
 
 				this->VertexFormats.push_back(format);
 			}
 
-			sz *= this->VertexCount;
-
-			this->VertexSize = sz;
+			this->VertexBufferSize *= this->VertexCount;
 
 			// Allocate array buffer in opengl.
 
-			OpenGL::SetVertexBuffer(this);
-			glBufferData(GL_ARRAY_BUFFER, sz, 0, GL_STATIC_DRAW);
-			OpenGL::SetVertexBuffer(NULL);
+			VertexBuffer* prev = OpenGL::SetVertexBuffer(this);
+			glBufferData(GL_ARRAY_BUFFER, this->VertexBufferSize, 0, GL_STATIC_DRAW);
+			OpenGL::SetVertexBuffer(prev);
 
 			if (glGetError() == GL_OUT_OF_MEMORY) {
-				this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
-				return;
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+			}
+			
+			// alloc buffer as byte array
+			this->Buffer = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->VertexBufferSize));
+			if (this->Buffer != nullptr) {
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+			}
+
+			if (!HeapAllocator::fake_malloc(this->VertexBufferSize)) {
+				// fake allocation, for tracking memory usage 
+				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 			}
 
 		}
@@ -831,6 +836,13 @@ namespace Sce::Pss::Core::Graphics {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
+	}
+
+	VertexBuffer::~VertexBuffer() {
+		if (this->Buffer != nullptr)
+			HeapAllocator::UniqueObject()->sce_psm_free(this->Buffer);
+		HeapAllocator::fake_free(this->VertexBufferSize);
+		this->VertexBufferSize = 0;
 	}
 
 }

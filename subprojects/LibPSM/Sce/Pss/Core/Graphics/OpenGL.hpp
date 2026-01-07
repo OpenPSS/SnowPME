@@ -23,7 +23,7 @@ namespace Sce::Pss::Core::Graphics {
 	public:
 
 		static void SetShaderProgram(ShaderProgram* shaderProgram);
-		static void SetVertexBuffer(VertexBuffer* vertexBuffer);
+		static VertexBuffer* SetVertexBuffer(VertexBuffer* vertexBuffer);
 		static void SetFrameBuffer(FrameBuffer* frameBuffer);
 
 		// Returns: Previous Texture

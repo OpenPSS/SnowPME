@@ -12,8 +12,6 @@
 #define INACCURATE_DONT_ENFORCE_MAX_SDK // include SDK functions, even if their removed in a later SDK.
 //#define INACCURATE_DONT_ENFORCE_MIN_SDK // include SDK functions, even if their only added in a newer SDK.
 
-#define INACCURATE_DONT_ENFORCE_MEM_LIMIT // it's currently broken, 
-
-#define USE_DX1 // not sure what this is about, but the implementation in PSM seems maybe wrong.
+//#define INACCURATE_DONT_ENFORCE_MEM_LIMIT // it's currently broken, 
 
 #endif

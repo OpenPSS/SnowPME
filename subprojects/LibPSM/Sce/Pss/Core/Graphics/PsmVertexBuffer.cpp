@@ -76,7 +76,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 			size_t arrayLen = MonoUtil::MonoArrayBytesLength(vertices);
 
-			if (count > 0 || !vertices || arrayLen == (buffer->VertexCount * buffer->VertexSize)) {
+			if (count > 0 || !vertices || arrayLen == (buffer->VertexCount * buffer->VertexBufferSize)) {
 				return buffer->SetVerticies(reinterpret_cast<float*>(verticiesBuffer), arrayLen, to, from);
 			}
 			ExceptionInfo::AddMessage("Vertex array has wrong size\n");

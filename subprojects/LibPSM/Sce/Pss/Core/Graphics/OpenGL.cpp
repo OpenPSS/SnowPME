@@ -29,7 +29,8 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	void OpenGL::SetVertexBuffer(VertexBuffer* vertexBuffer) {
+	VertexBuffer* OpenGL::SetVertexBuffer(VertexBuffer* vertexBuffer) {
+		VertexBuffer* prev = OpenGL::activeVertexBuffer;
 		OpenGL::activeVertexBuffer = vertexBuffer;
 		if (vertexBuffer == nullptr) {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -37,6 +38,7 @@ namespace Sce::Pss::Core::Graphics {
 		else {
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GLHandle);
 		}
+		return prev;
 	}
 
 	void OpenGL::SetFrameBuffer(FrameBuffer* frameBuffer) {

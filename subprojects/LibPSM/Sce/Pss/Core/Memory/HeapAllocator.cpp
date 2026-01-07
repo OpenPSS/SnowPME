@@ -9,11 +9,11 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Memory {
 	std::unordered_map<std::string, std::shared_ptr<HeapAllocator>> HeapAllocator::heapList;
+	size_t HeapAllocator::freeMemory = 0x6000000;
 
 	HeapAllocator::HeapAllocator(size_t heapSize, const std::string& heapName) {
 		this->HeapName = heapName;
 		this->TotalHeapSize = heapSize;
-
 	}
 
 	void* HeapAllocator::sce_psm_realloc(void* buffer, int sz) {
@@ -35,12 +35,6 @@ namespace Sce::Pss::Core::Memory {
 	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
 
-#ifndef INACCURATE_DONT_ENFORCE_MEM_LIMIT
-		if (this->UsedSpace + sz > this->TotalHeapSize) {
-			Logger::Warn("couldn't allocate memory " + std::to_string(sz) + " bytes(name = " + this->HeapName + ")");
-			return nullptr;
-		}
-#endif
 		// allocate a vector of uint8_t, of the given size
 		std::shared_ptr<std::vector<uint8_t>> vec = std::make_shared<std::vector<uint8_t>>(sz);
 
@@ -67,6 +61,27 @@ namespace Sce::Pss::Core::Memory {
 		// remove the buffer from the map
 		this->heapAllocations.erase(reinterpret_cast<uintptr_t>(buffer));
 
+	}
+
+	bool HeapAllocator::fake_malloc(size_t size) {
+#ifdef INACCURATE_DONT_ENFORCE_MEM_LIMIT
+		return true;
+#endif
+		LOCK_GUARD_STATIC();
+		if (HeapAllocator::freeMemory < size)
+			return false;
+
+		HeapAllocator::freeMemory -= size;
+		return true;
+	}
+
+	size_t HeapAllocator::fake_free(size_t size) {
+#ifdef INACCURATE_DONT_ENFORCE_MEM_LIMIT
+		return size;
+#endif
+		LOCK_GUARD_STATIC();
+		HeapAllocator::freeMemory += size;
+		return size;
 	}
 
 }

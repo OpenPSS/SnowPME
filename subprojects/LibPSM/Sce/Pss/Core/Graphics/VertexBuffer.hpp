@@ -17,9 +17,10 @@ namespace Sce::Pss::Core::Graphics {
 	class VertexBuffer : public GraphicsObject<VertexBuffer> {
 	private:
 		bool translationScaleNormalize(VertexFormat inputFormat, VertexFormat* outputFormat, Vector4** trans, Vector4** scale);
+	
 	public:
 		VertexBuffer(int vertexCount, int indexCount, VertexFormat* vertexFormats, int vertexFormatsLen, int instDivisor, int option);
-		~VertexBuffer() = default;
+		~VertexBuffer();
 
 		static bool GetFormatIsValid(VertexFormat format);
 		static ElementType GetFormatElementType(VertexFormat format);
@@ -34,13 +35,16 @@ namespace Sce::Pss::Core::Graphics {
 		std::vector<VertexFormat> VertexFormats;
 		std::vector<VertexFormat> FormatVectors;
 
+		uint8_t* Buffer = nullptr;
+		size_t VertexBufferSize = 0;
+
+
 		int VertexCount = 0;
 		int IndexCount = 0;
 		int FormatsLength = 0;
 		int InstDivisor = 0;
 		int Option = 0;
 
-		size_t VertexSize = 0;
 		bool unk21 = true;
 	};
 

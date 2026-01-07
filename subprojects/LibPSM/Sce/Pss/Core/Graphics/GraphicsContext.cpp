@@ -270,7 +270,7 @@ namespace Sce::Pss::Core::Graphics {
 									GLenum formatVectorType = OpenGL::GetVertexFormatType(format);
 									GLenum formatVectorNormalized = OpenGL::GetVertexFormatNormalize(format);
 
-									int stride = vertexBuffer->VertexSize;
+									int stride = vertexBuffer->VertexBufferSize;
 									
 									Logger::Todo("pointer = *(vertexBuffer->unk14 + 4 * _stream);");
 
