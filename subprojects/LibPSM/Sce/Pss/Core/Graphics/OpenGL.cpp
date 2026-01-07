@@ -66,19 +66,108 @@ namespace Sce::Pss::Core::Graphics {
 	
 	// TODO: figure out what the hell is this doing
 	// can we clean this up a bit more?
-	GLenum OpenGL::GetVertexFormatNormalize(VertexFormat fmt) {
-		return static_cast<GLenum>((fmt >> 0xC) & 0x1);
+	GLenum OpenGL::GetVertexFormatNormalize(VertexFormat format) {
+		return static_cast<GLenum>((format >> 0xC) & 0x1);
 	}
 
-	GLenum OpenGL::GetVertexFormatType(VertexFormat fmt) {
-		return OpenGL::glFormatTypes[static_cast<int>(fmt >> 0x8 & 0xF)];
+	GLenum OpenGL::GetVertexFormatType(VertexFormat format) {
+		return OpenGL::glFormatTypes[static_cast<int>(format >> 0x8 & 0xF)];
 	}
 
-	GLenum OpenGL::GetTextureFormatComponent(PixelFormat fmt) {
-		return OpenGL::glTextureFormatComponents[static_cast<int>(fmt & 0x1F)];
+	GLenum OpenGL::GetTextureFormatComponent(PixelFormat format) {
+		switch (format) {
+			case PixelFormat::None:
+				return GL_NONE;
+			case PixelFormat::Rgba:
+				return GL_RGBA;
+			case PixelFormat::RgbaH:
+				return GL_RGBA;
+			case PixelFormat::Rgba4444:
+				return GL_RGBA;
+			case PixelFormat::Rgba5551:
+				return GL_RGBA;
+			case PixelFormat::Rgb565:
+				return GL_RGB;
+			case PixelFormat::LuminanceAlpha:
+				return GL_LUMINANCE_ALPHA;
+			case PixelFormat::LuminanceAlphaH:
+				return GL_LUMINANCE_ALPHA;
+			case PixelFormat::Luminance:
+				return GL_LUMINANCE;
+			case PixelFormat::LuminanceH:
+				return GL_LUMINANCE;
+			case PixelFormat::Alpha:
+				return GL_ALPHA;
+			case PixelFormat::AlphaH:
+				return GL_ALPHA;
+			case PixelFormat::Depth16:
+				return GL_DEPTH_COMPONENT;
+			case PixelFormat::Depth24:
+				return GL_DEPTH_COMPONENT;
+			case PixelFormat::Depth16Stencil8:
+				return GL_DEPTH_COMPONENT;
+			case PixelFormat::Depth24Stencil8:
+				return GL_DEPTH_COMPONENT;
+			case PixelFormat::Dxt1:
+				return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			case PixelFormat::Dxt2:
+				return GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
+			case PixelFormat::Dxt3:
+				return GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE;
+			case PixelFormat::Dxt4:
+				return GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
+			case PixelFormat::Dxt5:
+				return GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE;
+		}
+
+		UNREACHABLE();
 	}
-	GLenum OpenGL::GetTextureFormatType(PixelFormat fmt) {
-		return OpenGL::glFormatTypes[static_cast<int>(fmt & 0x1F)];
+	GLenum OpenGL::GetTextureFormatType(PixelFormat format) {
+		switch (format) {
+			case PixelFormat::None:
+				return GL_NONE;
+			case PixelFormat::Rgba:
+				return GL_FLOAT;
+			case PixelFormat::RgbaH:
+				return GL_HALF_FLOAT_OES;
+			case PixelFormat::Rgba4444:
+				return GL_NONE;
+			case PixelFormat::Rgba5551:
+				return GL_NONE;
+			case PixelFormat::Rgb565:
+				return GL_NONE;
+			case PixelFormat::LuminanceAlpha:
+				return GL_SHORT;
+			case PixelFormat::LuminanceAlphaH:
+				return GL_UNSIGNED_SHORT;
+			case PixelFormat::Luminance:
+				return GL_BYTE;
+			case PixelFormat::LuminanceH:
+				return GL_UNSIGNED_BYTE;
+			case PixelFormat::Alpha:
+				return GL_NONE;
+			case PixelFormat::AlphaH:
+				return GL_NONE;
+			case PixelFormat::Depth16:
+				return GL_NONE;
+			case PixelFormat::Depth24:
+				return GL_NONE;
+			case PixelFormat::Depth16Stencil8:
+				return GL_NONE;
+			case PixelFormat::Depth24Stencil8:
+				return GL_NONE;
+			case PixelFormat::Dxt1:
+				return GL_NONE;
+			case PixelFormat::Dxt2:
+				return GL_UNSIGNED_BYTE;
+			case PixelFormat::Dxt3:
+				return GL_HALF_FLOAT_OES;
+			case PixelFormat::Dxt4:
+				return GL_UNSIGNED_SHORT_4_4_4_4;
+			case PixelFormat::Dxt5:
+				return GL_UNSIGNED_SHORT_5_5_5_1;
+		}
+		UNREACHABLE();
 	}
 
 }

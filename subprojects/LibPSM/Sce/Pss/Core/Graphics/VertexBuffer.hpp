@@ -10,9 +10,6 @@
 
 namespace Sce::Pss::Core::Graphics {
 
-	typedef uint16_t half;
-	typedef int8_t byte;
-	typedef uint8_t ubyte;
 
 	class VertexBuffer : public GraphicsObject<VertexBuffer> {
 	private:

@@ -120,6 +120,7 @@
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Features.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormatStructs.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.h" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontFileNames.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontImpl.hpp" />
@@ -243,7 +244,6 @@
     <ClInclude Include="Sce\Pss\Core\Vector3.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector4.hpp" />
     <ClInclude Include="Sce\Pss\Core\BitwiseEnum.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Bool.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\CryptoLibrary.hpp" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Algorithms\hmac_sha256.h" />
     <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />

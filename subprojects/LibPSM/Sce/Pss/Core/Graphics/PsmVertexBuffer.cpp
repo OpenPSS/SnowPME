@@ -36,7 +36,6 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (VertexBuffer::CheckHandle(handle)) {
-
 			if (Thread::IsMainThread()) {
 				VertexBuffer::Delete(handle);
 				return PSM_ERROR_NO_ERROR;

@@ -638,9 +638,6 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\PixelBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Bool.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Environment\Action.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -807,6 +804,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\PsmRefCount.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormatStructs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,13 +18,14 @@ namespace Shared::Debug {
 	#define ASSERT(expression) if(!(expression)) { \
 									_PANIC_MESSAGE(#expression); \
 								}
-
+	
 	#ifdef NDEBUG
 	#undef assert
 	#define assert ASSERT
 	#endif
 
 	#define PANIC(message) _PANIC_MESSAGE(message);
+	#define UNREACHABLE() PANIC("You have a reached an unreachable section of the code, whaaaaaaa?");
 
 }
 

@@ -1,12 +1,12 @@
 #include <Sce/Pss/Core/Graphics/PixelBuffer.hpp>
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
-#include <Sce/Pss/Core/Bool.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 #include <Sce/Pss/Core/Features.hpp>
+#include <Sce/Pss/Core/Graphics/PixelFormatStructs.hpp>
 
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Memory;
@@ -14,24 +14,7 @@ using namespace Sce::Pss::Core::Io;
 
 namespace Sce::Pss::Core::Graphics {
 
-	// TODO: figure out what this is for
-	uint8_t PixelBuffer::formatProperties[] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x20, 0x20, 0x18, 0x8, 0x0, 0x0, 0x0, 0x0,
-												0x40, 0x40, 0x30, 0x10, 0x0, 0x0, 0x0, 0x40, 0x10, 0x10, 0x0C, 0x4,
-												0x0, 0x0, 0x0, 0x0, 0x10, 0x10, 0x0F, 0x1, 0x0, 0x0, 0x0, 0x0, 0x10, 0x10,
-												0x10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x10, 0x10, 0x0, 0x8, 0x8, 0x0, 0x0, 0x0, 0x20,
-												0x20, 0x0, 0x10, 0x10, 0x0, 0x0, 0x20, 0x8, 0x8, 0x0, 0x0, 0x8, 0x0, 0x0, 0x0,
-												0x10, 0x10, 0x0, 0x0, 0x10, 0x0, 0x0, 0x10, 0x8, 0x8, 0x0, 0x8, 0x0, 0x0, 0x0,
-												0x0, 0x10, 0x10, 0x0, 0x10, 0x0, 0x0, 0x0, 0x10, 0x10, 0x0, 0x0, 0x0, 0x0,
-												0x10, 0x0, 0x0, 0x20, 0x0, 0x0, 0x0, 0x0, 0x18, 0x0, 0x0, 0x20, 0x0, 0x0, 0x0,
-												0x0, 0x10, 0x8, 0x0, 0x20, 0x0, 0x0, 0x0, 0x0, 0x18, 0x8, 0x0, 0x4, 0x4, 0x4, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x8, 0x8, 0x4, 0x4, 0x0, 0x0, 0x0, 0x0, 0x8, 0x8, 0x4, 0x4, 0x0, 0x0,
-												0x0, 0x0, 0x8, 0x8, 0x4, 0x4, 0x0, 0x0, 0x0, 0x0, 0x8, 0x8, 0x4, 0x4, 0x0, 0x0, 0x0, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-												0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
-
+	
 	uint32_t PixelBuffer::SetError(int error) {
 		if (error == PSM_ERROR_NO_ERROR) return true;
 
@@ -87,6 +70,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (format < PixelFormat::Dxt1 || this->CheckPowerOfTwo(width, height))
 			return true;
+
 		ExceptionInfo::AddMessage("Unsupported size for compressed texture\n");
 		return PixelBuffer::SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 	}
@@ -115,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 		// NOTE : 
 		// on android this actually mallocs;
 		// on win32 & vita psm.exe it does a fake malloc instead ??
-		// what? 
+		// what???
 		// i am going to assume this is an SDK2.00 thing
 
 		bool success = HeapAllocator::fake_malloc(this->imageSize);
@@ -128,20 +112,199 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int PixelBuffer::GetFormatHasDepth(PixelFormat format) {
-		return PixelBuffer::formatProperties[8 * (format & 0x1F) + 5];
+	bool PixelBuffer::GetFormatHasDepth(PixelFormat format) {
+		switch (format) {
+			case PixelFormat::None:
+				return false;
+			case PixelFormat::Rgba:
+				return false;
+			case PixelFormat::RgbaH:
+				return false;
+			case PixelFormat::Rgba4444:
+				return false;
+			case PixelFormat::Rgba5551:
+				return false;
+			case PixelFormat::Rgb565:
+				return false;
+			case PixelFormat::LuminanceAlpha:
+				return false;
+			case PixelFormat::LuminanceAlphaH:
+				return false;
+			case PixelFormat::Luminance:
+				return false;
+			case PixelFormat::LuminanceH:
+				return false;
+			case PixelFormat::Alpha:
+				return false;
+			case PixelFormat::AlphaH:
+				return false;
+			case PixelFormat::Depth16:
+				return true;
+			case PixelFormat::Depth24:
+				return true;
+			case PixelFormat::Depth16Stencil8:
+				return true;
+			case PixelFormat::Depth24Stencil8:
+				return true;
+			case PixelFormat::Dxt1:
+				return false;
+			case PixelFormat::Dxt2:
+				return false;
+			case PixelFormat::Dxt3:
+				return false;
+			case PixelFormat::Dxt4:
+				return false;
+			case PixelFormat::Dxt5:
+				return false;
+		}
+		UNREACHABLE();
 	}
 
-	int PixelBuffer::GetFormatHasRgb(PixelFormat format) {
-		return PixelBuffer::formatProperties[8 * (format & 0x1F) + 2];
+	bool PixelBuffer::GetFormatHasRgb(PixelFormat format) {
+		switch (format) {
+			case PixelFormat::None:
+				return false;
+			case PixelFormat::Rgba:
+				return true;
+			case PixelFormat::RgbaH:
+				return true;
+			case PixelFormat::Rgba4444:
+				return true;
+			case PixelFormat::Rgba5551:
+				return true;
+			case PixelFormat::Rgb565:
+				return true;
+			case PixelFormat::LuminanceAlpha:
+				return false;
+			case PixelFormat::LuminanceAlphaH:
+				return false;
+			case PixelFormat::Luminance:
+				return false;
+			case PixelFormat::LuminanceH:
+				return false;
+			case PixelFormat::Alpha:
+				return false;
+			case PixelFormat::AlphaH:
+				return false;
+			case PixelFormat::Depth16:
+				return false;
+			case PixelFormat::Depth24:
+				return false;
+			case PixelFormat::Depth16Stencil8:
+				return false;
+			case PixelFormat::Depth24Stencil8:
+				return false;
+			case PixelFormat::Dxt1:
+				return true;
+			case PixelFormat::Dxt2:
+				return true;
+			case PixelFormat::Dxt3:
+				return true;
+			case PixelFormat::Dxt4:
+				return true;
+			case PixelFormat::Dxt5:
+				return true;
+		}
+		
+		UNREACHABLE();
 	}
 
-	int PixelBuffer::GetFormatHasHalfFloat(PixelFormat format) {
-		return PixelBuffer::formatProperties[8 * (format & 0x1F) + 7];
+	bool PixelBuffer::GetFormatHasHalfFloat(PixelFormat format) {
+		switch (format) {
+			case PixelFormat::None:
+				return false;
+			case PixelFormat::Rgba:
+				return false;
+			case PixelFormat::RgbaH:
+				return true;
+			case PixelFormat::Rgba4444:
+				return false;
+			case PixelFormat::Rgba5551:
+				return false;
+			case PixelFormat::Rgb565:
+				return false;
+			case PixelFormat::LuminanceAlpha:
+				return false;
+			case PixelFormat::LuminanceAlphaH:
+				return true;
+			case PixelFormat::Luminance:
+				return false;
+			case PixelFormat::LuminanceH:
+				return true;
+			case PixelFormat::Alpha:
+				return false;
+			case PixelFormat::AlphaH:
+				return true;
+			case PixelFormat::Depth16:
+				return false;
+			case PixelFormat::Depth24:
+				return false;
+			case PixelFormat::Depth16Stencil8:
+				return false;
+			case PixelFormat::Depth24Stencil8:
+				return false;
+			case PixelFormat::Dxt1:
+				return false;
+			case PixelFormat::Dxt2:
+				return false;
+			case PixelFormat::Dxt3:
+				return false;
+			case PixelFormat::Dxt4:
+				return false;
+			case PixelFormat::Dxt5:
+				return false;
+		}
+
+		UNREACHABLE();
 	}
 
 	int PixelBuffer::GetFormatBitsPerPixel(PixelFormat format) {
-		return PixelBuffer::formatProperties[8 * (format & 0x1F)];
+		switch (format) {
+			case PixelFormat::None:
+				return 0x0;
+			case PixelFormat::Rgba:
+				return TO_BITS(sizeof(PixelFormats::Rgba));
+			case PixelFormat::RgbaH:
+				return TO_BITS(sizeof(PixelFormats::RgbaH));
+			case PixelFormat::Rgba4444:
+				return TO_BITS(sizeof(PixelFormats::Rgba4444));
+			case PixelFormat::Rgba5551:
+				return TO_BITS(sizeof(PixelFormats::Rgba5551));
+			case PixelFormat::Rgb565:
+				return TO_BITS(sizeof(PixelFormats::Rgb565));
+			case PixelFormat::LuminanceAlpha:
+				return TO_BITS(sizeof(PixelFormats::LuminanceAlpha));
+			case PixelFormat::LuminanceAlphaH:
+				return TO_BITS(sizeof(PixelFormats::LuminanceAlphaH));
+			case PixelFormat::Luminance:
+				return TO_BITS(sizeof(PixelFormats::Luminance));
+			case PixelFormat::LuminanceH:
+				return TO_BITS(sizeof(PixelFormats::LuminanceH));
+			case PixelFormat::Alpha:
+				return TO_BITS(sizeof(PixelFormats::Alpha));
+			case PixelFormat::AlphaH:
+				return TO_BITS(sizeof(PixelFormats::AlphaH));
+			case PixelFormat::Depth16:
+				return TO_BITS(sizeof(PixelFormats::Depth16));
+			case PixelFormat::Depth24:
+				return TO_BITS(sizeof(PixelFormats::Depth24));
+			case PixelFormat::Depth16Stencil8:
+				return TO_BITS(sizeof(PixelFormats::Depth16Stencil8));
+			case PixelFormat::Depth24Stencil8:
+				return TO_BITS(sizeof(PixelFormats::Depth24Stencil8));
+			case PixelFormat::Dxt1:
+				return Dxt1_Size;
+			case PixelFormat::Dxt2:
+				return Dxt2_Size;
+			case PixelFormat::Dxt3:
+				return Dxt3_Size;
+			case PixelFormat::Dxt4:
+				return Dxt4_Size;
+			case PixelFormat::Dxt5:
+				return Dxt5_Size;
+		}
+		
+		UNREACHABLE();
 	}
 
 	int PixelBuffer::CalculateTotalMipMaps(int width, int height) {

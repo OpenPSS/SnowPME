@@ -829,15 +829,15 @@ namespace Sce::Pss::Core::Graphics {
 				capsState.MaxAliasedPointSize = 128.0;
 
 			capsState.Extension = (gext & (GraphicsExtension::TextureFilterAnisotropic |
-													GraphicsExtension::Rgb8Rgba8 | 
-													GraphicsExtension::Depth24 | 
-													GraphicsExtension::PackedDepthStencil | 
-													GraphicsExtension::VertexHalfFloat | 
-													GraphicsExtension::TextureHalfFloat | 
-													GraphicsExtension::TextureHalfFloatLinear | 
-													GraphicsExtension::TextureNPot2DMipMap | 
-													GraphicsExtension::DrawInstanced | 
-													GraphicsExtension::InstancedArrays));
+											GraphicsExtension::Rgb8Rgba8 | 
+											GraphicsExtension::Depth24 | 
+											GraphicsExtension::PackedDepthStencil | 
+											GraphicsExtension::VertexHalfFloat | 
+											GraphicsExtension::TextureHalfFloat | 
+											GraphicsExtension::TextureHalfFloatLinear | 
+											GraphicsExtension::TextureNPot2DMipMap | 
+											GraphicsExtension::DrawInstanced | 
+											GraphicsExtension::InstancedArrays));
 
 			// set internal state to nulls
 			this->vertexBuffers.resize(4);

@@ -11,8 +11,13 @@
 #include <mutex>
 #include <memory>
 #include <utility>
+#include <cstdint>
+
+#define TO_BITS(x) ((x) * 8);
+#define TO_BYTES(x) ((x) / 8);
 
 namespace Sce::Pss::Core {
+
 	template<typename T> class PsmObject : public Errorable, public PsmMutexObject<PsmObject<T>> {
 		template<typename U> friend class PsmObject;
 

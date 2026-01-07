@@ -47,6 +47,6 @@ inline UnderlyingType operator -(BaseType l, UnderlyingType r) { return (Underly
 inline BaseType operator ~(BaseType l) { return (BaseType)(~(UnderlyingType)(l)); }; \
 \
 inline UnderlyingType operator ==(UnderlyingType l, BaseType r) { return (UnderlyingType)l == (UnderlyingType)r; }; \
-inline UnderlyingType operator ==(BaseType l, UnderlyingType r) { return (UnderlyingType)l == (UnderlyingType)r; }; \
+inline UnderlyingType operator ==(BaseType l, UnderlyingType r) { return (UnderlyingType)l == (UnderlyingType)r; } 
 
 #endif

@@ -9,6 +9,7 @@
 #include <glad/glad.h>
 #include <LibShared.hpp>
 #include <string.h>
+#include <cmath>
 
 using namespace Shared::Debug;
 using namespace Shared::String;
@@ -19,12 +20,10 @@ using namespace Sce::Pss::Core::Imaging::Impl;
 
 namespace Sce::Pss::Core::Graphics {
 
-
-
-	Texture2D::Texture2D(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, Sce::Pss::Core::Graphics::InternalOption option2) {
+	Texture2D::Texture2D(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption internalOption) {
 		LOCK_GUARD();
 		LOG_FUNCTION();
-		this->InitImage(width, height, mipmap, format, option, option2, nullptr);
+		this->InitImage(width, height, mipmap, format, option, internalOption, nullptr);
 	}
 
 	Texture2D::Texture2D(std::string& fileName, bool mipmap, PixelFormat format) {
@@ -100,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 
 
 		int mipmapLevel = 1;
-		if (mipmap != 0) {
+		if (mipmap != false) {
 			mipmapLevel = this->CalculateTotalMipMaps(width, height);
 		}
 
@@ -108,11 +107,11 @@ namespace Sce::Pss::Core::Graphics {
 		this->glPixelBufferType = GL_TEXTURE_2D;
 		this->unk11 = 1;
 
-		Logger::Debug("Option: " + Format::Hex(static_cast<int>(this->option)));
-		Logger::Debug("Type: " + Format::Hex(static_cast<int>(this->type)));
-		Logger::Debug("Format: " + Format::Hex(static_cast<int>(this->format)));
-		Logger::Debug("Width: " + Format::Hex(static_cast<int>(this->width)));
-		Logger::Debug("Height: " + Format::Hex(static_cast<int>(this->height)));
+		Logger::Debug("this->Option: " + Format::Hex(static_cast<int>(this->option)));
+		Logger::Debug("this->Type: " + Format::Hex(static_cast<int>(this->type)));
+		Logger::Debug("this->Format: " + Format::Hex(static_cast<int>(this->format)));
+		Logger::Debug("this->Width: " + Format::Hex(static_cast<int>(this->width)));
+		Logger::Debug("this->Height: " + Format::Hex(static_cast<int>(this->height)));
 
 		GraphicsExtension extension = GraphicsContext::GetCaps().Extension;
 
@@ -142,7 +141,6 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug("bitsPerPixel: 0x" + Format::Hex(bitsPerPixel));
 
 		bool isDxt = (format >= PixelFormat::Dxt1);
-		if (isDxt) UNIMPLEMENTED_MSG("DXT1 is unimplemented for now.");
 
 		// start using this texture
 		Texture* prev = OpenGL::SetTexture(this);
@@ -161,17 +159,17 @@ namespace Sce::Pss::Core::Graphics {
 				if (unk0 != nullptr) UNIMPLEMENTED_MSG("unk0 != null unimplemented if(unk0 != null, pixels = *(unk0 + 0x1c);");
 				GLvoid* pixels = nullptr;
 
-				// TODO: implement dxt size calculation;
-				// imageSz = (pixFmtI & (pixFmtN + height)) * ((bits_per_pixel * (pixFmtI & (pixFmtN + width)) + 7) / 8);
+				// calculate size including compressions;
+				int adjWidth = isDxt ? (width + 3) & ~3 : width;
+				int adjHeight = isDxt ? (height + 3) & ~3 : height;
 
-				// calculate the image size
-				this->imageSize += bitsPerPixel * height * width;
+				this->imageSize += static_cast<int>(ceil(static_cast<double>(bitsPerPixel * adjWidth) / 8.0) * adjHeight);
 				Logger::Debug("Current image size: " + Format::Hex(this->imageSize));
 
 
 				// generate current mipmap;
 				if (isDxt) {
-					glCompressedTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, imageSize, pixels);
+					glCompressedTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, this->imageSize, pixels);
 				}
 				else {
 					glTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, formatComponent, formatType, pixels);

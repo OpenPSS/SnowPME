@@ -3,28 +3,30 @@
 #include <Sce/Pss/Core/BitwiseEnum.hpp>
 #include <cstdint>
 namespace Sce::Pss::Core::Graphics {
-	enum class PixelFormat : uint32_t {
-		None = 0,
-		Rgba = 1,
-		RgbaH = 2,
-		Rgba4444 = 3,
-		Rgba5551 = 4,
-		Rgb565 = 5,
-		LuminanceAlpha = 6,
-		LuminanceAlphaH = 7,
-		Luminance = 8,
-		LuminanceH = 9,
-		Alpha = 10,
-		AlphaH = 11,
-		Depth16 = 12,
-		Depth24 = 13,
-		Depth16Stencil8 = 14,
-		Depth24Stencil8 = 15,
-		Dxt1 = 16,
-		Dxt2 = 17,
-		Dxt3 = 18,
-		Dxt4 = 19,
-		Dxt5 = 20
+
+	enum class PixelFormat : uint32_t
+	{
+		None = 0x0,
+		Rgba = 0x1,
+		RgbaH = 0x2,
+		Rgba4444 = 0x3,
+		Rgba5551 = 0x4,
+		Rgb565 = 0x5,
+		LuminanceAlpha = 0x6,
+		LuminanceAlphaH = 0x7,
+		Luminance = 0x8,
+		LuminanceH = 0x9,
+		Alpha = 0xA,
+		AlphaH = 0xB,
+		Depth16 = 0xC,
+		Depth24 = 0xD,
+		Depth16Stencil8 = 0xE,
+		Depth24Stencil8 = 0xF,
+		Dxt1 = 0x10,
+		Dxt2 = 0x11,
+		Dxt3 = 0x12,
+		Dxt4 = 0x13,
+		Dxt5 = 0x14,
 	};
 	
 	DEFINE_BITWISE_ENUM_OPERATOR(PixelFormat, uint32_t);

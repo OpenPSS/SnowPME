@@ -44,9 +44,9 @@ namespace Sce::Pss::Core::Graphics {
 		bool CheckGLError();
 		bool AllocCache(InternalOption opt);
 
-		int GetFormatHasDepth(PixelFormat format);
-		int GetFormatHasRgb(PixelFormat format);
-		int GetFormatHasHalfFloat(PixelFormat format);
+		bool GetFormatHasDepth(PixelFormat format);
+		bool GetFormatHasRgb(PixelFormat format);
+		bool GetFormatHasHalfFloat(PixelFormat format);
 		int GetFormatBitsPerPixel(PixelFormat format);
 		int CalculateTotalMipMaps(int width, int height);
 		GLenum GLPixelBufferType();

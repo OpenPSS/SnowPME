@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			int sz = 0;
 
-			glGetShaderInfoLog(shader, 0xFFF, &sz, log);
+			glGetShaderInfoLog(shader, sizeof(log)-1, &sz, log);
 			if (type == GL_VERTEX_SHADER)
 				Logger::Error("vertex shader compile failed: " + std::string(log));
 			else

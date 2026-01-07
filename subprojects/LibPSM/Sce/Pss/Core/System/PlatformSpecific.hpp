@@ -15,6 +15,18 @@ namespace Sce::Pss::Core::System {
 		typedef wchar_t wchar;
 	#endif
 
+	#ifdef __GNUC__
+	#define PACK( declaration ) declaration __attribute__((__packed__))
+	#elif _MSC_VER
+	#define PACK( declaration ) __pragma(pack(push, 1) ) declaration __pragma(pack(pop))
+	#endif
+
+	#ifdef _MSC_VER
+	#define endian_swap _byteswap_ushort
+	#elif __GNUC__
+	#define endian_swap __builtin_bswap16
+	#endif
+
 	class PlatformSpecific {
 	private:
 		static std::string escapeShellArgument(std::string arg);
