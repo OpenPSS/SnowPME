@@ -822,7 +822,7 @@ namespace Sce::Pss::Core::Graphics {
 			
 			// alloc buffer as byte array
 			this->Buffer = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->VertexBufferSize));
-			if (this->Buffer != nullptr) {
+			if (this->Buffer == nullptr) {
 				SET_ERROR_AND_RETURN(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 			}
 

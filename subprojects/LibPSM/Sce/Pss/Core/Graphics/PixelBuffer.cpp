@@ -3,10 +3,10 @@
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
 #include <Sce/Pss/Core/Bool.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
-
 #include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferType.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
+#include <Sce/Pss/Core/Features.hpp>
 
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Memory;
@@ -112,11 +112,20 @@ namespace Sce::Pss::Core::Graphics {
 		if ((opt & InternalOption::SystemResource) != InternalOption::None)
 			return false;
 
-		this->imagePtr = reinterpret_cast<uint8_t*>(HeapAllocator::UniqueObject()->sce_psm_malloc(this->imageSize));
-		if (this->imagePtr != nullptr) {
+		// NOTE : 
+		// on android this actually mallocs;
+		// on win32 & vita psm.exe it does a fake malloc instead ??
+		// what? 
+		// i am going to assume this is an SDK2.00 thing
+
+		bool success = HeapAllocator::fake_malloc(this->imageSize);
+
+		if (success) {
 			return true;
 		}
-		return this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+		else {
+			return this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
+		}
 	}
 
 	int PixelBuffer::GetFormatHasDepth(PixelFormat format) {

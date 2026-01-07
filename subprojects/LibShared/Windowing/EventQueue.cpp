@@ -8,6 +8,12 @@
 #include <unordered_map>
 #include <list>
 
+#include <Debug/Logger.hpp>
+#include <String/Format.hpp>
+
+using namespace Shared::String;
+using namespace Shared::Debug;
+
 namespace Shared::Windowing {
 
 
@@ -31,8 +37,10 @@ namespace Shared::Windowing {
 	}
 
 	std::shared_ptr<Event> EventQueue::DispatchEvent(std::shared_ptr<Event> evtRequest) {
+		Logger::Debug("Sending event // " + Format::Hex(static_cast<uint32_t>(evtRequest->TypeID())));
 		PushRequest(evtRequest);
 		evtRequest->WaitResponse();
+		Logger::Debug("Got response to event // " + Format::Hex(static_cast<uint32_t>(evtRequest->TypeID())));
 		return evtRequest;
 	}
 }

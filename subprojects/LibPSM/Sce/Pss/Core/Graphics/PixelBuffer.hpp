@@ -27,7 +27,6 @@ namespace Sce::Pss::Core::Graphics {
 		bool npot = false;
 
 		size_t imageSize = 0;
-		uint8_t* imagePtr = nullptr;
 
 		GLenum glPixelBufferType;
 		PixelFormat format = PixelFormat::None;

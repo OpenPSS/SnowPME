@@ -7,7 +7,7 @@
 
 namespace Shared::Windowing {
 
-	enum class EventType {
+	enum class EventType : uint32_t{
 		None,
 		Capture,
 		RunFunction

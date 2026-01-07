@@ -6,6 +6,7 @@
 #include <LibShared.hpp>
 
 using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::Memory {
 	std::unordered_map<std::string, std::shared_ptr<HeapAllocator>> HeapAllocator::heapList;
@@ -34,6 +35,7 @@ namespace Sce::Pss::Core::Memory {
 
 	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
+		Logger::Debug("Allocating: 0x" + Format::Hex(static_cast<size_t>(sz)) + " bytes"); \
 
 		// allocate a vector of uint8_t, of the given size
 		std::shared_ptr<std::vector<uint8_t>> vec = std::make_shared<std::vector<uint8_t>>(sz);
@@ -49,24 +51,27 @@ namespace Sce::Pss::Core::Memory {
 
 		return reinterpret_cast<void*>(buffer);
 	}
-	void HeapAllocator::sce_psm_free(void* buffer) {
+	void HeapAllocator::sce_psm_free(void* ptr) {
 		LOCK_GUARD();
+		Logger::Debug("Freeing: 0x" + Format::Hex(reinterpret_cast<uintptr_t>(ptr)) + " bytes"); \
 
 		// lookup the vector from this map
-		std::shared_ptr<std::vector<uint8_t>> vec = this->heapAllocations[reinterpret_cast<uintptr_t>(buffer)];
+		std::shared_ptr<std::vector<uint8_t>> vec = this->heapAllocations[reinterpret_cast<uintptr_t>(ptr)];
 
 		// minus the total space from the vector, from the total used space
 		this->UsedSpace -= vec->size();
 
 		// remove the buffer from the map
-		this->heapAllocations.erase(reinterpret_cast<uintptr_t>(buffer));
+		this->heapAllocations.erase(reinterpret_cast<uintptr_t>(ptr));
 
 	}
 
-	bool HeapAllocator::fake_malloc(size_t size) {
+	uintptr_t HeapAllocator::fake_malloc(size_t size) {
 #ifdef INACCURATE_DONT_ENFORCE_MEM_LIMIT
 		return true;
 #endif
+
+		Logger::Debug("Fake malloc'ing 0x" + Format::Hex(size) + " bytes");
 		LOCK_GUARD_STATIC();
 		if (HeapAllocator::freeMemory < size)
 			return false;
@@ -79,6 +84,9 @@ namespace Sce::Pss::Core::Memory {
 #ifdef INACCURATE_DONT_ENFORCE_MEM_LIMIT
 		return size;
 #endif
+		Logger::Debug("Fake free'ing 0x" + Format::Hex(size) + " bytes");
+
+
 		LOCK_GUARD_STATIC();
 		HeapAllocator::freeMemory += size;
 		return size;

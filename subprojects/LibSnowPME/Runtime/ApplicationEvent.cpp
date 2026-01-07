@@ -6,6 +6,7 @@
 #include <LibImGui.hpp>
 
 using namespace Shared::Debug;
+using namespace Shared::String;
 using namespace Shared::Windowing;
 using namespace SnowPME::Graphics;
 

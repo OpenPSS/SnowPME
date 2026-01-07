@@ -32,6 +32,8 @@ namespace Sce::Pss::Core::Graphics {
 		bool Active;
 		GLenum GLHandle;
 
+		CUSTOM_ALLOC();
+
 	};
 
 };

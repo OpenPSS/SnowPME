@@ -40,7 +40,6 @@ namespace Sce::Pss::Core {
 				PsmUniqueObject<T>::uObjPtr = nullptr;
 			}
 		}
-
 	};
 
 }

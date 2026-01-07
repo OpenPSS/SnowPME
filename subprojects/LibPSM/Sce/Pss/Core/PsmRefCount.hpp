@@ -86,19 +86,7 @@ namespace Sce::Pss::Core {
 			return Sce::Pss::Core::System::Handles<T>::IsValid(handle);
 		}
 
-
-		void* operator new(size_t size) {
-			Shared::Debug::Logger::Debug("Allocating: " + std::to_string(size) + " // " + typeid(T).name());
-			std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject();
-			return alloc->sce_psm_malloc(size);
-		}
-
-		void operator delete(void* ptr) {
-			Shared::Debug::Logger::Debug("Freeing: " + std::to_string(reinterpret_cast<uintptr_t>(ptr)) + " // " + typeid(T).name());
-			std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject();
-			alloc->sce_psm_free(ptr);
-		}
-
+		CUSTOM_ALLOC();
 
 	};
 
