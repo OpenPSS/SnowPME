@@ -15,7 +15,7 @@
 #define SDK_1_11_01 (0x011001u)
 #define SDK_1_10_00 (0x010000u)
 
-// "PlayStation Suite" / pre release versions
+// "PlayStation Suite" // pre release versions
 #define SDK_0_98_00 (0x009800u)
 #define SDK_0_99_00 (0x009900u)
 #define SDK_0_99_11 (0x009911u)
@@ -23,6 +23,7 @@
 
 #define MIN_SDK (SDK_0_98_00)
 #define MAX_SDK (SDK_2_01_00)
-#define NO_SDK	(0xFFFFFFu)
+
+#define NO_SDK	 INT_MIN
 
 #endif

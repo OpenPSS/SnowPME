@@ -35,8 +35,8 @@ namespace Sce::Pss::Core::Graphics {
 		*width = this->width;
 		*height = this->height;
 		*level = this->mipmapLevel;
-		*format = this->format;
-		*option = this->option;
+		*format = this->Format;
+		*option = this->Option;
 		return PSM_ERROR_NO_ERROR;
 	}
 

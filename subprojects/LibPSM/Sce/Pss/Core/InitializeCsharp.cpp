@@ -27,11 +27,10 @@ namespace Sce::Pss::Core {
 
 			// Check if current SDK matches allowed SDK
 #ifndef INACCURATE_DONT_ENFORCE_MAX_SDK
-			if (Config::SdkVersion >= functionsList[i].maxSdkVersion) 
-				continue;
+			if (Config::SdkVersion > functionsList[i].maxSdkVersion) continue;
 #endif
 #ifndef INACCURATE_DONT_ENFORCE_MIN_SDK
-			if (Config::SdkVersion <= functionsList[i].minSdkVerison) continue;
+			if (Config::SdkVersion < functionsList[i].minSdkVerison) continue;
 #endif
 
 			Logger::Debug(std::string(functionsList[i].functionSignature) + " -> 0x" + Format::Hex(reinterpret_cast<uintptr_t>(functionsList[i].functionPointer))+ " (SDK <= "+Format::Hex(functionsList[i].minSdkVerison) + " && SDK >= "+Format::Hex(functionsList[i].maxSdkVersion)+")");

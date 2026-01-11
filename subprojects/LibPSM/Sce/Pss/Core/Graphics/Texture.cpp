@@ -17,9 +17,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int Texture::SetPixels(int mipmapLevel, TextureCubeFace cubeFace, int* pixels, size_t pixelsSize, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh)
-	{
-		LOG_FUNCTION();
-		
+	{		
 		if (pixels == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (mipmapLevel < 0 || mipmapLevel >= this->mipmapLevel)
@@ -30,9 +28,9 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_ARGUMENT;
 
 		if (format == PixelFormat::None)
-			format = this->format;
+			format = this->Format;
 
-		if (format != this->format && (format != PixelFormat::Rgba || format >= PixelFormat::Dxt1)) {
+		if (format != this->Format && (format != PixelFormat::Rgba || format >= PixelFormat::Dxt1)) {
 			ExceptionInfo::AddMessage("Incompatible format with pixel buffer\n");
 			return PSM_ERROR_COMMON_NOT_SUPPORTED;
 		}
@@ -47,11 +45,13 @@ namespace Sce::Pss::Core::Graphics {
 		int mipmapWidth = this->GetMipmapWidth(mipmapLevel);
 		int mipmapHeight = this->GetMipmapHeight(mipmapLevel);
 
-		if (dx < 0 || dy < 0 || dh < 0 || dw < 0 || offset < 0 || dw + dx > mipmapHeight || dh + dy > mipmapWidth || pitch < sizeInBytes)
+		if (dx < 0 || dy < 0 || dh < 0 || dw < 0 || offset < 0 || dw + dx > mipmapWidth || dh + dy > mipmapHeight || pitch < sizeInBytes)
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 
-		if (PixelBuffer::IsFormatDxt(format) ? (offset + sizeInBytes * 4 + pitch * (~3 & dh - 1) > pixelsSize) : (offset + sizeInBytes * pitch * (dh - 1) > pixelsSize)) {
+		// TODO: double check this, it doesnt seem right;
+
+		/*if (offset + sizeInBytes * pitch * (dh - 1) > pixelsSize) {
 			ExceptionInfo::AddMessage("Pixel array is smaller than required\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
@@ -59,7 +59,7 @@ namespace Sce::Pss::Core::Graphics {
 		if ((pitch | offset) != 0) {
 			ExceptionInfo::AddMessage("Offset or pitch is not aligned properly\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
-		}
+		}*/
 
 		if (PixelBuffer::IsFormatDxt(format)) {
 			UNIMPLEMENTED_MSG("SetPixels, format > PixelFormat::Dxt1");
@@ -73,8 +73,8 @@ namespace Sce::Pss::Core::Graphics {
 
 			int start = 1;
 			GLenum glPixType = this->GetDeviceFaceTarget(cubeFace);
-			GLenum formatComponent = OpenGL::GetTextureFormatComponent(this->format);
-			GLenum formatType = OpenGL::GetTextureFormatType(this->format);
+			GLenum formatComponent = OpenGL::GetTextureFormatComponent(this->Format);
+			GLenum formatType = OpenGL::GetTextureFormatType(this->Format);
 			Texture* prev = OpenGL::SetTexture(this);
 
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

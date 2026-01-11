@@ -110,16 +110,14 @@ namespace Sce::Pss::Core::Graphics {
 
 			int mmW = tex->GetMipmapWidth(level);
 			int mmH = tex->GetMipmapHeight(level);
-			int bpp = PixelBuffer::GetFormatBitsPerPixel(format);
-
-			return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, dw, dh);
+			int bpp = PixelBuffer::GetFormatBitsPerPixel(tex->Format);
 			
 			if (pixels == nullptr || pixelArrSize != TO_BYTES(mmW * mmH * bpp)) {
 				ExceptionInfo::AddMessage("Pixel array has wrong size\n");
 				return PSM_ERROR_COMMON_INVALID_OPERATION;
 			}
 
-			return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, dw, dh);
+			return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, mmW, mmH);
 
 		}
 		else {

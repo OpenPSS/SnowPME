@@ -31,12 +31,11 @@ namespace Sce::Pss::Core::Graphics {
 		size_t imageSize = 0;
 
 		GLenum glPixelBufferType;
-		PixelFormat format = PixelFormat::None;
-		PixelBufferOption option = PixelBufferOption::None;
-
-		
-
 	public:
+		PixelFormat Format = PixelFormat::None;
+		PixelBufferOption Option = PixelBufferOption::None;
+
+
 		PixelBuffer() = default;
 		~PixelBuffer() = default;
 		uint32_t SetError(int errorCode);

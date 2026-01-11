@@ -91,9 +91,9 @@ namespace Sce::Pss::Core::Graphics {
 		if (!this->CheckFormatSizeError(format, width, height))
 			return PSM_ERROR_NO_ERROR;
 
-		this->option = option;
+		this->Option = option;
 		this->type = PixelBufferType::Texture2D;
-		this->format = format;
+		this->Format = format;
 		this->width = width;
 		this->height = height;
 
@@ -107,9 +107,9 @@ namespace Sce::Pss::Core::Graphics {
 		this->glPixelBufferType = GL_TEXTURE_2D;
 		this->unk11 = 1;
 
-		Logger::Debug("this->Option: " + Format::Hex(static_cast<int>(this->option)));
+		Logger::Debug("this->Option: " + Format::Hex(static_cast<int>(this->Option)));
 		Logger::Debug("this->Type: " + Format::Hex(static_cast<int>(this->type)));
-		Logger::Debug("this->Format: " + Format::Hex(static_cast<int>(this->format)));
+		Logger::Debug("this->Format: " + Format::Hex(static_cast<int>(this->Format)));
 		Logger::Debug("this->Width: " + Format::Hex(static_cast<int>(this->width)));
 		Logger::Debug("this->Height: " + Format::Hex(static_cast<int>(this->height)));
 
