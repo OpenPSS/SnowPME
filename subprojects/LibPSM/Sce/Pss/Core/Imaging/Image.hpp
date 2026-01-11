@@ -9,15 +9,15 @@
 #include <Sce/Pss/Core/Imaging/ImageRect.hpp>
 #include <Sce/Pss/Core/Imaging/ImagePosition.hpp>
 #include <Sce/Pss/Core/Imaging/ImageMode.hpp>
-#include <Sce/Pss/Core/PsmObject.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/ImageImpl.hpp>
 #include <Sce/Pss/Core/Imaging/PixelData.hpp>
 #include <Sce/Pss/Core/Features.hpp>
+#include <Sce/Pss/Core/PsmRefCount.hpp>
 #include <mono/mono.h>
 #include <memory>
 
 namespace Sce::Pss::Core::Imaging {
-	class Image : public PsmObject<Image> {
+	class Image : public PsmRefCount<Image> {
 	private:
 		std::shared_ptr<Sce::Pss::Core::Imaging::Impl::ImageImpl> imageImpl = nullptr;
 		void normalizeColor(ImageColor* color);

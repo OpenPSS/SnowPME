@@ -52,20 +52,29 @@ namespace Sce::Pss::Core::Imaging {
 	int Image::Decode() {
 		ImageSize extent;
 		void* pngBuffer = nullptr;
-
+		
+		// get image size ..
 		this->imageImpl->GetExtent(&extent);
-		if (extent.Width > 0x1000u || extent.Height > 0x1000u) {
+
+		if (extent.Width > 0x1000 || extent.Height > 0x1000) {
 			this->SetError(PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE);
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 
 		ImageImplMode mode = this->imageImpl->GetMode();
+		// if its rgba already, then just give the buffer
 		if (mode == ImageImplMode::Rgba || mode == ImageImplMode::A) {
-			this->imageImpl->ToBuffer(&pngBuffer, 1);
+			this->imageImpl->ToBuffer(&pngBuffer);
+		}
+		else {
+			// otherwise, convert to rgba then give buffer.
+			this->imageImpl->ConvertMode(&extent, ImageImplMode::Rgba);
+			this->imageImpl->ToBuffer(&pngBuffer);
+
 		}
 
+		return PSM_ERROR_NO_ERROR;
 
-		UNIMPLEMENTED();
 	}
 
 	int Image::DrawRectangle(ImageColor color, ImageRect rect) {
@@ -248,7 +257,7 @@ namespace Sce::Pss::Core::Imaging {
 		LOG_FUNCTION();
 		LOCK_GUARD_STATIC();
 
-		std::shared_ptr<Image> img = Image::Create(mode, size, color);
+		Image* img = Image::Create(mode, size, color);
 		RETURN_ERRORABLE_PSMOBJECT(img, Image);
 		*handle = img->Handle();
 		
@@ -258,10 +267,18 @@ namespace Sce::Pss::Core::Imaging {
 		UNIMPLEMENTED();
 	}
 	int Image::AddRefNative(int handle){
-		UNIMPLEMENTED();;
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		Image::AddRef(handle);
+		return PSM_ERROR_NO_ERROR;
 	}
 	int Image::ReleaseNative(int handle){
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+		
+		Image::Delete(handle);
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int Image::GetSize(int handle, ImageSize* size){
@@ -270,7 +287,7 @@ namespace Sce::Pss::Core::Imaging {
 		if (!Image::CheckHandle(handle)) {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
-		std::shared_ptr<Image> img = Image::LookupHandle(handle);
+		Image* img = Image::LookupHandle(handle);
 		*size = img->Size();
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -285,11 +302,18 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Image::LookupHandle(handle);
+		Image* img = Image::LookupHandle(handle);
 		return img->SetSize(*size);
 	}
 	int Image::DecodeNative(int handle) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (!Image::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		return Image::LookupHandle(handle)->Decode();
 	}
 
 	int Image::GetPixelData(int handle, MonoArray* buffer, uint32_t bufferSize) {
@@ -302,7 +326,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Image::LookupHandle(handle);
+		Image* img = Image::LookupHandle(handle);
 		img->GetPixelDataInternal(pixelData);
 		
 		if (bufferSize >= pixelData.size) {
@@ -323,7 +347,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Image::LookupHandle(handle);
+		Image* img = Image::LookupHandle(handle);
 		img->GetPixelDataInternal(pixelData);
 
 		*bufferSize = pixelData.size;
@@ -347,7 +371,7 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 
-		std::shared_ptr<Image> img = Image::LookupHandle(handle);
+		Image* img = Image::LookupHandle(handle);
 		return img->DrawRectangle(*color, *rect);
 	}
 

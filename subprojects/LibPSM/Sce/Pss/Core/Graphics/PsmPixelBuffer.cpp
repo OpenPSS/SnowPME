@@ -24,7 +24,7 @@ namespace Sce::Pss::Core::Graphics {
 			if (GraphicsContext::UniqueObject() != nullptr) {
 				switch (type) {
 				case PixelBufferType::Texture2D:
-					*result = GraphicsObject<Texture2D>::Create(width, height, mipmap, format, option, option2)->Handle();
+					*result = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new Texture2D(width, height, mipmap, format, option, option2)))->Handle();
 					return PSM_ERROR_NO_ERROR;
 				case PixelBufferType::TextureCube:
 					UNIMPLEMENTED_MSG("PixelBufferType::TextureCube");

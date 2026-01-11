@@ -3,14 +3,17 @@
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/PixelBuffer.hpp>
 #include <Sce/Pss/Core/Graphics/PixelFormat.hpp>
+#include <Sce/Pss/Core/Graphics/TextureCubeFace.hpp>
 #include <glad/glad.h>
 
 namespace Sce::Pss::Core::Graphics {
 	class Texture : public PixelBuffer {
 	public:
-		int ActiveStateChanged(bool state);
 
-		Texture();
+		int ActiveStateChanged(bool state);
+		int SetPixels(int mipmapLevel, TextureCubeFace cubeFace, int* pixels, size_t pixelsSize, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh);
+
+		Texture() = default;
 		virtual ~Texture() = default;
 	};
 }

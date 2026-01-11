@@ -7,10 +7,14 @@
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 #include <Sce/Pss/Core/Features.hpp>
 #include <Sce/Pss/Core/Graphics/PixelFormats.hpp>
+#include <LibShared.hpp>
 
 using namespace Sce::Pss::Core::System;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Io;
+
+using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -68,7 +72,7 @@ namespace Sce::Pss::Core::Graphics {
 		// if it is not a DXT texture, or the texture is not a power of two,
 		// then this check succeeds, otherwise it fails;
 
-		if (format < PixelFormat::Dxt1 || this->CheckPowerOfTwo(width, height))
+		if (format < PixelFormat::Dxt1 || PixelBuffer::CheckPowerOfTwo(width, height))
 			return true;
 
 		ExceptionInfo::AddMessage("Unsupported size for compressed texture\n");
@@ -110,6 +114,22 @@ namespace Sce::Pss::Core::Graphics {
 		else {
 			return this->SetError(PSM_ERROR_COMMON_OUT_OF_MEMORY);
 		}
+	}
+
+	int PixelBuffer::GetMipmapHeight(int level) {
+		int mmh = this->height >> level;
+
+		if (mmh <= 0)
+			return mmh > 0;
+		return mmh;
+	}
+
+	int PixelBuffer::GetMipmapWidth(int level) {
+		int mmw = this->width >> level;
+
+		if (mmw <= 0)
+			return mmw > 0;
+		return mmw;
 	}
 
 	bool PixelBuffer::GetFormatHasDepth(PixelFormat format) {
@@ -361,6 +381,43 @@ namespace Sce::Pss::Core::Graphics {
 	GLenum PixelBuffer::GLPixelBufferType() {
 		LOG_FUNCTION();
 		return this->glPixelBufferType;
+	}
+
+	GLenum PixelBuffer::GetDeviceFaceTarget(TextureCubeFace face) {
+		LOG_FUNCTION();
+		if (this->type == PixelBufferType::TextureCube) {
+			UNIMPLEMENTED_MSG("OpenGl::GetCubeMapTarget");
+		}
+		else {
+			return this->GLPixelBufferType();
+		}
+	}
+
+	bool PixelBuffer::IsFormatDxt(PixelFormat format) {
+		return (format >= PixelFormat::Dxt1);
+	}
+
+	int PixelBuffer::AdjValueForDxt(bool isDxt, int v) {
+		return isDxt ? (v + 3) & ~3 : v;
+	}
+
+	int PixelBuffer::CalculateImageArraySizeInBytes(PixelFormat format, int bitsPerPixel, int width, int height)
+	{
+		bool isDxt = (format >= PixelFormat::Dxt1);
+
+		int adjWidth = PixelBuffer::AdjValueForDxt(isDxt, width);
+		int adjHeight = PixelBuffer::AdjValueForDxt(isDxt, height);
+		int imageSize = static_cast<int>(ceil(TO_BYTES(static_cast<double>(bitsPerPixel * adjWidth))) * adjHeight);
+
+		Logger::Debug("isDxt: 0x" + Format::Hex(isDxt));
+
+		Logger::Debug("adjWidth: 0x" + Format::Hex(adjWidth));
+		Logger::Debug("adjHeight: 0x" + Format::Hex(adjHeight));
+		Logger::Debug("bpp: 0x" + Format::Hex(bitsPerPixel));
+
+		Logger::Debug("total image size: " + Format::Hex(imageSize));
+
+		return imageSize;
 	}
 
 

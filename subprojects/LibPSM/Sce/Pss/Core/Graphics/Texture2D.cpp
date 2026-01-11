@@ -83,12 +83,12 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		if ((option & PixelBufferOption::Renderable) != PixelBufferOption::None &&
-			(!this->GetFormatHasRgb(format) || this->GetFormatHasHalfFloat(format))) {
+			(!PixelBuffer::GetFormatHasRgb(format) || PixelBuffer::GetFormatHasHalfFloat(format))) {
 			ExceptionInfo::AddMessage("Unsupported format for renderable texture\n");
 			return this->SetError(PSM_ERROR_COMMON_NOT_SUPPORTED);
 		}
 
-		if (!CheckFormatSizeError(format, width, height))
+		if (!this->CheckFormatSizeError(format, width, height))
 			return PSM_ERROR_NO_ERROR;
 
 		this->option = option;
@@ -100,7 +100,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		int mipmapLevel = 1;
 		if (mipmap != false) {
-			mipmapLevel = this->CalculateTotalMipMaps(width, height);
+			mipmapLevel = PixelBuffer::CalculateTotalMipMaps(width, height);
 		}
 
 		this->mipmapLevel = mipmapLevel;
@@ -115,11 +115,11 @@ namespace Sce::Pss::Core::Graphics {
 
 		GraphicsExtension extension = GraphicsContext::GetCaps().Extension;
 
-		if (this->GetFormatHasHalfFloat(format)) {
+		if (PixelBuffer::GetFormatHasHalfFloat(format)) {
 			this->needsHalfFloat = ((extension & GraphicsExtension::TextureHalfFloat) == GraphicsExtension::None);
 		}
 
-		if (!this->CheckPowerOfTwo(width, height)) {
+		if (!PixelBuffer::CheckPowerOfTwo(width, height)) {
 			this->npot = (extension & GraphicsExtension::TextureNpot) == GraphicsExtension::None;
 			if (extension < GraphicsExtension::None)
 				this->mipmapLevel = 1;
@@ -134,13 +134,12 @@ namespace Sce::Pss::Core::Graphics {
 
 		int formatComponent = OpenGL::GetTextureFormatComponent(format);
 		int formatType = OpenGL::GetTextureFormatType(format);
-		int bitsPerPixel = this->GetFormatBitsPerPixel(format);
+		int bitsPerPixel = PixelBuffer::GetFormatBitsPerPixel(format);
 
 		Logger::Debug("formatComponent: 0x" + Format::Hex(formatComponent));
 		Logger::Debug("formatType: 0x" + Format::Hex(formatType));
 		Logger::Debug("bitsPerPixel: 0x" + Format::Hex(bitsPerPixel));
 
-		bool isDxt = (format >= PixelFormat::Dxt1);
 
 		// start using this texture
 		Texture* prev = OpenGL::SetTexture(this);
@@ -160,15 +159,10 @@ namespace Sce::Pss::Core::Graphics {
 				GLvoid* pixels = nullptr;
 
 				// calculate size including compressions;
-				int adjWidth = isDxt ? (width + 3) & ~3 : width;
-				int adjHeight = isDxt ? (height + 3) & ~3 : height;
-
-				this->imageSize += static_cast<int>(ceil(static_cast<double>(bitsPerPixel * adjWidth) / 8.0) * adjHeight);
-				Logger::Debug("Current image size: " + Format::Hex(this->imageSize));
-
+				this->imageSize += PixelBuffer::CalculateImageArraySizeInBytes(format, bitsPerPixel, width, height);
 
 				// generate current mipmap;
-				if (isDxt) {
+				if (PixelBuffer::IsFormatDxt(format)) {
 					glCompressedTexImage2D(this->glPixelBufferType, i, formatComponent, width, height, 0, this->imageSize, pixels);
 				}
 				else {

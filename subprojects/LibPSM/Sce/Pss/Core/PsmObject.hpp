@@ -13,8 +13,8 @@
 #include <utility>
 #include <cstdint>
 
-#define TO_BITS(x) ((x) * 8);
-#define TO_BYTES(x) ((x) / 8);
+#define TO_BITS(x) ((x) * 8.0)
+#define TO_BYTES(x) ((x) / 8.0)
 
 namespace Sce::Pss::Core {
 

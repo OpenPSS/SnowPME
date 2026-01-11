@@ -9,6 +9,8 @@
 #include <Sce/Pss/Core/Graphics/Texture2D.hpp>
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
+#include <Sce/Pss/Core/Graphics/Texture.hpp>
+
 #include <LibShared.hpp>
 
 #include <mono/mono.h>
@@ -27,6 +29,8 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
 		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() == nullptr)
 				return PSM_ERROR_GRAPHICS_SYSTEM;
@@ -37,7 +41,7 @@ namespace Sce::Pss::Core::Graphics {
 			if (type == PixelBufferType::Texture2D) {
 				Logger::Debug("type is PixelBufferType::Texture2D");
 				
-				PixelBuffer* tex2d = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
+				PixelBuffer* tex2d = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
 				RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
 
 				*result = tex2d->Handle();
@@ -45,7 +49,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 			else if(type == PixelBufferType::TextureCube) {
 				Logger::Debug("type is PixelBufferType::TextureCube");
-				PixelBuffer* texCube = PixelBuffer::Create(reinterpret_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
+				PixelBuffer* texCube = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
 
 				RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
 				*result = texCube->Handle();
@@ -78,8 +82,50 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmTexture::SetMaxAnisotropy(int handle, float anisotropy) {
 		UNIMPLEMENTED();
 	}
-	int PsmTexture::SetPixels(int handle, int level, TextureCubeFace cubeFace, int* pixels, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh) {
-		UNIMPLEMENTED();
+	int PsmTexture::SetPixels(int handle, int level, TextureCubeFace cubeFace, MonoArray* pixels, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh) {
+		LOG_FUNCTION();
+		LOCK_GUARD_STATIC();
+
+		if (Thread::IsMainThread()) {
+
+			if (!Texture::CheckHandle(handle)) {
+				return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+			}
+
+			Texture* tex = dynamic_cast<Texture*>(PixelBuffer::LookupHandle(handle));
+			
+			if (pixels != nullptr) {
+				MonoType* mtype = MonoUtil::MonoArrayElementsType(pixels);
+				if (!MonoUtil::MonoTypeIsValueType(mtype)) {
+					ExceptionInfo::AddMessage("Pixel data need to be ValueType\n");
+					return PSM_ERROR_COMMON_INVALID_OPERATION;
+				}
+			}
+			int* pixelArr = reinterpret_cast<int*>(mono_array_addr_with_size(pixels, 1, 0));
+			size_t pixelArrSize = MonoUtil::MonoArrayBytesLength(pixels);
+			
+			if (dw >= 0 && dh >= 0) {
+				return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, dw, dh);
+			}
+
+			int mmW = tex->GetMipmapWidth(level);
+			int mmH = tex->GetMipmapHeight(level);
+			int bpp = PixelBuffer::GetFormatBitsPerPixel(format);
+
+			return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, dw, dh);
+			
+			if (pixels == nullptr || pixelArrSize != TO_BYTES(mmW * mmH * bpp)) {
+				ExceptionInfo::AddMessage("Pixel array has wrong size\n");
+				return PSM_ERROR_COMMON_INVALID_OPERATION;
+			}
+
+			return tex->SetPixels(level, cubeFace, pixelArr, pixelArrSize, format, offset, pitch, dx, dy, dw, dh);
+
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmTexture::GenerateMipmap(int handle) {
 		UNIMPLEMENTED();

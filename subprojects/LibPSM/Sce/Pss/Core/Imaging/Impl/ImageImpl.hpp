@@ -24,13 +24,13 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		static int GetErrorType();
 
 		ImageImplMode GetMode();
-		int ConvertMode();
+		int ConvertMode(ImageSize* extent, ImageImplMode mode);
 		int GetExtent(ImageSize* extent);
 		int SetDecExtent(const ImageSize& extent, int resizeType);
-		int ToBuffer(void* pngBuffer, bool unk0);
+		uint64_t ToBuffer(void** pngBuffer);
 
 		uint8_t* ImgBuffer = nullptr;
-		size_t ImgBufferSize = 0;
+		uint64_t ImgBufferSize = 0;
 
 		ImageImpl(ImageImplMode mode);
 		virtual ~ImageImpl();

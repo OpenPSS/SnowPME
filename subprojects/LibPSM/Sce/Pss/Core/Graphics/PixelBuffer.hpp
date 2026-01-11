@@ -7,6 +7,8 @@
 #include <Sce/Pss/Core/Graphics/PixelBufferOption.hpp>
 #include <Sce/Pss/Core/Graphics/InternalOption.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
+#include <Sce/Pss/Core/Graphics/TextureCubeFace.hpp>
+
 #include <glad/glad.h>
 
 #define IS_POW_2(x) (((x - 1) & x) == 0)
@@ -32,6 +34,8 @@ namespace Sce::Pss::Core::Graphics {
 		PixelFormat format = PixelFormat::None;
 		PixelBufferOption option = PixelBufferOption::None;
 
+		
+
 	public:
 		PixelBuffer() = default;
 		~PixelBuffer() = default;
@@ -40,16 +44,25 @@ namespace Sce::Pss::Core::Graphics {
 		bool CheckFormatError(PixelFormat format, PixelBufferOption option);
 		bool CheckSizeError(int width, int height, int min, int max);
 		bool CheckFormatSizeError(PixelFormat format, int width, int height);
-		bool CheckPowerOfTwo(int width, int height);
 		bool CheckGLError();
 		bool AllocCache(InternalOption opt);
+		int GetMipmapWidth(int level);
+		int GetMipmapHeight(int level);
 
-		bool GetFormatHasDepth(PixelFormat format);
-		bool GetFormatHasRgb(PixelFormat format);
-		bool GetFormatHasHalfFloat(PixelFormat format);
-		int GetFormatBitsPerPixel(PixelFormat format);
-		int CalculateTotalMipMaps(int width, int height);
 		GLenum GLPixelBufferType();
+		GLenum GetDeviceFaceTarget(TextureCubeFace face);
+
+		static bool GetFormatHasDepth(PixelFormat format);
+		static bool GetFormatHasRgb(PixelFormat format);
+		static bool GetFormatHasHalfFloat(PixelFormat format);
+		static int GetFormatBitsPerPixel(PixelFormat format);
+		static int CalculateTotalMipMaps(int width, int height);
+		static bool CheckPowerOfTwo(int width, int height);
+		
+		static bool IsFormatDxt(PixelFormat format);
+		static int AdjValueForDxt(bool isDxt, int v);
+		static int CalculateImageArraySizeInBytes(PixelFormat format, int bitsPerPixel, int width, int height);
+
 
 		int LoadFile(const char* fileName, uint8_t*& fileData, uint32_t& fileSize);
 		int LoadImage(uint8_t* data, uint64_t dataLen, int mipmap, PixelFormat format);

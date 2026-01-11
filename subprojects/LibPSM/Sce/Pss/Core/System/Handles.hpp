@@ -9,15 +9,9 @@
 
 namespace Sce::Pss::Core::System {
 	template<typename T> class Handles {
-	private:
-		static std::unordered_map<int, std::shared_ptr<T>> handles;
-		static std::unordered_map<int, T*> rawHandles;
-		static std::atomic<int> lastHandle;
-		static std::atomic<int> lastRawHandle;
-
 	public:
-		static const int NoHandle = 0x0;
-		static const int NoRawHandle = 0xFFFF;
+		static const int NoHandle = 0x00;
+		static const int NoRawHandle = (INT_MAX / 2);
 
 		static bool IsValid(uint64_t handle) {
 			return Handles::IsValid(static_cast<int>(handle));
@@ -69,12 +63,14 @@ namespace Sce::Pss::Core::System {
 			if (rawHandles.contains(handle)) rawHandles.erase(handle);
 			if (handles.contains(handle)) handles.erase(handle);
 		}
+	private:
+		static inline std::unordered_map<int, std::shared_ptr<T>> handles;
+		static inline std::unordered_map<int, T*> rawHandles;
+		static inline std::atomic<int> lastHandle = Handles::NoHandle;
+		static inline std::atomic<int> lastRawHandle = Handles::NoRawHandle;
+
 	};
 
-	template<typename T> std::unordered_map<int, std::shared_ptr<T>> Handles<T>::handles;
-	template<typename T> std::unordered_map<int, T*> Handles<T>::rawHandles;
-	template<typename T> std::atomic<int> Handles<T>::lastHandle = Handles::NoHandle;
-	template<typename T> std::atomic<int> Handles<T>::lastRawHandle = Handles::NoRawHandle;
 }
 
 #endif

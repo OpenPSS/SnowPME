@@ -40,7 +40,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return this->mode;
 	}
 	
-	int ImageImpl::ConvertMode() {
+	int ImageImpl::ConvertMode(ImageSize* extent, ImageImplMode mode) {
 		UNIMPLEMENTED();
 	}
 	
@@ -51,7 +51,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 			return 0;
 		}
 		else {
-			UNIMPLEMENTED_MSG("yet to figure out SetDecExtent.");
+			UNIMPLEMENTED_MSG("SetDecExtent.");
 			return 1;
 		}
 
@@ -65,8 +65,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int ImageImpl::ToBuffer(void* pngBuffer, bool unk0) {
-		UNIMPLEMENTED();
+	uint64_t ImageImpl::ToBuffer(void** pngBuffer) {
+		if (pngBuffer != nullptr)
+			*pngBuffer = this->ImgBuffer;
+
+		return this->ImgBufferSize;
 	}
 
 	std::shared_ptr<ImageImpl> ImageImpl::CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, ImageImplMode mode, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc) {
@@ -92,7 +95,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		implImg->allocator = alloc;
 
 		if (memcmp("MIG", data, 3) == 0) {
-			PANIC("Implement .GIM parsing to the image library (how did you even trigger this?)");
+			PANIC("Implement .GIM parsing to the image library (what game is this?)");
 		}
 
 		stbi_uc* stbImg = stbi_load_from_memory(data, dataLen, &implImg->imgSize.Width, &implImg->imgSize.Height, &implImg->channels, 4);
