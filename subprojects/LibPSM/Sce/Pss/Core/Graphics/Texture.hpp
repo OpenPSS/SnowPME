@@ -8,10 +8,12 @@
 
 namespace Sce::Pss::Core::Graphics {
 	class Texture : public PixelBuffer {
+	private:
+		static uint8_t g_image[0x8000];
 	public:
 
 		int ActiveStateChanged(bool state);
-		int SetPixels(int mipmapLevel, TextureCubeFace cubeFace, int* pixels, size_t pixelsSize, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh);
+		int SetPixels(int mipmapLevel, TextureCubeFace cubeFace, uint8_t* pixels, size_t pixelsSize, PixelFormat format, int offset, int pitch, int dx, int dy, int dw, int dh);
 
 		Texture() = default;
 		virtual ~Texture() = default;

@@ -60,8 +60,9 @@ namespace Sce::Pss::Core::Graphics {
 		
 		static bool IsFormatDxt(PixelFormat format);
 		static int AdjValueForDxt(bool isDxt, int v);
+		static int AdjValueForDxt(PixelFormat format, int v);
 		static int CalculateImageArraySizeInBytes(PixelFormat format, int bitsPerPixel, int width, int height);
-
+		static int GetDxtMultiplier(PixelFormat format);
 
 		int LoadFile(const char* fileName, uint8_t*& fileData, uint32_t& fileSize);
 		int LoadImage(uint8_t* data, uint64_t dataLen, int mipmap, PixelFormat format);

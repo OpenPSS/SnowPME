@@ -101,7 +101,7 @@ namespace Sce::Pss::Core::Graphics {
 					return PSM_ERROR_COMMON_INVALID_OPERATION;
 				}
 			}
-			int* pixelArr = reinterpret_cast<int*>(mono_array_addr_with_size(pixels, 1, 0));
+			uint8_t* pixelArr = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(pixels, 1, 0));
 			size_t pixelArrSize = MonoUtil::MonoArrayBytesLength(pixels);
 			
 			if (dw >= 0 && dh >= 0) {

@@ -400,16 +400,15 @@ namespace Sce::Pss::Core::Graphics {
 	int PixelBuffer::AdjValueForDxt(bool isDxt, int v) {
 		return isDxt ? (v + 3) & ~3 : v;
 	}
+	int PixelBuffer::AdjValueForDxt(PixelFormat format, int v) {
+		return PixelBuffer::IsFormatDxt(format) ? (v + 3) & ~3 : v;
+	}
 
 	int PixelBuffer::CalculateImageArraySizeInBytes(PixelFormat format, int bitsPerPixel, int width, int height)
 	{
-		bool isDxt = (format >= PixelFormat::Dxt1);
-
-		int adjWidth = PixelBuffer::AdjValueForDxt(isDxt, width);
-		int adjHeight = PixelBuffer::AdjValueForDxt(isDxt, height);
-		int imageSize = static_cast<int>(ceil(TO_BYTES(static_cast<double>(bitsPerPixel * adjWidth))) * adjHeight);
-
-		Logger::Debug("isDxt: 0x" + Format::Hex(isDxt));
+		int adjWidth = PixelBuffer::AdjValueForDxt(format, width);
+		int adjHeight = PixelBuffer::AdjValueForDxt(format, height);
+		int imageSize = TO_BYTES_C(bitsPerPixel * adjWidth) * adjHeight;
 
 		Logger::Debug("adjWidth: 0x" + Format::Hex(adjWidth));
 		Logger::Debug("adjHeight: 0x" + Format::Hex(adjHeight));
@@ -418,6 +417,11 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug("total image size: " + Format::Hex(imageSize));
 
 		return imageSize;
+	}
+
+	int PixelBuffer::GetDxtMultiplier(PixelFormat format)
+	{
+		return PixelBuffer::IsFormatDxt(format) ? 3 : 0;
 	}
 
 

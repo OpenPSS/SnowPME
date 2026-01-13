@@ -12,9 +12,11 @@
 #include <memory>
 #include <utility>
 #include <cstdint>
+#include <cmath>
 
 #define TO_BITS(x) ((x) * 8.0)
 #define TO_BYTES(x) ((x) / 8.0)
+#define TO_BYTES_C(x) static_cast<int>(ceil((static_cast<double>(x)) / 8.0))
 
 namespace Sce::Pss::Core {
 

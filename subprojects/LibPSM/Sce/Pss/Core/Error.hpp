@@ -82,14 +82,14 @@ enum PsmError: uint32_t {
 };
 
 #ifndef DEBUGGING_UNIMPLEMENTED_IS_ERROR
-#define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(std::string(__FUNCTION__) + " // " + std::string(__FILE__) + ": "+std::to_string(__LINE__) + " // " + msg)
+#define _UNIMPLEMENETED_MACRO_BODY(msg) Shared::Debug::Logger::Todo(std::string(__FUNCTION__) + " // " + std::string(Shared::String::Path::GetFilename(__FILE__)) + ": "+std::to_string(__LINE__) + " // " + msg)
 #else
 #define _UNIMPLEMENETED_MACRO_BODY(msg) Sce::Pss::Core::ExceptionInfo::AddMessage(msg + std::string("\n")); return PSM_ERROR_NOT_IMPLEMENTED
 #endif
 
 #define UNIMPLEMENTED_MSG(msg) \
 	do { \
-		_UNIMPLEMENETED_MACRO_BODY(std::string(msg) + " is not yet implemented."); \
+		_UNIMPLEMENETED_MACRO_BODY(std::string(msg) + " // not implemented."); \
 		return PSM_ERROR_NO_ERROR; \
 	} while (0)
 

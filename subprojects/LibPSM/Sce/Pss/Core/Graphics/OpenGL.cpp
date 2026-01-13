@@ -127,45 +127,45 @@ namespace Sce::Pss::Core::Graphics {
 			case PixelFormat::None:
 				return GL_NONE;
 			case PixelFormat::Rgba:
-				return GL_FLOAT;
+				return GL_UNSIGNED_BYTE;
 			case PixelFormat::RgbaH:
 				return GL_HALF_FLOAT_OES;
 			case PixelFormat::Rgba4444:
-				return GL_NONE;
+				return GL_UNSIGNED_SHORT_4_4_4_4;
 			case PixelFormat::Rgba5551:
-				return GL_NONE;
+				return GL_UNSIGNED_SHORT_5_5_5_1;
 			case PixelFormat::Rgb565:
-				return GL_NONE;
+				return GL_UNSIGNED_SHORT_5_6_5;
 			case PixelFormat::LuminanceAlpha:
-				return GL_SHORT;
-			case PixelFormat::LuminanceAlphaH:
-				return GL_UNSIGNED_SHORT;
-			case PixelFormat::Luminance:
-				return GL_BYTE;
-			case PixelFormat::LuminanceH:
 				return GL_UNSIGNED_BYTE;
+			case PixelFormat::LuminanceAlphaH:
+				return GL_HALF_FLOAT_OES;
+			case PixelFormat::Luminance:
+				return GL_UNSIGNED_BYTE;
+			case PixelFormat::LuminanceH:
+				return GL_HALF_FLOAT_OES;
 			case PixelFormat::Alpha:
-				return GL_NONE;
+				return GL_UNSIGNED_BYTE;
 			case PixelFormat::AlphaH:
-				return GL_NONE;
+				return GL_HALF_FLOAT_OES;
 			case PixelFormat::Depth16:
-				return GL_NONE;
+				return GL_UNSIGNED_SHORT;
 			case PixelFormat::Depth24:
-				return GL_NONE;
+				return GL_UNSIGNED_INT;
 			case PixelFormat::Depth16Stencil8:
-				return GL_NONE;
+				return GL_UNSIGNED_SHORT;
 			case PixelFormat::Depth24Stencil8:
-				return GL_NONE;
+				return GL_UNSIGNED_INT;
 			case PixelFormat::Dxt1:
 				return GL_NONE;
 			case PixelFormat::Dxt2:
-				return GL_UNSIGNED_BYTE;
+				return GL_NONE;
 			case PixelFormat::Dxt3:
-				return GL_HALF_FLOAT_OES;
+				return GL_NONE;
 			case PixelFormat::Dxt4:
-				return GL_UNSIGNED_SHORT_4_4_4_4;
+				return GL_NONE;
 			case PixelFormat::Dxt5:
-				return GL_UNSIGNED_SHORT_5_5_5_1;
+				return GL_NONE;
 		}
 		UNREACHABLE();
 	}
