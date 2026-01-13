@@ -15,6 +15,7 @@ using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::System;
 using namespace Shared::Debug;
 using namespace Shared::Windowing;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::Graphics {
 
@@ -51,19 +52,15 @@ namespace Sce::Pss::Core::Graphics {
 		if (shaderProgram != this->currentProgram) {
 			// check if the current program is set 
 			if (this->currentProgram != nullptr) {
-				// get and clear the update flag
-				bool activeFlag = this->currentProgram->Active;
-				// clear the active flag
-				this->currentProgram->Active = false;
-				if (activeFlag) { // if the update flag was set, call the active state changed.
-					result = this->currentProgram->ActiveStateChanged();
+				if (this->currentProgram->RemoveRef() == 1) { // if exactly 1 ref left, call the active state changed.
+					result = this->currentProgram->ActiveStateChanged(true);
 				}
 			}
 
 			// update the current program
 			this->currentProgram = shaderProgram;
 			if (shaderProgram != nullptr) {
-				shaderProgram->Active = true;
+				shaderProgram->AddRef();
 			}
 
 		}
@@ -76,19 +73,15 @@ namespace Sce::Pss::Core::Graphics {
 		if (frameBuffer != this->currentFrameBuffer) {
 			// check if the current frame buffer is set 
 			if (this->currentFrameBuffer != nullptr) {
-				// get and clear the update flag
-				bool activeFlag = this->currentFrameBuffer->Active;
-				// clear the active flag
-				this->currentFrameBuffer->Active = false;
-				if (activeFlag) { // if the update flag was set, call the active state changed.
-					result = this->currentFrameBuffer->ActiveStateChanged();
+				if (this->currentFrameBuffer->RemoveRef() == 1) { // if exactly one ref left. call the active state changed.
+					result = this->currentFrameBuffer->ActiveStateChanged(true);
 				}
 			}
 
 			// update the current frame buffer
 			this->currentFrameBuffer = frameBuffer;
 			if (frameBuffer != nullptr) {
-				frameBuffer->Active = true;
+				frameBuffer->AddRef();
 			}
 
 		}
@@ -130,13 +123,10 @@ namespace Sce::Pss::Core::Graphics {
 				else {
 					// Check the current frame buffer is set
 					if (this->currentFrameBuffer != nullptr) {
-						// get the active flag
-						bool activeFlag = this->currentFrameBuffer->Active;
-						// clear the active flag
-						this->currentFrameBuffer->Active = false;
-						// if the flag was set, call ActiveStateChanged
-						if (activeFlag) {
-							this->currentFrameBuffer->ActiveStateChanged();
+
+						// if exactly one reference left, call ActiveStateChanged
+						if (this->currentFrameBuffer->RemoveRef() == 1) {
+							this->currentFrameBuffer->ActiveStateChanged(true);
 						}
 
 						// unset the current framebuffer.
@@ -150,28 +140,26 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("update & GraphicsUpdate::VertexBuffer");
 				int count = ((update & GraphicsUpdate::VertexBufferN) != GraphicsUpdate::None) ? 4 : 1;
 				for (int i = 0; i < count; i++) {
-					VertexBuffer* workingVertexBuffer = VertexBuffer::LookupHandle(handles[GraphicsContext::vertexBufferHandleOffset + i]);
-					VertexBuffer* currentVertexBuffer = this->vertexBuffers[i];
+					VertexBuffer* newVert = VertexBuffer::LookupHandle(handles[GraphicsContext::vertexBufferHandleOffset + i]);
+					VertexBuffer* oldVert = this->vertexBuffers[i];
 
-					if (currentVertexBuffer == workingVertexBuffer) {
-						if (workingVertexBuffer != nullptr && workingVertexBuffer->unk21) {
+					if (oldVert == newVert) {
+						if (newVert != nullptr && newVert->needsUpdateData) {
 							this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 						}
 					}
 					else {
-						if (currentVertexBuffer != nullptr) {
-							bool activeFlg = currentVertexBuffer->Active;
-							currentVertexBuffer->Active = false;
-							if (activeFlg) {
-								currentVertexBuffer->ActiveStateChanged();
+						if (oldVert != nullptr) {
+							if (oldVert->RemoveRef() == 1) {
+								oldVert->ActiveStateChanged(true);
 							}
 						}
 
-						this->vertexBuffers[i] = workingVertexBuffer;
+						this->vertexBuffers[i] = newVert;
 
-						if (workingVertexBuffer != nullptr) {
-							workingVertexBuffer->Active = true;
-							if (workingVertexBuffer->unk21) {
+						if (newVert != nullptr) {
+							newVert->AddRef();
+							if (newVert->needsUpdateData) {
 								this->NotifyUpdateData(GraphicsUpdate::VertexBuffer);
 							}
 						}
@@ -183,8 +171,25 @@ namespace Sce::Pss::Core::Graphics {
 			if ((update & GraphicsUpdate::Texture) != GraphicsUpdate::None)
 			{
 				Logger::Debug("update & GraphicsUpdate::Texture");
-				int count = ((update < GraphicsUpdate::None) ? 8 : 1);
-				UNIMPLEMENTED_MSG("update & GraphicsUpdate::Texture is not implemented");
+				int count = ((update > GraphicsUpdate::None) ? 1 : 8);
+
+				for (int i = 0; i < count; i++) {
+					// get the current and previous texture ...
+					Texture* newTex = dynamic_cast<Texture*>(PixelBuffer::LookupHandle(handles[GraphicsContext::textureHandleOffset + i]));
+					Texture* oldTex = this->textures[i];
+					
+					// remove previous refernece and add a new reference if its not the same texture, 
+					if (newTex != oldTex) {
+						if (oldTex != nullptr) {
+							if (oldTex->RemoveRef() == 1)
+								oldTex->ActiveStateChanged(true);
+						}
+
+						this->textures[i] = newTex;
+						if (newTex != nullptr)
+							newTex->AddRef();
+					}
+				}				
 			}
 
 		}
@@ -202,7 +207,7 @@ namespace Sce::Pss::Core::Graphics {
 			OpenGL::SetShaderProgram(this->currentProgram);
 
 			// set the vertexBuffer notify flag.
-			notifyFlag = notifyFlag | GraphicsUpdate::VertexBuffer;
+			notifyFlag |= GraphicsUpdate::VertexBuffer;
 		}
 
 		// check notifyFlag is VertexBuffer
@@ -221,14 +226,11 @@ namespace Sce::Pss::Core::Graphics {
 				numStreams = vertexBuffer->FormatsLength;
 			}
 
-			// TODO: what are these?
-			int unk1 = 0xFFFF;
-			int unk2 = 0xFFFF;
+			uint16_t maxVertexCount = 0xFFFF;
 
 			OpenGL::SetVertexBuffer(vertexBuffer);
 
 			if (numAttributes > 0) {
-
 				for (int i = 0; i < numAttributes; i++) {
 					int stream = program->GetAttributeStream(i);
 					if (stream >= 0) {
@@ -252,12 +254,12 @@ namespace Sce::Pss::Core::Graphics {
 							VertexFormat format = vertexBuffer->VertexFormats[stream];
 							if (format != VertexFormat::None) {
 								if (vertexBuffer->VertexFormats[0] == VertexFormat::None) {
-									if (unk2 > vertexBuffer->VertexCount) {
-										unk2 = vertexBuffer->VertexCount;
+									if (maxVertexCount > vertexBuffer->VertexCount) {
+										maxVertexCount = vertexBuffer->VertexCount;
 									}
 								}
-								else if(unk1 > vertexBuffer->VertexCount) {
-									unk1 = vertexBuffer->VertexCount;
+								else if(maxVertexCount > vertexBuffer->VertexCount) {
+									maxVertexCount = vertexBuffer->VertexCount;
 								}
 
 								Logger::Todo("index = *(_program->unk10 + 48 * *(v50 + _program->unk10) + 8)");
@@ -297,12 +299,30 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::VertexBuffer");
+			Logger::Todo("Framebuffer part.");
+
+			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::VertexBuffer, framebuffer part");
 		}
 
 		// check notifyFlag is Texture
 		if ((notifyFlag & GraphicsUpdate::Texture) != GraphicsUpdate::None) {
-			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::Texture");
+			Logger::Debug("notifyFlag & GraphicsUpdate::Texture");
+
+			OpenGL::SetTexture(this->textures[0]);
+			for (int slot = 1; slot < 8; slot++) {
+				Texture* tex = this->textures[slot];
+				glActiveTexture(slot = GL_TEXTURE0);
+				GLenum glTextureType = GL_TEXTURE_2D;
+				GLenum glHandle = GL_NONE;
+
+				if (tex != nullptr) {
+					glTextureType = tex->GLPixelBufferType();
+					glHandle = tex->GLHandle;
+				}
+				
+				glBindTexture(glTextureType, glHandle);
+			}
+			glActiveTexture(GL_TEXTURE0);
 		}
 
 		// check notifyFlag is FrameBuffer
@@ -315,6 +335,7 @@ namespace Sce::Pss::Core::Graphics {
 			// set hasNoFrameBuffer and HasShaderOrNoFrameBuffer flags
 			this->hasFrameBuffer = (!this->currentFrameBuffer  || this->currentFrameBuffer->unk12 );
 			this->hasShaderOrNoFrameBuffer = (this->currentProgram == nullptr && this->hasFrameBuffer);
+
 		}
 
 		return PSM_ERROR_NO_ERROR;
@@ -637,12 +658,12 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	GraphicsUpdate GraphicsContext::NotifyUpdateData(GraphicsUpdate updateDataFlag) {
-		this->updateNotifyDataFlag = this->updateNotifyDataFlag | updateDataFlag;
+		this->updateNotifyDataFlag |= updateDataFlag;
 		return updateNotifyDataFlag;
 	}
 
 	GraphicsUpdate GraphicsContext::NotifyUpdate(GraphicsUpdate updateFlag) {
-		this->updateNotifyFlag = this->updateNotifyFlag | updateFlag;
+		this->updateNotifyFlag |= updateFlag;
 		return updateFlag;
 	}
 
@@ -733,7 +754,7 @@ namespace Sce::Pss::Core::Graphics {
 			else
 				this->Extensions = std::string(glExtensions);
 
-			std::vector<std::string> extensionList = Shared::String::Format::Split(this->Extensions, " ");
+			std::vector<std::string> extensionList = Format::Split(this->Extensions, " ");
 
 			char* glVendor = (char*)glGetString(GL_VENDOR);
 			char* glRenderer = (char*)glGetString(GL_RENDERER);
@@ -838,10 +859,6 @@ namespace Sce::Pss::Core::Graphics {
 											GraphicsExtension::TextureNPot2DMipMap | 
 											GraphicsExtension::DrawInstanced | 
 											GraphicsExtension::InstancedArrays));
-
-			// set internal state to nulls
-			this->vertexBuffers.resize(4);
-			this->textures.resize(4);
 			
 			
 			this->minFrameDelta = std::make_unique<DeltaTime>(60);

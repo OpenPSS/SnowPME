@@ -21,7 +21,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	public:
 
-		virtual int ActiveStateChanged() {
+		virtual int ActiveStateChanged(bool state) {
 			return PSM_ERROR_NO_ERROR;
 		};
 
@@ -29,8 +29,8 @@ namespace Sce::Pss::Core::Graphics {
 			return this->handle;
 		}
 
-		bool Active;
-		GLenum GLHandle;
+		GLenum GLHandle = 0;
+
 
 		CUSTOM_ALLOC();
 

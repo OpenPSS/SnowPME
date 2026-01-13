@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 		int InstDivisor = 0;
 		int Option = 0;
 
-		bool unk21 = true;
+		bool needsUpdateData = true;
 	};
 
 }

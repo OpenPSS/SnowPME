@@ -15,8 +15,8 @@ namespace Sce::Pss::Core {
 		template<typename U> friend class PsmRefCount;
 
 	protected:
-		std::atomic<size_t> totalReferences = 0;
 		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
+		std::atomic<size_t> totalReferences = 0;
 	public:
 
 		PsmRefCount() = default;
@@ -35,9 +35,9 @@ namespace Sce::Pss::Core {
 
 		static bool AddRef(int handle) {
 			if (T::CheckHandle(handle)) {
-				T* object = dynamic_cast<T*>(T::LookupHandle(handle));
+				T* obj = dynamic_cast<T*>(T::LookupHandle(handle));
 
-				object->totalReferences++;
+				obj->AddRef();
 				return true;
 			}
 
@@ -46,23 +46,22 @@ namespace Sce::Pss::Core {
 
 		static bool Delete(int handle) {
 			if (T::CheckHandle(handle)) {
-				T* object = dynamic_cast<T*>(T::LookupHandle(handle));
-				return T::Delete(object);
+				T* obj = dynamic_cast<T*>(T::LookupHandle(handle));
+				return T::Delete(obj);
 			}
 
 			return false;
 		}
 
-		static bool Delete(T* object) {
-			if (object != nullptr) {
-				object->totalReferences--;
-				if (object->TotalReferences() > 0)
+		static bool Delete(T* obj) {
+			if (obj != nullptr) {
+				if (obj->RemoveRef() > 0)
 					return false;
 
-				if(CheckHandle(object->Handle()))
-					Sce::Pss::Core::System::Handles<T>::Delete(object->Handle());
+				if(CheckHandle(obj->Handle()))
+					Sce::Pss::Core::System::Handles<T>::Delete(obj->Handle());
 
-				delete object;
+				delete obj;
 
 				return true;
 			}
@@ -70,8 +69,16 @@ namespace Sce::Pss::Core {
 			return false;
 		}
 
-		size_t TotalReferences() {
+		size_t RefCount() {
 			return this->totalReferences;
+		}
+
+		size_t AddRef() {
+			return this->totalReferences++;
+		}
+		
+		size_t RemoveRef() {
+			return this->totalReferences--;
 		}
 
 		int Handle() {

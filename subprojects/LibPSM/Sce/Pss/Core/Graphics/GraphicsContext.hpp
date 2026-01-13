@@ -28,6 +28,7 @@
 #include <memory>
 #include <cstdint>
 #include <vector>
+#include <array>
 
 using namespace Sce::Pss::Core::Imaging;
 using namespace Sce::Pss::Core::Timing;
@@ -54,8 +55,9 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderProgram* currentProgram = nullptr;
 		FrameBuffer* currentFrameBuffer = nullptr;
 		
-		std::vector<VertexBuffer*> vertexBuffers;
-		std::vector<Texture*> textures;
+		std::array<VertexBuffer*, 4> vertexBuffers = { nullptr };
+		std::array<Texture*, 8> textures = { nullptr };
+
 		EnableMode currentEnableModes = EnableMode::None;
 
 		int cullFaceBits = 0;
