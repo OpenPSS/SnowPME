@@ -311,7 +311,7 @@ namespace Sce::Pss::Core::Graphics {
 			OpenGL::SetTexture(this->textures[0]);
 			for (int slot = 1; slot < 8; slot++) {
 				Texture* tex = this->textures[slot];
-				glActiveTexture(slot = GL_TEXTURE0);
+				glActiveTexture(slot + GL_TEXTURE0);
 				GLenum glTextureType = GL_TEXTURE_2D;
 				GLenum glHandle = GL_NONE;
 
