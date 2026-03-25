@@ -299,9 +299,7 @@ namespace Sce::Pss::Core::Graphics {
 				}
 			}
 
-			Logger::Todo("Framebuffer part.");
-
-			UNIMPLEMENTED_MSG("notifyFlag & GraphicsUpdate::VertexBuffer, framebuffer part");
+			Logger::Todo("implement the Framebuffer part of vertexbuffer");
 		}
 
 		// check notifyFlag is Texture
