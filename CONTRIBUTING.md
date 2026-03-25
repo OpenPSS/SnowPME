@@ -3,20 +3,21 @@ SnowPME is a PlayStation Mobile emulator;
 
 first: 
 
-please dont use AI here, their generally bad at understanding common Vita internals like e.g NIDs, 
-and its also generally bad for reverse-engineering in general; since you have to know what the program acutally does to validate results !!
+please dont use AI here, their generally bad at understanding common Vita internals like e.g NIDs, function usage, amoung others .. 
+and its also bad for reverse-engineering in general; since you have to know what the program acutally does to validate results !!
  .. but also, [anarchist rants about LLMS](https://silica.codes/ramblings/ai.htm)
 
 
 relevant file structure is: 
-
-  subprojects/LibPSM -- main psm libraries; 
+```
+  subprojects/LibPSM -- main psm libraries;
   subprojects/LibCXML -- parsing app.info, cxml stuffs;
   subprojects/LibSnowPME -- custom GUI, handling of certain functions
   subprojects/LibShared -- stuff shared between multiple projects;
   
   tests/ -- various tests for the emulator; written in C# using the PSM SDK;
-  
+```
+
 the project uses Meson build system, but also MSVC for windows; 
 its primary dependancies are SDL2, SDL2_ttf, Mono, ImGui;
 
