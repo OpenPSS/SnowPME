@@ -1,6 +1,6 @@
 project('SnowPME', 'cpp',
   version : '0.1',
-  default_options : ['warning_level=0', 'cpp_std=c++20'])
+  default_options : ['warning_level=0', 'cpp_std=c++20', 'default_library=shared'])
 
 cpp = meson.get_compiler('cpp')
 
@@ -35,7 +35,6 @@ executable('SnowPME',
 		LibSnowPME_dep,
 		LibPssMono_dep,
 	],
-#	link_args: ['-static-libgcc', '-static-libstdc++']
 )
 
 #subproject('SnowPMEBenchmark')
