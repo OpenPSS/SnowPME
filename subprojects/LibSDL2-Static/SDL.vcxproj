@@ -338,6 +338,7 @@
     <ClInclude Include="SDL2\src\hidapi\SDL_hidapi_c.h" />
     <ClInclude Include="SDL2\src\joystick\controller_type.h" />
     <ClInclude Include="SDL2\src\joystick\hidapi\SDL_hidapijoystick_c.h" />
+    <ClCompile Include="SDL2\src\joystick\hidapi\SDL_hidapi_8bitdo.c" />
     <ClInclude Include="SDL2\src\joystick\hidapi\SDL_hidapi_rumble.h" />
     <ClInclude Include="SDL2\src\joystick\SDL_gamecontrollerdb.h" />
     <ClInclude Include="SDL2\src\joystick\SDL_joystick_c.h" />
