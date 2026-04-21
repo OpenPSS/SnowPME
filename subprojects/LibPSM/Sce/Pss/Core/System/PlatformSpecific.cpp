@@ -12,7 +12,7 @@ using namespace Shared::String;
 namespace Sce::Pss::Core::System {
 
     int PlatformSpecific::ChangeFileAttributes(std::string RealFilePath, uint32_t attribute) {
-#ifdef _WIN32
+#if defined(_WIN32)
         DWORD fileAttributes = 0;
 
         if ((attribute & SCE_PSS_FILE_FLAG_READONLY) == 0)
@@ -24,15 +24,18 @@ namespace Sce::Pss::Core::System {
         SetFileAttributesA(RealFilePath.c_str(), fileAttributes);
 
         return PSM_ERROR_NO_ERROR;  
-#elif __linux__
+#elif defined(__linux__)
+        return PSM_ERROR_NOT_AVAILABLE;
+#elif defined(__HAIKU__)
         return PSM_ERROR_NOT_AVAILABLE;
 #else
-#error platform not supported
+        #warning platform not supported
+        return PSM_ERROR_NOT_AVAILABLE;
 #endif
     }
 
 	int PlatformSpecific::ChangeFileTimes(std::string RealFilePath, time_t CreationTime, time_t LastAccessTime, time_t LastWriteTime) {
-#ifdef _WIN32
+#if defined(_WIN32)
         FILETIME creationTime; 
         FILETIME lastAccessTime;
         FILETIME lastWriteTime;
@@ -51,17 +54,20 @@ namespace Sce::Pss::Core::System {
         // Close the file
         CloseHandle(fd);
         return PSM_ERROR_NO_ERROR;
-#elif __linux__
+#elif defined(__linux__)
+        return PSM_ERROR_NOT_AVAILABLE;
+#elif defined(__HAIKU__)
         return PSM_ERROR_NOT_AVAILABLE;
 #else
-#error platform not supported
+        #warning platform not supported
+        return PSM_ERROR_NOT_AVAILABLE;
 #endif
 	}
     std::string PlatformSpecific::escapeShellArgument(std::string arg) {
         // list of all special shell characters
         std::string specialCharacters = "^&<>|()=;,%\"";
 
-#ifdef _WIN32
+#ifdef defined(_WIN32)
         std::string escapeSeq = "^";
 #else
         std::string escapeSeq = "\\";
@@ -92,11 +98,11 @@ namespace Sce::Pss::Core::System {
 
         // generate the command to start the browser
         // this is dependant on platform
-#ifdef _WIN32
+#if defined(_WIN32)
         std::string command = "start /B " + url;
-#elif __APPLE__
+#elif defined(__APPLE__) || defined(__HAIKU__)
         std::string command = "open " + url;
-#elif __linux__
+#elif defined(__linux__)
         std::string command = "xdg-open " + url;
 #else
 #error platform not supported

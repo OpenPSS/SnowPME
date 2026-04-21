@@ -23,6 +23,9 @@ LibImGui_dep = LibImGui.get_variable('LibImGui_dep')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')
 LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
 
+LibNetwork_dep = cpp.find_library('network', required: false)
+LibIconv_dep = dependency('iconv')
+
 
 libSnowPME = static_library('SnowPME',
 	'Graphics/Gui/ConfigurationWindow.cpp',
@@ -49,9 +52,13 @@ libSnowPME = static_library('SnowPME',
 		LibImGui_dep,
 		LibGLAD_dep,
 		LibPssMono_dep,
-		GlobalInclude_dep
+		GlobalInclude_dep,
+
+		LibNetwork_dep,
+		LibIconv_dep
 	],
 )
+
 
 LibSnowPME_dep = declare_dependency(
 	include_directories: include_libs,

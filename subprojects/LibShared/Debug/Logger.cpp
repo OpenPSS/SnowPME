@@ -24,7 +24,7 @@ namespace Shared::Debug
 #if defined(_WIN32)
 		HANDLE hConsole = GetStdHandle(STD_ERROR_HANDLE);
 		SetConsoleTextAttribute(hConsole, static_cast<WORD>(color));
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__HAIKU__)
 
 		std::string COLOR_RESET = "\e[0m";
 		std::string COLOR_BLACK = "\e[30m";
