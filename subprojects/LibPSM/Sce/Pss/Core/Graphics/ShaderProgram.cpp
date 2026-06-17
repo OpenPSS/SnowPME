@@ -192,52 +192,47 @@ namespace Sce::Pss::Core::Graphics {
 		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
 		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
 
-
+		this->Uniforms.resize(uniformCount);
 		for (int i = 0; i < uniformCount; i++) {
-			ProgramUniform uniform = ProgramUniform();
-
 			int nameLen;
 			char name[0x100];
 			GLenum uniformType = 0;
 			
-			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &uniform.Size, &uniformType, name);
+			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &Uniforms[i].Size, &uniformType, name);
 
-			uniform.Location = glGetUniformLocation(this->GLHandle, name);
-			uniform.Index = i;
-			uniform.Name = std::string(name, nameLen);
-			uniform.Type = glUniformTypeToPsmType(uniformType);
+			Uniforms[i].Location = glGetUniformLocation(this->GLHandle, name);
+			Uniforms[i].Index = i;
+			Uniforms[i].Name = std::string(name, nameLen);
+			Uniforms[i].Type = glUniformTypeToPsmType(uniformType);
 			
-			size_t pos = uniform.Name.find('[');
+			size_t pos = Uniforms[i].Name.find('[');
 			if (pos != std::string::npos) {
-				uniform.Name = uniform.Name.substr(0, pos);
+				Uniforms[i].Name = Uniforms[i].Name.substr(0, pos);
 			}
 
-			Logger::Debug("Uniform: " + uniform.Name + " location: " + std::to_string(uniform.Location));
-			this->Uniforms.push_back(uniform);
+			Logger::Debug("Uniform: " + Uniforms[i].Name + " location: " + Format::Hex(Uniforms[i].Location));
 		}
 
 		glGetProgramiv(this->GLHandle, GL_ACTIVE_ATTRIBUTES, &attributeCount);
 
+		this->Attributes.resize(attributeCount);
 		for (int i = 0; i < attributeCount; i++) {
-			ProgramAttribute attribute = ProgramAttribute();
-
 			int nameLen;
 			char name[0x100];
 			GLenum attributeType = 0;
 
-			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &attribute.Size, &attributeType, name);
-			attribute.Location = glGetAttribLocation(this->GLHandle, name);
-			attribute.Index = i;
-			attribute.Name = std::string(name, nameLen);
-			attribute.Type = (ShaderUniformType)glAttributeTypeToPsmType(attributeType);
+			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &Attributes[i].Size, &attributeType, name);
+			Attributes[i].Location = glGetAttribLocation(this->GLHandle, name);
+			Attributes[i].Index = i;
+			Attributes[i].Name = std::string(name, nameLen);
+			Attributes[i].Type = (ShaderUniformType)glAttributeTypeToPsmType(attributeType);
 
-			size_t pos = attribute.Name.find('[');
+			size_t pos = Attributes[i].Name.find('[');
 			if (pos != std::string::npos) {
-				attribute.Name = attribute.Name.substr(0, pos);
+				Attributes[i].Name = Attributes[i].Name.substr(0, pos);
 			}
 
-			Logger::Debug("Attribute: " + attribute.Name + " location: " + std::to_string(attribute.Location));
-			this->Attributes.push_back(attribute);
+			Logger::Debug("Attribute: " + Attributes[i].Name + " location: " + Format::Hex(Attributes[i].Location));
 		}
 		
 
