@@ -8,10 +8,10 @@
 namespace Sce::Pss::Core::Graphics {
 	typedef struct ProgramUniform {
 		std::string Name;
-		int Size;
-		int Index;
-		ShaderUniformType Type;
-		int Location;
+		int Size = 0;
+		int Index = 0;
+		ShaderUniformType Type = ShaderUniformType::None;
+		int Location = 0;
 		int Binding = -1;
 	} ProgramUniform;
 }

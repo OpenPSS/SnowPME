@@ -231,13 +231,13 @@ namespace Sce::Pss::Core::Graphics {
 			OpenGL::SetVertexBuffer(vertexBuffer);
 
 			if (numAttributes > 0) {
-				for (int i = 0; i < numAttributes; i++) {
-					int stream = program->GetAttributeStream(i);
+				for (int attrib = 0; attrib < numAttributes; attrib++) {
+					int stream = program->GetAttributeStream(attrib);
 					if (stream >= 0) {
 						// set the specified stream ..
 						if (stream >= numStreams) {
 							for (int strId = 0; strId < 4; strId++) {
-								vertexBuffer = this->vertexBuffers[i];
+								vertexBuffer = this->vertexBuffers[attrib];
 								
 								if (vertexBuffer != nullptr) {
 									numStreams = vertexBuffer->FormatsLength;
@@ -262,42 +262,26 @@ namespace Sce::Pss::Core::Graphics {
 									maxVertexCount = vertexBuffer->VertexCount;
 								}
 
-								Logger::Todo("index = *(_program->unk10 + 48 * *(v50 + _program->unk10) + 8)");
-								// TODO: wtf is index = *(_program->unk10 + 48 * *(v50 + _program->unk10) + 8); 
-								// ???
-								
-								int index = 0;
-								if (index >= 0) {
+								int attribLocation = program->Attributes[attrib].Location; 
+								if (attribLocation >= 0) {
 									int vectorWidth = VertexBuffer::GetFormatVectorWidth(format);
 									GLenum formatVectorType = OpenGL::GetVertexFormatType(format);
 									GLenum formatVectorNormalized = OpenGL::GetVertexFormatNormalize(format);
 
 									int stride = vertexBuffer->VertexBufferSize;
-									
-									Logger::Todo("pointer = *(vertexBuffer->unk14 + 4 * _stream);");
+									void* pointer = 0; //vertexBuffer->indicies[stream]; 
 
-									/* TODO: wtf is this:
-										pointer = *(vertexBuffer->unk14 + 4 * _stream);
-										if ( vFormats )
-										pointer += stride * this->unk24;
-									*/
-
-									void* pointer = nullptr;
-
-									glVertexAttribPointer(index, vectorWidth, formatVectorType, formatVectorNormalized, stride, pointer);
-									glVertexAttribDivisorEXT(index, static_cast<uint32_t>(vertexBuffer->VertexFormats[0]));
-									glEnableVertexAttribArray(index);
+									glVertexAttribPointer(attribLocation, vectorWidth, formatVectorType, formatVectorNormalized, stride, pointer);
+									glVertexAttribDivisorEXT(attribLocation, vertexBuffer->InstDivisor);
+									glEnableVertexAttribArray(attribLocation);
 								}
-								
-
-
 							}
 						}
-						Logger::Todo("Implement goto i_greater_than_4; here.");
 					}
 
 				}
 			}
+
 
 			Logger::Todo("implement the Framebuffer part of vertexbuffer");
 		}
