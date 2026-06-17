@@ -13713,7 +13713,7 @@ MA_API ma_result ma_log_postv(ma_log* pLog, ma_uint32 level, const char* pFormat
             }
             #else
             {
-                vsprintf(pFormattedMessage, pFormat, args);
+                vsnprintf(pFormattedMessage, formattedLen + 1, pFormat, args);
             }
             #endif
 
