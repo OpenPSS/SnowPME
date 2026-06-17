@@ -269,7 +269,23 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::GetUniformType(int handle, int index, ShaderUniformType* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		};
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (index < 0 || index >= static_cast<int>(prog->Uniforms.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetUniformType(index);
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int PsmShaderProgram::GetAttributeType(int handle, int index, ShaderAttributeType* result) {
@@ -373,9 +389,40 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetAttributeStream(int handle, int index, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (index < 0 || index >= static_cast<int>(prog->Attributes.size())) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetAttributeStream(index);
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmShaderProgram::SetAttributeStream(int handle, int index, int stream) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		return prog->SetAttributeStream(index, stream);
 	}
 }

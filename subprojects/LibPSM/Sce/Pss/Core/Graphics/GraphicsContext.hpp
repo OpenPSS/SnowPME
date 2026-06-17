@@ -54,7 +54,8 @@ namespace Sce::Pss::Core::Graphics {
 
 		ShaderProgram* currentProgram = nullptr;
 		FrameBuffer* currentFrameBuffer = nullptr;
-		
+		VertexBuffer* currentVertexBuffer = nullptr;
+
 		std::array<VertexBuffer*, 4> vertexBuffers = { nullptr };
 		std::array<Texture*, 8> textures = { nullptr };
 
@@ -63,7 +64,11 @@ namespace Sce::Pss::Core::Graphics {
 		int cullFaceBits = 0;
 
 		short frameCount = 0;
+		int indexCount = 0;
+		int vertexCount = 0;
 		int numScreens = 0;
+
+		int disableMask = 0;
 		bool hasFrameBuffer = true;
 		bool hasShaderOrNoFrameBuffer = false;
 		bool frameInProgress = false;

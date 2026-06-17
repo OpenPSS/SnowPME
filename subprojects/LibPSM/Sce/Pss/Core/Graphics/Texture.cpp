@@ -104,20 +104,20 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		int bpp = PixelBuffer::GetFormatBitsPerPixel(format);
-		int wBytesTotal = TO_BYTES_C(bpp * (PixelBuffer::AdjValueForDxt(format, dw)));
+		int bytesTotal = TO_BYTES_C(bpp * (PixelBuffer::AdjValueForDxt(format, dw)));
 
 		if (pitch == NULL)
-			pitch = wBytesTotal;
+			pitch = bytesTotal;
 
 		int mipmapWidth = this->GetMipmapWidth(mipmapLevel);
 		int mipmapHeight = this->GetMipmapHeight(mipmapLevel);
 
-		if (dx < 0 || dy < 0 || dh < 0 || dw < 0 || offset < 0 || dw + dx > mipmapWidth || dh + dy > mipmapHeight || pitch < wBytesTotal) {
+		if (dx < 0 || dy < 0 || dh < 0 || dw < 0 || offset < 0 || dw + dx > mipmapWidth || dh + dy > mipmapHeight || pitch < bytesTotal) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 		
 		// TODO: cleanup this if statement
-		if (offset + wBytesTotal * (PixelBuffer::GetDxtMultiplier(format) + 1) + pitch * (~PixelBuffer::GetDxtMultiplier(format) & (dh - 1)) > pixelsSize) {
+		if (offset + bytesTotal * (PixelBuffer::GetDxtMultiplier(format) + 1) + pitch * (~PixelBuffer::GetDxtMultiplier(format) & (dh - 1)) > pixelsSize) {
 			ExceptionInfo::AddMessage("Pixel array is smaller than required\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
@@ -151,7 +151,7 @@ namespace Sce::Pss::Core::Graphics {
 			int yoffset = PixelBuffer::GetDxtMultiplier(format) + 1;
 
 			// TODO: why? 
-			if (formatMatches || pitch != wBytesTotal) {
+			if (formatMatches || pitch != bytesTotal) {
 				end = (PixelBuffer::GetDxtMultiplier(format) + dh) / yoffset;
 				dh -= yoffset * (end - 1);
 			}
@@ -168,7 +168,7 @@ namespace Sce::Pss::Core::Graphics {
 				for (int i = end; i--; i < 0) {
 					if (PixelBuffer::IsFormatDxt(format)) {
 						int adjHeight = (i <= 0) ? 4 : dh;
-						int adjSize = wBytesTotal * (dh + (3 & -4));
+						int adjSize = bytesTotal * (dh + (3 & -4));
 
 						glCompressedTexSubImage2D(glPixType, mipmapLevel, dx, dy, dw, adjHeight, formatComponent, adjSize, p);
 

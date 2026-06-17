@@ -45,8 +45,10 @@ namespace Sce::Pss::Core::Graphics {
 		std::string GetAttributeBinding(int index) const;
 		std::string GetAttributeName(int index) const;
 		ShaderAttributeType GetAttributeType(int index) const;
+		ShaderUniformType GetUniformType(int index) const;
 		int GetAttributeLocation(std::string& name) const;
 		int GetAttributeStream(int index) const;
+		int SetAttributeStream(int index, int stream);
 		int SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int unk0, int count);
 		std::string GetUniformName(int index);
 

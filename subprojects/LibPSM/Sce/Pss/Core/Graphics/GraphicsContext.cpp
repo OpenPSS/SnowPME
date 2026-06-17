@@ -226,7 +226,10 @@ namespace Sce::Pss::Core::Graphics {
 				numStreams = vertexBuffer->FormatsLength;
 			}
 
-			uint16_t maxVertexCount = 0xFFFF;
+			this->indexCount = 0xFFFF;
+			this->vertexCount = 0xFFFF;
+			int disableMask = 0;
+			int enableMask = 1;
 
 			OpenGL::SetVertexBuffer(vertexBuffer);
 
@@ -253,13 +256,13 @@ namespace Sce::Pss::Core::Graphics {
 						else {
 							VertexFormat format = vertexBuffer->VertexFormats[stream];
 							if (format != VertexFormat::None) {
-								if (vertexBuffer->VertexFormats[0] == VertexFormat::None) {
-									if (maxVertexCount > vertexBuffer->VertexCount) {
-										maxVertexCount = vertexBuffer->VertexCount;
-									}
+
+								if (vertexBuffer->InstDivisor) {
+									if (this->vertexCount > vertexBuffer->VertexCount)
+										this->vertexCount = vertexBuffer->VertexCount;
 								}
-								else if(maxVertexCount > vertexBuffer->VertexCount) {
-									maxVertexCount = vertexBuffer->VertexCount;
+								else if(this->indexCount > vertexBuffer->VertexCount) {
+									this->indexCount = vertexBuffer->VertexCount;
 								}
 
 								int attribLocation = program->Attributes[attrib].Location; 
@@ -274,16 +277,43 @@ namespace Sce::Pss::Core::Graphics {
 									glVertexAttribPointer(attribLocation, vectorWidth, formatVectorType, formatVectorNormalized, stride, pointer);
 									glVertexAttribDivisorEXT(attribLocation, vertexBuffer->InstDivisor);
 									glEnableVertexAttribArray(attribLocation);
+
+									disableMask |= 1 << attribLocation;
+									enableMask |= 1;
+
 								}
 							}
 						}
 					}
 
+					enableMask <<= 1;
+				}
+			}
+			
+			VertexBuffer* currentVb = nullptr;
+			for (int i = 0; i < 4; i++) {
+				this->currentVertexBuffer = this->vertexBuffers[i];
+
+				if (this->vertexBuffers[i] != nullptr && this->vertexBuffers[i]->IndexCount != 0) {
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vertexBuffers[i]->GLHandle);
+					this->indexCount = this->vertexBuffers[i]->IndexCount;
 				}
 			}
 
+			int mask = this->disableMask & ~disableMask;
+			this->disableMask = disableMask;
+			for (int i = 0; mask != 0; i++) {
+				mask >>= 1;
+				if((mask & 1) != 0) glDisableVertexAttribArray(i);
+			}
 
-			Logger::Todo("implement the Framebuffer part of vertexbuffer");
+			mask = ~enableMask;
+			if ((mask & (1 << numAttributes) - 1) != 0) {
+				UNIMPLEMENTED_MSG("enablemask");
+			}
+
+			UNIMPLEMENTED_MSG("continue VertexBuffer impl");
+
 		}
 
 		// check notifyFlag is Texture

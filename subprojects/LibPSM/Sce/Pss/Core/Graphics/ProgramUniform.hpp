@@ -13,6 +13,7 @@ namespace Sce::Pss::Core::Graphics {
 		ShaderUniformType Type = ShaderUniformType::None;
 		int Location = 0;
 		int Binding = -1;
+		int Stream = 0;
 	} ProgramUniform;
 }
 
