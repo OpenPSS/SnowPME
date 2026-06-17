@@ -417,7 +417,7 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
-	int ShaderProgram::SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int unk0, int unk1)
+	int ShaderProgram::SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int stream, int count)
 	{
 		if(value == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
@@ -452,62 +452,62 @@ namespace Sce::Pss::Core::Graphics {
 			type = Uniforms[index].Type;
 		}
 	
-		if (((unk1 | unk0 | offset) & 0xFF000000) != 0  /*|| offset + unk1 > uniform->unk7*/)
+		if (((count | stream | offset) & 0xFF000000) != 0  /*|| offset + count > uniform->unk7*/)
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
-		if (GetUniformTypeVectorSize(type) * (unk0 + unk1) > vectorsize)
+		if (GetUniformTypeVectorSize(type) * (stream + count) > vectorsize)
 		{
 			ExceptionInfo::AddMessage("Value argument has wrong size\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		if (unk1 > Uniforms[index].Size - offset)
-			unk1 = Uniforms[index].Size - offset;
+		if (count > Uniforms[index].Size - offset)
+			count = Uniforms[index].Size - offset;
 
 		ShaderProgram* prevShader = OpenGL::SetShaderProgram(this);
 
 		switch (Uniforms[index].Type) {
 			// float
 			case ShaderUniformType::Float:
-				glUniform1fv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float2:
-				glUniform1fv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float3:
-				glUniform1fv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float4:
-				glUniform1fv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			// float matrix
 			case ShaderUniformType::Float3x3:
-				glUniformMatrix3fv(offset + Uniforms[index].Location, unk1, 0, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniformMatrix3fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float4x4:
-				glUniformMatrix4fv(offset + Uniforms[index].Location, unk1, 0, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniformMatrix4fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float2x2:
-				glUniformMatrix2fv(offset + Uniforms[index].Location, unk1, 0, (reinterpret_cast<float*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniformMatrix2fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			// int 
 			case ShaderUniformType::Bool:
 			case ShaderUniformType::Int:
-				glUniform1iv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<int*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform1iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool2:
 			case ShaderUniformType::Int2:
-				glUniform2iv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<int*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform2iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool3:
 			case ShaderUniformType::Int3:
-				glUniform3iv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<int*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform3iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool4:
 			case ShaderUniformType::Int4:
-				glUniform4iv(offset + Uniforms[index].Location, unk1, (reinterpret_cast<int*>(value) + unk0 * GetUniformTypeVectorSize(type)));
+				glUniform4iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			default:

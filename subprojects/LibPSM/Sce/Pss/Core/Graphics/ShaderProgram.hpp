@@ -49,7 +49,7 @@ namespace Sce::Pss::Core::Graphics {
 		int GetAttributeLocation(std::string& name) const;
 		int GetAttributeStream(int index) const;
 		int SetAttributeStream(int index, int stream);
-		int SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int unk0, int count);
+		int SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int stream, int count);
 		std::string GetUniformName(int index);
 
 		static int GetUniformTypeVectorSize(ShaderUniformType type);
