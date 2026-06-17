@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	public:
 
-		static void SetShaderProgram(ShaderProgram* shaderProgram);
+		static ShaderProgram* SetShaderProgram(ShaderProgram* shaderProgram);
 		static VertexBuffer* SetVertexBuffer(VertexBuffer* vertexBuffer);
 		static void SetFrameBuffer(FrameBuffer* frameBuffer);
 

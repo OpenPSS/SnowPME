@@ -133,7 +133,27 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		};
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (name == nullptr) {
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		}
+
+		std::string uniformName;
+		MonoUtil::MonoStringToStdString(name, uniformName);
+
+		*result = prog->FindUniform(uniformName);
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int PsmShaderProgram::FindAttribute(int handle, MonoString* name, int* result) {
@@ -148,6 +168,10 @@ namespace Sce::Pss::Core::Graphics {
 		};
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (name == nullptr) {
+			return PSM_ERROR_COMMON_ARGUMENT_NULL;
+		}
 
 		std::string attributeName;
     	MonoUtil::MonoStringToStdString(name, attributeName);
@@ -323,7 +347,21 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::SetUniformValue(int handle, int index, int offset, void* value, ShaderUniformType type) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+		int vectorSize = ShaderProgram::GetUniformTypeVectorSize(type);
+
+		return prog->SetUniformValue(index, value, vectorSize, type, offset, 0, 1);
 	}
 	int PsmShaderProgram::SetUniformValue2(int handle, int index, void* value, ShaderUniformType type, int to, int from, int count) {
 		UNIMPLEMENTED();

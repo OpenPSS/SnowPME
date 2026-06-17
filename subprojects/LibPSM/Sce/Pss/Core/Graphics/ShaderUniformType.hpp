@@ -1,27 +1,29 @@
 #ifndef LIB_PSS_SHADERUNIFORMTYPE_H
 #define LIB_PSS_SHADERUNIFORMTYPE_H 1
-
+#include <Sce/Pss/Core/BitwiseEnum.hpp>
 namespace Sce::Pss::Core::Graphics {
 	enum class ShaderUniformType : unsigned int {
-		None = 0,
+		None = 0x0,
 		Float = 0x100,
-		Float2 = 257,
-		Float3 = 258,
-		Float4 = 259,
-		Float2x2 = 273,
-		Float3x3 = 290,
-		Float4x4 = 307,
+		Float2 = 0x101,
+		Float3 = 0x102,
+		Float4 = 0x103,
+		Float2x2 = 0x111,
+		Float3x3 = 0x122,
+		Float4x4 = 0x133,
 		Int = 0x400,
-		Int2 = 1025,
-		Int3 = 1026,
-		Int4 = 1027,
-		Bool = 768,
-		Bool2 = 769,
-		Bool3 = 770,
-		Bool4 = 771,
-		Sampler2D = 32769,
-		SamplerCube = 32770
+		Int2 = 0x401,
+		Int3 = 0x402,
+		Int4 = 0x403,
+		Bool = 0x300,
+		Bool2 = 0x301,
+		Bool3 = 0x302,
+		Bool4 = 0x303,
+		Sampler2D = 0x8001,
+		SamplerCube = 0x8002
 	};
+
+	DEFINE_BITWISE_ENUM_OPERATOR(ShaderUniformType, unsigned int);
 }
 
 #endif

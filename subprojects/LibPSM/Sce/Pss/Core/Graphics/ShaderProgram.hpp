@@ -5,6 +5,7 @@
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgramOption.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderAttributeType.hpp>
+#include <Sce/Pss/Core/Graphics/ShaderUniformType.hpp>
 #include <Sce/Pss/Core/PsmObject.hpp>
 
 namespace Sce::Pss::Core::Graphics {
@@ -22,8 +23,9 @@ namespace Sce::Pss::Core::Graphics {
 
 		std::vector<std::string> attributeBindings; 
 
-
 		int compileShader(int type, const char* source);
+		ShaderUniformType glUniformTypeToPsmType(int glType);
+		ShaderAttributeType glAttributeTypeToPsmType(int glType);
 	public:
 		int UniformCount();
 		int AttributeCount();
@@ -37,14 +39,18 @@ namespace Sce::Pss::Core::Graphics {
 		~ShaderProgram();
 
 		int FindAttribute(std::string& name);
+		int FindUniform(std::string& name);
+
 		int SetAttributeBinding(int index, std::string& name);
 		std::string GetAttributeBinding(int index) const;
 		std::string GetAttributeName(int index) const;
 		ShaderAttributeType GetAttributeType(int index) const;
 		int GetAttributeLocation(std::string& name) const;
 		int GetAttributeStream(int index) const;
-
+		int SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int unk0, int count);
 		std::string GetUniformName(int index);
+
+		static int GetUniformTypeVectorSize(ShaderUniformType type);
 
 		std::vector<ProgramUniform> Uniforms;
 		std::vector<ProgramAttribute> Attributes;

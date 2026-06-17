@@ -19,7 +19,8 @@ namespace Sce::Pss::Core::Graphics {
 	FrameBuffer* OpenGL::activeFrameBuffer = nullptr;
 	Texture* OpenGL::activeTexture = nullptr;
 
-	void OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
+	ShaderProgram* OpenGL::SetShaderProgram(ShaderProgram* shaderProgram) {
+		ShaderProgram* prevShader = OpenGL::activeShaderProgram;
 		OpenGL::activeShaderProgram = shaderProgram;
 		if (shaderProgram == nullptr) {
 			glUseProgram(0);
@@ -27,6 +28,7 @@ namespace Sce::Pss::Core::Graphics {
 		else {
 			glUseProgram(shaderProgram->GLHandle);
 		}
+		return prevShader;
 	}
 
 	VertexBuffer* OpenGL::SetVertexBuffer(VertexBuffer* vertexBuffer) {

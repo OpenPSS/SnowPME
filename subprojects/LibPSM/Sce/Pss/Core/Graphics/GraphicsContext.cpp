@@ -293,7 +293,7 @@ namespace Sce::Pss::Core::Graphics {
 
 							}
 						}
-						Logger::Todo("Implement  goto i_greater_than_4; here.");
+						Logger::Todo("Implement goto i_greater_than_4; here.");
 					}
 
 				}
