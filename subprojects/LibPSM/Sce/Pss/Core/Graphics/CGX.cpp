@@ -99,7 +99,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->vertexVariants.reserve(this->vertexVariantTableEntry.VariantCount);
 
 			for (uint32_t i = 0; i < this->vertexVariantTableEntry.VariantCount; i++) {
-				CGXVariant variant = ((CGXVariant*)(this->cgxBuf + this->vertexVariantTableEntry.VariantListPtr))[i];
+				CGXVariant variant = reinterpret_cast<CGXVariant*>(this->cgxBuf + this->vertexVariantTableEntry.VariantListPtr)[i];
 				this->vertexVariants.push_back(variant);
 				std::string language = reversed(variant.language, 4);
 				Logger::Debug("CGX : vert : lang : " + language);
@@ -107,11 +107,11 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		if (this->header.fragmentShaderVariantsPtr != 0) {
-			this->fragmentVariantTableEntry = *(CGXVariantTableEntry*)(this->cgxBuf + this->header.fragmentShaderVariantsPtr);
+			this->fragmentVariantTableEntry = *reinterpret_cast<CGXVariantTableEntry*>(this->cgxBuf + this->header.fragmentShaderVariantsPtr);
 			this->fragmentVariants.reserve(this->fragmentVariantTableEntry.VariantCount);
 
 			for (uint32_t i = 0; i < this->fragmentVariantTableEntry.VariantCount; i++) {
-				CGXVariant variant = ((CGXVariant*)(this->cgxBuf + this->fragmentVariantTableEntry.VariantListPtr))[i];
+				CGXVariant variant = reinterpret_cast<CGXVariant*>(this->cgxBuf + this->fragmentVariantTableEntry.VariantListPtr)[i];
 				this->fragmentVariants.push_back(variant);
 				std::string language = reversed(variant.language, 4);
 				Logger::Debug("CGX : frag : lang : " + language);
@@ -122,7 +122,7 @@ namespace Sce::Pss::Core::Graphics {
 		for(CGXVariant& variant : this->vertexVariants) {
 			if(reversed(variant.language, 4) == shaderLanguage) {
 				const char* shaderData = reinterpret_cast<const char*>(this->cgxBuf + variant.sourcePtr);
-					return std::string(shaderData, variant.sourceSz);
+				return std::string(shaderData, variant.sourceSz);
 			}
 		}
 		ExceptionInfo::AddMessage("Vertex shader not found\n");

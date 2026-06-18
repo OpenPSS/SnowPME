@@ -20,6 +20,47 @@ using namespace Sce::Pss::Core::Memory;
 namespace Sce::Pss::Core::Graphics {
 
 
+	int ShaderProgram::GetUniformTypeVectorSize(ShaderUniformType type)
+	{
+		switch (type) {
+		case ShaderUniformType::Float:
+			return 0x04;
+		case ShaderUniformType::Float2:
+			return 0x08;
+		case ShaderUniformType::Float3:
+			return 0x0C;
+		case ShaderUniformType::Float4:
+			return 0x10;
+		case ShaderUniformType::Float2x2:
+			return 0x10;
+		case ShaderUniformType::Float3x3:
+			return 0x24;
+		case ShaderUniformType::Float4x4:
+			return 0x40;
+		case ShaderUniformType::Int:
+			return 0x04;
+		case ShaderUniformType::Int2:
+			return 0x08;
+		case ShaderUniformType::Int3:
+			return 0x0C;
+		case ShaderUniformType::Int4:
+			return 0x10;
+		case ShaderUniformType::Bool:
+			return 0x04;
+		case ShaderUniformType::Bool2:
+			return 0x08;
+		case ShaderUniformType::Bool3:
+			return 0x0C;
+		case ShaderUniformType::Bool4:
+			return 0x10;
+		case ShaderUniformType::Sampler2D:
+			return 0x08;
+		case ShaderUniformType::SamplerCube:
+			return 0x0C;
+		}
+
+		UNREACHABLE();
+	}
 	ShaderAttributeType ShaderProgram::glAttributeTypeToPsmType(int glType)
 	{
 		switch (glType) {
@@ -33,8 +74,8 @@ namespace Sce::Pss::Core::Graphics {
 			return ShaderAttributeType::Float4;
 		default:
 			return ShaderAttributeType::None;
-
 		}
+		UNREACHABLE();
 	}
 	ShaderUniformType ShaderProgram::glUniformTypeToPsmType(int glType)
 	{
@@ -76,39 +117,140 @@ namespace Sce::Pss::Core::Graphics {
 		default:
 			return ShaderUniformType::None;
 		}
+		UNREACHABLE();
 	}
 
-	int ShaderProgram::compileShader(int type, const char* source) {
+	int ShaderProgram::LoadShader(int type, const char* source) {
 		
 		int shader = glCreateShader(type);
 		glShaderSource(shader, 1, &source, 0);
 		glCompileShader(shader);
 
-		int status;
+		int status = GL_FALSE;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 
 		if (status == GL_TRUE) {
 			return shader;
 		}
 		else {
-			char log[0x1000];
-			memset(log, 0, sizeof(log));
+			char* log = reinterpret_cast<char*>(HeapAllocator::UniqueObject()->sce_psm_malloc(0x1000u));
 
-			int sz = 0;
+			if (log != nullptr) {
+				int sz = 0;
 
-			glGetShaderInfoLog(shader, sizeof(log)-1, &sz, log);
-			if (type == GL_VERTEX_SHADER)
-				Logger::Error("vertex shader compile failed: " + std::string(log));
-			else
-				Logger::Error("fragment shader compile failed: " + std::string(log));
+				glGetShaderInfoLog(shader, 0xFFFu, &sz, log);
 
+				if (sz > 0xFFF) {
+					sz = 0xFFF;
+				}
+
+				log[sz] = 0;
+
+				ExceptionInfo::AddMessage(log);
+				HeapAllocator::UniqueObject()->sce_psm_free(log);
+			}
 			glDeleteShader(shader);
 			return 0;
 		}
 	}
 
+	int ShaderProgram::ParseParams(CGX* fragCgx, CGX* vertCgx, int type)
+	{
 
-	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz) {
+		UNIMPLEMENTED();
+	}
+
+	int ShaderProgram::CheckParameters()
+	{
+		// initalize all attributes and uniforms
+		// 
+
+		int nameLen;
+		int size;
+		char name[0x100];
+		GLenum type = 0;
+
+		// uniforms ...
+
+		int totalUniforms = 0;
+		glGetProgramiv(this->GLHandle, GL_ACTIVE_UNIFORMS, &totalUniforms);
+
+		Uniforms.resize(totalUniforms);
+		for (int i = 0; i < totalUniforms; i++) {
+			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &size, &type, name);
+
+			std::string normalizedName = std::string(name);
+			size_t pos = normalizedName.find('[');
+			if (pos != std::string::npos) {
+				normalizedName = normalizedName.substr(pos, normalizedName.find(']'));
+			}
+
+
+			Uniforms[i].Location = glGetUniformLocation(this->GLHandle, name);
+			Uniforms[i].Index = i;
+			Uniforms[i].Binding = -1;
+			Uniforms[i].Name = normalizedName;
+			Uniforms[i].Type = glUniformTypeToPsmType(type);
+			Uniforms[i].Size = size;
+
+			if (Uniforms[i].ESize < size)
+				Uniforms[i].ESize = size;
+
+
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Location // " + Format::Hex(Uniforms[i].Location));
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Index // " + Format::Hex(Uniforms[i].Index));
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Binding // " + Format::Hex(Uniforms[i].Binding));
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Name // " + Uniforms[i].Name);
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Uniforms[i].Type));
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Size // " + Format::Hex(Uniforms[i].Size));
+			Logger::Debug("Uniforms[" + Format::Hex(i) + "].ESize // " + Format::Hex(Uniforms[i].ESize));
+		}
+		
+		// attributes ...
+
+		int totalAttributes = 0;
+		glGetProgramiv(this->GLHandle, GL_ACTIVE_ATTRIBUTES, &totalAttributes);
+
+		Attributes.resize(totalAttributes);
+		for (int i = 0; i < totalAttributes; i++) {
+
+			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &size, &type, name);
+
+			std::string normalizedName = std::string(name);
+			size_t pos = normalizedName.find('[');
+			if (pos != std::string::npos) {
+				normalizedName = normalizedName.substr(pos, normalizedName.find(']'));
+			}
+
+			Attributes[i].Location = glGetAttribLocation(this->GLHandle, name);
+			Attributes[i].Index = i;
+			Attributes[i].Binding = -1;
+			Attributes[i].Name = normalizedName;
+			Attributes[i].Type = (ShaderUniformType)glAttributeTypeToPsmType(type);
+			Attributes[i].Size = size;
+
+			if (Attributes[i].ESize < size)
+				Attributes[i].ESize = size;
+
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Location // " + Format::Hex(Attributes[i].Location));
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Index // " + Format::Hex(Attributes[i].Index));
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Binding // " + Format::Hex(Attributes[i].Binding));
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Name // " + Attributes[i].Name);
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Attributes[i].Type));
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].Size // " + Format::Hex(Attributes[i].Size));
+			Logger::Debug("Attributes[" + Format::Hex(i) + "].ESize // " + Format::Hex(Attributes[i].ESize));
+		}
+
+		return 1;
+	}
+
+	int ShaderProgram::CheckSamplers()
+	{
+		UNIMPLEMENTED();
+	}
+
+
+	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option) {
 
 		if (vertexShaderBuf != nullptr) {
 			std::unique_ptr<CGX> cgxFile = std::make_unique<CGX>(vertexShaderBuf, vertexShaderSz);
@@ -135,6 +277,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->fragmentSrc = src;
 		}
 
+
 		this->GLHandle = glCreateProgram();
 
 		// in pure OGL, we have to append a version number to the start of the GL Shaders
@@ -145,14 +288,14 @@ namespace Sce::Pss::Core::Graphics {
 			this->vertexSrc = "#version 120\r\nprecision mediump float;\r\n" + this->vertexSrc;
 		}
 
-		int compileFragmentShader = compileShader(GL_FRAGMENT_SHADER, this->fragmentSrc.c_str());
+		int compileFragmentShader = LoadShader(GL_FRAGMENT_SHADER, this->fragmentSrc.c_str());
 		if (compileFragmentShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
 			return 0;
 		}
 
-		int compileVertexShader = compileShader(GL_VERTEX_SHADER, this->vertexSrc.c_str());
+		int compileVertexShader = LoadShader(GL_VERTEX_SHADER, this->vertexSrc.c_str());
 		if (compileVertexShader == 0)
 		{
 			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
@@ -170,73 +313,38 @@ namespace Sce::Pss::Core::Graphics {
 		int status = 0;
 		glGetProgramiv(this->GLHandle, GL_LINK_STATUS, &status);
 
-		if (status == GL_FALSE) {
-			char log[0x1000];
-			memset(log, 0, sizeof(log));
+		if (status) {
+			if (CheckParameters() && CheckSamplers()) {
+				return this->GLHandle;
+			}
+			else {
+				glDeleteProgram(this->GLHandle);
+				this->GLHandle = 0;
+				return 0;
+			}
+		}
+		else {
+			char* log = (char*)HeapAllocator::UniqueObject()->sce_psm_malloc(0x1000u);
+			this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 
-			int sz = 0;
-			glGetProgramInfoLog(this->GLHandle, 0xFFF, &sz, log);
+			if (log != nullptr) {
+				int sz = 0;
+				glGetProgramInfoLog(this->GLHandle, 0xFFF, &sz, log);
+
+				if (sz > 0xFFF) {
+					sz = 0xFFF;
+				}
+
+				log[sz] = 0;
+				ExceptionInfo::AddMessage(log);
+
+
+				HeapAllocator::UniqueObject()->sce_psm_free(log);
+			}
+
 			glDeleteProgram(this->GLHandle);
-
-			this->SetError(PSM_ERROR_GRAPHICS_SYSTEM);
-			Logger::Error("Shader compile failed; " + std::string(log));
-			return 0;
+			return PSM_ERROR_NO_ERROR;
 		}
-
-
-		int uniformCount = 0;
-		int attributeCount = 0;
-
-		glGetProgramiv(this->GLHandle, GL_ACTIVE_UNIFORMS, &uniformCount);
-
-		Logger::Debug("CGX : fragment source code : \n" + this->fragmentSrc);
-		Logger::Debug("CGX : vertex source code : \n" + this->vertexSrc);
-
-		this->Uniforms.resize(uniformCount);
-		for (int i = 0; i < uniformCount; i++) {
-			int nameLen;
-			char name[0x100];
-			GLenum uniformType = 0;
-			
-			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &Uniforms[i].Size, &uniformType, name);
-
-			Uniforms[i].Location = glGetUniformLocation(this->GLHandle, name);
-			Uniforms[i].Index = i;
-			Uniforms[i].Name = std::string(name, nameLen);
-			Uniforms[i].Type = glUniformTypeToPsmType(uniformType);
-			
-			size_t pos = Uniforms[i].Name.find('[');
-			if (pos != std::string::npos) {
-				Uniforms[i].Name = Uniforms[i].Name.substr(0, pos);
-			}
-
-			Logger::Debug("Uniform: " + Uniforms[i].Name + " location: " + Format::Hex(Uniforms[i].Location));
-		}
-
-		glGetProgramiv(this->GLHandle, GL_ACTIVE_ATTRIBUTES, &attributeCount);
-
-		this->Attributes.resize(attributeCount);
-		for (int i = 0; i < attributeCount; i++) {
-			int nameLen;
-			char name[0x100];
-			GLenum attributeType = 0;
-
-			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &Attributes[i].Size, &attributeType, name);
-			Attributes[i].Location = glGetAttribLocation(this->GLHandle, name);
-			Attributes[i].Index = i;
-			Attributes[i].Name = std::string(name, nameLen);
-			Attributes[i].Type = (ShaderUniformType)glAttributeTypeToPsmType(attributeType);
-
-			size_t pos = Attributes[i].Name.find('[');
-			if (pos != std::string::npos) {
-				Attributes[i].Name = Attributes[i].Name.substr(0, pos);
-			}
-
-			Logger::Debug("Attribute: " + Attributes[i].Name + " location: " + Format::Hex(Attributes[i].Location));
-		}
-		
-
-		return this->GLHandle;
 	}
 
 	
@@ -316,7 +424,7 @@ namespace Sce::Pss::Core::Graphics {
 		this->fragmentCgxLen = fragmentShaderSz;
 
 		if (this->GetError() == PSM_ERROR_NO_ERROR) {
-			this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
+			this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen, nullptr);
 		}
 
 	}
@@ -338,7 +446,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		if (this->GetError() == PSM_ERROR_NO_ERROR) {
-			this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen);
+			this->GLHandle = this->LoadProgram(this->vertexCgx, this->vertexCgxLen, this->fragmentCgx, this->fragmentCgxLen, nullptr);
 		}
 
 	}
@@ -385,27 +493,122 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int ShaderProgram::SetAttributeBinding(int index, std::string& name) {
-		if (this->FindAttribute(name) == -1) {
-			ExceptionInfo::AddMessage("Attribute variable '" + name + "' is not found\n");
+
+		if (index > 0xff)
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+
+
+		if (index < this->Attributes.size()) {
+			index = this->Attributes[index].Index;
+		}
+		else {
+			index = -1;
 		}
 
-		GL_CALL(glBindAttribLocation(this->GLHandle, index, name.c_str()));
-		if (attributeBindings.size() <= static_cast<size_t>(index)) attributeBindings.resize(index + 1);
-		attributeBindings[index] = name;
-		return PSM_ERROR_NO_ERROR;
+		int nameIndex = -1;
+		if (name != "") {
+			int nameIndex = this->FindAttribute(name);
+			if (nameIndex == -1) {
+				ExceptionInfo::AddMessage("Attribute variable '" + name + "' is not found\n");
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			}
+			nameIndex = this->Attributes[nameIndex].Index;
+		}
+
+		if (index >= 0)
+			this->Attributes[index].Binding = -1;
+		if (nameIndex >= 0)
+			this->Attributes[nameIndex].Binding = index;
+
+		return 0;
+	}
+
+	int ShaderProgram::SetUniformBinding(int index, std::string& name)
+	{
+		if (index > 0xff)
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+
+
+		if (index < this->Uniforms.size()) {
+			index = this->Uniforms[index].Index;
+		}
+		else {
+			index = -1;
+		}
+
+		int nameIndex = -1;
+		if (name != "") {
+			int nameIndex = this->FindUniform(name);
+			if (nameIndex == -1) {
+				ExceptionInfo::AddMessage("Uniform variable '" + name + "' is not found\n");
+				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+			}
+			nameIndex = this->Uniforms[nameIndex].Index;
+		}
+
+		if (index >= 0)
+			this->Uniforms[index].Binding = -1;
+		if (nameIndex >= 0)
+			this->Uniforms[nameIndex].Binding = index;
+
+		return 0;
 	}
 	
 	std::string ShaderProgram::GetAttributeBinding(int index) const 
 	{
-		if(attributeBindings.size() <= static_cast<size_t>(index)) return "";
-		return attributeBindings[index];
+		if (this->Attributes[this->Attributes[index].Index].Binding >= 0) {
+			return this->Attributes[this->Attributes[index].Index].Name;
+		}
+		else {
+			return "";
+		}
     }
 
 
 	int ShaderProgram::GetAttributeStream(int index) const 
 	{
-		return this->Attributes[index].Stream;
+		return this->Attributes[this->Uniforms[index].Index].Stream;
+	}
+
+	int ShaderProgram::GetAttributeSize(int index) const
+	{
+		return this->Attributes[this->Uniforms[index].Index].ESize;
+	}
+
+	int ShaderProgram::GetUniformTexture(int index) const
+	{
+		return this->Uniforms[this->Uniforms[index].Index].Texture;
+	}
+
+	int ShaderProgram::GetUniformSize(int index) const
+	{
+		return this->Uniforms[this->Uniforms[index].Index].ESize;
+	}
+
+	std::string ShaderProgram::GetAttributeName(int index) const
+	{
+		if (Attributes.size() <= static_cast<size_t>(index)) return "";
+		return Attributes[this->Uniforms[index].Index].Name;
+	}
+
+	int ShaderProgram::GetAttributeLocation(std::string& name)
+	{
+		return this->Attributes[this->FindAttribute(name)].Location;
+	}
+
+	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const
+	{
+		return (ShaderAttributeType)this->Attributes[Attributes[index].Index].Type;
+	}
+
+	ShaderUniformType ShaderProgram::GetUniformType(int index) const
+	{
+		return this->Uniforms[Uniforms[index].Index].Type;
+	}
+
+	std::string ShaderProgram::GetUniformName(int index) const {
+		if (Uniforms.size() <= static_cast<size_t>(index)) return "";
+		return Uniforms[Uniforms[index].Index].Name;
 	}
 
 	int ShaderProgram::SetAttributeStream(int index, int stream)
@@ -521,71 +724,4 @@ namespace Sce::Pss::Core::Graphics {
 
 	}
 
-	std::string ShaderProgram::GetAttributeName(int index) const
-	{
-		if (Attributes.size() <= static_cast<size_t>(index)) return "";
-		return Attributes[index].Name;
-	}
-
-    int ShaderProgram::GetAttributeLocation(std::string &name) const 
-	{
-		return glGetAttribLocation(this->GLHandle, name.c_str());
-    }
-
-	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const
-    {
-		return (ShaderAttributeType)this->Attributes[index].Type;
-    }
-
-	ShaderUniformType ShaderProgram::GetUniformType(int index) const
-	{
-		return this->Uniforms[index].Type;
-	}
-
-    std::string ShaderProgram::GetUniformName(int index) {
-		if (Uniforms.size() <= static_cast<size_t>(index)) return "";
-		return Uniforms[index].Name;
-	}
-
-	int ShaderProgram::GetUniformTypeVectorSize(ShaderUniformType type)
-	{
-		switch (type) {
-			case ShaderUniformType::Float:
-				return 0x04;
-			case ShaderUniformType::Float2:
-				return 0x08;
-			case ShaderUniformType::Float3:
-				return 0x0C;
-			case ShaderUniformType::Float4:
-				return 0x10;
-			case ShaderUniformType::Float2x2:
-				return 0x10;
-			case ShaderUniformType::Float3x3:
-				return 0x24;
-			case ShaderUniformType::Float4x4:
-				return 0x40;
-			case ShaderUniformType::Int:
-				return 0x04;
-			case ShaderUniformType::Int2:
-				return 0x08;
-			case ShaderUniformType::Int3:
-				return 0x0C;
-			case ShaderUniformType::Int4:
-				return 0x10;
-			case ShaderUniformType::Bool:
-				return 0x04;
-			case ShaderUniformType::Bool2:
-				return 0x08;
-			case ShaderUniformType::Bool3:
-				return 0x0C;
-			case ShaderUniformType::Bool4:
-				return 0x10;
-			case ShaderUniformType::Sampler2D:
-				return 0x08;
-			case ShaderUniformType::SamplerCube:
-				return 0x0C;
-		}
-		
-		UNREACHABLE();
-	}
 }

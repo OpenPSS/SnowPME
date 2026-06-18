@@ -34,6 +34,7 @@ namespace Sce::Pss::Core {
 
 		if (str != nullptr) {
 			ExceptionInfo::message = std::string(str, strlen(str)) + "\n";
+
 		}
 		else {
 			ExceptionInfo::message = std::string();

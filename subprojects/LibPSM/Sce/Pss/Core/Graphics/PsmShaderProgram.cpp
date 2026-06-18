@@ -68,7 +68,6 @@ namespace Sce::Pss::Core::Graphics {
 		*result = prog->Handle();
 		return PSM_ERROR_NO_ERROR;
 	}
-	
 	int PsmShaderProgram::Delete(int handle){
 		LOG_FUNCTION();
 
@@ -86,7 +85,6 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	}
-
 	int PsmShaderProgram::AddRef(int handle){
 		LOG_FUNCTION();
 		if (Thread::IsMainThread()) {
@@ -95,7 +93,6 @@ namespace Sce::Pss::Core::Graphics {
 		ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
-
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
@@ -113,7 +110,6 @@ namespace Sce::Pss::Core::Graphics {
 		*result = prog->UniformCount();
 		return PSM_ERROR_NO_ERROR;
 	}
-
 	int PsmShaderProgram::GetAttributeCount(int handle, int* result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
@@ -131,7 +127,6 @@ namespace Sce::Pss::Core::Graphics {
 		*result = prog->AttributeCount();
 		return PSM_ERROR_NO_ERROR;
 	}
-
 	int PsmShaderProgram::FindUniform(int handle, MonoString* name, int* result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
@@ -155,7 +150,6 @@ namespace Sce::Pss::Core::Graphics {
 
 		return PSM_ERROR_NO_ERROR;
 	}
-
 	int PsmShaderProgram::FindAttribute(int handle, MonoString* name, int* result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {
@@ -198,25 +192,10 @@ namespace Sce::Pss::Core::Graphics {
 		};
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
-		
-		std::string uniformName;
-		MonoUtil::MonoStringToStdString(name, uniformName);
 
-		bool found = false;
-		for (ProgramUniform uniform : prog->Uniforms)
-		{
-			if (uniform.Name == uniformName) {
-				Logger::Debug("Setting uniform binding of " + uniformName + " to " + std::to_string(index));
-				uniform.Binding = index;
-				found = true;
-			}
-		}
-
-		if (!found) {
-			Logger::Error("No uniform with name " + uniformName + " was found.");
-			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
-		}
-
+		std::string uniName = ""; 
+		MonoUtil::MonoStringToStdString(name, uniName);
+		return prog->SetUniformBinding(index, uniName);
 
 		return PSM_ERROR_NO_ERROR;
 	}
@@ -351,17 +330,59 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		std::string attributeName = prog->GetAttributeName(index);
-		MonoString* monoAttributeName = MonoUtil::StdStringToMonoString(attributeName);
-		mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoAttributeName));
+		if (attributeName != "") {
+			MonoString* monoAttributeName = MonoUtil::StdStringToMonoString(attributeName);
+			mono_gc_wbarrier_generic_store(result, reinterpret_cast<MonoObject*>(monoAttributeName));
+		}
+		else {
+			mono_gc_wbarrier_generic_store(result, nullptr);
+		}
 
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmShaderProgram::GetUniformSize(int handle, int index, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (index < 0 || index >= prog->Uniforms.size()) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetUniformSize(index);
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmShaderProgram::GetAttributeSize(int handle, int index, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (index < 0 || index >= prog->Attributes.size()) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetAttributeSize(index);
+		return PSM_ERROR_NO_ERROR;
 	}
+
 	int PsmShaderProgram::SetUniformValue(int handle, int index, int offset, void* value, ShaderUniformType type) {
 		LOG_FUNCTION();
 
@@ -379,6 +400,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		return prog->SetUniformValue(index, value, vectorSize, type, offset, 0, 1);
 	}
+
 	int PsmShaderProgram::SetUniformValue2(int handle, int index, void* value, ShaderUniformType type, int to, int from, int count) {
 		UNIMPLEMENTED();
 	}
@@ -386,8 +408,27 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 	int PsmShaderProgram::GetUniformTexture(int handle, int index, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (!Thread::IsMainThread()) {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (!ShaderProgram::CheckHandle(handle)) {
+			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
+		}
+
+		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
+
+		if (index < 0 || index >= prog->Uniforms.size()) {
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		}
+
+		*result = prog->GetUniformTexture(index);
+		return PSM_ERROR_NO_ERROR;
 	}
+
 	int PsmShaderProgram::GetAttributeStream(int handle, int index, int* result) {
 		LOG_FUNCTION();
 
@@ -422,7 +463,6 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
-
 		return prog->SetAttributeStream(index, stream);
 	}
 }
