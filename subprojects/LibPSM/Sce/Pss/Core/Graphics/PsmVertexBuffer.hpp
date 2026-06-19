@@ -7,8 +7,9 @@
 
 #include <mono/mono.h>
 
-#include "VertexFormat.hpp"
-#include "../Vector4.hpp"
+#include <Sce/Pss/Core/Graphics/VertexFormat.hpp>
+#include <Sce/Pss/Core/Vector4.hpp>
+
 
 
 namespace Sce::Pss::Core::Graphics {

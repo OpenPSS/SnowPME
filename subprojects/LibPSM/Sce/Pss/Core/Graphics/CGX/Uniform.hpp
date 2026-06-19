@@ -11,7 +11,7 @@ namespace Sce::Pss::Core::Graphics::CGX {
 	public:
 		ShaderUniformType Type;
 
-		Uniform(std::string name, std::string typeName, ShaderUniformType type);
+		Uniform(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderUniformType type);
 		Uniform(uint8_t* buf, Sce::Pss::Core::Graphics::CGX::File::CGXUniform* tblEntry);
 	};
 

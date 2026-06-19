@@ -17,13 +17,19 @@ namespace Sce::Pss::Core::Graphics::CGX::File {
 	#define CG_VER ("0.95")
 	#define GLES_VER ("ES20")
 
+	enum class CGXVariantType : uint32_t {
+		None = 0,
+		Vertex = 1,
+		Fragment = 2
+	};
+
 	typedef PACK(struct CGXUniform {
 		uint32_t namePtr;
 		uint32_t typeNamePtr;
 		uint32_t unk1;
 		ShaderGlobalType type;
-		uint32_t unk3;
-		uint32_t unk4;
+		uint32_t size;
+		uint32_t flags;
 	}) CGXUniform;
 
 	typedef PACK(struct CGXVariant {

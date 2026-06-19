@@ -6,8 +6,8 @@ using namespace Shared::String;
 using namespace Sce::Pss::Core::Graphics::CGX::File;
 namespace Sce::Pss::Core::Graphics::CGX {
 
-	Uniform::Uniform(std::string name, std::string typeName, ShaderUniformType type)
-		: super(name, typeName)
+	Uniform::Uniform(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderUniformType type)
+		: super(name, typeName, size, flags)
 	{
 		Type = static_cast<ShaderUniformType>(type);
 		Logger::Debug("CGXUniform : type : " + Format::Hex(static_cast<ShaderGlobalType>(Type)));

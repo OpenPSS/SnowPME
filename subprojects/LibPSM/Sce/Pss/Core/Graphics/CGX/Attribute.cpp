@@ -5,8 +5,8 @@ using namespace Shared::Debug;
 using namespace Shared::String;
 using namespace Sce::Pss::Core::Graphics::CGX::File;
 namespace Sce::Pss::Core::Graphics::CGX {
-	Attribute::Attribute(std::string name, std::string typeName, ShaderAttributeType type)
-		: super(name, typeName)
+	Attribute::Attribute(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderAttributeType type)
+		: super(name, typeName, size, flags)
 	{
 		Type = type;
 		Logger::Debug("CGXAttribute : type : " + Format::Hex(static_cast<ShaderGlobalType>(Type)));

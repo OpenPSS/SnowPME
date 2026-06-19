@@ -6,8 +6,8 @@ using namespace Shared::String;
 using namespace Sce::Pss::Core::Graphics::CGX::File;
 
 namespace Sce::Pss::Core::Graphics::CGX {
-	Varying::Varying(std::string name, std::string typeName, ShaderGlobalType type)
-		: super(name, typeName)
+	Varying::Varying(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderGlobalType type)
+		: super(name, typeName, size, flags)
 	{
 		Type = type;
 		Logger::Debug("CGXVarying : type : " + Format::Hex(Type));

@@ -10,9 +10,10 @@ namespace Sce::Pss::Core::Graphics {
 		std::string Name;
 		int Size = 0;
 		int ESize = 0;
+		int Flags = 0;
 		int Index = 0;
 		Sce::Pss::Core::Graphics::CGX::ShaderUniformType Type = Sce::Pss::Core::Graphics::CGX::ShaderUniformType::None;
-		int Location = 0;
+		int Location = -1;
 		int Binding = -1;
 		int Stream = 0;
 		int Texture = -1;

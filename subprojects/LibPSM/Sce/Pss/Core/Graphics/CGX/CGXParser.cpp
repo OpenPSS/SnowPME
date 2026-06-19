@@ -101,6 +101,7 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		}
 
 	}
+
 	const std::string CGXParser::FindVertexShader(const std::string& shaderLanguage) {
 		for(const auto& variant : this->VertexVariants->Variants) {
 			if(variant.ShaderLanguage == shaderLanguage) {

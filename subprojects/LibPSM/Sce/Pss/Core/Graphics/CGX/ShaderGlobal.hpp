@@ -6,10 +6,12 @@
 namespace Sce::Pss::Core::Graphics::CGX {
 	class ShaderGlobal {
 	public:
-		std::string Name;
-		std::string TypeName;
+		std::string Name = "";
+		std::string TypeName = "";
+		uint32_t Size = 0;
+		uint32_t Flags = 0;
 
-		ShaderGlobal(std::string name, std::string typeName);
+		ShaderGlobal(std::string name, std::string typeName, uint32_t size, uint32_t flags);
 		ShaderGlobal(uint8_t* buf, Sce::Pss::Core::Graphics::CGX::File::CGXUniform* tblEntry);
 	};
 }

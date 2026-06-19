@@ -8,7 +8,7 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		typedef ShaderGlobal super;
 	public:
 		ShaderAttributeType Type;
-		Attribute(std::string name, std::string typeName, ShaderAttributeType type);
+		Attribute(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderAttributeType type);
 		Attribute(uint8_t* buf, Sce::Pss::Core::Graphics::CGX::File::CGXUniform* tblEntry);
 	};
 }

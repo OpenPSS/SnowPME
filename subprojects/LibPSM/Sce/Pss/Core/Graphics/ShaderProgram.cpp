@@ -155,9 +155,52 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ParseParams(CGXParser* fragCgx, CGXParser* vertCgx, int type)
+	int ShaderProgram::ParseParams(VariantEntry* entry, ShaderType type)
 	{
-		UNIMPLEMENTED();
+		if (type == ShaderType::Vertex)
+			return 1;
+
+		if (this->Attributes.size() > 0) {
+			UNIMPLEMENTED_MSG("Calling ParseParams while attributes already initalized.");
+		}
+
+		Attributes.resize(entry->Attributes.size());
+		for (int i = 0; i < entry->Attributes.size(); i++) {
+			Attributes[i].Name = entry->Attributes[i].Name;
+			Attributes[i].ESize = entry->Attributes[i].Size;
+			Attributes[i].Flags = entry->Attributes[i].Flags;
+			Attributes[i].Binding = -1;
+			Attributes[i].Type = static_cast<ShaderUniformType>(entry->Attributes[i].Type);
+			Attributes[i].Size = 0;
+
+			// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
+			Attributes[i].Stream = 0;
+			Attributes[i].Texture = -1;
+			Attributes[i].Location = -1;
+		}
+
+		if (this->Uniforms.size() > 0) {
+			UNIMPLEMENTED_MSG("Calling ParseParams while attributes already initalized.");
+		}
+
+		Uniforms.resize(entry->Uniforms.size());
+		for (int i = 0; i < entry->Uniforms.size(); i++) {
+			Uniforms[i].Name = entry->Uniforms[i].Name;
+			Uniforms[i].ESize = entry->Uniforms[i].Size;
+			Uniforms[i].Flags = entry->Uniforms[i].Flags;
+			Uniforms[i].Binding = -1;
+			Uniforms[i].Type = entry->Uniforms[i].Type;
+			Uniforms[i].Size = 0;
+
+			// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
+			Uniforms[i].Stream = 0;
+			Uniforms[i].Texture = -1;
+			Uniforms[i].Location = -1;
+		}
+
+		UNIMPLEMENTED_MSG("Implement sampler2d part; and error checking.");
+
+
 	}
 
 	int ShaderProgram::CheckParameters()
@@ -174,8 +217,6 @@ namespace Sce::Pss::Core::Graphics {
 
 		int totalUniforms = 0;
 		glGetProgramiv(this->GLHandle, GL_ACTIVE_UNIFORMS, &totalUniforms);
-
-		Uniforms.resize(totalUniforms);
 		for (int i = 0; i < totalUniforms; i++) {
 			glGetActiveUniform(this->GLHandle, i, sizeof(name), &nameLen, &size, &type, name);
 
@@ -188,9 +229,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			Uniforms[i].Location = glGetUniformLocation(this->GLHandle, name);
 			Uniforms[i].Index = i;
-			Uniforms[i].Binding = -1;
 			Uniforms[i].Name = normalizedName;
-			Uniforms[i].Type = glUniformTypeToPsmType(type);
 			Uniforms[i].Size = size;
 
 			if (Uniforms[i].ESize < size)
@@ -210,8 +249,6 @@ namespace Sce::Pss::Core::Graphics {
 
 		int totalAttributes = 0;
 		glGetProgramiv(this->GLHandle, GL_ACTIVE_ATTRIBUTES, &totalAttributes);
-
-		Attributes.resize(totalAttributes);
 		for (int i = 0; i < totalAttributes; i++) {
 
 			glGetActiveAttrib(this->GLHandle, i, sizeof(name), &nameLen, &size, &type, name);
@@ -224,9 +261,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			Attributes[i].Location = glGetAttribLocation(this->GLHandle, name);
 			Attributes[i].Index = i;
-			Attributes[i].Binding = -1;
 			Attributes[i].Name = normalizedName;
-			Attributes[i].Type = (ShaderUniformType)glAttributeTypeToPsmType(type);
 			Attributes[i].Size = size;
 
 			if (Attributes[i].ESize < size)
@@ -264,17 +299,24 @@ namespace Sce::Pss::Core::Graphics {
 				std::string src = cgxFile->FindFragmentShader("GLSL");
 				RETURN_ERRORABLE_SMARTPTR(cgxFile);
 				this->fragmentSrc = src;
+
 			}
+
+			this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex);
+			this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment);
 
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			std::unique_ptr<CGX::CGXParser> cgxFile = std::make_unique<CGX::CGXParser>(fragmentShaderBuf, fragmentShaderSz);
+			std::unique_ptr<CGXParser> cgxFile = std::make_unique<CGXParser>(fragmentShaderBuf, fragmentShaderSz);
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindFragmentShader("GLSL");
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 			this->fragmentSrc = src;
+
+			this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex);
+			this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment);
 		}
 
 
@@ -622,15 +664,17 @@ namespace Sce::Pss::Core::Graphics {
 
 	int ShaderProgram::SetUniformValue(int index, void* value, int vectorsize, ShaderUniformType type, int offset, int stream, int count)
 	{
+		ProgramUniform* uniform = &this->Uniforms[this->Uniforms[index].Index];
+
 		if(value == nullptr)
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (index < 0 || index >= static_cast<int>(this->Uniforms.size()))
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
-		if ( /*(Uniforms[index].unk7 & 0x8000) != 0 */ 0) {
+		if ( (uniform->Flags & 0x8000) != 0) { // Figure out what flags & 0x8000 is
 			Logger::Debug("SetUniformValue RequiredExtension branch reached.");
 
-			if (Uniforms[index].Type >= ShaderUniformType::Sampler2D) {
+			if (uniform->Type >= ShaderUniformType::Sampler2D) {
 				ExceptionInfo::AddMessage("Sampler variable cannot set new value\n");
 			}
 			else {
@@ -640,10 +684,10 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		if (type != Uniforms[index].Type) {
+		if (type != uniform->Type) {
 			Logger::Debug("SetUniformValue type does not match actual uniform type.");
 
-			if (type == ShaderUniformType::Float && (Uniforms[index].Type < ShaderUniformType::Float || Uniforms[index].Type > ShaderUniformType::Float4x4)) {
+			if (type == ShaderUniformType::Float && (uniform->Type < ShaderUniformType::Float || uniform->Type > ShaderUniformType::Float4x4)) {
 				ExceptionInfo::AddMessage("Incompatible type with shader variable\n");
 				return PSM_ERROR_COMMON_NOT_SUPPORTED;
 			}
@@ -655,7 +699,7 @@ namespace Sce::Pss::Core::Graphics {
 			type = Uniforms[index].Type;
 		}
 	
-		if (((count | stream | offset) & 0xFF000000) != 0  /*|| offset + count > uniform->unk7*/)
+		if (((count | stream | offset) & 0xFF000000) != 0  || offset + count > uniform->ESize)
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (GetUniformTypeVectorSize(type) * (stream + count) > vectorsize)
@@ -664,57 +708,57 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		if (count > Uniforms[index].Size - offset)
-			count = Uniforms[index].Size - offset;
+		if (count > uniform->Size - offset)
+			count = uniform->Size - offset;
 
 		ShaderProgram* prevShader = OpenGL::SetShaderProgram(this);
 
-		switch (Uniforms[index].Type) {
+		switch (uniform->Type) {
 			// float
 			case ShaderUniformType::Float:
-				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + uniform->Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float2:
-				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + uniform->Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float3:
-				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + uniform->Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float4:
-				glUniform1fv(offset + Uniforms[index].Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform1fv(offset + uniform->Location, count, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			// float matrix
 			case ShaderUniformType::Float3x3:
-				glUniformMatrix3fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniformMatrix3fv(offset + uniform->Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float4x4:
-				glUniformMatrix4fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniformMatrix4fv(offset + uniform->Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Float2x2:
-				glUniformMatrix2fv(offset + Uniforms[index].Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniformMatrix2fv(offset + uniform->Location, count, 0, (reinterpret_cast<float*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			// int 
 			case ShaderUniformType::Bool:
 			case ShaderUniformType::Int:
-				glUniform1iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform1iv(offset + uniform->Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool2:
 			case ShaderUniformType::Int2:
-				glUniform2iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform2iv(offset + uniform->Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool3:
 			case ShaderUniformType::Int3:
-				glUniform3iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform3iv(offset + uniform->Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 			case ShaderUniformType::Bool4:
 			case ShaderUniformType::Int4:
-				glUniform4iv(offset + Uniforms[index].Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
+				glUniform4iv(offset + uniform->Location, count, (reinterpret_cast<int*>(value) + stream * GetUniformTypeVectorSize(type)));
 				break;
 
 			default:
-				Logger::Error("Unknown shader uniform type: " + Format::Hex(static_cast<int>(Uniforms[index].Type)));
+				Logger::Error("Unknown shader uniform type: " + Format::Hex(static_cast<int>(uniform->Type)));
 				break;
 			
 		}

@@ -42,7 +42,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		*result = prog->Handle();
 
-		if(vertexProgramFileName != nullptr) mono_free(vertexProgramFileName);
+		if (vertexProgramFileName != nullptr) mono_free(vertexProgramFileName);
 		if (fragmentProgramFileName != nullptr) mono_free(fragmentProgramFileName);
 
 		return PSM_ERROR_NO_ERROR;

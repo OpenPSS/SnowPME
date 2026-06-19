@@ -9,7 +9,7 @@ namespace Sce::Pss::Core::Graphics::CGX {
 	public:
 		ShaderGlobalType Type;
 
-		Varying(std::string name, std::string typeName, ShaderGlobalType type);
+		Varying(std::string name, std::string typeName, uint32_t size, uint32_t flags, ShaderGlobalType type);
 		Varying(uint8_t* buf, Sce::Pss::Core::Graphics::CGX::File::CGXUniform* tblEntry);
 	};
 }

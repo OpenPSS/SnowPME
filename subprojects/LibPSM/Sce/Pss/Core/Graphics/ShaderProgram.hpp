@@ -11,6 +11,11 @@
 
 namespace Sce::Pss::Core::Graphics {
 
+	enum class ShaderType : uint32_t {
+		Vertex = 0,
+		Fragment = 1
+	};
+
 	class ShaderProgram : public GraphicsObject<ShaderProgram> {
 	private:
 		uint8_t* vertexCgx = nullptr;
@@ -32,7 +37,7 @@ namespace Sce::Pss::Core::Graphics {
 		uint8_t* CopyOrMove(uint8_t* shaderSrc, int shaderLen);
 		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option);
 		int LoadShader(int type, const char* source);
-		int ParseParams(Sce::Pss::Core::Graphics::CGX::CGXParser* fragCgx, Sce::Pss::Core::Graphics::CGX::CGXParser* vertCgx, int type);
+		int ParseParams(Sce::Pss::Core::Graphics::CGX::VariantEntry* entry, ShaderType type);
 		int CheckParameters();
 		int CheckSamplers();
 
