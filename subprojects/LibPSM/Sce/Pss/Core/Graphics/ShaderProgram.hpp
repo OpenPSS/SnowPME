@@ -37,7 +37,7 @@ namespace Sce::Pss::Core::Graphics {
 		uint8_t* CopyOrMove(uint8_t* shaderSrc, int shaderLen);
 		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option);
 		int LoadShader(int type, const char* source);
-		int ParseParams(Sce::Pss::Core::Graphics::CGX::VariantEntry* entry, ShaderType type);
+		bool ParseParams(Sce::Pss::Core::Graphics::CGX::VariantEntry* entry, ShaderType type, bool chk);
 		int CheckParameters();
 		int CheckSamplers();
 

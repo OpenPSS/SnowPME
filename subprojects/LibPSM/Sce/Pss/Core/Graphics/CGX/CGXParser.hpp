@@ -28,6 +28,10 @@ namespace Sce::Pss::Core::Graphics::CGX {
 
 		const std::string FindFragmentShader(const std::string& shaderLanguage);
 		const std::string FindVertexShader(const std::string& shaderLanguage);
+
+		const uint8_t* GetFragmentUniformsBuf();
+		const uint8_t* GetVertexUniformsBuf();
+
 	};
 }
 

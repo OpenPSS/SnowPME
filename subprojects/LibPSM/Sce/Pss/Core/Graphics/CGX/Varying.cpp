@@ -12,7 +12,7 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		Type = type;
 		Logger::Debug("CGXVarying : type : " + Format::Hex(Type));
 	}
-	Varying::Varying(uint8_t * buf, CGXUniform * tblEntry)
+	Varying::Varying(uint8_t * buf, CGXUniform* tblEntry)
 		: super(buf, tblEntry)
 	{
 		Type = tblEntry->type;

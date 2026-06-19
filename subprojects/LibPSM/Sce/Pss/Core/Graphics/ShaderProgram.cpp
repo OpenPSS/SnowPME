@@ -155,48 +155,94 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ShaderProgram::ParseParams(VariantEntry* entry, ShaderType type)
+	bool ShaderProgram::ParseParams(VariantEntry* entry, ShaderType type, bool chk)
 	{
-		if (type == ShaderType::Vertex)
-			return 1;
-
-		if (this->Attributes.size() > 0) {
-			UNIMPLEMENTED_MSG("Calling ParseParams while attributes already initalized.");
+		if (chk) {
+			if (type == ShaderType::Vertex) {
+				return true;
+			}
 		}
 
-		Attributes.resize(entry->Attributes.size());
-		for (int i = 0; i < entry->Attributes.size(); i++) {
-			Attributes[i].Name = entry->Attributes[i].Name;
-			Attributes[i].ESize = entry->Attributes[i].Size;
-			Attributes[i].Flags = entry->Attributes[i].Flags;
-			Attributes[i].Binding = -1;
-			Attributes[i].Type = static_cast<ShaderUniformType>(entry->Attributes[i].Type);
-			Attributes[i].Size = 0;
+		
+		if (entry->Uniforms.size() > 0) {
+			Uniforms.resize(entry->Uniforms.size());
+			for (int i = 0; i < entry->Uniforms.size(); i++) {
+				int idx = FindUniform(entry->Uniforms[i].Name);
+				if (type == ShaderType::Vertex || idx < 0) {
+					Uniforms[i].Index = i;
+					Uniforms[i].Name = entry->Uniforms[i].Name;
+					Uniforms[i].ESize = entry->Uniforms[i].Size;
+					Uniforms[i].Flags = entry->Uniforms[i].Flags;
+					Uniforms[i].Binding = -1;
+					Uniforms[i].Type = entry->Uniforms[i].Type;
+					Uniforms[i].Size = 0;
 
-			// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
-			Attributes[i].Stream = 0;
-			Attributes[i].Texture = -1;
-			Attributes[i].Location = -1;
+					// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
+					Uniforms[i].Stream = 0;
+					Uniforms[i].Texture = -1;
+
+					// handle texture
+					if (entry->Uniforms[i].Type >= ShaderUniformType::Sampler2D) {
+						if (entry->Uniforms[i].TypeName.starts_with("TEXUNIT")) {
+							Uniforms[i].Texture = entry->Uniforms[i].TypeName[std::string("TEXUNIT").size()] - '0';
+							if (Uniforms[i].Texture >= 8) {
+								Uniforms[i].Texture = -1;
+							}
+						}
+					}
+					Uniforms[i].Location = -1;
+
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Name // " + Format::Hex(Uniforms[i].Index));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Name // " + Uniforms[i].Name);
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].ESize // " + Format::Hex(Uniforms[i].ESize));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Flags // " + Format::Hex(Uniforms[i].Flags));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Binding // " + Format::Hex(Uniforms[i].Binding));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Uniforms[i].Type));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Size // " + Format::Hex(Uniforms[i].Size));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Stream // " + Format::Hex(Uniforms[i].Stream));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Texture // " + Format::Hex(Uniforms[i].Texture));
+					Logger::Debug("Uniforms[" + Format::Hex(i) + "].Location // " + Format::Hex(Uniforms[i].Location));
+				}
+				else if(entry->Uniforms[i].Type == Uniforms[i].Type || Uniforms[i].ESize == entry->Uniforms[i].Size) {
+					this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
+					ExceptionInfo::AddMessage("Uniform variable '" + entry->Uniforms[i].Name + "' mismatches between VP and FP\n");
+					return false;
+				}
+			}
+
+			if (entry->Attributes.size() > 0) {
+				Attributes.resize(entry->Attributes.size());
+				for (int i = 0; i < entry->Attributes.size(); i++) {
+					Attributes[i].Index = i;
+					Attributes[i].Name = entry->Attributes[i].Name;
+					Attributes[i].ESize = entry->Attributes[i].Size;
+					Attributes[i].Flags = entry->Attributes[i].Flags;
+					Attributes[i].Binding = -1;
+					Attributes[i].Type = static_cast<ShaderUniformType>(entry->Attributes[i].Type);
+					Attributes[i].Size = 0;
+
+					// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
+					Attributes[i].Stream = 0;
+					Attributes[i].Texture = -1;
+					Attributes[i].Location = -1;
+
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Index // " + Format::Hex(Attributes[i].Index));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Name // " + Attributes[i].Name);
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].ESize // " + Format::Hex(Attributes[i].ESize));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Flags // " + Format::Hex(Attributes[i].Flags));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Binding // " + Format::Hex(Attributes[i].Binding));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Attributes[i].Type));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Size // " + Format::Hex(Attributes[i].Size));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Stream // " + Format::Hex(Attributes[i].Stream));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Texture // " + Format::Hex(Attributes[i].Texture));
+					Logger::Debug("Attributes[" + Format::Hex(i) + "].Location // " + Format::Hex(Attributes[i].Location));
+				}
+			}
+
+			return true;
 		}
 
-		if (this->Uniforms.size() > 0) {
-			UNIMPLEMENTED_MSG("Calling ParseParams while attributes already initalized.");
-		}
 
-		Uniforms.resize(entry->Uniforms.size());
-		for (int i = 0; i < entry->Uniforms.size(); i++) {
-			Uniforms[i].Name = entry->Uniforms[i].Name;
-			Uniforms[i].ESize = entry->Uniforms[i].Size;
-			Uniforms[i].Flags = entry->Uniforms[i].Flags;
-			Uniforms[i].Binding = -1;
-			Uniforms[i].Type = entry->Uniforms[i].Type;
-			Uniforms[i].Size = 0;
-
-			// should be = 'attributeCount' after a whole lot of (seemingly) useless math, see IDA project; ParseParams?? 
-			Uniforms[i].Stream = 0;
-			Uniforms[i].Texture = -1;
-			Uniforms[i].Location = -1;
-		}
 
 		UNIMPLEMENTED_MSG("Implement sampler2d part; and error checking.");
 
@@ -205,7 +251,8 @@ namespace Sce::Pss::Core::Graphics {
 
 	int ShaderProgram::CheckParameters()
 	{
-		// initalize all attributes and uniforms
+		//
+		// copy opengl info into all attributes and uniforms
 		// 
 
 		int nameLen;
@@ -226,23 +273,23 @@ namespace Sce::Pss::Core::Graphics {
 				normalizedName = normalizedName.substr(pos, normalizedName.find(']'));
 			}
 
+			int idx = FindUniform(normalizedName);
 
-			Uniforms[i].Location = glGetUniformLocation(this->GLHandle, name);
-			Uniforms[i].Index = i;
-			Uniforms[i].Name = normalizedName;
-			Uniforms[i].Size = size;
+			if (idx >= 0) {
+				Uniforms[idx].Index = idx;
+				Uniforms[idx].Binding = -1;
+				Uniforms[idx].Location = glGetUniformLocation(this->GLHandle, name);
+				Uniforms[idx].Size = size;
 
-			if (Uniforms[i].ESize < size)
-				Uniforms[i].ESize = size;
+				if (Uniforms[idx].ESize < size)
+					Uniforms[idx].ESize = size;
+			}
 
 
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Location // " + Format::Hex(Uniforms[i].Location));
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Index // " + Format::Hex(Uniforms[i].Index));
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Binding // " + Format::Hex(Uniforms[i].Binding));
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Name // " + Uniforms[i].Name);
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Uniforms[i].Type));
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].Size // " + Format::Hex(Uniforms[i].Size));
-			Logger::Debug("Uniforms[" + Format::Hex(i) + "].ESize // " + Format::Hex(Uniforms[i].ESize));
+			Logger::Debug("Uniforms[" + Format::Hex(idx) + "].Location // " + Format::Hex(Uniforms[idx].Location));
+			Logger::Debug("Uniforms[" + Format::Hex(idx) + "].Index // " + Format::Hex(Uniforms[idx].Index));
+			Logger::Debug("Uniforms[" + Format::Hex(idx) + "].Size // " + Format::Hex(Uniforms[idx].Size));
+			Logger::Debug("Uniforms[" + Format::Hex(idx) + "].ESize // " + Format::Hex(Uniforms[idx].ESize));
 		}
 		
 		// attributes ...
@@ -259,21 +306,21 @@ namespace Sce::Pss::Core::Graphics {
 				normalizedName = normalizedName.substr(pos, normalizedName.find(']'));
 			}
 
-			Attributes[i].Location = glGetAttribLocation(this->GLHandle, name);
-			Attributes[i].Index = i;
-			Attributes[i].Name = normalizedName;
-			Attributes[i].Size = size;
+			int idx = FindAttribute(normalizedName);
+			if (idx >= 0) {
+				Attributes[idx].Index = idx;
+				Attributes[idx].Binding = -1;
+				Attributes[idx].Location = glGetAttribLocation(this->GLHandle, name);
+				Attributes[idx].Size = size;
 
-			if (Attributes[i].ESize < size)
-				Attributes[i].ESize = size;
+				if (Attributes[idx].ESize < size)
+					Attributes[idx].ESize = size;
+			}
 
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Location // " + Format::Hex(Attributes[i].Location));
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Index // " + Format::Hex(Attributes[i].Index));
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Binding // " + Format::Hex(Attributes[i].Binding));
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Name // " + Attributes[i].Name);
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Type // " + Format::Hex((int)Attributes[i].Type));
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].Size // " + Format::Hex(Attributes[i].Size));
-			Logger::Debug("Attributes[" + Format::Hex(i) + "].ESize // " + Format::Hex(Attributes[i].ESize));
+			Logger::Debug("Attributes[" + Format::Hex(idx) + "].Location // " + Format::Hex(Attributes[idx].Location));
+			Logger::Debug("Attributes[" + Format::Hex(idx) + "].Index // " + Format::Hex(Attributes[idx].Index));
+			Logger::Debug("Attributes[" + Format::Hex(idx) + "].Size // " + Format::Hex(Attributes[idx].Size));
+			Logger::Debug("Attributes[" + Format::Hex(idx) + "].ESize // " + Format::Hex(Attributes[idx].ESize));
 		}
 
 		return 1;
@@ -288,7 +335,7 @@ namespace Sce::Pss::Core::Graphics {
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option) {
 
 		if (vertexShaderBuf != nullptr) {
-			std::unique_ptr<CGX::CGXParser> cgxFile = std::make_unique<CGX::CGXParser>(vertexShaderBuf, vertexShaderSz);
+			std::unique_ptr<CGXParser> cgxFile = std::make_unique<CGXParser>(vertexShaderBuf, vertexShaderSz);
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindVertexShader("GLSL");
@@ -302,9 +349,10 @@ namespace Sce::Pss::Core::Graphics {
 
 			}
 
-			this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex);
-			this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment);
-
+			bool chk = cgxFile->GetVertexUniformsBuf() == cgxFile->GetFragmentUniformsBuf();
+			if (this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex, chk) && this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment, chk)) {
+				return 0;
+			}
 		}
 
 		if (fragmentShaderBuf != nullptr) {
@@ -315,8 +363,10 @@ namespace Sce::Pss::Core::Graphics {
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 			this->fragmentSrc = src;
 
-			this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex);
-			this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment);
+			bool chk = cgxFile->GetVertexUniformsBuf() != cgxFile->GetFragmentUniformsBuf();
+			if (this->ParseParams(cgxFile->VertexVariants.get(), ShaderType::Vertex, chk) && this->ParseParams(cgxFile->FragmentVariants.get(), ShaderType::Fragment, chk)) {
+				return 0;
+			}
 		}
 
 
@@ -515,9 +565,9 @@ namespace Sce::Pss::Core::Graphics {
 
 
 	int ShaderProgram::FindUniform(std::string& name) {
-		for (ProgramUniform uniform : this->Uniforms) {
-			if (uniform.Name == name) {
-				return uniform.Index;
+		for (int i = 0; i < UniformCount(); i++) {
+			if (this->Uniforms[i].Name == name) {
+				return this->Uniforms[i].Index;
 			}
 		}
 
@@ -525,9 +575,9 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int ShaderProgram::FindAttribute(std::string& name) {
-		for (ProgramAttribute attribute : this->Attributes) {
-			if (attribute.Name == name) {
-				return attribute.Index;
+		for (int i = 0; i < AttributeCount(); i++) {
+			if (this->Attributes[i].Name == name) {
+				return i;
 			}
 		}
 
@@ -536,8 +586,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	int ShaderProgram::SetAttributeBinding(int index, std::string& name) {
 
-		if (index > 0xff)
-			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+		if (index > 0xff) return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 
 		if (index < this->Attributes.size()) {
@@ -547,20 +596,26 @@ namespace Sce::Pss::Core::Graphics {
 			index = -1;
 		}
 
-		int nameIndex = -1;
+		int bindIndex = -1;
 		if (name != "") {
-			int nameIndex = this->FindAttribute(name);
-			if (nameIndex == -1) {
+			bindIndex = this->FindAttribute(name);
+			if (bindIndex == -1) {
 				ExceptionInfo::AddMessage("Attribute variable '" + name + "' is not found\n");
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
-			nameIndex = this->Attributes[nameIndex].Index;
+			bindIndex = this->Attributes[bindIndex].Index;
 		}
 
 		if (index >= 0)
 			this->Attributes[index].Binding = -1;
-		if (nameIndex >= 0)
-			this->Attributes[nameIndex].Binding = index;
+		if (bindIndex >= 0)
+			this->Attributes[bindIndex].Binding = index;
+
+		if (index >= this->AttributeCount()) {
+			UNIMPLEMENTED_MSG("Allocate more bindings or something");
+		}
+
+		UNIMPLEMENTED_MSG("sce::pss::core::graphics::ShaderProgram::RemapParameters // " + this->Attributes[bindIndex].Name + " -> " + this->Attributes[index].Name);
 
 		return 0;
 	}
@@ -578,20 +633,28 @@ namespace Sce::Pss::Core::Graphics {
 			index = -1;
 		}
 
-		int nameIndex = -1;
+		int bindIndex = -1;
 		if (name != "") {
-			int nameIndex = this->FindUniform(name);
-			if (nameIndex == -1) {
+			bindIndex = this->FindUniform(name);
+			if (bindIndex == -1) {
 				ExceptionInfo::AddMessage("Uniform variable '" + name + "' is not found\n");
 				return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 			}
-			nameIndex = this->Uniforms[nameIndex].Index;
+
+			bindIndex = this->Uniforms[bindIndex].Index;
 		}
 
 		if (index >= 0)
 			this->Uniforms[index].Binding = -1;
-		if (nameIndex >= 0)
-			this->Uniforms[nameIndex].Binding = index;
+		if (bindIndex >= 0)
+			this->Uniforms[bindIndex].Binding = index;
+
+		if (index >= this->UniformCount()) {
+			UNIMPLEMENTED_MSG("Allocate more bindings or something");
+		}
+
+		UNIMPLEMENTED_MSG("sce::pss::core::graphics::ShaderProgram::RemapParameters // " + this->Uniforms[bindIndex].Name + " -> " + this->Uniforms[index].Name);
+
 
 		return 0;
 	}
@@ -691,12 +754,12 @@ namespace Sce::Pss::Core::Graphics {
 				ExceptionInfo::AddMessage("Incompatible type with shader variable\n");
 				return PSM_ERROR_COMMON_NOT_SUPPORTED;
 			}
-			else if(type == ShaderUniformType::Int && (Uniforms[index].Type < ShaderUniformType::Bool || Uniforms[index].Type > ShaderUniformType::Int4)) {
+			else if(type != ShaderUniformType::Int || uniform->Type < ShaderUniformType::Bool || uniform->Type > ShaderUniformType::Int4) {
 				ExceptionInfo::AddMessage("Incompatible type with shader variable\n");
 				return PSM_ERROR_COMMON_NOT_SUPPORTED;
 			}
 
-			type = Uniforms[index].Type;
+			type = uniform->Type;
 		}
 	
 		if (((count | stream | offset) & 0xFF000000) != 0  || offset + count > uniform->ESize)

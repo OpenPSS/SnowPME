@@ -98,7 +98,9 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		if (header->fragmentShaderVariantsPtr != 0) {
 			CGXVariantTableEntry* tblEntry = reinterpret_cast<CGXVariantTableEntry*>(cgxFile.data() + header->fragmentShaderVariantsPtr);
 			this->FragmentVariants = std::make_unique<VariantEntry>(cgxFile.data(), tblEntry);
+
 		}
+
 
 	}
 
@@ -111,6 +113,26 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		ExceptionInfo::AddMessage("Vertex shader not found\n");
 		this->SetError(PSM_ERROR_COMMON_FILE_LOAD);
 		return "";
+	}
+
+	const uint8_t* CGXParser::GetFragmentUniformsBuf()
+	{
+		CGXHeader* header = reinterpret_cast<CGXHeader*>(this->cgxFile.data());
+		if (header->fragmentShaderVariantsPtr != 0) {
+			CGXVariantTableEntry* tblEntry = reinterpret_cast<CGXVariantTableEntry*>(cgxFile.data() + header->fragmentShaderVariantsPtr);
+			return cgxFile.data() + tblEntry->uniformsPtr;
+		}
+		return nullptr;
+	}
+
+	const uint8_t* CGXParser::GetVertexUniformsBuf()
+	{
+		CGXHeader* header = reinterpret_cast<CGXHeader*>(this->cgxFile.data());
+		if (header->vertexShaderVariantsPtr != 0) {
+			CGXVariantTableEntry* tblEntry = reinterpret_cast<CGXVariantTableEntry*>(cgxFile.data() + header->vertexShaderVariantsPtr);
+			return cgxFile.data() + tblEntry->uniformsPtr;
+		}
+		return nullptr;
 	}
 
 	const std::string CGXParser::FindFragmentShader(const std::string& shaderLanguage) {
