@@ -23,6 +23,14 @@
     <ClCompile Include="Sce\Pss\Core\Device\CameraImportDialog.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\Location.cpp" />
     <ClCompile Include="Sce\Pss\Core\Device\PhotoImportDialog.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Attribute.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobal.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Uniform.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Variant.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobalType.hpp" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.c" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\FontImpl.cpp" />
     <ClCompile Include="Sce\Pss\Core\Io\Edata\EdataCallbacks.cpp" />
@@ -68,7 +76,7 @@
     <ClCompile Include="Sce\Pss\Core\Crypto\CryptoLibrary.cpp" />
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp" />
     <ClCompile Include="Sce\Pss\Core\ExceptionInfo.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\CGXParser.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\FrameBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\PixelBuffer.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\ShaderProgramOption.cpp" />
@@ -119,6 +127,12 @@
     <ClInclude Include="Sce\Pss\Core\Device\PhotoImportDialog.hpp" />
     <ClInclude Include="Sce\Pss\Core\Device\PictureState.hpp" />
     <ClInclude Include="Sce\Pss\Core\Features.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Attribute.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\CGXFile.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobal.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Uniform.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Variant.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormats.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.h" />
@@ -180,8 +194,8 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\PsmShaderProgram.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\PsmTexture.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\PsmVertexBuffer.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderAttributeType.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderUniformType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderAttributeType.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderUniformType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\StencilFunc.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\StencilFuncMode.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\StencilOp.hpp" />
@@ -249,7 +263,7 @@
     <ClInclude Include="Sce\Pss\Core\Crypto\Keys.hpp" />
     <ClInclude Include="Sce\Pss\Core\ExceptionInfo.hpp" />
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp" />
-    <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\CGXParser.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\FrameBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\PixelBuffer.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\ProgramAttribute.hpp" />

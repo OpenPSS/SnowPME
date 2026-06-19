@@ -5,12 +5,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
-
 #include <mono/mono.h>
 
-#include <Sce/Pss/Core/Graphics/ShaderUniformType.hpp>
-#include <Sce/Pss/Core/Graphics/ShaderAttributeType.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/ShaderUniformType.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/ShaderAttributeType.hpp>
 #include <Sce/Pss/Core/Vector2.hpp>
 #include <Sce/Pss/Core/Vector3.hpp>
 #include <Sce/Pss/Core/Vector4.hpp>
@@ -18,8 +16,6 @@
 
 
 namespace Sce::Pss::Core::Graphics {
-	using namespace Sce::Pss::Core;
-
 	class PsmShaderProgram {
 	public:
 		static int FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString*  constKeys, int* constVals, int* result);
@@ -34,14 +30,14 @@ namespace Sce::Pss::Core::Graphics {
 		static int SetUniformBinding(int handle, int index, MonoString* name);
 		static int GetAttributeBinding(int handle, int index, MonoObject** result);
 		static int SetAttributeBinding(int handle, int index, MonoString* name);
-		static int GetUniformType(int handle, int index, ShaderUniformType *result);
-		static int GetAttributeType(int handle, int index, ShaderAttributeType *result);
+		static int GetUniformType(int handle, int index, Sce::Pss::Core::Graphics::CGX::ShaderUniformType *result);
+		static int GetAttributeType(int handle, int index, Sce::Pss::Core::Graphics::CGX::ShaderAttributeType *result);
 		static int GetUniformName(int handle, int index, MonoObject** result);
 		static int GetAttributeName(int handle, int index, MonoObject** result);
 		static int GetUniformSize(int handle, int index, int *result);
 		static int GetAttributeSize(int handle, int index, int *result);
-		static int SetUniformValue(int handle, int index, int offset, void *value, ShaderUniformType type);
-		static int SetUniformValue2(int handle, int index, void *value, ShaderUniformType type, int to, int from, int count);
+		static int SetUniformValue(int handle, int index, int offset, void *value, Sce::Pss::Core::Graphics::CGX::ShaderUniformType type);
+		static int SetUniformValue2(int handle, int index, void *value, Sce::Pss::Core::Graphics::CGX::ShaderUniformType type, int to, int from, int count);
 		static int SetAttributeValue2(int handle, int index, float *value);
 		static int GetUniformTexture(int handle, int index, int *result);
 		static int GetAttributeStream(int handle, int index, int *result);

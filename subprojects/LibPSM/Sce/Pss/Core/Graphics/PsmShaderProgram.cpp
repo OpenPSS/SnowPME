@@ -3,7 +3,7 @@
 #include <Sce/Pss/Core/Error.hpp>
 
 #include <Sce/Pss/Core/Threading/Thread.hpp>
-#include <Sce/Pss/Core/Graphics/CGX.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/CGXParser.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
@@ -19,6 +19,7 @@ using namespace Shared::Debug;
 using namespace Sce::Pss::Core;
 using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Graphics;
+using namespace Sce::Pss::Core::Graphics::CGX;
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Mono;
 using namespace Sce::Pss::Core::System;
@@ -354,7 +355,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
 
-		if (index < 0 || index >= prog->Uniforms.size()) {
+		if (index < 0 || index >= prog->UniformCount()) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 
@@ -375,7 +376,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
 
-		if (index < 0 || index >= prog->Attributes.size()) {
+		if (index < 0 || index >= prog->AttributeCount()) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 
@@ -421,7 +422,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		ShaderProgram* prog = ShaderProgram::LookupHandle(handle);
 
-		if (index < 0 || index >= prog->Uniforms.size()) {
+		if (index < 0 || index >= prog->UniformCount()) {
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 		}
 

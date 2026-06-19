@@ -66,7 +66,7 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 
-	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption intOption, void* unk0) {
+	int Texture2D::InitImage(int width, int height, bool mipmap, PixelFormat format, PixelBufferOption option, InternalOption intOption, void* uniformsPtr) {
 		LOG_FUNCTION();
 		
 		if (!this->CheckSizeError(width, height, 0, 0x800)) {
@@ -154,8 +154,8 @@ namespace Sce::Pss::Core::Graphics {
 				if (width < 1) width = 1;
 				if (height < 1) height = 1;
 
-				// TODO: if(unk0 != null, pixels = *(unk0 + 0x1c);
-				if (unk0 != nullptr) UNIMPLEMENTED_MSG("unk0 != null unimplemented if(unk0 != null, pixels = *(unk0 + 0x1c);");
+				// TODO: if(uniformsPtr != null, pixels = *(uniformsPtr + 0x1c);
+				if (uniformsPtr != nullptr) UNIMPLEMENTED_MSG("unk0 != null unimplemented if(unk0 != null, pixels = *(unk0 + 0x1c);");
 				GLvoid* pixels = nullptr;
 
 				// calculate size including compressions;

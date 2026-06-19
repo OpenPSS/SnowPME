@@ -96,7 +96,7 @@
     <ClCompile Include="Sce\Pss\Core\Errorable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Graphics\CGX.cpp">
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\CGXParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Graphics\VertexBuffer.cpp">
@@ -261,6 +261,30 @@
     <ClCompile Include="Sce\Pss\Core\PsmRefCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobalType.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Uniform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Attribute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Variant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -401,10 +425,10 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\PsmVertexBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderAttributeType.hpp">
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderAttributeType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Graphics\ShaderUniformType.hpp">
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderUniformType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\StencilFunc.hpp">
@@ -542,7 +566,7 @@
     <ClInclude Include="Sce\Pss\Core\Errorable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sce\Pss\Core\Graphics\CGX.hpp">
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\CGXParser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\System\Handles.hpp">
@@ -807,6 +831,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormats.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\CGXFile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Variant.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobal.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Uniform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Attribute.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

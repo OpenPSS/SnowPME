@@ -1,6 +1,6 @@
 #ifndef LIB_PSS_PROGRAMUNIFORM
 #define LIB_PSS_PROGRAMUNIFORM 1
-#include <Sce/Pss/Core/Graphics/ShaderUniformType.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/ShaderGlobalType.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 #include <string>
 #include <cstdint>
@@ -11,7 +11,7 @@ namespace Sce::Pss::Core::Graphics {
 		int Size = 0;
 		int ESize = 0;
 		int Index = 0;
-		ShaderUniformType Type = ShaderUniformType::None;
+		Sce::Pss::Core::Graphics::CGX::ShaderUniformType Type = Sce::Pss::Core::Graphics::CGX::ShaderUniformType::None;
 		int Location = 0;
 		int Binding = -1;
 		int Stream = 0;

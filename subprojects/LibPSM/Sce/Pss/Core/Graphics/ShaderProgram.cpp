@@ -1,6 +1,6 @@
 #include <Sce/Pss/Core/Graphics/ShaderProgram.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
-#include <Sce/Pss/Core/Graphics/CGX.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/CGXParser.hpp>
 #include <Sce/Pss/Core/Graphics/OpenGL.hpp>
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Memory/HeapAllocator.hpp>
@@ -14,11 +14,12 @@
 using namespace Shared::Windowing;
 using namespace Shared::Debug;
 using namespace Shared::String;
+
 using namespace Sce::Pss::Core::Io;
 using namespace Sce::Pss::Core::Memory;
+using namespace Sce::Pss::Core::Graphics::CGX;
 
 namespace Sce::Pss::Core::Graphics {
-
 
 	int ShaderProgram::GetUniformTypeVectorSize(ShaderUniformType type)
 	{
@@ -154,9 +155,8 @@ namespace Sce::Pss::Core::Graphics {
 		}
 	}
 
-	int ShaderProgram::ParseParams(CGX* fragCgx, CGX* vertCgx, int type)
+	int ParseParams(CGXParser* fragCgx, CGXParser* vertCgx, int type)
 	{
-
 		UNIMPLEMENTED();
 	}
 
@@ -253,7 +253,7 @@ namespace Sce::Pss::Core::Graphics {
 	int ShaderProgram::LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option) {
 
 		if (vertexShaderBuf != nullptr) {
-			std::unique_ptr<CGX> cgxFile = std::make_unique<CGX>(vertexShaderBuf, vertexShaderSz);
+			std::unique_ptr<CGX::CGXParser> cgxFile = std::make_unique<CGX::CGXParser>(vertexShaderBuf, vertexShaderSz);
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindVertexShader("GLSL");
@@ -269,7 +269,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		if (fragmentShaderBuf != nullptr) {
-			std::unique_ptr<CGX> cgxFile = std::make_unique<CGX>(fragmentShaderBuf, fragmentShaderSz);
+			std::unique_ptr<CGX::CGXParser> cgxFile = std::make_unique<CGX::CGXParser>(fragmentShaderBuf, fragmentShaderSz);
 			RETURN_ERRORABLE_SMARTPTR(cgxFile);
 
 			std::string src = cgxFile->FindFragmentShader("GLSL");

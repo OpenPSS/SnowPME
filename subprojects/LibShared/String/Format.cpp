@@ -55,6 +55,10 @@ namespace Shared::String {
 		return val;
 	}
 
+	 std::string Format::Reverse(const char* data, size_t len) {
+		 return Reverse(std::string(data, len));
+	 }
+
 	 std::string Format::Reverse(const std::string& str) {
 		std::string littleEndainStr = str;
 		std::string bigEndianStr = "";
