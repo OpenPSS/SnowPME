@@ -38,6 +38,7 @@ namespace Sce::Pss::Core::Graphics {
 									                     GL_ONE_MINUS_SRC_ALPHA, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR,
 									                     GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_ZERO, GL_ZERO,
 									                     GL_ZERO, GL_ZERO, GL_ZERO };
+	const GLenum GraphicsContext::glShapeModes[0x8] = { GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_LINE_LOOP, GL_POINTS };
 	const GLenum GraphicsContext::glCullModes[0x4] = { GL_BACK, GL_FRONT, GL_BACK, GL_FRONT_AND_BACK };
 	const GLenum GraphicsContext::glCullFrontFaceModes[0x2] = { GL_CW, GL_CCW };
 
@@ -93,6 +94,19 @@ namespace Sce::Pss::Core::Graphics {
 	{
 		Logger::Todo("implement // GraphicsContext::setVerticies ");
 		return nullptr;
+	}
+
+	void GraphicsContext::handleNotifyDataFlags()
+	{
+		if (updateNotifyDataFlag != GraphicsUpdate::None) {
+			updateNotifyDataFlag = GraphicsUpdate::None;
+
+			for (int i = 0; i < vertexBuffers.size(); i++) {
+				vertexBuffers[i]->UpdateData(this->frameCount);
+			}
+
+			this->UpdateHandles(GraphicsUpdate::VertexBuffer);
+		}
 	}
 	
 	int GraphicsContext::Update(GraphicsUpdate update, GraphicsState* state, int* handles) {
@@ -564,7 +578,7 @@ namespace Sce::Pss::Core::Graphics {
 				glFrontFace(this->glCullFrontFaceModes[(state->cullFace.bits >> 8) & 1]);
 
 				if (state->cullFace.bits & 0xFF)
-					this->cullFaceBits |=  2;
+					this->cullFaceBits |= 0b10;
 				else
 					this->cullFaceBits |= 0xFFFFFFFD;
 			}
@@ -572,8 +586,8 @@ namespace Sce::Pss::Core::Graphics {
 			if ((notifyFlag & GraphicsUpdate::BlendFunc) != GraphicsUpdate::None) {
 				Logger::Debug("notifyFlag & GraphicsUpdate::BlendFunc");
 				glBlendEquationSeparate(
-					this->glBlendModes[state->blendFuncRgb.bits & 3],
-					this->glBlendModes[state->blendFuncAlpha.bits & 3]);
+					this->glBlendModes[state->blendFuncRgb.bits & 0b11],
+					this->glBlendModes[state->blendFuncAlpha.bits & 0b11]);
 				glBlendFuncSeparate(
 					this->glBlendSFactor[(state->blendFuncRgb.bits >> 8) & 0xF],
 					this->glBlendDFactor[(state->blendFuncRgb.bits & 0x0000FFFF) & 0xF],
@@ -596,13 +610,13 @@ namespace Sce::Pss::Core::Graphics {
 				Logger::Debug("notifyFlag & GraphicsUpdate::StencilFunc");
 				
 				glStencilFuncSeparate(GL_FRONT, 
-									glDepthFuncs[state->stencilFuncFront.bits & 7],
+									glDepthFuncs[state->stencilFuncFront.bits & 0b111],
 									(state->stencilFuncFront.bits >> 8) & 0xFF,
 									(state->stencilFuncFront.bits >> 16) & 0xFF
 				);
 
 				glStencilFuncSeparate(GL_BACK,
-									glDepthFuncs[state->stencilFuncBack.bits & 7],
+									glDepthFuncs[state->stencilFuncBack.bits & 0b111],
 									(state->stencilFuncBack.bits >> 8) & 0xFF,
 									(state->stencilFuncBack.bits >> 16) & 0xFF
 				);
@@ -617,15 +631,15 @@ namespace Sce::Pss::Core::Graphics {
 
 				glStencilOpSeparate(
 					GL_FRONT,
-					glStencilOps[state->stencilOpFront.bits & 7],
-					glStencilOps[(state->stencilOpFront.bits >> 8) & 7],
-					glStencilOps[((state->stencilOpFront.bits >> 16) & 0xFFFF) & 7]
+					glStencilOps[state->stencilOpFront.bits & 0b111],
+					glStencilOps[(state->stencilOpFront.bits >> 8) & 0b111],
+					glStencilOps[((state->stencilOpFront.bits >> 16) & 0xFFFF) & 0b111]
 				);
 				glStencilOpSeparate(
 					GL_BACK,
-					glStencilOps[state->stencilOpBack.bits & 7],
-					glStencilOps[(state->stencilOpBack.bits >> 8) & 7],
-					glStencilOps[((state->stencilOpBack.bits >> 16) & 0xFFFF) & 7]
+					glStencilOps[state->stencilOpBack.bits & 0b111],
+					glStencilOps[(state->stencilOpBack.bits >> 8) & 0b111],
+					glStencilOps[((state->stencilOpBack.bits >> 16) & 0xFFFF) & 0b111]
 				);
 			}
 
@@ -671,7 +685,40 @@ namespace Sce::Pss::Core::Graphics {
 
 	int GraphicsContext::DrawArrays(DrawMode mode, int first, int count, int repeat)
 	{
-		UNIMPLEMENTED();
+		handleNotifyDataFlags();
+		if (!this->hasShaderOrNoFrameBuffer) {
+			ExceptionInfo::AddMessage("Shader program or frame buffer is not available\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
+		if (mode > (DrawMode::TriangleStrip | DrawMode::LineStrip))
+			return PSM_ERROR_COMMON_ARGUMENT;
+
+		if (first >= 0xFFFF || count > 0xFFFF || repeat > 0xFFFF || (first + repeat * count) > this->indexCount)
+			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
+
+		GLenum glMode = glShapeModes[static_cast<int>(mode) & 0b111];
+
+		if (this->currentVertexBuffer != nullptr) {
+			if (repeat > 0)
+			{
+				for(int i = repeat; i != 1; i--)
+				{
+					glDrawElements(glMode, count, GL_UNSIGNED_SHORT, (void*)((first * sizeof(uint16_t) + count * sizeof(uint16_t) * i)));
+				}
+			}
+			return PSM_ERROR_NO_ERROR;
+		}
+
+		if (repeat <= 0)
+			return PSM_ERROR_NO_ERROR;
+
+		for (int i = repeat; i >= 0; i--) {
+			glDrawArrays(glMode, first, count);
+			first += count;
+		}
+
+		return PSM_ERROR_NO_ERROR;
 	}
 
 	int GraphicsContext::CheckUpdate(GraphicsState* state) {

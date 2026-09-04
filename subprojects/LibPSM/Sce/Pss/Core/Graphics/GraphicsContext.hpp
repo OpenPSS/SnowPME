@@ -49,6 +49,7 @@ namespace Sce::Pss::Core::Graphics {
 		static const GLenum glBlendModes[0x4];
 		static const GLenum glBlendSFactor[0x10];
 		static const GLenum glBlendDFactor[0x10];
+		static const GLenum glShapeModes[0x8];
 		static const GLenum glCullModes[0x4];
 		static const GLenum glCullFrontFaceModes[0x2];
 
@@ -82,6 +83,7 @@ namespace Sce::Pss::Core::Graphics {
 		int setCurrentObject(FrameBuffer* frameBuffer);
 
 		VertexBuffer* setVerticies(int indexCount, Vector4& vector4);
+		void handleNotifyDataFlags();
 
 		static GraphicsCapsState capsState;
 

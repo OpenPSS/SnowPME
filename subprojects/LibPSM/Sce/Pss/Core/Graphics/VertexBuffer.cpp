@@ -736,6 +736,11 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 
+	int VertexBuffer::UpdateData(short frameCount)
+	{
+		UNIMPLEMENTED();
+	}
+
 	VertexBuffer::VertexBuffer(int vertexCount, int indexCount, VertexFormat* formats, int formatsLength, int instDivisor, int option) {
 		if (Thread::IsMainThread()) {
 			if (!GraphicsContext::UniqueObjectExists()) {

@@ -29,6 +29,8 @@ namespace Sce::Pss::Core::Graphics {
 		int SetVerticies(float* vertexBuffer, int vertexBufferSz, int to, int from);
 		int SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count);
 		
+		int UpdateData(short frameCount);
+
 		std::vector<VertexFormat> FormatVectors;
 		std::vector<VertexFormat> VertexFormats;
 
