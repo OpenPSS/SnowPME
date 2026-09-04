@@ -22,7 +22,7 @@ namespace SnowPME::Graphics::Gui {
 		progEntry.enabled = true;
 
 		this->programs.push_back(progEntry);
-		return std::move(progEntry);
+		return this->programs.back();
 	}
 
 	void ProgramList::parsePsmFolder(std::string psmFolderPath) {
