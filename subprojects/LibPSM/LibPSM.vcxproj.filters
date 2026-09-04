@@ -264,12 +264,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobalType.hpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -283,6 +277,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -849,6 +846,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

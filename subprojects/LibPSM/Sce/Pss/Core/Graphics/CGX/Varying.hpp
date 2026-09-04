@@ -2,6 +2,7 @@
 #define LIB_PSS_CGX_VARYING_H
 #include <Sce/Pss/Core/Graphics/CGX/ShaderGlobalType.hpp>
 #include <Sce/Pss/Core/Graphics/CGX/ShaderGlobal.hpp>
+#include <Sce/Pss/Core/Graphics/CGX/CGXFile.hpp>
 
 namespace Sce::Pss::Core::Graphics::CGX {
 	class Varying : public ShaderGlobal {

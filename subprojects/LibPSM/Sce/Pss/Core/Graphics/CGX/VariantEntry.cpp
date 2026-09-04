@@ -19,8 +19,6 @@ namespace Sce::Pss::Core::Graphics::CGX {
 		CGXUniform* attributes = &uniforms[tblEntry->uniformsNum];
 		CGXUniform* varyings = &attributes[tblEntry->attributesNum];
 
-		
-
 		for (uint32_t i = 0; i < tblEntry->variantsNum; i++) {
 			this->Variants.emplace_back(buf, &variants[i]);
 		}
