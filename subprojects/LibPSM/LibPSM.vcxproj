@@ -29,7 +29,6 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Variant.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp" />
-    <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\ShaderGlobalType.hpp" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.c" />
     <ClCompile Include="Sce\Pss\Core\Imaging\Impl\FontImpl.cpp" />
@@ -134,6 +133,7 @@
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Variant.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX\VariantEntry.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\GlError.hpp" />
+	<ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp" />
     <ClInclude Include="Sce\Pss\Core\Graphics\PixelFormats.hpp" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\EmbeddedFonts.h" />
     <ClInclude Include="Sce\Pss\Core\Imaging\Impl\FontFileNames.hpp" />
