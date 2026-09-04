@@ -81,6 +81,7 @@ namespace Sce::Pss::Core::Graphics {
 		int setCurrentObject(ShaderProgram* program);
 		int setCurrentObject(FrameBuffer* frameBuffer);
 
+		VertexBuffer* setVerticies(int indexCount, Vector4& vector4);
 
 		static GraphicsCapsState capsState;
 
@@ -111,6 +112,9 @@ namespace Sce::Pss::Core::Graphics {
 		GraphicsUpdate NotifyUpdateData(GraphicsUpdate updateDataFlag);
 
 		static GraphicsCapsState& GetCaps();
+		
+		// actually draw
+		int DrawArrays(DrawMode mode, int first, int count, int repeat);
 
 		int CheckUpdate(GraphicsState* state);
 		int UpdateHandles(GraphicsUpdate notifyFlag);

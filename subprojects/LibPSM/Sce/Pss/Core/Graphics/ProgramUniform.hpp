@@ -1,5 +1,6 @@
 #ifndef LIB_PSS_PROGRAMUNIFORM
 #define LIB_PSS_PROGRAMUNIFORM 1
+#include <Sce/Pss/Core/Vector4.hpp>
 #include <Sce/Pss/Core/Graphics/CGX/ShaderGlobalType.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsExtension.hpp>
 #include <string>
@@ -17,6 +18,7 @@ namespace Sce::Pss::Core::Graphics {
 		int Binding = -1;
 		int Stream = 0;
 		int Texture = -1;
+		Vector4 Value = { 0 };
 	} ProgramUniform;
 }
 

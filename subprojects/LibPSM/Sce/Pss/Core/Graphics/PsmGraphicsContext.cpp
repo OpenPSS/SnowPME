@@ -107,8 +107,19 @@ namespace Sce::Pss::Core::Graphics {
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 	}
-	int PsmGraphicsContext::DrawArrays(int handle, DrawMode mode, int first, int count, int repeat){
-		UNIMPLEMENTED();
+	int PsmGraphicsContext::DrawArrays(int handle, DrawMode mode, int first, int count, int repeat) {
+		LOG_FUNCTION();
+
+		if (Thread::IsMainThread()) {
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
+
+			return ctx->DrawArrays(mode, first, count, repeat);
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::DrawArrays2(int handle, Primitive* primitives, int first, int count){
 		UNIMPLEMENTED();

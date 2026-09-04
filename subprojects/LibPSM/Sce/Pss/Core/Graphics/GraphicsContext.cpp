@@ -88,6 +88,12 @@ namespace Sce::Pss::Core::Graphics {
 
 		return result;
 	}
+
+	VertexBuffer* GraphicsContext::setVerticies(int indexCount, Vector4& vector4)
+	{
+		Logger::Todo("implement // GraphicsContext::setVerticies ");
+		return nullptr;
+	}
 	
 	int GraphicsContext::Update(GraphicsUpdate update, GraphicsState* state, int* handles) {
 
@@ -307,12 +313,31 @@ namespace Sce::Pss::Core::Graphics {
 				if((mask & 1) != 0) glDisableVertexAttribArray(i);
 			}
 
-			mask = ~enableMask;
-			if ((mask & (1 << numAttributes) - 1) != 0) {
-				UNIMPLEMENTED_MSG("enablemask");
-			}
+			int i = 0;
+			for (int bit = mask & ((1 << numAttributes) - 1); bit != 0; bit >>= 1)
+			{
+				if ((bit & 1) != 0)
+				{
+					if (program->GetAttributeLocation(i) >= 0)
+					{
+						Vector4 value = program->GetAttributeValue(i);
+						//if (!value)
+						//	value = (Vector4){ 0 };
 
-			UNIMPLEMENTED_MSG("continue VertexBuffer impl");
+						if (program->GetAttributeLocation(i) || (vertexBuffer = setVerticies(this->indexCount, value)) == nullptr)
+						{
+							glVertexAttrib4f(program->GetAttributeLocation(i), value.X, value.Y, value.Z, value.W);
+		                }
+						else
+						{
+							OpenGL::SetVertexBuffer(vertexBuffer);
+							glVertexAttribPointer(0, 4, GL_FLOAT, 0, 0x10u, vertexBuffer->Buffer);
+							glEnableVertexAttribArray(0);
+						}
+					}
+				}
+				i++;
+			}
 
 		}
 
@@ -643,6 +668,11 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 
+
+	int GraphicsContext::DrawArrays(DrawMode mode, int first, int count, int repeat)
+	{
+		UNIMPLEMENTED();
+	}
 
 	int GraphicsContext::CheckUpdate(GraphicsState* state) {
 		GraphicsUpdate notifyFlag = this->updateNotifyFlag;

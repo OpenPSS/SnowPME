@@ -706,12 +706,17 @@ namespace Sce::Pss::Core::Graphics {
 
 	int ShaderProgram::GetAttributeStream(int index) const 
 	{
-		return this->Attributes[this->Uniforms[index].Index].Stream;
+		return this->Attributes[index].Stream;
+	}
+
+	Vector4& ShaderProgram::GetAttributeValue(int index)
+	{
+		return this->Attributes[this->Attributes[index].Index].Value;
 	}
 
 	int ShaderProgram::GetAttributeSize(int index) const
 	{
-		return this->Attributes[this->Uniforms[index].Index].ESize;
+		return this->Attributes[this->Attributes[index].Index].ESize;
 	}
 
 	int ShaderProgram::GetUniformTexture(int index) const
@@ -733,6 +738,11 @@ namespace Sce::Pss::Core::Graphics {
 	int ShaderProgram::GetAttributeLocation(std::string& name)
 	{
 		return this->Attributes[this->FindAttribute(name)].Location;
+	}
+
+	int ShaderProgram::GetAttributeLocation(int index) const
+	{
+		return this->Attributes[this->Attributes[index].Index].Location;
 	}
 
 	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const

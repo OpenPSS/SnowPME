@@ -2,6 +2,7 @@
 #define LIB_PSS_SHADERPROGRAM_H 1
 #include <string>
 #include <vector>
+#include <Sce/Pss/Core/Vector4.hpp>
 #include <Sce/Pss/Core/Graphics/GraphicsObject.hpp>
 #include <Sce/Pss/Core/Graphics/ShaderProgramOption.hpp>
 #include <Sce/Pss/Core/Graphics/CGX/ShaderAttributeType.hpp>
@@ -56,7 +57,9 @@ namespace Sce::Pss::Core::Graphics {
 		Sce::Pss::Core::Graphics::CGX::ShaderAttributeType GetAttributeType(int index) const;
 		Sce::Pss::Core::Graphics::CGX::ShaderUniformType GetUniformType(int index) const;
 		int GetAttributeLocation(std::string& name);
+		int GetAttributeLocation(int index) const;
 		int GetAttributeStream(int index) const;
+		Vector4& GetAttributeValue(int index);
 		int GetUniformTexture(int index) const;
 		int GetUniformSize(int index) const;
 		int GetAttributeSize(int index) const;
