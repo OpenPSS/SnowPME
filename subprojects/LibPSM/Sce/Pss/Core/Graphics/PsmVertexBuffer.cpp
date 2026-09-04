@@ -41,6 +41,7 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {
+				VertexBuffer::Delete(handle); // this is unsafe ...
 				UNIMPLEMENTED_MSG("Trying to delete VertexBuffer cross-thread (TODO: Notify main thread?)");
 			}
 		}

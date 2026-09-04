@@ -72,7 +72,7 @@ namespace Sce::Pss::Core::Imaging {
 	}
 
 	int Font::GetTextMetrics(const std::wstring& text, int offset, int len, CharMetrics* charMetrics) {
-		if (offset < 0 || offset > text.length() || len < 0 || offset + len > text.length())
+		if (offset < 0 || offset > text.length() || len < 0 || offset + len > static_cast<int>(text.length()))
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (this->fontImpl != nullptr) {

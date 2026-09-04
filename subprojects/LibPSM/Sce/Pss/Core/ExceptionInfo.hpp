@@ -9,8 +9,8 @@ namespace Sce::Pss::Core {
 		static std::string param;
 
 	public:
-		static std::string& GetMessage();
-		static std::string& GetParam();
+		static std::string GetMessage();
+		static std::string GetParam();
 
 		static void SetMessage(const std::string& str);
 		static void SetMessage(const char* str);

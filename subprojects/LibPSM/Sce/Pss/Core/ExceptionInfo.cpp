@@ -11,14 +11,20 @@ namespace Sce::Pss::Core {
 	std::string ExceptionInfo::message = "";
 	std::string ExceptionInfo::param = "";
 
-	std::string& ExceptionInfo::GetMessage() {
+	std::string ExceptionInfo::GetMessage() {
 		LOG_FUNCTION();
 
-		return message;
+		std::string oldMsg = message;
+		message = "";
+
+		return oldMsg;
 	}
 	
-	std::string& ExceptionInfo::GetParam() {
+	std::string ExceptionInfo::GetParam() {
 		LOG_FUNCTION();
+
+		std::string oldParam = param;
+		param = "";
 
 		return param;
 	}
