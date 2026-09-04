@@ -9,7 +9,7 @@
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 
 #define READ_CXML_ATTRIBUTE(TYPE, VALUE, SET) { \
-		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<LibCXML::CXMLAttribute<TYPE>*>(VALUE); \
+		LibCXML::CXMLAttribute<TYPE>* attribute = element->GetAttribute<TYPE>(VALUE); \
 		if (attribute != nullptr) { \
 			SET = attribute->AttributeValue(); \
 		} \
@@ -78,10 +78,10 @@ namespace Sce::Pss::Core::Metadata {
 		std::vector<RatingInfo> RatingList;
 
 		// <images>
-		LibCXML::CXMLStream* Splash854x480 = nullptr;
-		LibCXML::CXMLStream* Icon128x128 = nullptr;
-		LibCXML::CXMLStream* Icon512x512 = nullptr;
-		LibCXML::CXMLStream* Icon256x256 = nullptr;
+		LibCXML::CXMLStream Splash854x480;
+		LibCXML::CXMLStream Icon128x128;
+		LibCXML::CXMLStream Icon512x512;
+		LibCXML::CXMLStream Icon256x256;
 
 		// <genre_list>
 		std::vector<std::string> GenreList;
@@ -91,7 +91,7 @@ namespace Sce::Pss::Core::Metadata {
 		std::string Website;
 
 		// <copyright> 
-		LibCXML::CXMLStream* CopyrightText = nullptr;
+		LibCXML::CXMLStream CopyrightText;
 		std::string Author;
 
 		// <purchase>

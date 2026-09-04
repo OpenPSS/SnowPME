@@ -129,7 +129,6 @@ namespace Sce::Pss::Core::Graphics {
 		
 	}
 	int PsmVertexBuffer::SetIndices(int handle, MonoArray* indices, int to, int from, int count) {
-		LOG_FUNCTION();
 		UNIMPLEMENTED();
 	}
 }

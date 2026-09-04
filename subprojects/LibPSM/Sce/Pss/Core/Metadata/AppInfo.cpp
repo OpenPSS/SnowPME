@@ -151,10 +151,10 @@ namespace Sce::Pss::Core::Metadata {
 					this->RatingList.push_back(ratingInfo);
 				}
 				else if (element->ElementName() == "images") {
-					READ_CXML_ATTRIBUTE(LibCXML::CXMLStream*, "splash_854x480", this->Splash854x480);
-					READ_CXML_ATTRIBUTE(LibCXML::CXMLStream*, "icon_128x128", this->Icon128x128);
-					READ_CXML_ATTRIBUTE(LibCXML::CXMLStream*, "icon_512x512", this->Icon512x512);
-					READ_CXML_ATTRIBUTE(LibCXML::CXMLStream*, "icon_256x256", this->Icon256x256);
+					READ_CXML_ATTRIBUTE(CXMLStream, "splash_854x480", this->Splash854x480);
+					READ_CXML_ATTRIBUTE(CXMLStream, "icon_128x128", this->Icon128x128);
+					READ_CXML_ATTRIBUTE(CXMLStream, "icon_512x512", this->Icon512x512);
+					READ_CXML_ATTRIBUTE(CXMLStream, "icon_256x256", this->Icon256x256);
 				}
 				else if (element->ElementName() == "genre") {
 					std::string strGenre;
@@ -165,7 +165,7 @@ namespace Sce::Pss::Core::Metadata {
 					READ_CXML_ATTRIBUTE(std::string, "href", this->Website);
 				}
 				else if (element->ElementName() == "copyright") {
-					READ_CXML_ATTRIBUTE(LibCXML::CXMLStream*, "text", this->CopyrightText);
+					READ_CXML_ATTRIBUTE(CXMLStream, "text", this->CopyrightText);
 					READ_CXML_ATTRIBUTE(std::string, "author", this->Author);
 				}
 				else if (element->ElementName() == "product" && parserMode == "product_list") {
