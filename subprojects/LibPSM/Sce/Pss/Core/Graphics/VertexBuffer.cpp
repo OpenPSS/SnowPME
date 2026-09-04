@@ -690,6 +690,8 @@ namespace Sce::Pss::Core::Graphics {
 	}
 
 	int VertexBuffer::SetVerticies(int stream, float* vertexBuffer, int vertexBufferSz, int offset, int stride, VertexFormat format, Vector4* trans, Vector4* scale, int to, int from, int count) {
+		
+		
 		// is the vertex buffer not null?
 		if (vertexBuffer == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
