@@ -19,8 +19,10 @@ namespace Sce::Pss::Core::System {
 
 		static bool IsValid(int handle) {
 			if (handle <= Handles::NoHandle) return false;
-			if (rawHandles.contains(handle)) return true;
-			else return handles.contains(handle);
+			else if (handles.contains(handle)) return true;
+
+			if (handle <= Handles::NoRawHandle) return false;
+			else if (rawHandles.contains(handle)) return true;
 		}
 
 		static int Create(T* address) {

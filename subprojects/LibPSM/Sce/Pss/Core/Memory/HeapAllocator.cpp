@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Memory {
 
 	void* HeapAllocator::sce_psm_malloc(int sz) {
 		LOCK_GUARD();
-		Logger::Debug("Allocating: 0x" + Format::Hex(static_cast<size_t>(sz)) + " bytes"); \
+		Logger::Debug("Allocating: 0x" + Format::Hex(static_cast<size_t>(sz)) + " bytes");
 
 		// allocate a vector of uint8_t, of the given size
 		std::shared_ptr<std::vector<uint8_t>> vec = std::make_shared<std::vector<uint8_t>>(sz);
@@ -53,7 +53,7 @@ namespace Sce::Pss::Core::Memory {
 	}
 	void HeapAllocator::sce_psm_free(void* ptr) {
 		LOCK_GUARD();
-		Logger::Debug("Freeing: 0x" + Format::Hex(reinterpret_cast<uintptr_t>(ptr)) + " bytes"); \
+		Logger::Debug("Freeing: 0x" + Format::Hex(reinterpret_cast<uintptr_t>(ptr)) + " bytes");
 
 		// lookup the vector from this map
 		std::shared_ptr<std::vector<uint8_t>> vec = this->heapAllocations[reinterpret_cast<uintptr_t>(ptr)];

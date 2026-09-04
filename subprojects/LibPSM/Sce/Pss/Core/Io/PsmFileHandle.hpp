@@ -18,8 +18,6 @@ namespace Sce::Pss::Core::Io {
 		std::string pathOnDisk = "";
 
 		IUnderlying* underlying = nullptr;
-
-
 		void signalClosed();
 	public:
 		PsmFileHandle(std::string pathInSandbox, std::string pathOnDisk, ScePssFileOpenFlag_t flags);

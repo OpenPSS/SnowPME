@@ -172,8 +172,8 @@ namespace Sce::Pss::Core::Imaging {
 		}
 
 		size_t bufferSize = channels * size->Width * size->Height;
-
 		std::vector<uint8_t> img(bufferSize);
+
 		if(img.data() != nullptr) {
 
 			ImageColor colorNormalized = *color;
@@ -186,8 +186,8 @@ namespace Sce::Pss::Core::Imaging {
 					// loop over each coordinate of the image, and set the pixel to the right alpha.
 					for (int y = 0; y < size->Height; y++) {
 						for (int x = 0; x < size->Width; x++) {
-							size_t pos = y + (x * size->Width) + 0;
-							img.data()[pos] = colorNormalized.A;
+							size_t pos = (y + (x * size->Width)) * channels;
+							img.data()[pos] = colorNormalized.A; 
 						}
 					}
 				}
@@ -198,7 +198,10 @@ namespace Sce::Pss::Core::Imaging {
 					// loop over each coordinate of the image, and set the pixel to the right color.
 					for (int y = 0; y < size->Height; y++) {
 						for (int x = 0; x < size->Width; x++) {
-							size_t pos = y + (x * size->Width);
+							size_t pos = channels * (x + (y * size->Width));
+
+							ASSERT(pos < img.size()); // huh?
+
 							img.data()[pos + 0] = colorNormalized.R;
 							img.data()[pos + 1] = colorNormalized.G;
 							img.data()[pos + 2] = colorNormalized.B;

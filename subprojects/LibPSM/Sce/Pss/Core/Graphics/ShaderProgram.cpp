@@ -649,7 +649,7 @@ namespace Sce::Pss::Core::Graphics {
 			UNIMPLEMENTED_MSG("Allocate more bindings or something");
 		}
 
-		RemapParameters(this->Attributes.data(), this->AttributeCount());
+		RemapParameters(this->Attributes.data(), this->AttributeCount()-1);
 		return 0;
 	}
 
