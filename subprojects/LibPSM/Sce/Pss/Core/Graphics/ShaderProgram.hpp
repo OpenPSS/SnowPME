@@ -38,6 +38,7 @@ namespace Sce::Pss::Core::Graphics {
 		int LoadProgram(uint8_t* vertexShaderBuf, int vertexShaderSz, uint8_t* fragmentShaderBuf, int fragmentShaderSz, ShaderProgramOption* option);
 		int LoadShader(int type, const char* source);
 		bool ParseParams(Sce::Pss::Core::Graphics::CGX::VariantEntry* entry, ShaderType type, bool chk);
+		void RemapParameters(ProgramUniform* entry, int total);
 		int CheckParameters();
 		int CheckSamplers();
 

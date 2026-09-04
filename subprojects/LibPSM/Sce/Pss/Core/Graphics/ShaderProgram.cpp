@@ -249,6 +249,40 @@ namespace Sce::Pss::Core::Graphics {
 
 	}
 
+	void ShaderProgram::RemapParameters(ProgramUniform* entry, int total)
+	{
+		int ii = 0;
+		//result = entry;
+
+		if (total <= 0) return;
+
+		for (int i = total; i != 0; i--)
+		{
+			entry[i].Index = -1;
+		}
+
+
+		for (int i = 0; i < total; ++i) {
+			if (entry[i].Binding >= 0 && entry[i].Binding < total)
+			{
+				entry[i + entry[i].Binding].Index = i;
+			}
+		}
+
+		for (int i = 0; i < total; ++i)
+		{
+			if (entry[i].Binding < 0 || entry[i].Binding >= total)
+			{
+				// find first not -1
+				for (; entry[ii].Index >= 0; ++ii)
+
+				//result = (6 * ii); wtf seemingly not used?
+				entry[ii].Index = i;
+			}
+		}
+		//return result;
+	}
+
 	int ShaderProgram::CheckParameters()
 	{
 		//
@@ -615,8 +649,7 @@ namespace Sce::Pss::Core::Graphics {
 			UNIMPLEMENTED_MSG("Allocate more bindings or something");
 		}
 
-		UNIMPLEMENTED_MSG("sce::pss::core::graphics::ShaderProgram::RemapParameters // " + this->Attributes[bindIndex].Name + " -> " + this->Attributes[index].Name);
-
+		RemapParameters(this->Attributes.data(), this->AttributeCount());
 		return 0;
 	}
 
@@ -653,7 +686,8 @@ namespace Sce::Pss::Core::Graphics {
 			UNIMPLEMENTED_MSG("Allocate more bindings or something");
 		}
 
-		UNIMPLEMENTED_MSG("sce::pss::core::graphics::ShaderProgram::RemapParameters // " + this->Uniforms[bindIndex].Name + " -> " + this->Uniforms[index].Name);
+		RemapParameters(this->Attributes.data(), this->AttributeCount());
+		//UNIMPLEMENTED_MSG("sce::pss::core::graphics::ShaderProgram::RemapParameters // " + this->Uniforms[bindIndex].Name + " -> " + this->Uniforms[index].Name);
 
 
 		return 0;
@@ -703,7 +737,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	ShaderAttributeType ShaderProgram::GetAttributeType(int index) const
 	{
-		return (ShaderAttributeType)this->Attributes[Attributes[index].Index].Type;
+		return static_cast<ShaderAttributeType>(this->Attributes[Attributes[index].Index].Type);
 	}
 
 	ShaderUniformType ShaderProgram::GetUniformType(int index) const

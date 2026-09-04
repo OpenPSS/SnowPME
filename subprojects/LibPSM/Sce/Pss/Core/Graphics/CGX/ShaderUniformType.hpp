@@ -4,6 +4,7 @@
 #include <Sce/Pss/Core/Graphics/CGX/ShaderGlobalType.hpp>
 
 namespace Sce::Pss::Core::Graphics::CGX {
+
 	enum class ShaderUniformType : uint32_t {
 		None = 0x0,
 		Float = 0x100,
