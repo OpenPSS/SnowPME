@@ -35,7 +35,7 @@ namespace Sce::Pss::Core::Io {
 		bool IsOpen();
 
 		EmulatedDirectory(std::string rootDirectoryName, std::vector<EmulatedDirectoryEntry>& subDirectories);
-		~EmulatedDirectory();
+		~EmulatedDirectory() override;
 	};
 }
 #endif

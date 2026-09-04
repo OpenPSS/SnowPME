@@ -20,7 +20,7 @@ namespace Sce::Pss::Core::Io {
 		bool opened = true;
 	public:
 		DirectoryIterator(std::string sandboxedFolder, bool recursive);
-		~DirectoryIterator();
+		~DirectoryIterator() override;
 		uint32_t Read(void* buffer, uint32_t length);
 		int Next(ScePssFileInformation_t* pathInfo);
 		uint64_t Tell();

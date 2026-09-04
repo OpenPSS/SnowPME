@@ -49,7 +49,7 @@ namespace Sce::Pss::Core::Io::Edata {
 
 	public:
 		EdataStream(const std::string& file, std::ios::openmode mode, uint8_t klicensee[0x10] = nullptr, bool inEdata = false);
-		~EdataStream();
+		~EdataStream() override;
 
 		uint64_t Length();
 		uint32_t Read(void* buffer, uint32_t length);
