@@ -123,6 +123,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		UNREACHABLE();
+		return 0;
 	}
 	GLenum OpenGL::GetTextureFormatType(PixelFormat format) {
 		switch (format) {
@@ -170,6 +171,7 @@ namespace Sce::Pss::Core::Graphics {
 				return GL_NONE;
 		}
 		UNREACHABLE();
+		return 0;
 	}
 
 }

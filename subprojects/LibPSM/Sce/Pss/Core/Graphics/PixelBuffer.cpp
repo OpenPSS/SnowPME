@@ -178,6 +178,7 @@ namespace Sce::Pss::Core::Graphics {
 				return false;
 		}
 		UNREACHABLE();
+		return false;
 	}
 
 	bool PixelBuffer::GetFormatHasRgb(PixelFormat format) {
@@ -227,6 +228,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		
 		UNREACHABLE();
+		return false;
 	}
 
 	bool PixelBuffer::GetFormatHasHalfFloat(PixelFormat format) {
@@ -276,6 +278,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		UNREACHABLE();
+		return false;
 	}
 
 	int PixelBuffer::GetFormatBitsPerPixel(PixelFormat format) {
@@ -325,6 +328,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 		
 		UNREACHABLE();
+		return 0x0;
 	}
 
 	int PixelBuffer::CalculateTotalMipMaps(int width, int height) {

@@ -61,6 +61,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		UNREACHABLE();
+		return 0;
 	}
 	ShaderAttributeType ShaderProgram::glAttributeTypeToPsmType(int glType)
 	{
@@ -77,6 +78,7 @@ namespace Sce::Pss::Core::Graphics {
 			return ShaderAttributeType::None;
 		}
 		UNREACHABLE();
+		return ShaderAttributeType::None;
 	}
 	ShaderUniformType ShaderProgram::glUniformTypeToPsmType(int glType)
 	{
@@ -119,6 +121,7 @@ namespace Sce::Pss::Core::Graphics {
 			return ShaderUniformType::None;
 		}
 		UNREACHABLE();
+		return ShaderUniformType::None;
 	}
 
 	int ShaderProgram::LoadShader(int type, const char* source) {

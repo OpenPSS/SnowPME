@@ -101,7 +101,7 @@ namespace Sce::Pss::Core::Graphics {
 		if (updateNotifyDataFlag != GraphicsUpdate::None) {
 			updateNotifyDataFlag = GraphicsUpdate::None;
 
-			for (int i = 0; i < vertexBuffers.size(); i++) {
+			for (size_t i = 0; i < vertexBuffers.size(); i++) {
 				vertexBuffers[i]->UpdateData(this->frameCount);
 			}
 
