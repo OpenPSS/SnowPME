@@ -259,12 +259,15 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (total <= 0) return;
 
+		// set all to -1
 		for (int i = 0; i < total; i++)
 		{
 			entry[i].Index = -1;
 		}
 
 
+		// for every entry with a valid binding (none)
+		// set its index to its position in the list ..
 		for (int i = 0; i < total; ++i) {
 			if (entry[i].Binding >= 0 && entry[i].Binding < total)
 			{
@@ -272,6 +275,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 		}
 
+		// for every entry with binding set to <0, set its binding to location of first one with index > 0.
 		for (int i = 0; i < total; ++i)
 		{
 			if (entry[i].Binding < 0 || entry[i].Binding >= total)
