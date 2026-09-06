@@ -67,7 +67,7 @@ namespace Sce::Pss::Core::System {
         // list of all special shell characters
         std::string specialCharacters = "^&<>|()=;,%\"";
 
-#ifdef defined(_WIN32)
+#if defined(_WIN32)
         std::string escapeSeq = "^";
 #else
         std::string escapeSeq = "\\";
