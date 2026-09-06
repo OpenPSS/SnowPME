@@ -33,11 +33,11 @@ jobs:
             cd subprojects/LibSDL3-Static/SDL
             cmake -B build 
             cd build
-            make install -j$(nproc)
+            sudo make install -j$(nproc)
             cd subprojects/LibSDL3-Static/SDL_ttf
             cmake -B build 
             cd build
-            make install -j$(nproc)
+            sudo make install -j$(nproc)
       - name: Meson Build
         run: |
             meson setup build
