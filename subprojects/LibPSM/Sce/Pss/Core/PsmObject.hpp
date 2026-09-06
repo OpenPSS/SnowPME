@@ -51,7 +51,7 @@ namespace Sce::Pss::Core {
 		}
 
 		static void Delete(int handle) {
-			T::Delete(Sce::Pss::Core::System::Handles<T>::Get(handle));
+			T::Delete(LookupHandle(handle));
 		}
 
 		static void Delete(std::shared_ptr<T> obj) {

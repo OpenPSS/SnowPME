@@ -6,6 +6,7 @@
 #include <Sce/Pss/Core/PsmUniqueObject.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Graphics/PsmFree.hpp>
+#include <Sce/Pss/Core/Error.hpp>
 
 namespace Sce::Pss::Core::Graphics {
 	class PsmFreeList : public PsmMutexObject<PsmFreeList> {
@@ -16,7 +17,6 @@ namespace Sce::Pss::Core::Graphics {
 		static void AddEntry(PsmFree freeEntry);
 		
 		template <typename... Args> static void AddEntry(Args&&... args) {
-			LOG_FUNCTION();
 			LOCK_GUARD_STATIC();
 			freeList.emplace_back(std::forward<Args>(args)...);
 		}

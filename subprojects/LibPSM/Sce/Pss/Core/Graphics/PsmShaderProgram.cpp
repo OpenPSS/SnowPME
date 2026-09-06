@@ -98,7 +98,7 @@ namespace Sce::Pss::Core::Graphics {
 				ShaderProgram::Delete(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
-			PsmFreeList::AddEntry(PsmObjectType::Shader, handle);
+			PsmFreeList::AddEntry(PsmObjectType::ShaderProgram, handle);
 		}
 		return PSM_ERROR_NO_ERROR;
 
@@ -412,6 +412,7 @@ namespace Sce::Pss::Core::Graphics {
 		}
 
 		if (!ShaderProgram::CheckHandle(handle)) {
+			Logger::Error("Invalid ShaderProgram handle: " + Format::Hex(handle));
 			return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 		}
 

@@ -49,7 +49,7 @@ namespace Sce::Pss::Core {
 
 				T* obj = dynamic_cast<T*>(T::LookupHandle(handle));
 				
-				return Delete(obj);
+				return T::Delete(obj);
 			}
 
 			return false;

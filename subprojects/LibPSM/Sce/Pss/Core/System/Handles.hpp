@@ -3,9 +3,12 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-
 #include <unordered_map>
+
 #include <LibShared.hpp>
+
+using namespace Shared::Debug;
+using namespace Shared::String;
 
 namespace Sce::Pss::Core::System {
 	template<typename T> class Handles {
@@ -55,6 +58,7 @@ namespace Sce::Pss::Core::System {
 		}
 
 		static T* GetRaw(uint64_t handle) {
+
 			return Handles<T>::GetRaw(static_cast<int>(handle));
 		}
 
@@ -75,11 +79,20 @@ namespace Sce::Pss::Core::System {
 
 			handles.clear();
 			rawHandles.clear();
+
+			lastHandle = Handles::NoHandle;
+			lastRawHandle = Handles::NoRawHandle;
 		}
 
 		static void Delete(int handle) {
-			if (rawHandles.contains(handle)) rawHandles.erase(handle);
-			if (handles.contains(handle)) handles.erase(handle);
+			if (handle >= NoHandle && handle <= lastHandle) {
+				if (handle == NoHandle) return;
+				if (handles.contains(handle)) handles.erase(handle);
+			}
+			else if (handle >= NoRawHandle && handle <= lastRawHandle) {
+				if (handle == NoRawHandle) return;
+				if (rawHandles.contains(handle)) rawHandles.erase(handle);
+			}
 		}
 	private:
 		static inline std::unordered_map<int, std::shared_ptr<T>> handles;

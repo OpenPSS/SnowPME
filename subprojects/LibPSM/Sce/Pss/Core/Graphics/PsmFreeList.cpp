@@ -30,16 +30,26 @@ namespace Sce::Pss::Core::Graphics {
 		for (PsmFree free : freeList) {
 			switch (free.Type()) {
 			case PsmObjectType::GraphicsContext:
+				Logger::Debug("Freeing GraphicsContext: "+Format::Hex(free.Handle()));
 				GraphicsContext::Delete(free.Handle());
 				GraphicsContext::MakeLocalObject();
+				break;
 			case PsmObjectType::FrameBuffer:
+				Logger::Debug("Freeing FrameBuffer: " + Format::Hex(free.Handle()));
 				FrameBuffer::Delete(free.Handle());
+				break;
 			case PsmObjectType::VertexBuffer:
+				Logger::Debug("Freeing VertexBuffer: " + Format::Hex(free.Handle()));
 				VertexBuffer::Delete(free.Handle());
-			case PsmObjectType::Texture:
-				Texture::Delete(free.Handle());
-			case PsmObjectType::Shader:
+				break;
+			case PsmObjectType::PixelBuffer:
+				Logger::Debug("Freeing PixelBuffer: " + Format::Hex(free.Handle()));
+				PixelBuffer::Delete(free.Handle());
+				break;
+			case PsmObjectType::ShaderProgram:
+				Logger::Debug("Freeing ShaderProgram: " + Format::Hex(free.Handle()));
 				ShaderProgram::Delete(free.Handle());
+				break;
 			}
 		}
 

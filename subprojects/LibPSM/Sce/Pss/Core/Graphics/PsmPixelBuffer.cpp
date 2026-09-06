@@ -58,7 +58,7 @@ namespace Sce::Pss::Core::Graphics {
 				PixelBuffer::Delete(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
-			PsmFreeList::AddEntry(PsmObjectType::Texture, handle);
+			PsmFreeList::AddEntry(PsmObjectType::PixelBuffer, handle);
 		}
 		return PSM_ERROR_NO_ERROR;
 	}

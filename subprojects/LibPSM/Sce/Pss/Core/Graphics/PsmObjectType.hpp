@@ -5,9 +5,9 @@
 namespace Sce::Pss::Core::Graphics {
 	enum class PsmObjectType : uint32_t {
 		GraphicsContext = 0,
-		Shader = 1,
+		ShaderProgram = 1,
 		VertexBuffer = 2,
-		Texture = 3,
+		PixelBuffer = 3,
 		FrameBuffer = 4
 	};
 
