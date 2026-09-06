@@ -23,12 +23,11 @@ jobs:
       # somehow, ubuntu doesn't have SDL3 ...
       - name: Build SDL3
         run: |
-            sudo apt-get install build-essential git make \
-            pkg-config cmake ninja-build gnome-desktop-testing libasound2-dev libpulse-dev \
-            libaudio-dev libfribidi-dev libjack-dev libsndio-dev libx11-dev libxext-dev \
-            libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
-            libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
-            libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev libusb-1.0-0-dev -y
+            sudo apt-get update -y
+            sudo apt-get install gnome-desktop-testing libasound2-dev libpulse-dev libaudio-dev libjack-dev libsndio-dev \
+            libusb-1.0-0-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev \
+            libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev \
+            libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev fcitx-libs-dev ninja-build -y
             
             cd subprojects/LibSDL3-Static/SDL
             cmake -B build 
@@ -36,11 +35,11 @@ jobs:
             sudo make install -j$(nproc)            
       - name: Build SDL3_ttf
         run: |
+            sudo apt-get update -y
             sudo apt-get install gnome-desktop-testing libasound2-dev libpulse-dev libaudio-dev libjack-dev libsndio-dev \
             libusb-1.0-0-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev \
             libxss-dev libwayland-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
-            libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev fcitx-libs-dev \
-            libfreetype-dev libharfbuzz-dev -y
+            libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev fcitx-libs-dev libfreetype-dev libharfbuzz-dev -y
             
             cd subprojects/LibSDL3-Static/SDL_ttf
             cmake -B build 
@@ -70,7 +69,7 @@ jobs:
         with:
           arch: x86
       - name: MSBuild SnowPME.sln
-        run: MSBuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32
+        run: MSBuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32 /m:$Env:NUMBER_OF_PROCESSORS
       - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:

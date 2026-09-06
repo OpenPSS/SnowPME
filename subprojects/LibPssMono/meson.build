@@ -2,17 +2,25 @@ project('LibPssMono', 'c',
 version: '0.1',
 default_options: ['warning_level=0', 'cpp_std=c++20', 'default_library=static'])
 
+mod = import('unstable-external_project')
+
 c = meson.get_compiler('c')
 bin_dir = meson.current_build_dir()
 mono_include_dir = include_directories('include')
 
-mod = import('unstable-external_project')
-p = mod.add_project('configure',
+# generate configure script
+run_command('pss-mono/autogen.sh')
+
+p = mod.add_project('pss-mono/configure',
+    configure_options : [
+        '--enable-pss',
+    ],
 	env: {
 		'CFLAGS': '-O2'
 	},
 	verbose: true
 )
+
 eglib_dep = p.dependency('eglib-static')
 monosgen_dep = p.dependency('monosgen-static')
 monoruntimesgen_dep = p.dependency('monoruntimesgen')
