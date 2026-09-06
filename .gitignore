@@ -12,6 +12,7 @@ SnowPME/SnowPME.cfg
 *.cfg
 *.aps
 *.obj
+*.wraplock
 *.user
 *.o
 Makefile-autogen.mk
