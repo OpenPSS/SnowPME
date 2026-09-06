@@ -271,7 +271,8 @@ namespace Sce::Pss::Core::Graphics {
 		for (int i = 0; i < total; ++i) {
 			if (entry[i].Binding >= 0 && entry[i].Binding < total)
 			{
-				entry[i + entry[i].Binding].Index = i;
+				Logger::Debug(entry[entry[i].Binding].Name);
+				entry[entry[i].Binding].Index = i;
 			}
 		}
 
