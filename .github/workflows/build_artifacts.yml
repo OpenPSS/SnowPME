@@ -41,7 +41,7 @@ jobs:
             libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev fcitx-libs-dev libfreetype-dev libharfbuzz-dev -y
             
             cd subprojects/LibSDL3-Static/SDL_ttf
-            cmake -B build -DBUILD_SHARED_LIBS=NO
+            cmake -B build -DBUILD_SHARED_LIBS=NO -DSDLTTF_VENDORED=YES
             sudo cmake --build build          
             sudo cmake --install build          
       - name: Meson Build
