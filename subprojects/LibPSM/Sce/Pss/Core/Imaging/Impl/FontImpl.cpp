@@ -168,7 +168,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 			}
 
 			size_t w = 0;
-			if (TTF_MeasureString(this->font, buf.data(), Config::ScreenWidth(0), 0, nullptr, &w) == true) {
+			if (TTF_MeasureString(this->font, buf.data(), 0, Config::ScreenWidth(0), nullptr, &w) == true) {
 				*width = static_cast<int>(w);
 				return PSM_ERROR_NO_ERROR;
 			}
