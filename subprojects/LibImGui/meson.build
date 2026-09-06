@@ -6,7 +6,7 @@ project('LibImGui', 'cpp',
 cpp = meson.get_compiler('cpp')
 dirbase = meson.current_source_dir()
 
-LibSDL2_dep = cpp.find_library('SDL2', required: true)
+LibSDL3_dep = cpp.find_library('SDL3', required: true)
 LibOpenGL_dep = cpp.find_library('GL', required: true)
 
 LibGLAD = subproject('LibGLAD')
@@ -23,7 +23,7 @@ libImGui = static_library('ImGui',
 	'imgui_widgets.cpp',
 	'imgui.cpp',
     dependencies: [
-        LibSDL2_dep,
+        LibSDL3_dep,
 		LibOpenGL_dep,
         LibGLAD_dep
     ],

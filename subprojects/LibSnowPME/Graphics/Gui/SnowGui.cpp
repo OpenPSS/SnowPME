@@ -1,8 +1,8 @@
 #include <LibImGui.hpp>
 #include <Graphics/Gui/SnowGui.hpp>
 #include <Graphics/Gui/ImGuiWindow.hpp>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_opengl.h>
 #include <Graphics/ImGuiBackend.hpp>
 #include <Graphics/ImGuiGLES2Backend.hpp>
 
@@ -19,7 +19,7 @@ namespace SnowPME::Graphics::Gui {
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		window->Backend->Init();
-		ImGui_ImplSDL2_InitForOpenGL(this->window->GetSdlWindow(), this->window->GetGlCtx());
+		ImGui_ImplSDL3_InitForOpenGL(this->window->GetSdlWindow(), this->window->GetGlCtx());
 	}
 
 	void SnowGui::UpdateGui() {
@@ -28,10 +28,10 @@ namespace SnowPME::Graphics::Gui {
 		
 		while (SDL_PollEvent(&event))
 		{
-			ImGui_ImplSDL2_ProcessEvent(&event);
-			if (event.type == SDL_QUIT)
+			ImGui_ImplSDL3_ProcessEvent(&event);
+			if (event.type == SDL_EVENT_QUIT)
 				this->done = true;
-			if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window->GetSdlWindow()))
+			if (event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event.window.windowID == SDL_GetWindowID(window->GetSdlWindow()))
 				this->done = true;
 		}
 
@@ -52,7 +52,7 @@ namespace SnowPME::Graphics::Gui {
 
 	void SnowGui::NewFrame() {
 		this->window->Backend->NewFrame();
-		ImGui_ImplSDL2_NewFrame();
+		ImGui_ImplSDL3_NewFrame();
 		ImGui::NewFrame();
 	}
 
@@ -77,7 +77,7 @@ namespace SnowPME::Graphics::Gui {
 
 	SnowGui::~SnowGui() {
 		this->window->Backend->Term();
-		ImGui_ImplSDL2_Shutdown();
+		ImGui_ImplSDL3_Shutdown();
 		ImGui::DestroyContext();
 	}
 

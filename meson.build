@@ -37,5 +37,4 @@ executable('SnowPME',
 	],
 )
 
-#subproject('SnowPMEBenchmark')
 

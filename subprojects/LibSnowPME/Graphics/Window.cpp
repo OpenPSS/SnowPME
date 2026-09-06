@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <Graphics/Window.hpp>
 #include <Graphics/ImGuiGLES2Backend.hpp>
 #include <Graphics/ImGuiGL2Backend.hpp>
@@ -21,9 +21,9 @@ namespace SnowPME::Graphics {
 	bool Window::tryGl() {
 		Logger::Warn("Cannot use GLES, Falling back on OpenGL Core 3.0");
 
-		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == 0) {
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == 0);
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE) == true) {
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3) == true);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == true);
 			this->Backend = std::make_unique<ImGuiGL2Backend>();
 			return true;
 		}
@@ -31,9 +31,9 @@ namespace SnowPME::Graphics {
 	}
 
 	bool Window::tryGles() {
-		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) == 0) {
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == 0);
-			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == 0);
+		if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) == true) {
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) == true);
+			ASSERT(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) == true);
 			this->Backend = std::make_unique<ImGuiGLES2Backend>();
 			return true;
 		}
@@ -41,41 +41,41 @@ namespace SnowPME::Graphics {
 	}
 
 	Window::Window(int height, int width, const std::string& title) {
-		ASSERT(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) == 0);
+		ASSERT(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMEPAD) == true);
 
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) == 0);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) == true);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24) == true);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) == true);
 
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) == 0);
-		ASSERT(SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8) == 0);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) == true);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) == true);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) == true);
+		ASSERT(SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8) == true);
 
 		tryGles();
-		this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL|SDL_RENDERER_PRESENTVSYNC);
+		this->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL);
 		if (this->sdlWindow == nullptr) {
 			tryGl();
 
-			this->sdlWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL | SDL_RENDERER_PRESENTVSYNC);
+			this->sdlWindow = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL);
 			if (this->sdlWindow == nullptr) {
 				PANIC("Cannot create window " + std::string(SDL_GetError()));
 			}
 		}
 
-		int displayIndex = SDL_GetWindowDisplayIndex(this->sdlWindow);
-		if (displayIndex == -1) {
-			PANIC(SDL_GetError());
-		}
 
-		SDL_DisplayMode mode;
+		SDL_DisplayID displayIndex = SDL_GetDisplayForWindow(this->sdlWindow);
+		ASSERT(displayIndex != 0);
+
+		const SDL_DisplayMode* mode = SDL_GetDesktopDisplayMode(displayIndex);
 		
-		if (SDL_GetDisplayMode(displayIndex, 0, &mode) != 0) {
+		if (mode == nullptr) {
 			Logger::Warn("Could not get display mode! SDL_Error: "+ std::string(SDL_GetError()));
-			mode.refresh_rate = 60;
+			this->refreshRate = 60;
 		}
-
-		this->refreshRate = mode.refresh_rate;
+		else {
+			this->refreshRate = mode->refresh_rate;
+		}
 
 	}
 
@@ -92,9 +92,9 @@ namespace SnowPME::Graphics {
 		}
 
 		ASSERT(gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)) == true);
-		ASSERT(SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx) == 0);
+		ASSERT(SDL_GL_MakeCurrent(this->sdlWindow, this->glCtx) == true);
 
-		if (SDL_GL_SetSwapInterval(1) != 0) {
+		if (SDL_GL_SetSwapInterval(1) == false) {
 			Logger::Warn("Cannot use SDL_GL_SetSwapInterval " + std::string(SDL_GetError()) + " (Is your monitor unsupported?)");
 			Logger::Warn("Screen Tearing may occur, as vsync cannot be used.");
 		}
@@ -106,8 +106,8 @@ namespace SnowPME::Graphics {
 		int expectedMajor = 0;
 		int expectedMinor = 0;
 
-		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &expectedMajor);
-		SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &expectedMinor);
+		ASSERT(SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &expectedMajor) == true);
+		ASSERT(SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &expectedMinor) == true);
 
 		if (GLVersion.major < expectedMajor && GLVersion.minor < expectedMinor) {
 			PANIC("Could not initalize GLES or OpenGL!\nGot version " + std::to_string(GLVersion.major) + "." + std::to_string(GLVersion.minor) + ", expected atleast : " + std::to_string(expectedMajor) + "." + std::to_string(expectedMinor)+"\nTry updating your graphics drivers?");
@@ -158,7 +158,7 @@ namespace SnowPME::Graphics {
 		memset(&data, 0x00, sizeof(data));
 		memset(&buttons, 0x00, sizeof(buttons));
 
-		buttons.buttonid = 0;
+		buttons.buttonID = 0;
 		buttons.flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 		buttons.text = "Ok";
 
@@ -172,7 +172,7 @@ namespace SnowPME::Graphics {
 
 		int buttonSelected = -1;
 
-		if (SDL_ShowMessageBox(&data, &buttonSelected) == 0) {
+		if (SDL_ShowMessageBox(&data, &buttonSelected) == true) {
 			Logger::Error(error);
 			Logger::Error("Failed to open messagebox; " + std::string(SDL_GetError()));
 		}
@@ -184,11 +184,11 @@ namespace SnowPME::Graphics {
 
 		buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 		buttonData[0].text = "Yes";
-		buttonData[0].buttonid = 1;
+		buttonData[0].buttonID = 1;
 
 		buttonData[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
 		buttonData[1].text = "No";
-		buttonData[1].buttonid = 0;
+		buttonData[1].buttonID = 0;
 
 		SDL_MessageBoxData data;
 		memset(&data, 0, sizeof(SDL_MessageBoxData));
@@ -202,7 +202,7 @@ namespace SnowPME::Graphics {
 		data.colorScheme = nullptr;
 
 		int buttonSelected = -1;
-		if (SDL_ShowMessageBox(&data, &buttonSelected) == 0) {
+		if (SDL_ShowMessageBox(&data, &buttonSelected) == true) {
 			Logger::Info(message);
 			Logger::Error("Failed to open messagebox; " + std::string(SDL_GetError()));
 		}
@@ -211,7 +211,7 @@ namespace SnowPME::Graphics {
 	}
 
 	Window::~Window() {
-		if(this->glCtx != nullptr) SDL_GL_DeleteContext(this->glCtx);
+		if(this->glCtx != nullptr) SDL_GL_DestroyContext(this->glCtx);
 		if(this->sdlWindow != nullptr) SDL_DestroyWindow(this->sdlWindow);
 		SDL_Quit();
 	}

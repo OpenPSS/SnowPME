@@ -4,6 +4,6 @@
 #include <imgui.h>
 #include <backends/imgui_impl_gles2.h>
 #include <backends/imgui_impl_opengl2.h>
-#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_sdl3.h>
 
 #endif

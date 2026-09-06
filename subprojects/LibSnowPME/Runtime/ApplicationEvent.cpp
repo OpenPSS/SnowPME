@@ -2,7 +2,10 @@
 #include <Runtime/ApplicationEvent.hpp>
 #include <Runtime/Application.hpp>
 #include <memory>
-#include <SDL2/SDL.h>
+
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_events.h>
+
 #include <LibImGui.hpp>
 
 using namespace Shared::Debug;
@@ -61,42 +64,39 @@ namespace SnowPME::Runtime {
 			if (SDL_PollEvent(&sdlEvt)) {
 
 				switch (sdlEvt.type) {
-				case SDL_QUIT:
+				case SDL_EVENT_QUIT:
 					Application::RunPssTerminate();
 					state.Closed = true;
 					exit(0);
 					break;
-				case SDL_WINDOWEVENT:
-					if (sdlEvt.window.windowID != SDL_GetWindowID(window)) break;
-
-					switch (sdlEvt.window.event) {
-					case SDL_WINDOWEVENT_MAXIMIZED:
-						state.Maximized = true;
-						break;
-					case SDL_WINDOWEVENT_RESIZED:
-						state.Maximized = false;
-						break;
-					case SDL_WINDOWEVENT_MINIMIZED:
-						state.Minmized = true;
-						state.Restored = false;
-						break;
-					case SDL_WINDOWEVENT_RESTORED:
-						state.Restored = true;
-						state.Minmized = false;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						state.Focused = false;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						state.Focused = true;
-					}
-
+				case SDL_EVENT_WINDOW_MAXIMIZED:
+					state.Maximized = true;
 					break;
-				case SDL_MOUSEBUTTONDOWN:
+				case SDL_EVENT_WINDOW_RESIZED:
+					state.Maximized = false;
+					break;
+				case SDL_EVENT_WINDOW_MINIMIZED:
+					state.Minmized = true;
+					state.Restored = false;
+					break;
+				case SDL_EVENT_WINDOW_RESTORED:
+					state.Restored = true;
+					state.Minmized = false;
+					break;
+				case SDL_EVENT_WINDOW_FOCUS_LOST:
+					state.Focused = false;
+					break;
+				case SDL_EVENT_WINDOW_FOCUS_GAINED:
+					state.Focused = true;
+					break;
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
 					state.TouchActive = true;
-					SDL_GetMouseState(&state.TouchX, &state.TouchY);
+					float x, y;
+					SDL_GetMouseState(&x, &y);
+					state.TouchX = x;
+					state.TouchY = y;
 					break;
-				case SDL_MOUSEBUTTONUP:
+				case SDL_EVENT_MOUSE_BUTTON_UP:
 					state.TouchActive = false;
 					break;
 				}

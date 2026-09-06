@@ -10,7 +10,7 @@
 #include <unordered_map>
 
 // using sdl font library
-#include <SDL2/SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 namespace Sce::Pss::Core::Imaging::Impl {
 	class FontImpl : public Errorable {
@@ -29,6 +29,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 		void initFonts();
 
+		static void encodeUnicodeCharacter(char* buffer, int* offset, wchar_t ucs_character);
 		int lookupAndLoadFile(const std::string& ttfFilepath);
 		int loadFontFile(const std::string& ttfFilepath);
 		int loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize);

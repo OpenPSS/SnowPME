@@ -15,7 +15,7 @@ namespace Sce::Pss::Core::Io {
 
 			virtual bool IsDirectory() = 0;
 			virtual bool IsEncrypted() = 0;
-			virtual bool IsOpen() = 0;
+			virtual bool IsOpen() = 0;	
 
 	};
 }

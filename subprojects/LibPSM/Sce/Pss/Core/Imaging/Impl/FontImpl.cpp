@@ -11,9 +11,11 @@
 #include <Sce/Pss/Core/Imaging/CharMetrics.hpp>
 #include <Sce/Pss/Core/Imaging/Impl/EmbeddedFonts.h>
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <LibShared.hpp>
 
+#include <locale>
+#include <codecvt>
 
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Imaging;
@@ -22,6 +24,56 @@ using namespace Shared;
 namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
 	bool FontImpl::isInitalized = false;
+
+
+	void FontImpl::encodeUnicodeCharacter(char* buffer, int* offset, wchar_t ucs_character)
+	{
+		if (ucs_character <= 0x7F)
+		{
+			// Plain single-byte ASCII.
+			buffer[(*offset)++] = (char)ucs_character;
+		}
+		else if (ucs_character <= 0x7FF)
+		{
+			// Two bytes.
+			buffer[(*offset)++] = 0xC0 | (ucs_character >> 6);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
+		}
+		else if (ucs_character <= 0xFFFF)
+		{
+			// Three bytes.
+			buffer[(*offset)++] = 0xE0 | (ucs_character >> 12);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
+		}
+		else if (ucs_character <= 0x1FFFFF)
+		{
+			// Four bytes.
+			buffer[(*offset)++] = 0xF0 | (ucs_character >> 18);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
+		}
+		else if (ucs_character <= 0x3FFFFFF)
+		{
+			// Five bytes.
+			buffer[(*offset)++] = 0xF8 | (ucs_character >> 24);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 18) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
+		}
+		else if (ucs_character <= 0x7FFFFFFF)
+		{
+			// Six bytes.
+			buffer[(*offset)++] = 0xFC | (ucs_character >> 30);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 24) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 18) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
+			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
+		}
+	}
 
 	void FontImpl::initFonts() {
 		if (!FontImpl::isInitalized) {
@@ -81,10 +133,10 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		this->name = fontName;
 
 		if (lookupAndLoadFile(filenames.fontFile1) == PSM_ERROR_NO_ERROR) {
-			SDL_RWops* ops = SDL_RWFromConstMem(ttfFileBuffer, ttfFileSize);
+			SDL_IOStream* ops = SDL_IOFromConstMem(ttfFileBuffer, ttfFileSize);
 			if (ops == nullptr) this->SetError(PSM_ERROR_FONT_SYSTEM);
 
-			this->font = TTF_OpenFontRW(ops, 1, this->fontSize);
+			this->font = TTF_OpenFontIO(ops, 1, this->fontSize);
 			if (this->font == nullptr) this->SetError(PSM_ERROR_FONT_SYSTEM);
 		}
 		
@@ -104,9 +156,20 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return PSM_ERROR_FONT_SYSTEM;
 	}
 
+
 	int FontImpl::GetCharSize(std::wstring& text, int* width) {
 		if (this->font != nullptr) {
-			if (TTF_MeasureUNICODE(this->font, reinterpret_cast<const uint16_t*>(text.c_str()), Config::ScreenWidth(0), width, nullptr) == 0) {
+			std::vector<char> buf((text.length() * 6) + 1);
+
+			int offset = 0;
+			for (int i = 0; i < text.length(); i++) {
+				encodeUnicodeCharacter(buf.data(), &offset, text[i]);
+				ASSERT(offset < buf.size()-6);
+			}
+
+			size_t w = 0;
+			if (TTF_MeasureString(this->font, buf.data(), Config::ScreenWidth(0), 0, nullptr, &w) == true) {
+				*width = static_cast<int>(w);
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {
@@ -131,7 +194,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 				// and has two extra values in Metrics (HorizontalBaring values) 
 				// which is not implemented correctly.
 
-				if (TTF_GlyphMetrics(this->font, static_cast<uint16_t>(chr), &x, &width, &y, &height, &advance) == 0) {
+				if (TTF_GetGlyphMetrics(this->font, static_cast<uint16_t>(chr), &x, &width, &y, &height, &advance) == true) {
 					memset(&metrics[i], 0, sizeof(CharMetrics));
 					
 
@@ -154,9 +217,9 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 	int FontImpl::GetMetrics(FontMetrics& metrics) {
 		if (this->font != nullptr) {
-			metrics.Ascent = TTF_FontAscent(this->font);
-			metrics.Descent = TTF_FontDescent(this->font);
-			metrics.Leading = TTF_FontLineSkip(this->font);
+			metrics.Ascent = TTF_GetFontAscent(this->font);
+			metrics.Descent = TTF_GetFontDescent(this->font);
+			metrics.Leading = TTF_GetFontLineSkip(this->font);
 			return PSM_ERROR_NO_ERROR;
 		}
 

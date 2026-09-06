@@ -10,11 +10,9 @@
 	path = subprojects/LibMonoBridge
 	url = https://github.com/OpenPSS/LibMonoBridge.git
 	branch = main
-[submodule "subprojects/LibSDL2-Static/SDL2"]
-	path = subprojects/LibSDL2-Static/SDL2
+[submodule "subprojects/LibSDL3-Static/SDL"]
+	path = subprojects/LibSDL3-Static/SDL
 	url = https://github.com/libsdl-org/SDL.git
-	branch = SDL2
-[submodule "subprojects/LibSDL2-Static/SDL_ttf"]
-	path = subprojects/LibSDL2-Static/SDL2_ttf
+[submodule "subprojects/LibSDL3-Static/SDL_ttf"]
+	path = subprojects/LibSDL3-Static/SDL_ttf
 	url = https://github.com/libsdl-org/SDL_ttf.git
-	branch = SDL2
