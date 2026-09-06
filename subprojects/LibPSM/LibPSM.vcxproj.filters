@@ -282,6 +282,12 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\CGX\Varying.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmFreeList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmFree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sce\Pss\Core\Audio\Bgm.hpp">
@@ -849,6 +855,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sce\Pss\Core\Graphics\CGX\Varying.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmFreeList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmFree.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmObjectType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
 
 #include <mono/mono.h>
 #include <LibShared.hpp>
@@ -24,36 +25,43 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmGraphicsContext::Create(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode, int* result) {
 		LOG_FUNCTION();
-		
-		if (GraphicsContext::UniqueObjectExists()) {
-			return PSM_ERROR_GRAPHICS_SYSTEM;
+		if (Thread::IsMainThread()) {
+			PsmFreeList::FreeHeldObjects();
+
+			if (GraphicsContext::UniqueObjectExists()) {
+				return PSM_ERROR_GRAPHICS_SYSTEM;
+			}
+
+			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
+			RETURN_ERRORABLE_PSMOBJECT(ctx, GraphicsContext);
+
+			GraphicsContext::MakeUniqueObject(ctx);
+
+			*result = ctx->Handle();
+
+			return PSM_ERROR_NO_ERROR;
+
 		}
-
-		std::shared_ptr<GraphicsContext> ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
-		RETURN_ERRORABLE_PSMOBJECT(ctx, GraphicsContext);
-
-		GraphicsContext::MakeUniqueObject(ctx);
-
-		*result = ctx->Handle();
-		
-		return PSM_ERROR_NO_ERROR;
+		else
+		{
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 	}
 	int PsmGraphicsContext::Delete(int handle){
 		LOG_FUNCTION();
 
-		if (Thread::IsMainThread()) {
-			if (!GraphicsContext::UniqueObjectExists()) return PSM_ERROR_GRAPHICS_SYSTEM;
+		if (GraphicsContext::CheckHandle(handle)) {
+			if (Thread::IsMainThread()) {
+				PsmFreeList::FreeHeldObjects();
 
+				GraphicsContext::DeleteGraphicsCtx();
+				return PSM_ERROR_NO_ERROR;
+			}
+			PsmFreeList::AddEntry(PsmObjectType::GraphicsContext, handle);
+		}
+		return PSM_ERROR_NO_ERROR;
 
-			GraphicsContext::Delete(GraphicsContext::UniqueObject());
-			GraphicsContext::MakeLocalObject();
-			
-			return PSM_ERROR_NO_ERROR;
-		}
-		else {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
-			return PSM_ERROR_COMMON_INVALID_OPERATION;
-		}
 	}
 	int PsmGraphicsContext::Update(int handle, GraphicsUpdate update, GraphicsState* state, MonoArray* handles) {
 		LOG_FUNCTION();
@@ -80,6 +88,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (Thread::IsMainThread()) {
+			PsmFreeList::FreeHeldObjects();
 			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 

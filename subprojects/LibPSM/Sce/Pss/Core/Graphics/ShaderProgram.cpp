@@ -215,7 +215,7 @@ namespace Sce::Pss::Core::Graphics {
 
 			if (entry->Attributes.size() > 0) {
 				Attributes.resize(entry->Attributes.size());
-				for (int i = 0; i < entry->Attributes.size(); i++) {
+				for (size_t i = 0; i < entry->Attributes.size(); i++) {
 					Attributes[i].Index = i;
 					Attributes[i].Name = entry->Attributes[i].Name;
 					Attributes[i].ESize = entry->Attributes[i].Size;

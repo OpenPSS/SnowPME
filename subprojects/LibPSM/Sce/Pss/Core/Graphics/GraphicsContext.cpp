@@ -682,7 +682,6 @@ namespace Sce::Pss::Core::Graphics {
 		UNIMPLEMENTED();
 	}
 
-
 	int GraphicsContext::DrawArrays(DrawMode mode, int first, int count, int repeat)
 	{
 		handleNotifyDataFlags();
@@ -956,5 +955,23 @@ namespace Sce::Pss::Core::Graphics {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			this->SetError(PSM_ERROR_COMMON_INVALID_OPERATION);
 		}
+	}
+
+	void GraphicsContext::DeleteGraphicsCtx()
+	{
+		if (GraphicsContext::UniqueObjectExists()) {
+			GraphicsContext::Delete(GraphicsContext::UniqueObject());
+			GraphicsContext::MakeLocalObject();
+
+			Handles<ShaderProgram>::DeleteEverything();
+			Handles<VertexBuffer>::DeleteEverything();
+			Handles<PixelBuffer>::DeleteEverything();
+			Handles<FrameBuffer>::DeleteEverything();
+		}
+	}
+
+	GraphicsContext::~GraphicsContext()
+	{
+		GraphicsContext::DeleteGraphicsCtx();
 	}
 }

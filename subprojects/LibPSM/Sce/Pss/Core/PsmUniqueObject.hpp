@@ -11,7 +11,7 @@ namespace Sce::Pss::Core {
 	private:
 		inline static std::shared_ptr<T> uObjPtr = nullptr;
 	public:
-		~PsmUniqueObject() {
+		virtual ~PsmUniqueObject() {
 			if (PsmUniqueObject<T>::UniqueObjectExists()) {
 				PsmUniqueObject<T>::MakeLocalObject();
 			}

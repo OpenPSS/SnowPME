@@ -29,6 +29,7 @@ namespace Sce::Pss::Core::Graphics {
 			return this->handle;
 		}
 
+
 		GLenum GLHandle = 0;
 
 

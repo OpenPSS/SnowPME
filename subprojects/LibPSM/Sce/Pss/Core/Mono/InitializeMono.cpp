@@ -15,8 +15,9 @@
 #include <LibShared.hpp>
 #include <LibMonoBridge.hpp>
 #include <mono/mono.h>
-
 #include <csetjmp>
+#include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
 
 using namespace LibCXML;
 
@@ -29,6 +30,7 @@ using namespace Sce::Pss::Core::Threading;
 using namespace Sce::Pss::Core::Memory;
 using namespace Sce::Pss::Core::Environment;
 using namespace Sce::Pss::Core::Services;
+using namespace Sce::Pss::Core::Graphics;
 
 namespace Sce::Pss::Core::Mono {
 
@@ -39,12 +41,15 @@ namespace Sce::Pss::Core::Mono {
 		mono_exit(0);
 
 		psmDomain = nullptr;
+
+		PsmFreeList::FreeHeldObjects();
 		InitalizeCsharp::Terminate();
 
 		HeapAllocator::MakeLocalObject();
 		AppInfo::MakeLocalObject();
 		Sandbox::MakeLocalObject();
 		InAppPurchaseDialog::MakeLocalObject();
+		GraphicsContext::MakeLocalObject();
 
 		return PSM_ERROR_NO_ERROR;
 	}

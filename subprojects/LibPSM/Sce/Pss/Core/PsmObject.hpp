@@ -14,8 +14,8 @@
 #include <cstdint>
 #include <cmath>
 
-#define TO_BITS(x) ((x) * 8.0)
-#define TO_BYTES(x) ((x) / 8.0)
+#define TO_BITS(x) static_cast<int>((x) * 8.0)
+#define TO_BYTES(x) static_cast<int>((x) / 8.0)
 #define TO_BYTES_C(x) static_cast<int>(ceil((static_cast<double>(x)) / 8.0))
 
 namespace Sce::Pss::Core {
@@ -26,7 +26,14 @@ namespace Sce::Pss::Core {
 	protected:
 		int handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		PsmObject() = default;
-		~PsmObject() {
+		virtual ~PsmObject() {
+			if (this->handle == Sce::Pss::Core::System::Handles<T>::NoHandle) return;
+			if (this->handle == Sce::Pss::Core::System::Handles<T>::NoRawHandle) return;
+
+			if (Sce::Pss::Core::System::Handles<T>::IsValid(this->handle)) {
+				Sce::Pss::Core::System::Handles<T>::Delete(this->handle);
+			}
+
 			this->handle = Sce::Pss::Core::System::Handles<T>::NoHandle;
 		};
 		
@@ -41,6 +48,10 @@ namespace Sce::Pss::Core {
 		static std::shared_ptr<T> Create(std::shared_ptr<T> obj) {
 			std::reinterpret_pointer_cast<T>(obj)->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
 			return obj;
+		}
+
+		static void Delete(int handle) {
+			T::Delete(Sce::Pss::Core::System::Handles<T>::Get(handle));
 		}
 
 		static void Delete(std::shared_ptr<T> obj) {

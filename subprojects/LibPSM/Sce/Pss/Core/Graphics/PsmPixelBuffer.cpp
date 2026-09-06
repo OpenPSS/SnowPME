@@ -7,6 +7,7 @@
 #include <Sce/Pss/Core/Threading/Thread.hpp>
 #include <Sce/Pss/Core/Error.hpp>
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
 
 #include <LibShared.hpp>
 
@@ -22,6 +23,8 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (Thread::IsMainThread()) {
 			if (GraphicsContext::UniqueObject() != nullptr) {
+				PsmFreeList::FreeHeldObjects();
+
 				switch (type) {
 				case PixelBufferType::Texture2D:
 					*result = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new Texture2D(width, height, mipmap, format, option, option2)))->Handle();
@@ -50,18 +53,14 @@ namespace Sce::Pss::Core::Graphics {
 	}
 	int PsmPixelBuffer::Delete(int handle) {
 		LOG_FUNCTION();
-
-		if (Thread::IsMainThread()) {
-			if (!PixelBuffer::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
-			PixelBuffer::Delete(handle);
-
-			return PSM_ERROR_NO_ERROR;
+		if (PixelBuffer::CheckHandle(handle)) {
+			if (Thread::IsMainThread()) {
+				PixelBuffer::Delete(handle);
+				return PSM_ERROR_NO_ERROR;
+			}
+			PsmFreeList::AddEntry(PsmObjectType::Texture, handle);
 		}
-		else
-		{
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
-			return PSM_ERROR_COMMON_INVALID_OPERATION;
-		}
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmPixelBuffer::AddRef(int handle) {
 		LOG_FUNCTION();

@@ -9,6 +9,8 @@
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Io/IoCall.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
+#include <Sce/Pss/Core/Graphics/GraphicsContext.hpp>
 
 #include <iostream>
 #include <string>
@@ -29,58 +31,74 @@ namespace Sce::Pss::Core::Graphics {
 	int PsmShaderProgram::FromFile(MonoString* vpFileName, MonoString* fpFileName, MonoString* constKeys, int* constVals, int *result) {
 		LOG_FUNCTION();
 		
-		if (!Thread::IsMainThread()) {
-			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n"); 
-			return PSM_ERROR_COMMON_INVALID_OPERATION;
-		};
+		if (Thread::IsMainThread()) {
+			if (GraphicsContext::UniqueObjectExists()) {
+				PsmFreeList::FreeHeldObjects();
 
-		char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
-		char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
+				char* vertexProgramFileName = mono_string_to_utf8(vpFileName);
+				char* fragmentProgramFileName = mono_string_to_utf8(fpFileName);
 
-		ShaderProgram* prog = ShaderProgram::Create(vertexProgramFileName, fragmentProgramFileName);
-		RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
+				ShaderProgram* prog = ShaderProgram::Create(vertexProgramFileName, fragmentProgramFileName);
+				RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
 
-		*result = prog->Handle();
+				*result = prog->Handle();
 
-		if (vertexProgramFileName != nullptr) mono_free(vertexProgramFileName);
-		if (fragmentProgramFileName != nullptr) mono_free(fragmentProgramFileName);
+				if (vertexProgramFileName != nullptr) mono_free(vertexProgramFileName);
+				if (fragmentProgramFileName != nullptr) mono_free(fragmentProgramFileName);
 
-		return PSM_ERROR_NO_ERROR;
-	}
-	int PsmShaderProgram::FromImage(MonoArray* vpFileImage, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
-		LOG_FUNCTION();
-
-		if (!Thread::IsMainThread()) {
+				return PSM_ERROR_NO_ERROR;
+			}
+			else {
+				return PSM_ERROR_GRAPHICS_SYSTEM;
+			}
+		}
+		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 			return PSM_ERROR_COMMON_INVALID_OPERATION;
 		}
 
-		size_t vertexShaderSz = MonoUtil::MonoArrayBytesLength(vpFileImage);
-		size_t fragmentShaderSz = MonoUtil::MonoArrayBytesLength(fpFileImage);
-		uint8_t* vertexShaderBuf = nullptr;
-		uint8_t* fragmentShaderBuf = nullptr;
 
-		if(vpFileImage != nullptr) vertexShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(vpFileImage, 1, 0));
-		if(fpFileImage != nullptr) fragmentShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(fpFileImage, 1, 0));
+	}
+	int PsmShaderProgram::FromImage(MonoArray* vpFileImage, MonoArray* fpFileImage, MonoArray* constKeys, int* constVals, int *result){
+		LOG_FUNCTION();
 
-		ShaderProgram* prog = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
-		RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
+		if (Thread::IsMainThread()) {
+			if (GraphicsContext::UniqueObjectExists()) {
+				PsmFreeList::FreeHeldObjects();
 
-		*result = prog->Handle();
-		return PSM_ERROR_NO_ERROR;
+				size_t vertexShaderSz = MonoUtil::MonoArrayBytesLength(vpFileImage);
+				size_t fragmentShaderSz = MonoUtil::MonoArrayBytesLength(fpFileImage);
+				uint8_t* vertexShaderBuf = nullptr;
+				uint8_t* fragmentShaderBuf = nullptr;
+
+				if (vpFileImage != nullptr) vertexShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(vpFileImage, 1, 0));
+				if (fpFileImage != nullptr) fragmentShaderBuf = reinterpret_cast<uint8_t*>(mono_array_addr_with_size(fpFileImage, 1, 0));
+
+				ShaderProgram* prog = ShaderProgram::Create(vertexShaderBuf, vertexShaderSz, fragmentShaderBuf, fragmentShaderSz);
+				RETURN_ERRORABLE_PSMOBJECT(prog, ShaderProgram);
+
+				*result = prog->Handle();
+				return PSM_ERROR_NO_ERROR;
+			}
+			else {
+				return PSM_ERROR_GRAPHICS_SYSTEM;
+			}
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
+
 	}
 	int PsmShaderProgram::Delete(int handle){
 		LOG_FUNCTION();
 
 		if (ShaderProgram::CheckHandle(handle)) {
-	
-			if (!Thread::IsMainThread()) {
+			if (Thread::IsMainThread()) {
 				ShaderProgram::Delete(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
-			else {
-				UNIMPLEMENTED_MSG("Trying to delete ShaderProgram cross-thread (TODO: Notify main thread?)");
-			}
+			PsmFreeList::AddEntry(PsmObjectType::Shader, handle);
 		}
 		return PSM_ERROR_NO_ERROR;
 
@@ -94,6 +112,7 @@ namespace Sce::Pss::Core::Graphics {
 		ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
 		return PSM_ERROR_COMMON_INVALID_OPERATION;
 	}
+
 	int PsmShaderProgram::GetUniformCount(int handle, int* result) {
 		LOG_FUNCTION();
 		if (!Thread::IsMainThread()) {

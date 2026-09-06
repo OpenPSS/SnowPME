@@ -82,6 +82,8 @@
     <ClCompile Include="Sce\Pss\Core\Graphics\Texture2D.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\TextureCube.cpp" />
     <ClCompile Include="Sce\Pss\Core\Memory\HeapAllocator.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmFree.cpp" />
+    <ClCompile Include="Sce\Pss\Core\Graphics\PsmFreeList.cpp" />
     <ClCompile Include="Sce\Pss\Core\Timing\DeltaTime.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\GraphicsContext.cpp" />
     <ClCompile Include="Sce\Pss\Core\Graphics\OpenGL.cpp" />
@@ -253,6 +255,9 @@
     <ClInclude Include="Sce\Pss\Core\Services\InAppPurchaseTicketType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\Network.hpp" />
     <ClInclude Include="Sce\Pss\Core\Services\NetworkRequest.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmFree.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmFreeList.hpp" />
+    <ClInclude Include="Sce\Pss\Core\Graphics\PsmObjectType.hpp" />
     <ClInclude Include="Sce\Pss\Core\Timing\Time.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector2.hpp" />
     <ClInclude Include="Sce\Pss\Core\Vector3.hpp" />

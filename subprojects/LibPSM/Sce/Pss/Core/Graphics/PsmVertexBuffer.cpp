@@ -8,6 +8,8 @@
 #include <Sce/Pss/Core/ExceptionInfo.hpp>
 #include <Sce/Pss/Core/Mono/MonoUtil.hpp>
 
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
+
 #include <LibShared.hpp>
 
 using namespace Shared::Debug;
@@ -22,14 +24,25 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmVertexBuffer::Create(int vertexCount, int indexCount, int instDivisor, int option, MonoArray* formats, int* result) {
 		LOG_FUNCTION();
+		if (Thread::IsMainThread()) {
+			if (GraphicsContext::UniqueObjectExists()) {
+				PsmFreeList::FreeHeldObjects();
 
-		VertexFormat* vertexFormats = reinterpret_cast<VertexFormat*>(mono_array_addr_with_size(formats, 1, 0));
-		int vertexFormatsLen = mono_array_length(formats);
-		VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, vertexFormats, vertexFormatsLen, instDivisor, option);
-		RETURN_ERRORABLE_PSMOBJECT(vtxBuf, VertexBuffer);
+				VertexFormat* vertexFormats = reinterpret_cast<VertexFormat*>(mono_array_addr_with_size(formats, 1, 0));
+				int vertexFormatsLen = mono_array_length(formats);
+				VertexBuffer* vtxBuf = VertexBuffer::Create(vertexCount, indexCount, vertexFormats, vertexFormatsLen, instDivisor, option);
+				RETURN_ERRORABLE_PSMOBJECT(vtxBuf, VertexBuffer);
 
-		*result = vtxBuf->Handle();
-
+				*result = vtxBuf->Handle();
+			}
+			else {
+				return PSM_ERROR_GRAPHICS_SYSTEM;
+			}
+		}
+		else {
+			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
+			return PSM_ERROR_COMMON_INVALID_OPERATION;
+		}
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmVertexBuffer::Delete(int handle) {
@@ -40,10 +53,7 @@ namespace Sce::Pss::Core::Graphics {
 				VertexBuffer::Delete(handle);
 				return PSM_ERROR_NO_ERROR;
 			}
-			else {
-				VertexBuffer::Delete(handle); // this is unsafe ...
-				UNIMPLEMENTED_MSG("Trying to delete VertexBuffer cross-thread (TODO: Notify main thread?)");
-			}
+			PsmFreeList::AddEntry(PsmObjectType::VertexBuffer, handle);
 		}
 		return PSM_ERROR_NO_ERROR;
 	}

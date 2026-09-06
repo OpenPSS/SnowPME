@@ -18,9 +18,15 @@ namespace Sce::Pss::Core::System {
 		}
 
 		static bool IsValid(int handle) {
-			if (handle <= Handles::NoHandle) return false;
-			if (rawHandles.contains(handle)) return true;
-			else return handles.contains(handle);
+			if (handle >= NoHandle && handle <= lastHandle) {
+				if (handle == NoHandle) return false;
+				return handles.contains(handle);
+			}
+			else if (handle >= NoRawHandle && handle <= lastRawHandle) {
+				if (handle == NoRawHandle) return false;
+				return rawHandles.contains(handle);
+			}
+			return false;
 		}
 
 		static int Create(T* address) {
@@ -59,6 +65,18 @@ namespace Sce::Pss::Core::System {
 			return nullptr;
 		}
 
+		static void DeleteEverything() {
+			for (auto& handle : rawHandles) {
+				T::Delete(handle.first);
+			}
+			for (auto& handle : handles) {
+				T::Delete(handle.first);
+			}
+
+			handles.clear();
+			rawHandles.clear();
+		}
+
 		static void Delete(int handle) {
 			if (rawHandles.contains(handle)) rawHandles.erase(handle);
 			if (handles.contains(handle)) handles.erase(handle);
@@ -68,7 +86,6 @@ namespace Sce::Pss::Core::System {
 		static inline std::unordered_map<int, T*> rawHandles;
 		static inline std::atomic<int> lastHandle = Handles::NoHandle;
 		static inline std::atomic<int> lastRawHandle = Handles::NoRawHandle;
-
 	};
 
 }

@@ -89,7 +89,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	public:
 		GraphicsContext(int width, int height, PixelFormat colorFormat, PixelFormat depthFormat, MultiSampleMode multiSampleMode);
-		~GraphicsContext() = default;
+		~GraphicsContext() override;
 		int ActiveStateChanged(bool state);
 		
 		int EndFrame();
@@ -122,6 +122,8 @@ namespace Sce::Pss::Core::Graphics {
 		int UpdateHandles(GraphicsUpdate notifyFlag);
 		int UpdateState(GraphicsUpdate notifyFlag, GraphicsState* state);
 		int UpdateMultiScreen(GraphicsUpdate notifyFlag, GraphicsState* state, char unk); // TODO: work out this unknown parameter;
+	
+		static void DeleteGraphicsCtx();
 	};
 }
 

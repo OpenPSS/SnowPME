@@ -46,8 +46,10 @@ namespace Sce::Pss::Core {
 
 		static bool Delete(int handle) {
 			if (T::CheckHandle(handle)) {
+
 				T* obj = dynamic_cast<T*>(T::LookupHandle(handle));
-				return T::Delete(obj);
+				
+				return Delete(obj);
 			}
 
 			return false;

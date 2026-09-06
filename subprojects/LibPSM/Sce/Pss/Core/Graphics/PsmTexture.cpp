@@ -10,6 +10,7 @@
 #include <Sce/Pss/Core/Graphics/TextureCube.hpp>
 #include <Sce/Pss/Core/System/Handles.hpp>
 #include <Sce/Pss/Core/Graphics/Texture.hpp>
+#include <Sce/Pss/Core/Graphics/PsmFreeList.hpp>
 
 #include <LibShared.hpp>
 
@@ -29,40 +30,41 @@ namespace Sce::Pss::Core::Graphics {
 
 	int PsmTexture::FromFile(PixelBufferType type, MonoString* fileName, bool mipmap, PixelFormat format, int* result) {
 		LOG_FUNCTION();
-		LOCK_GUARD_STATIC();
 
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::UniqueObject() == nullptr)
-				return PSM_ERROR_GRAPHICS_SYSTEM;
-			
-			std::string filename;
-			MonoUtil::MonoStringToStdString(fileName, filename);
+			if (GraphicsContext::UniqueObjectExists())
+			{
+				PsmFreeList::FreeHeldObjects();
 
-			if (type == PixelBufferType::Texture2D) {
-				Logger::Debug("type is PixelBufferType::Texture2D");
-				
-				PixelBuffer* tex2d = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
-				RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
+				std::string filename;
+				MonoUtil::MonoStringToStdString(fileName, filename);
 
-				*result = tex2d->Handle();
-				return PSM_ERROR_NO_ERROR;
-			}
-			else if(type == PixelBufferType::TextureCube) {
-				Logger::Debug("type is PixelBufferType::TextureCube");
-				PixelBuffer* texCube = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
+				if (type == PixelBufferType::Texture2D) {
+					Logger::Debug("type is PixelBufferType::Texture2D");
 
-				RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
-				*result = texCube->Handle();
+					PixelBuffer* tex2d = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new Texture2D(filename, mipmap, format)));
+					RETURN_ERRORABLE_PSMOBJECT(tex2d, PixelBuffer);
 
-				return PSM_ERROR_NO_ERROR;
+					*result = tex2d->Handle();
+					return PSM_ERROR_NO_ERROR;
+				}
+				else if (type == PixelBufferType::TextureCube) {
+					Logger::Debug("type is PixelBufferType::TextureCube");
+					PixelBuffer* texCube = PixelBuffer::Create(dynamic_cast<PixelBuffer*>(new TextureCube(filename, mipmap, format)));
+
+					RETURN_ERRORABLE_PSMOBJECT(texCube, PixelBuffer);
+					*result = texCube->Handle();
+
+					return PSM_ERROR_NO_ERROR;
+				}
+				else {
+					UNIMPLEMENTED();
+				}
+				return PSM_ERROR_INVALID_PARAMETER;
 			}
 			else {
-				UNIMPLEMENTED();
+				return PSM_ERROR_GRAPHICS_SYSTEM;
 			}
-			
-
-			return PSM_ERROR_INVALID_PARAMETER;
-
 		}
 		else {
 			ExceptionInfo::AddMessage("Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads\n");
@@ -71,7 +73,16 @@ namespace Sce::Pss::Core::Graphics {
 		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmTexture::FromImage(PixelBufferType type, MonoArray* fileImage, bool mipmap, PixelFormat format, int* result) {
-		UNIMPLEMENTED();
+		LOG_FUNCTION();
+
+		if (Thread::IsMainThread()) {
+			if (GraphicsContext::UniqueObjectExists())
+			{
+				PsmFreeList::FreeHeldObjects();
+				UNIMPLEMENTED();
+			}
+		}
+		return PSM_ERROR_NO_ERROR;
 	}
 	int PsmTexture::SetFilter(int handle, TextureFilter* filter) {
 		UNIMPLEMENTED();
