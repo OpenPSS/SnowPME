@@ -13,8 +13,8 @@ pss_mono_subdir = join_paths(meson.current_source_dir(), 'pss-mono')
 pss_mono_configure = join_paths(pss_mono_subdir, 'configure')
 
 
-r = run_command(['sh', '-c', 'cd pss-mono; ./autogen.sh NOCONFIGURE=1'], check: true)
-
+#r = run_command(['sh', '-c', 'cd pss-mono; ./autogen.sh NOCONFIGURE=1'], check: true)
+r = run_command(['autoreconf', '-ivf', pss_mono_subdir], check: true)
 
 p = mod.add_project(pss_mono_configure,
     configure_options : [
