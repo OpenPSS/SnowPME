@@ -13,6 +13,8 @@
 [submodule "subprojects/LibSDL3-Static/SDL"]
 	path = subprojects/LibSDL3-Static/SDL
 	url = https://github.com/libsdl-org/SDL.git
+	branch = main
 [submodule "subprojects/LibSDL3-Static/SDL_ttf"]
 	path = subprojects/LibSDL3-Static/SDL_ttf
 	url = https://github.com/libsdl-org/SDL_ttf.git
+	branch = main

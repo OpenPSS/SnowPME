@@ -6,8 +6,8 @@ project('LibImGui', 'cpp',
 cpp = meson.get_compiler('cpp')
 dirbase = meson.current_source_dir()
 
-LibSDL3_dep = cpp.find_library('SDL3', required: true)
-LibOpenGL_dep = cpp.find_library('GL', required: true)
+LibSDL3_dep = dependency('SDL3', required: true, static: true)
+LibOpenGL_dep = dependency('GL', required: true)
 
 LibGLAD = subproject('LibGLAD')
 LibGLAD_dep = LibGLAD.get_variable('LibGLAD_dep')

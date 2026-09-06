@@ -29,7 +29,7 @@ LibCXML_dep = LibCXML.get_variable('libCXML_dep')
 LibMonoBridge_dep = LibMonoBridge.get_variable('libMonoBridge_dep')
 LibPssMono_dep = LibPssMono.get_variable('LibPssMono_dep')
 GlobalInclude_dep = GlobalInclude.get_variable('GlobalInclude_dep')
-LibSDL3ttf_dep = cpp.find_library('SDL3_ttf', required: true)
+LibSDL3ttf_dep = dependency('SDL3_ttf', required: true, static: true)
 
 LibPSM = static_library('PSM',
 	'Sce/Pss/Core/Audio/Bgm.cpp',
