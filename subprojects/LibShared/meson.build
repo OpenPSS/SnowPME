@@ -19,6 +19,7 @@ libShared = static_library('Shared',
 	'Debug/Logger.cpp',
 	'Debug/Assert.cpp',
 	'String/Path.cpp',
+	'String/Encoding.cpp'
 	'String/Format.cpp',
 	'Windowing/CallbackBase.cpp',
 	'Windowing/Event.cpp',

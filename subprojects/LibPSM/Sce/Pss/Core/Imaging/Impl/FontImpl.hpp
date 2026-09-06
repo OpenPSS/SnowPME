@@ -29,7 +29,6 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 		void initFonts();
 
-		static void encodeUnicodeCharacter(char* buffer, int* offset, wchar_t ucs_character);
 		int lookupAndLoadFile(const std::string& ttfFilepath);
 		int loadFontFile(const std::string& ttfFilepath);
 		int loadFontMemory(const uint8_t* ttfBuffer, const size_t ttfSize);
@@ -38,9 +37,9 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 		int GetMetrics(Sce::Pss::Core::Imaging::FontMetrics& metrics);
 		int GetStyle(Sce::Pss::Core::Imaging::FontStyle& style);
-		int GetCharSize(std::wstring& text, int* width);
+		int GetCharSize(std::u16string& text, int* width);
 		int GetSize(size_t* size);
-		int GetCharMetrics(std::wstring& text, Sce::Pss::Core::Imaging::CharMetrics* metrics);
+		int GetCharMetrics(std::u16string& text, Sce::Pss::Core::Imaging::CharMetrics* metrics);
 
 		FontImpl(const std::string& fontName, const FontFileNames& filenames, int size, FontStyle style);
 		~FontImpl();

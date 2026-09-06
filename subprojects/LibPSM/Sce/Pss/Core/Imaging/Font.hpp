@@ -27,8 +27,8 @@ namespace Sce::Pss::Core::Imaging {
 		int Size();
 		FontMetrics Metrics();
 
-		int GetTextWidth(const std::wstring& text, int offset, int len, int* width);
-		int GetTextMetrics(const std::wstring& text, int offset, int len, CharMetrics* charMetrics);
+		int GetTextWidth(const std::u16string& text, int offset, int len, int* width);
+		int GetTextMetrics(const std::u16string& text, int offset, int len, CharMetrics* charMetrics);
 
 		static int NewFromFilenameSizeStyle(MonoString* filename, int size, FontStyle style, int *handle);
 		static int NewFromAliasSizeStyle(FontAlias alias, int size, FontStyle style, int *handle);

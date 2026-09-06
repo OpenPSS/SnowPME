@@ -25,56 +25,6 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	std::unordered_map<std::string, FontFileNames> FontImpl::entries;
 	bool FontImpl::isInitalized = false;
 
-
-	void FontImpl::encodeUnicodeCharacter(char* buffer, int* offset, wchar_t ucs_character)
-	{
-		if (ucs_character <= 0x7F)
-		{
-			// Plain single-byte ASCII.
-			buffer[(*offset)++] = (char)ucs_character;
-		}
-		else if (ucs_character <= 0x7FF)
-		{
-			// Two bytes.
-			buffer[(*offset)++] = 0xC0 | (ucs_character >> 6);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
-		}
-		else if (ucs_character <= 0xFFFF)
-		{
-			// Three bytes.
-			buffer[(*offset)++] = 0xE0 | (ucs_character >> 12);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
-		}
-		else if (ucs_character <= 0x1FFFFF)
-		{
-			// Four bytes.
-			buffer[(*offset)++] = 0xF0 | (ucs_character >> 18);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
-		}
-		else if (ucs_character <= 0x3FFFFFF)
-		{
-			// Five bytes.
-			buffer[(*offset)++] = 0xF8 | (ucs_character >> 24);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 18) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
-		}
-		else if (ucs_character <= 0x7FFFFFFF)
-		{
-			// Six bytes.
-			buffer[(*offset)++] = 0xFC | (ucs_character >> 30);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 24) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 18) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 12) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 6) & 0x3F);
-			buffer[(*offset)++] = 0x80 | ((ucs_character >> 0) & 0x3F);
-		}
-	}
-
 	void FontImpl::initFonts() {
 		if (!FontImpl::isInitalized) {
 			TTF_Init();
@@ -157,19 +107,11 @@ namespace Sce::Pss::Core::Imaging::Impl {
 	}
 
 
-	int FontImpl::GetCharSize(std::wstring& text, int* width) {
+	int FontImpl::GetCharSize(std::u16string& text, int* width) {
 		if (this->font != nullptr) {
-			std::vector<char> buf((text.length() * 6) + 1);
-
-			int offset = 0;
-			for (int i = 0; i < text.length(); i++) {
-				encodeUnicodeCharacter(buf.data(), &offset, text[i]);
-				ASSERT(offset < buf.size()-6);
-			}
-
-			size_t w = 0;
-			if (TTF_MeasureString(this->font, buf.data(), 0, Config::ScreenWidth(0), nullptr, &w) == true) {
-				*width = static_cast<int>(w);
+			
+			std::u8string txt = String::Encoding::Utf16ToUtf8(text);
+			if (TTF_MeasureString(this->font, (const char*)txt.c_str(), txt.length(), Config::ScreenWidth(0), width, nullptr) == true) {
 				return PSM_ERROR_NO_ERROR;
 			}
 			else {
@@ -181,20 +123,21 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 
 
-	int FontImpl::GetCharMetrics(std::wstring& text, CharMetrics* metrics) {
+	int FontImpl::GetCharMetrics(std::u16string& text, CharMetrics* metrics) {
 		if (this->font != nullptr) {
 			Logger::Warn("Font Glyph Metrics are not completely accurate yet!!");
 			int x, width, y, height, advance = 0;
 
+
 			for (size_t i = 0; i < text.length(); i++) {
-				wchar_t chr = text[i];
+				char16_t chr = text[i];
 
 				// TODO: 
 				// PSM returns floats for all of these values
 				// and has two extra values in Metrics (HorizontalBaring values) 
 				// which is not implemented correctly.
 
-				if (TTF_GetGlyphMetrics(this->font, static_cast<uint16_t>(chr), &x, &width, &y, &height, &advance) == true) {
+				if (TTF_GetGlyphMetrics(this->font, static_cast<uint32_t>(chr), &x, &width, &y, &height, &advance) == true) {
 					memset(&metrics[i], 0, sizeof(CharMetrics));
 					
 

@@ -57,13 +57,13 @@ namespace Sce::Pss::Core::Imaging {
 		return metrics;
 	}
 
-	int Font::GetTextWidth(const std::wstring& text, int offset, int len, int* width) {
+	int Font::GetTextWidth(const std::u16string& text, int offset, int len, int* width) {
 		if (offset < 0 || offset > text.length() || len < 0 || (offset + len) > text.length())
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (this->fontImpl != nullptr) {
 			// get formatted text
-			std::wstring fmtText = text.substr(offset, len);
+			std::u16string fmtText = text.substr(offset, len);
 			
 			// calculate the width of the string in pixels.
 			return this->fontImpl->GetCharSize(fmtText, width);
@@ -71,13 +71,13 @@ namespace Sce::Pss::Core::Imaging {
 		return PSM_ERROR_FONT_SYSTEM;
 	}
 
-	int Font::GetTextMetrics(const std::wstring& text, int offset, int len, CharMetrics* charMetrics) {
+	int Font::GetTextMetrics(const std::u16string& text, int offset, int len, CharMetrics* charMetrics) {
 		if (offset < 0 || offset > text.length() || len < 0 || offset + len > static_cast<int>(text.length()))
 			return PSM_ERROR_COMMON_ARGUMENT_OUT_OF_RANGE;
 
 		if (this->fontImpl != nullptr) {
 			// get formatted text
-			std::wstring fmtText = text.substr(offset, len);
+			std::u16string fmtText = text.substr(offset, len);
 
 			// calculate the width of the string in pixels.
 			return this->fontImpl->GetCharMetrics(fmtText, charMetrics);
@@ -183,10 +183,11 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// get text
-		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
+		char16_t* chkTxt = reinterpret_cast<char16_t*>(mono_string_chars(text));
 		int chkLen = mono_string_length(text);
 
-		const std::wstring textForCalc(chkTxt, chkLen);
+		
+		const std::u16string textForCalc(chkTxt, chkLen);
 		return Font::LookupHandle(handle)->GetTextWidth(textForCalc, offset, len, width);
 	}
 	int Font::GetTextMetricsNative(int handle, MonoString* text, int offset, int len, MonoArray* charMetrics) {
@@ -199,9 +200,9 @@ namespace Sce::Pss::Core::Imaging {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// get text
-		wchar_t* chkTxt = reinterpret_cast<wchar_t*>(mono_string_chars(text));
+		char16_t* chkTxt = reinterpret_cast<char16_t*>(mono_string_chars(text));
 		int chkLen = mono_string_length(text);
-		const std::wstring textForCalc(chkTxt, chkLen);
+		const std::u16string textForCalc(chkTxt, chkLen);
 
 		// get metrics
 		CharMetrics* metrics = reinterpret_cast<CharMetrics*>(mono_array_addr_with_size(charMetrics, sizeof(CharMetrics), 0));

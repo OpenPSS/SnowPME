@@ -66,6 +66,9 @@
     <ClCompile Include="Crypto\sha256.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="String\Encoding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug\Logger.hpp">
@@ -147,6 +150,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SdkVersion.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="String\Encoding.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

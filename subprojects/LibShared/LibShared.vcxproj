@@ -21,6 +21,7 @@
     <ClCompile Include="Debug\Assert.cpp" />
     <ClCompile Include="Debug\Logger.cpp" />
     <ClCompile Include="Package\PackageExtractor.cpp" />
+    <ClCompile Include="String\Encoding.cpp" />
     <ClCompile Include="Windowing\CallbackBase.cpp" />
     <ClCompile Include="Windowing\Event.cpp" />
     <ClCompile Include="Windowing\WindowControl.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="Package\PackageError.hpp" />
     <ClInclude Include="Package\PackageExtractor.hpp" />
     <ClInclude Include="SdkVersion.hpp" />
+    <ClInclude Include="String\Encoding.hpp" />
     <ClInclude Include="Windowing\CallbackBase.hpp" />
     <ClInclude Include="Windowing\Capture.hpp" />
     <ClInclude Include="Windowing\EventType.hpp" />

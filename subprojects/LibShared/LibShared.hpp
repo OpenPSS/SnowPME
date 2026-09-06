@@ -6,6 +6,7 @@
 #include <Debug/Assert.hpp>
 #include <String/Format.hpp>
 #include <String/Path.hpp>
+#include <String/Encoding.hpp>
 #include <Windowing/Event.hpp>
 #include <Windowing/EventType.hpp>
 #include <Windowing/EventQueue.hpp>
