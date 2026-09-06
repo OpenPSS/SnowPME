@@ -17,7 +17,7 @@ include_libs = include_directories('.')
 libImGui = static_library('ImGui',
 	'backends/imgui_impl_opengl2.cpp',
 	'backends/imgui_impl_gles2.cpp',
-	'backends/imgui_impl_sdl2.cpp',
+	'backends/imgui_impl_sdl3.cpp',
 	'imgui_draw.cpp',
 	'imgui_tables.cpp',
 	'imgui_widgets.cpp',

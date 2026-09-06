@@ -2,6 +2,7 @@
 Win32/*
 Debug/*
 build/*
+build_*
 builddir/*
 
 SnowPME/dll/*
