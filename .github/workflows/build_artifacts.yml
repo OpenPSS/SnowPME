@@ -12,10 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
-          fetch-depth: 0
-          submodules: true
+          submodules: recursive
       - uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: build-essential meson ninja-build libsdl3-dev libsdl3-ttf-dev mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev automake libtool-bin gettext libc++-dev libc-dev
@@ -58,10 +57,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
         with:
-          fetch-depth: 0
-          submodules: true
+          submodules: recursive
       - name: Run Developer Command Prompt
         uses: TheMrMilchmann/setup-msvc-dev@v3.0.1
         with:

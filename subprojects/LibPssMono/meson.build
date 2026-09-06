@@ -9,18 +9,31 @@ bin_dir = meson.current_build_dir()
 mono_include_dir = include_directories('include')
 
 # generate configure script
-pss_mono_autogen = join_paths(meson.current_source_dir(), 'pss-mono/autogen.sh')
-pss_mono_autogen_dep = custom_target('pss-mono-autogen', command: [pss_mono_autogen], output: 'pss-mono/configure')
+pss_mono_subdir = join_paths(meson.current_source_dir(), 'pss-mono')
+pss_mono_configure = join_paths(pss_mono_subdir, 'configure')
+pss_mono_autogen = join_paths(pss_mono_subdir, 'autogen.sh')
 
-p = mod.add_project('pss-mono/configure',
+#pss_mono_autogen_dep = custom_target(
+#            'pss_autogen', 
+#            command: pss_mono_autogen,
+#           # build_subdir: pss_mono_subdir,
+#            build_always_stale: true,
+#            output: ['configure']
+#)
+
+r = run_command(['cd', 'pss-mono'])
+r = run_command(['./autogen.sh'])
+
+
+p = mod.add_project(pss_mono_configure,
     configure_options : [
         '--enable-pss',
     ],
 	env: {
 		'CFLAGS': '-O2'
 	},
-    depends: [ 
-        pss_mono_autogen_dep 
+    depends: [
+        pss_mono_autogen_dep
     ],
 	verbose: true
 )
