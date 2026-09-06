@@ -78,9 +78,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v7
       - name: Install PlayStation Mobile SDK
         uses: OpenPSS/install-psm-sdk@v1
         with:
