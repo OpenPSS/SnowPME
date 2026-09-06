@@ -254,7 +254,7 @@ namespace Sce::Pss::Core::Graphics {
 
 	void ShaderProgram::RemapParameters(ProgramUniform* entry, int total)
 	{
-		int ii = 0;
+		//int ii = 0;
 		//result = entry;
 
 		if (total <= 0) return;
@@ -277,6 +277,7 @@ namespace Sce::Pss::Core::Graphics {
 			if (entry[i].Binding < 0 || entry[i].Binding >= total)
 			{
 				// find first not -1
+				int ii = 0;
 				for (; entry[ii].Index >= 0; ++ii)
 
 				//result = (6 * ii); wtf seemingly not used?
@@ -649,6 +650,7 @@ namespace Sce::Pss::Core::Graphics {
 			this->Attributes[bindIndex].Binding = index;
 
 		if (index >= this->AttributeCount()) {
+			//this->Attributes.emplace_back(); ?
 			UNIMPLEMENTED_MSG("Allocate more bindings or something");
 		}
 
