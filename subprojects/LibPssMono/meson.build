@@ -9,7 +9,7 @@ bin_dir = meson.current_build_dir()
 mono_include_dir = include_directories('include')
 
 # generate configure script
-run_command('pss-mono/autogen.sh')
+run_command('./autogen.sh', check: true)
 
 p = mod.add_project('pss-mono/configure',
     configure_options : [

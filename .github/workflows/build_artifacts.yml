@@ -31,8 +31,7 @@ jobs:
             
             cd subprojects/LibSDL3-Static/SDL
             cmake -B build 
-            cd build
-            sudo make install -j$(nproc)            
+            sudo cmake --install build
       - name: Build SDL3_ttf
         run: |
             sudo apt-get update -y
@@ -43,8 +42,7 @@ jobs:
             
             cd subprojects/LibSDL3-Static/SDL_ttf
             cmake -B build 
-            cd build
-            sudo make install -j$(nproc)            
+            sudo cmake --install build          
       - name: Meson Build
         run: |
             meson setup build
