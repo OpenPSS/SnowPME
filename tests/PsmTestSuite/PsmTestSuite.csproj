@@ -43,6 +43,7 @@
     <Compile Include="tests\BackgroundMusic.cs" />
     <Compile Include="tests\OpenWebsite.cs" />
     <Compile Include="tests\FontInfo.cs" />
+    <Compile Include="tests\GraphicsObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -60,8 +61,10 @@
   <ItemGroup>
     <Content Include="assets\test.mp3" />
     <Content Include="results\BackgroundMusic.result" />
-    <Content Include="results\DeviceID-VITA.result" />
+    <Content Include="results\FontInfo-WINDOWS.result" />
+    <Content Include="results\GraphicsObject.result" />
     <Content Include="results\PM.result" />
+    <Content Include="results\DeviceID-VITA.result" />
     <Content Include="results\DeviceID-ANDROID.result" />
   </ItemGroup>
 </Project>

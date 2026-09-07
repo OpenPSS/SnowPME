@@ -89,8 +89,6 @@ namespace Sce::Pss::Core::Imaging {
 		ImageSize size;
 		this->imageImpl->GetExtent(&size);
 
-		Logger::Debug("Filling range: " + std::to_string(rect.X) + "," + std::to_string(rect.Y) + "[" + std::to_string(rect.Width) + "x" + std::to_string(rect.Height) + "] with color: " + Format::Hex(color.ToUint32()));
-
 		// caluclate absolute position on image.
 
 		if (rect.X <= 0)

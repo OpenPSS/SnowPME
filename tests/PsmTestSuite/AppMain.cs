@@ -18,6 +18,7 @@ namespace PsmTestSuite
 			tests.Add(new PM());
 			tests.Add(new BackgroundMusic());
 			tests.Add(new FontInfo());
+			tests.Add(new GraphicsObject());
 			
 			// require user interaction: 
 			

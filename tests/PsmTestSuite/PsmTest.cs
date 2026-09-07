@@ -12,6 +12,11 @@ namespace PsmTestSuite
 	public abstract class PsmTest
 	{		
 		private List<string> results = new List<string>(); 
+		public string[] Results {  
+			get{
+				return results.ToArray();	
+			}
+		}
 		
 		/*
 		 * Fingerprint SDK Target
@@ -53,6 +58,18 @@ namespace PsmTestSuite
 				return name;
 			}
 		}
+		
+		public void TryThing(string thing, Action action) {
+			try {
+				action();
+				Log (thing+": SUCCESS");
+			}
+			catch (Exception e) {
+				Log(thing+": FAIL, "+e.Message);		
+			}
+		}
+		
+		
 		public string TestFile {
 			get{
 				string fnamePlatform = TestName+"-"+PsmPlatform+".result";
@@ -60,13 +77,13 @@ namespace PsmTestSuite
 				string applicationResults = "/Application/results/";
 				string documents = "/Documents/";
 				
-				string path = applicationResults+fnamePlatform;
+				string path = Path.Combine(applicationResults,fnamePlatform);
 				if(File.Exists(path)) return path;
 				
-				path = applicationResults+fname;
+				path = Path.Combine (applicationResults, fname);
 				if(File.Exists(path)) return path;
 				
-				path = documents+fnamePlatform;
+				path = Path.Combine(documents, fnamePlatform);
 				
 				return path;
 			}
@@ -75,6 +92,7 @@ namespace PsmTestSuite
 		public abstract void Run();
 		
 		public virtual void Log(string msg) {
+			msg = msg.Replace("\n", "").Replace("\r", "");
 			this.results.Add(msg);
 			Console.WriteLine(TestName+": "+msg);
 		}
@@ -107,26 +125,44 @@ namespace PsmTestSuite
 		public virtual void Record() {
 			Console.WriteLine ("Recording: " + TestName);
 			TryRun();
-			File.WriteAllLines(TestFile, results.ToArray()); 
+			File.WriteAllText(TestFile, String.Join("\n", Results)); 
 		}
 		public virtual bool Check(){
 			bool valid = true;
 			
 			if(!File.Exists(TestFile)) {
-				this.Record();
+			this.Record();
 			}
 			
-			String[] expected = File.ReadAllLines(TestFile);
+			String[] expected = File.ReadAllText(TestFile).Split('\n');
 			TryRun();
 			
-			if(results.Count != expected.Length) {
+			if(Results.Length != expected.Length) {
 				valid = false;
+				
+				for(int i = 0; i < Math.Max(Results.Length, expected.Length); i++) {
+					if(i >= expected.Length) {
+						Console.WriteLine ("err ("+i.ToString()+"): got: "+Results[i]+", expected: nothing");
+						continue;
+					}
+					else if(i >= Results.Length) {
+						Console.WriteLine ("err ("+i.ToString()+"): got: nothing, expected: "+expected[i]);
+						continue;
+					}
+					else if(expected[i] != Results[i]) {
+						Console.WriteLine("err ("+i.ToString()+"): got: "+Results[i] + ", expected: "+expected[i]);
+						continue;
+					}
+				}
+				
+				File.WriteAllText (TestFile, String.Join ("\n", Results));
+								
 				Console.WriteLine ("err: expected result is not expacted length ("+expected.Length.ToString()+")");
 			}
 			else {
-				for(int i = 0; i < results.Count; i++){
-					if(expected[i] != results[i]) {
-						Console.WriteLine("err: got: "+results[i] + ", expected: "+expected[i]);
+				for(int i = 0; i < Results.Length; i++){
+					if(expected[i] != Results[i]) {
+						Console.WriteLine("err ("+i.ToString()+"): got: "+Results[i] + ", expected: "+expected[i]);
 						valid = false;
 					}
 				}

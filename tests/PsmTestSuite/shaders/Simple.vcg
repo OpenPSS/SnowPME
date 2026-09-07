@@ -1,4 +1,3 @@
-
 void main( float4 in a_Position  : POSITION,
 		   float4 out v_Position : POSITION,
 		   uniform float4x4 WorldViewProj

@@ -1,0 +1,31 @@
+Create without initalizing graphics ...
+Shader without gCTX: FAIL, native function returned error.
+Vertex without gCTX: FAIL, native function returned error.
+Texture without gCTX: FAIL, native function returned error.
+gCTX Create: SUCCESS
+Create after initalizing graphics ...
+Shader with gCTX: SUCCESS
+Vertex with gCTX: SUCCESS
+Texture with gCTX: SUCCESS
+Cross thread create ...
+Cross-Thread Shader with gCTX: FAIL, Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads
+Cross-Thread Vertex with gCTX: FAIL, Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads
+Cross-Thread Texture with gCTX: FAIL, Sce.PlayStation.Core.Graphics cannot be accessed by multiple theads
+Delete gCTX ..: SUCCESS
+gCTX Re-Create: SUCCESS
+Create Shader ..: SUCCESS
+Create Vertex ..: SUCCESS
+Create Texture ..: SUCCESS
+Delete gCTX with dangling objects : SUCCESS
+Access dangling program: FAIL, native function returned error.
+Access dangling vertex: FAIL, native function returned error.
+Access dangling texture: FAIL, native function returned error.
+gCTX Re-Create: SUCCESS
+Create Shader ..: SUCCESS
+Create Vertex ..: SUCCESS
+Create Texture ..: SUCCESS
+Delete gCTX cross-thread: SUCCESS
+Access dangling program: SUCCESS
+gCTX Re-Create: SUCCESS
+Access dangling program: FAIL, native function returned error.
+gCTX Delete: SUCCESS
