@@ -145,7 +145,7 @@ namespace Sce::Pss::Core::Audio {
 		if (Bgm::CheckHandle(handle)) {
 			std::shared_ptr<Bgm> bgm = Bgm::LookupHandle(handle);
 			if (bgm == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
-
+			
 			Bgm::Delete(bgm);
 		}
 

@@ -59,6 +59,7 @@ namespace Sce::Pss::Core::Audio::Impl {
 
 		bool Looping();
 		int SetLooping(bool val);
+
 	};
 };
 

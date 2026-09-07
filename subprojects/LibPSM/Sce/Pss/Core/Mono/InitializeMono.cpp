@@ -38,9 +38,10 @@ namespace Sce::Pss::Core::Mono {
 	MonoDomain* InitializeMono::psmDomain = nullptr;
 
 	int InitializeMono::ScePsmTerminate() {
-		mono_exit(0);
 
-		psmDomain = nullptr;
+		mono_runtime_quit();
+		//mono_threads_set_shutting_down();
+		//mono_exit(0);
 
 		PsmFreeList::FreeHeldObjects();
 		InitalizeCsharp::Terminate();
@@ -50,6 +51,8 @@ namespace Sce::Pss::Core::Mono {
 		Sandbox::MakeLocalObject();
 		InAppPurchaseDialog::MakeLocalObject();
 		GraphicsContext::MakeLocalObject();
+
+		psmDomain = nullptr;
 
 		return PSM_ERROR_NO_ERROR;
 	}
