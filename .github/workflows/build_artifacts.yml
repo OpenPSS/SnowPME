@@ -85,9 +85,17 @@ jobs:
             version: 2.00.00
       - name: Add MSBuild to Path
         run: $Env:WinDir+"\Microsoft.NET\Framework\v4.0.30319" >> $Env:GITHUB_PATH
-      - name: MSBuild PsmTestSuite
+      - name: MSBuild Psm Test Suite
         run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
-      - name: Upload Test Binaries
+        
+      - name: Sign Psm Test Suite
+        uses: OpenPSS/sign-psm-application@v1
+        with:
+            input: tests/build/PsmTestSuite-unsigned
+            output: tests/build/PsmTestSuite-signed
+            content_id: UM0999-UNIT00009_00-0000000000000000
+            
+      - name: Upload Psm Test Suite
         uses: actions/upload-artifact@v7
         with:
           name: SnowPME-Tests
@@ -168,7 +176,7 @@ jobs:
             path: Release
             merge-multiple: true
       - name: Checkout uploadtool
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
             repository: 'probonopd/uploadtool'
             path: 'uploadtool'
