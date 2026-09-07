@@ -50,7 +50,7 @@ jobs:
             cd build
             ninja
       - name: Upload Binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: SnowPME-Linux
           path: build/SnowPME
@@ -69,7 +69,7 @@ jobs:
       - name: MSBuild SnowPME.sln
         run: MSBuild SnowPME.sln /p:Configuration=Release_Static /p:Platform=Win32 /m:$Env:NUMBER_OF_PROCESSORS
       - name: Upload Binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: SnowPME-Windows
           path: build/SnowPME/bin/SnowPME.exe
@@ -88,7 +88,7 @@ jobs:
       - name: MSBuild PsmTestSuite
         run: MSBuild tests/PsmTestSuite.sln /p:Configuration=Release /p:Platform="Any CPU"
       - name: Upload Test Binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: SnowPME-Tests
           path: tests/build
@@ -141,7 +141,7 @@ jobs:
         continue-on-error: true
         run: ./SnowPME -g psm/PsmTestSuite-unsigned
       - name: Upload Test Logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
             name: SnowPME-TestLogs-Windows
             path: psm/PsmTestSuite-unsigned/Documents
