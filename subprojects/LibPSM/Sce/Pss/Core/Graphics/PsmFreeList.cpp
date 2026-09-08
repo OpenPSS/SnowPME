@@ -32,7 +32,6 @@ namespace Sce::Pss::Core::Graphics {
 			case PsmObjectType::GraphicsContext:
 				Logger::Debug("Freeing GraphicsContext: "+Format::Hex(free.Handle()));
 				GraphicsContext::Delete(free.Handle());
-				GraphicsContext::MakeLocalObject();
 				break;
 			case PsmObjectType::FrameBuffer:
 				Logger::Debug("Freeing FrameBuffer: " + Format::Hex(free.Handle()));
