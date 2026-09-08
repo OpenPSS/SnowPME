@@ -14,17 +14,13 @@ namespace Sce::Pss::Core {
 	std::string ExceptionInfo::GetMessage() {
 		LOG_FUNCTION();
 
-		std::string oldMsg = message;
-		message = "";
+		Logger::Debug("Exception read .. " + message);
 
-		return oldMsg;
+		return message;
 	}
 	
 	std::string ExceptionInfo::GetParam() {
 		LOG_FUNCTION();
-
-		std::string oldParam = param;
-		param = "";
 
 		return param;
 	}
@@ -32,18 +28,17 @@ namespace Sce::Pss::Core {
 	void ExceptionInfo::SetMessage(const std::string& str) {
 		LOG_FUNCTION();
 
-		ExceptionInfo::message = str + "\n";
+		ExceptionInfo::message = str;
 	}
 
 	void ExceptionInfo::SetMessage(const char* str) {
 		LOG_FUNCTION();
 
 		if (str != nullptr) {
-			ExceptionInfo::message = std::string(str, strlen(str)) + "\n";
-
+			ExceptionInfo::message = std::string(str, strlen(str));
 		}
 		else {
-			ExceptionInfo::message = std::string();
+			ExceptionInfo::message = "";
 		}
 	}
 
@@ -60,12 +55,15 @@ namespace Sce::Pss::Core {
 			ExceptionInfo::param = std::string(param, strlen(str));
 		}
 		else {
-			ExceptionInfo::param = std::string();
+			ExceptionInfo::param = "";
 		}
 	}
 
 	void ExceptionInfo::AddMessage(const std::string& str) {
 		LOG_FUNCTION();
+
+		Logger::Debug("Exception write .. " + str);
+		Logger::Error(str);
 
 		if (ExceptionInfo::message.empty())
 			ExceptionInfo::message += "\n";

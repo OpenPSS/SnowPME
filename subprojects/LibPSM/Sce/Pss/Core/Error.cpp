@@ -11,23 +11,23 @@ namespace Sce::Pss::Core {
 	int Error::GetExceptionInfoNative(MonoString* message, MonoString* param) {
 		LOG_FUNCTION();
 		
-		const char* exceptionMessage = ExceptionInfo::GetMessage().c_str();
-		const char* exceptionParam = ExceptionInfo::GetParam().c_str();
+		std::string exceptionMessage = ExceptionInfo::GetMessage();
+		std::string exceptionParam = ExceptionInfo::GetParam();
 
 		MonoString* monoStrMessage = nullptr;
 		MonoString* monoStrParam = nullptr;
 
 		// add exception message;
-		if (exceptionMessage[0] != 0x00) {
+		if (!exceptionMessage.empty()) {
 			MonoDomain* domain = mono_domain_get();
-			monoStrMessage = mono_string_new(domain, exceptionMessage);
+			monoStrMessage = mono_string_new(domain, exceptionMessage.c_str());
 		}
 		mono_gc_wbarrier_generic_store(message, (MonoObject*)monoStrMessage);
 
 		// add exeception param;
-		if (exceptionParam[0] != 0x00) {
+		if (!exceptionParam.empty()) {
 			MonoDomain* domain = mono_domain_get();
-			monoStrParam = mono_string_new(domain, exceptionMessage);
+			monoStrParam = mono_string_new(domain, exceptionMessage.c_str());
 		}
 		mono_gc_wbarrier_generic_store(param, (MonoObject*)monoStrParam);
 

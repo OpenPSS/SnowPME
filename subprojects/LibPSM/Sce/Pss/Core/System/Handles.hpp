@@ -70,10 +70,13 @@ namespace Sce::Pss::Core::System {
 		}
 
 		static void DeleteEverything() {
-			for (auto& handle : rawHandles) {
+			auto rawHandlesCpy = rawHandles;
+			auto handlesCpy = handles;
+
+			for (auto& handle : rawHandlesCpy) {
 				T::Delete(handle.first);
 			}
-			for (auto& handle : handles) {
+			for (auto& handle : handlesCpy) {
 				T::Delete(handle.first);
 			}
 

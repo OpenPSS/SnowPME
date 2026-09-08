@@ -22,7 +22,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (Thread::IsMainThread()) {
-			if (GraphicsContext::UniqueObject() != nullptr) {
+			if (GraphicsContext::UniqueObjectExists()) {
 				PsmFreeList::FreeHeldObjects();
 
 				switch (type) {
