@@ -39,22 +39,22 @@ namespace Sce::Pss::Core {
 		
 	public:
 		
-		template <typename... Args, typename = T> static std::shared_ptr<T> Create(Args&&... args) {
+		template <typename... Args, typename = T> static T* Create(Args&&... args) {
 			std::shared_ptr<T> obj = std::make_shared<T>(std::forward<Args>(args)...);
 			obj->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
-			return obj;
+			return obj.get();
 		}
 
-		static std::shared_ptr<T> Create(std::shared_ptr<T> obj) {
+		static T* Create(std::shared_ptr<T> obj) {
 			std::reinterpret_pointer_cast<T>(obj)->handle = Sce::Pss::Core::System::Handles<T>::Create(obj);
-			return obj;
+			return obj.get();
 		}
 
 		static void Delete(int handle) {
 			T::Delete(LookupHandle(handle));
 		}
 
-		static void Delete(std::shared_ptr<T> obj) {
+		static void Delete(T* obj) {
 			if (CheckHandle(obj->Handle()))
 				Sce::Pss::Core::System::Handles<T>::Delete(obj->Handle());
 			obj = nullptr;
@@ -64,11 +64,11 @@ namespace Sce::Pss::Core {
 			return this->handle;
 		}
 
-		static std::shared_ptr<T> LookupHandle(uint64_t handle) {
+		static T* LookupHandle(uint64_t handle) {
 			return T::LookupHandle(static_cast<int>(handle));
 		}
 
-		static std::shared_ptr<T> LookupHandle(int handle) {
+		static T* LookupHandle(int handle) {
 			return Sce::Pss::Core::System::Handles<T>::Get(handle);
 		}
 

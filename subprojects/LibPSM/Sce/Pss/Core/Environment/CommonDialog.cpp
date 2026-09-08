@@ -122,7 +122,7 @@ namespace Sce::Pss::Core::Environment {
 		LOG_FUNCTION();
 		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
+		CommonDialog* cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		CommonDialog::Delete(cDialog);
@@ -142,7 +142,7 @@ namespace Sce::Pss::Core::Environment {
 		if (cmdArg == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
+		CommonDialog* cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		// I think this is actually a bit inaccurate for some InAppPurchaseDialog commands ...
@@ -163,7 +163,7 @@ namespace Sce::Pss::Core::Environment {
 		LOG_FUNCTION();
 		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
+		CommonDialog* cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		int err = cDialog->CheckAbort();
@@ -179,7 +179,7 @@ namespace Sce::Pss::Core::Environment {
 		if (state == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
+		CommonDialog* cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		int err = cDialog->CheckState();
@@ -197,7 +197,7 @@ namespace Sce::Pss::Core::Environment {
 		if (type >= CommonDialogType::PhotoImportDialog) return PSM_ERROR_COMMON_ARGUMENT;
 		if (!CommonDialog::CheckHandle(handle)) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
-		std::shared_ptr<CommonDialog> cDialog = CommonDialog::LookupHandle(handle);
+		CommonDialog* cDialog = CommonDialog::LookupHandle(handle);
 		if (cDialog == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 

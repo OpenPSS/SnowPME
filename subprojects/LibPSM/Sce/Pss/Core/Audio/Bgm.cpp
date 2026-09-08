@@ -157,8 +157,8 @@ namespace Sce::Pss::Core::Audio {
 			return PSM_ERROR_COMMON_ARGUMENT_NULL;
 
 		if (Bgm::CheckHandle(handle)) {
-			std::shared_ptr<Bgm> bgm = Bgm::LookupHandle(handle);
-			std::shared_ptr<BgmPlayer> player = BgmPlayer::Create(std::weak_ptr<Bgm>(bgm));
+			Bgm* bgm = Bgm::LookupHandle(handle);
+			BgmPlayer* player = BgmPlayer::Create(handle);
 			RETURN_ERRORABLE_PSMOBJECT(player, BgmPlayer);
 
 			*playerHandle = player->Handle();

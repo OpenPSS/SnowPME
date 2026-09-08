@@ -12,6 +12,14 @@ using namespace Shared::String;
 
 namespace Sce::Pss::Core::System {
 	template<typename T> class Handles {
+	private:
+		static std::weak_ptr<T> getWeak(int handle) {
+			if (Handles::IsValid(handle)) {
+				return std::dynamic_pointer_cast<T>(handles[handle]);
+			}
+			return nullptr;
+		}
+
 	public:
 		static const int NoHandle = 0x00;
 		static const int NoRawHandle = (INT_MAX / 2);
@@ -46,13 +54,13 @@ namespace Sce::Pss::Core::System {
 			return handle;
 		}
 
-		static std::shared_ptr<T> Get(uint64_t handle) {
+		static T* Get(uint64_t handle) {
 			return Handles<T>::Get(static_cast<int>(handle));
 		}
 
-		static std::shared_ptr<T> Get(int handle) {
+		static T* Get(int handle) {
 			if (Handles::IsValid(handle)) {
-				return std::dynamic_pointer_cast<T>(handles[handle]);
+				return std::dynamic_pointer_cast<T>(handles[handle]).get();
 			}
 			return nullptr;
 		}
