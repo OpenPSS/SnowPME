@@ -8,7 +8,6 @@ using namespace Shared::Debug;
 
 namespace Sce::Pss::Core::Environment {
 
-
 	int Log::WriteNative(MonoString* text){
 		LOG_FUNCTION();
 
@@ -23,6 +22,7 @@ namespace Sce::Pss::Core::Environment {
 
 		return PSM_ERROR_NO_ERROR;
 	}
+
 	int Log::GetNeedsRedirection(){
 		LOG_FUNCTION();
 

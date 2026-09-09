@@ -32,11 +32,10 @@ namespace Sce::Pss::Core::Graphics {
 				return PSM_ERROR_GRAPHICS_SYSTEM;
 			}
 
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
+			GraphicsContext* ctx = GraphicsContext::Create(width, height, colorFormat, depthFormat, multiSampleMode);
 			RETURN_ERRORABLE_PSMOBJECT(ctx, GraphicsContext);
 
-			GraphicsContext::MakeUniqueObject(ctx);
-
+			GraphicsContext::MakeUniqueObject(ctx->Handle());
 			*result = ctx->Handle();
 
 			return PSM_ERROR_NO_ERROR;
@@ -67,7 +66,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (Thread::IsMainThread()) {
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			GraphicsContext* ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			int* handlesList = nullptr;
@@ -89,7 +88,7 @@ namespace Sce::Pss::Core::Graphics {
 
 		if (Thread::IsMainThread()) {
 			PsmFreeList::FreeHeldObjects();
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			GraphicsContext* ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			ctx->SwapBuffers();
@@ -106,7 +105,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (Thread::IsMainThread()) {
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			GraphicsContext* ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			return ctx->Clear(mask);
@@ -120,7 +119,7 @@ namespace Sce::Pss::Core::Graphics {
 		LOG_FUNCTION();
 
 		if (Thread::IsMainThread()) {
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			GraphicsContext* ctx = GraphicsContext::UniqueObject();
 			if (ctx == nullptr) return PSM_ERROR_GRAPHICS_SYSTEM;
 
 			return ctx->DrawArrays(mode, first, count, repeat);

@@ -41,13 +41,13 @@ namespace Sce::Pss::Core::Memory {
 #define CUSTOM_ALLOC() \
 void* operator new(size_t size) { \
 	LOG_FUNCTION(); \
-	std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject(); \
+	Sce::Pss::Core::Memory::HeapAllocator* alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject(); \
 	return alloc->sce_psm_malloc(size); \
 } \
 \
 void operator delete(void* ptr) { \
 	LOG_FUNCTION(); \
-	std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject(); \
+	Sce::Pss::Core::Memory::HeapAllocator* alloc = Sce::Pss::Core::Memory::HeapAllocator::UniqueObject(); \
 	alloc->sce_psm_free(ptr); \
 } 
 

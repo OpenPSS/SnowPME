@@ -122,7 +122,7 @@ namespace Sce::Pss::Core::Services {
 			uint32_t _ = 0;
 			err = IoCall::PsmFileGetSize(handle, &size);
 			if (err == PSM_ERROR_NO_ERROR) {
-				std::shared_ptr<HeapAllocator> heapAllocator = HeapAllocator::UniqueObject();
+				HeapAllocator* heapAllocator = HeapAllocator::UniqueObject();
 				uint8_t* data = reinterpret_cast<uint8_t*>(heapAllocator->sce_psm_malloc(size));
 				if (data != nullptr) {
 					err = IoCall::PsmFileRead(handle, data, size, &_);
@@ -204,7 +204,7 @@ namespace Sce::Pss::Core::Services {
 
 
 	InAppPurchaseInventory::InAppPurchaseInventory() {
-		std::shared_ptr<AppInfo> appInfo = AppInfo::UniqueObject();
+		AppInfo* appInfo = AppInfo::UniqueObject();
 
 		for (ProductInfo metadata : appInfo->ProductList) {
 			InAppPurchaseProduct* product = new InAppPurchaseProduct();

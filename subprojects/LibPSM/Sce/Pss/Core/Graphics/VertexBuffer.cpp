@@ -751,7 +751,7 @@ namespace Sce::Pss::Core::Graphics {
 			}
 
 			// Get graphics context
-			std::shared_ptr<GraphicsContext> ctx = GraphicsContext::UniqueObject();
+			GraphicsContext* ctx = GraphicsContext::UniqueObject();
 
 			// Store state passed to parameters
 			this->IndexCount = indexCount;

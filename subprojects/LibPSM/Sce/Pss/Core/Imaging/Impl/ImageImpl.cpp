@@ -32,7 +32,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 
 	ImageImpl::~ImageImpl() {
 		if (this->ImgBuffer != nullptr) {
-			this->allocator.lock()->sce_psm_free(ImgBuffer);
+			this->allocator->sce_psm_free(ImgBuffer);
 		}
 	}
 
@@ -72,7 +72,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return this->ImgBufferSize;
 	}
 
-	std::shared_ptr<ImageImpl> ImageImpl::CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, ImageImplMode mode, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc) {
+	std::shared_ptr<ImageImpl> ImageImpl::CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, ImageImplMode mode, Sce::Pss::Core::Memory::HeapAllocator* alloc) {
 		std::shared_ptr<ImageImpl> implImg = std::make_shared<ImageImpl>(mode);
 
 		implImg->allocator = alloc;
@@ -89,7 +89,7 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		return implImg;
 	}
 
-	std::shared_ptr<ImageImpl> ImageImpl::Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<HeapAllocator> alloc) {
+	std::shared_ptr<ImageImpl> ImageImpl::Open(const uint8_t* data, uint32_t dataLen, Sce::Pss::Core::Memory::HeapAllocator* alloc) {
 		std::shared_ptr<ImageImpl> implImg = std::make_shared<ImageImpl>(ImageImplMode::Rgba);
 
 		implImg->allocator = alloc;

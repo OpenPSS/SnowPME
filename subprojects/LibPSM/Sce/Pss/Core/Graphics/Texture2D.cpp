@@ -44,7 +44,7 @@ namespace Sce::Pss::Core::Graphics {
 				this->LoadImage(fileData, fileSize, mipmap, format);
 
 				// free the file data
-				std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
+				HeapAllocator* allocator = HeapAllocator::UniqueObject();
 				allocator->sce_psm_free(fileData);
 			}
 			else {

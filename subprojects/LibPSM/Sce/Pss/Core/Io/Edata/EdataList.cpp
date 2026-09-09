@@ -29,7 +29,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	int EdataList::ReadPsseOrEdataList(uint8_t klicensee[0x10], Sandbox* sandbox) {
 		Logger::Debug("[EdataList] Reading "+ PsseListPath);
 
-		if (sandbox == nullptr && Sandbox::UniqueObjectExists()) sandbox = Sandbox::UniqueObject().get();
+		if (sandbox == nullptr && Sandbox::UniqueObjectExists()) sandbox = Sandbox::UniqueObject();
 		if (sandbox == nullptr) return PSM_ERROR_COMMON_OBJECT_DISPOSED;
 
 		std::string psseListFile = sandbox->LocateRealPath(PsseListPath);

@@ -960,7 +960,7 @@ namespace Sce::Pss::Core::Graphics {
 	void GraphicsContext::DeleteGraphicsCtx()
 	{
 		if (GraphicsContext::UniqueObjectExists()) {
-			std::shared_ptr<GraphicsContext> gobj = GraphicsContext::UniqueObject();
+			GraphicsContext* gobj = GraphicsContext::UniqueObject();
 			GraphicsContext::Delete(gobj);
 			GraphicsContext::MakeLocalObject();
 

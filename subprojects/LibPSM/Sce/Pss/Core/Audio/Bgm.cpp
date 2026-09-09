@@ -107,7 +107,7 @@ namespace Sce::Pss::Core::Audio {
 		std::string audioFileName = std::string(fname);
 		mono_free(fname);
 
-		std::shared_ptr<Bgm> bgm = Bgm::Create(audioFileName);
+		Bgm* bgm = Bgm::Create(audioFileName);
 		RETURN_ERRORABLE_PSMOBJECT(bgm, Bgm);
 		*handle = bgm->Handle();
 
@@ -123,12 +123,12 @@ namespace Sce::Pss::Core::Audio {
 		char* fImage = mono_array_addr_with_size(fileImage, 1, 0);
 		int fSz = mono_array_length(fileImage);
 
-		std::shared_ptr<HeapAllocator> allocator = HeapAllocator::UniqueObject();
+		HeapAllocator* allocator = HeapAllocator::UniqueObject();
 		uint8_t* musicData = reinterpret_cast<uint8_t*>(allocator->sce_psm_malloc(fSz));
 
 		if (musicData != nullptr) {
 			memcpy(musicData, fImage, fSz);
-			std::shared_ptr<Bgm> bgm = Bgm::Create(musicData, fSz);
+			Bgm* bgm = Bgm::Create(musicData, fSz);
 			RETURN_ERRORABLE_PSMOBJECT(bgm, Bgm);
 			*handle = bgm->Handle();
 
@@ -143,7 +143,7 @@ namespace Sce::Pss::Core::Audio {
 		LOG_FUNCTION();
 		
 		if (Bgm::CheckHandle(handle)) {
-			std::shared_ptr<Bgm> bgm = Bgm::LookupHandle(handle);
+			Bgm* bgm = Bgm::LookupHandle(handle);
 			if (bgm == nullptr) return PSM_ERROR_COMMON_ARGUMENT_NULL;
 			
 			Bgm::Delete(bgm);

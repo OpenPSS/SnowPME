@@ -12,14 +12,6 @@ using namespace Shared::String;
 
 namespace Sce::Pss::Core::System {
 	template<typename T> class Handles {
-	private:
-		static std::weak_ptr<T> getWeak(int handle) {
-			if (Handles::IsValid(handle)) {
-				return std::dynamic_pointer_cast<T>(handles[handle]);
-			}
-			return nullptr;
-		}
-
 	public:
 		static const int NoHandle = 0x00;
 		static const int NoRawHandle = (INT_MAX / 2);
@@ -65,6 +57,13 @@ namespace Sce::Pss::Core::System {
 			return nullptr;
 		}
 
+		static std::shared_ptr<T> GetShared(int handle) {
+			if (Handles::IsValid(handle)) {
+				return std::dynamic_pointer_cast<T>(handles[handle]);
+			}
+			return nullptr;
+		}
+
 		static T* GetRaw(uint64_t handle) {
 
 			return Handles<T>::GetRaw(static_cast<int>(handle));
@@ -96,6 +95,8 @@ namespace Sce::Pss::Core::System {
 		}
 
 		static void Delete(int handle) {
+			Logger::Debug(std::string(typeid(T).name()) + Format::Hex(Handles::GetShared(handle).use_count()));
+
 			if (handle >= NoHandle && handle <= lastHandle) {
 				if (handle == NoHandle) return;
 				if (handles.contains(handle)) handles.erase(handle);

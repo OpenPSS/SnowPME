@@ -193,13 +193,13 @@ namespace Sce::Pss::Core::Mono {
 		int resCode = 0;
 
 		// create Sandbox object
-		std::shared_ptr<Sandbox> sandbox = Sandbox::MakeUniqueObject(std::make_shared<Sandbox>(gameFolder));
+		Sandbox* sandbox = Sandbox::MakeUniqueObject(std::make_shared<Sandbox>(gameFolder));
 
 		std::string appInfoPath = "/Application/app.info";
 		std::string realAppExePath = sandbox->LocateRealPath("/Application/app.exe", false);
 		
 		// create appinfo object
-		std::shared_ptr<AppInfo> appInfo = (!sandbox->PathExist(appInfoPath, false) ? nullptr : AppInfo::MakeUniqueObject(std::make_shared<AppInfo>(sandbox->LocateRealPath(appInfoPath, false))));
+		AppInfo* appInfo = (!sandbox->PathExist(appInfoPath, false) ? nullptr : AppInfo::MakeUniqueObject(std::make_shared<AppInfo>(sandbox->LocateRealPath(appInfoPath, false))));
 
 		// setup Edata ... for ScePsmDrm / PSSE decrypt..
 		PssCryptoCallbacks callbacks;

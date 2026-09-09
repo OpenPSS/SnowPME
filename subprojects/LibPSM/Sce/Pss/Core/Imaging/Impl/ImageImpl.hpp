@@ -13,13 +13,13 @@ namespace Sce::Pss::Core::Imaging::Impl {
 		static int errorType;
 
 		int channels = 0;
-		std::weak_ptr<Sce::Pss::Core::Memory::HeapAllocator> allocator;
+		Sce::Pss::Core::Memory::HeapAllocator* allocator;
 		ImageImplMode mode;
 		ImageSize imgSize = { 0,0 };
 
 	public:
-		static std::shared_ptr<ImageImpl> Open(const uint8_t* data, uint32_t dataLen, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc);
-		static std::shared_ptr<ImageImpl> CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, ImageImplMode mode, std::shared_ptr<Sce::Pss::Core::Memory::HeapAllocator> alloc);
+		static std::shared_ptr<ImageImpl> Open(const uint8_t* data, uint32_t dataLen, Sce::Pss::Core::Memory::HeapAllocator* alloc);
+		static std::shared_ptr<ImageImpl> CreateFromBuffer(uint8_t* imageBuffer, ImageSize* size, ImageImplMode mode, Sce::Pss::Core::Memory::HeapAllocator* alloc);
 		static int SetErrorType(int error);
 		static int GetErrorType();
 

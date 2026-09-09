@@ -102,9 +102,11 @@ namespace Sce::Pss::Core::Environment {
 				}
 
 				// create in app purchase common dialog,
-				std::shared_ptr<InAppPurchaseDialog> cDialog = InAppPurchaseDialog::MakeUniqueObject(reinterpret_pointer_cast<InAppPurchaseDialog>(CommonDialog::Create(reinterpret_pointer_cast<CommonDialog>(std::make_shared<InAppPurchaseDialog>()))));;
+				InAppPurchaseDialog* cDialog = reinterpret_cast<InAppPurchaseDialog*>(CommonDialog::Create(std::reinterpret_pointer_cast<CommonDialog>(std::make_shared<InAppPurchaseDialog>())));
 				RETURN_ERRORABLE_PSMOBJECT(cDialog, CommonDialog);
 
+				InAppPurchaseDialog::MakeUniqueObject(cDialog->Handle());
+				
 				// set handle to the new in app purchase
 				*handle = cDialog->Handle();
 

@@ -30,7 +30,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 	int EdataCallbacks::EdataRead(int handle, void* buffer, int toRead, int* totalRead) {
 		if (Handles<EdataStream>::IsValid(handle) && totalRead != nullptr) {
-			std::shared_ptr<EdataStream> stream = Handles<EdataStream>::Get(handle);
+			EdataStream* stream = Handles<EdataStream>::Get(handle);
 
 			*totalRead = stream->Read((char*)buffer, toRead);
 
@@ -41,7 +41,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 	int EdataCallbacks::EdataSeek(int handle, long offset, int whence, long* totalSeeked) {
 		if (Handles<EdataStream>::IsValid(handle) && totalSeeked != nullptr) {
-			std::shared_ptr<EdataStream> stream = Handles<EdataStream>::Get(handle);
+			EdataStream* stream = Handles<EdataStream>::Get(handle);
 
 			ScePssFileSeekType_t whenceType = SCE_PSS_FILE_SEEK_TYPE_BEGIN;
 			if (whence == PssCryptoSeekCur)
@@ -74,7 +74,7 @@ namespace Sce::Pss::Core::Io::Edata {
 	}
 	void EdataCallbacks::EdataClose(int handle) {
 		if (Handles<EdataStream>::IsValid(handle)) {
-			std::shared_ptr<EdataStream> str = Handles<EdataStream>::Get(handle);
+			EdataStream* str = Handles<EdataStream>::Get(handle);
 			str->Close();
 			Handles<EdataStream>::Delete(handle);
 		}

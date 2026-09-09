@@ -3,6 +3,7 @@
 #include <memory>
 #include <atomic>
 #include <LibShared.hpp>
+#include <Sce/Pss/Core/System/Handles.hpp>
 using namespace Shared::Debug;
 
 namespace Sce::Pss::Core {
@@ -17,18 +18,28 @@ namespace Sce::Pss::Core {
 			}
 		}
 
-		static std::shared_ptr<T> MakeUniqueObject(std::shared_ptr<T> ptr) {
+		static T* MakeUniqueObject(int obj) {
+			// fail if a uniqueobject already exists
+			ASSERT(!PsmUniqueObject<T>::UniqueObjectExists());
+		
+			uObjPtr = Sce::Pss::Core::System::Handles<T>::GetShared(obj);
+		
+			return uObjPtr.get();
+		}
+
+		static T* MakeUniqueObject(std::shared_ptr<T>& ptr) {
 			// fail if a uniqueobject already exists
 			ASSERT(!PsmUniqueObject<T>::UniqueObjectExists());
 			
 			// set unique object to shared_ptr of this 
-			PsmUniqueObject<T>::uObjPtr = std::reinterpret_pointer_cast<T>(ptr);
-			return ptr;
+			uObjPtr = ptr;
+
+			return uObjPtr.get();
 		}
 
-		static std::shared_ptr<T> UniqueObject() {
+		static T* UniqueObject() {
 			ASSERT(PsmUniqueObject<T>::UniqueObjectExists());
-			return PsmUniqueObject<T>::uObjPtr;
+			return PsmUniqueObject<T>::uObjPtr.get();
 		}
 
 		static bool UniqueObjectExists() {

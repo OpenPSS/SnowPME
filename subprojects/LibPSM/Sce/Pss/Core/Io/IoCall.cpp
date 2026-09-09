@@ -286,7 +286,7 @@ namespace Sce::Pss::Core::Io {
 		if (!PsmFileHandle::CheckHandle(file))
 			return PSM_ERROR_INVALID_PARAMETER;
 
-		\1* handle = PsmFileHandle::LookupHandle(file);
+		PsmFileHandle* handle = PsmFileHandle::LookupHandle(file);
 
 		if(!handle->IsOpen())
 			return PSM_ERROR_INVALID_PARAMETER;
