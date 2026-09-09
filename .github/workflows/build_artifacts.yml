@@ -145,6 +145,7 @@ jobs:
             copy patch/PCSI00011_dec/dll/mscorlib.dll ./dll/mscorlib.dll
             copy patch/PCSI00011_dec/dll/System.dll ./dll/System.dll
             copy patch/PCSI00011_dec/dll/Sce.PlayStation.Core.dll ./dll/Sce.PlayStation.Core.dll
+            echo "Config::DebugLogging=true">SnowPME.cfg
       - name: Run Tests
         continue-on-error: true
         run: ./SnowPME -g psm/PsmTestSuite-unsigned
