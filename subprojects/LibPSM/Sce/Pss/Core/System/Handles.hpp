@@ -95,8 +95,6 @@ namespace Sce::Pss::Core::System {
 		}
 
 		static void Delete(int handle) {
-			Logger::Debug(std::string(typeid(T).name()) + Format::Hex(Handles::GetShared(handle).use_count()));
-
 			if (handle >= NoHandle && handle <= lastHandle) {
 				if (handle == NoHandle) return;
 				if (handles.contains(handle)) handles.erase(handle);

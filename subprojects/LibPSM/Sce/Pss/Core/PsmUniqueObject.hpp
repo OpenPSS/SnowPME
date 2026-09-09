@@ -27,7 +27,7 @@ namespace Sce::Pss::Core {
 			return uObjPtr.get();
 		}
 
-		static T* MakeUniqueObject(std::shared_ptr<T>& ptr) {
+		static T* MakeUniqueObject(std::shared_ptr<T> ptr) {
 			// fail if a uniqueobject already exists
 			ASSERT(!PsmUniqueObject<T>::UniqueObjectExists());
 			
