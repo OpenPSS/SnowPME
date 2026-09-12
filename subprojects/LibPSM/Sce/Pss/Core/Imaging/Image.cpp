@@ -336,7 +336,7 @@ namespace Sce::Pss::Core::Imaging {
 			size_t length = mono_array_length(buffer);
 
 			// Fix vulnerability in PSM- use minimum size here-
-			memcpy(buf, pixelData.data, std::min(pixelData.size, length));
+			memcpy(buf, pixelData.data, std::min(pixelData.size, static_cast<uint32_t>(length)));
 		}
 
 		Logger::Todo("Call first virtual function here.");
