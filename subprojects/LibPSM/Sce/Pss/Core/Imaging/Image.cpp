@@ -331,12 +331,19 @@ namespace Sce::Pss::Core::Imaging {
 		Image* img = Image::LookupHandle(handle);
 		img->GetPixelDataInternal(pixelData);
 		
+		// ?? sony what are you doing, MonoArray contains a size already ...
+		// mono C# side can control this value, thus skip this check
+		// .. .. this is bad,
 		if (bufferSize >= pixelData.size) {
 			char* buf = mono_array_addr_with_size(buffer, 1, 0);
 			size_t length = mono_array_length(buffer);
 
-			// Fix vulnerability in PSM- use minimum size here-
+#ifdef INACCURATE_FIX_BUFFER_OVERFLOW_VULN
+			// Fix vulnerability in PSM: use minimum size here-
 			memcpy(buf, pixelData.data, std::min(pixelData.size, static_cast<uint32_t>(length)));
+#else
+			memcpy(buf, pixelData.data, pixelData.size);
+#endif
 		}
 
 		Logger::Todo("Call first virtual function here.");

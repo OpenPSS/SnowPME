@@ -9,6 +9,8 @@
 
 //#define DEBUGGING_UNIMPLEMENTED_IS_ERROR // all "unimplemented functions" will throw an error.
 
+#define INACCURATE_FIX_BUFFER_OVERFLOW_VULN // fixes a heap buffer overflow within Imaging::Image::GetPixelData.
+
 #define INACCURATE_DONT_ENFORCE_MAX_SDK // include SDK functions, even if their removed in a later SDK.
 //#define INACCURATE_DONT_ENFORCE_MIN_SDK // include SDK functions, even if their only added in a newer SDK.
 
