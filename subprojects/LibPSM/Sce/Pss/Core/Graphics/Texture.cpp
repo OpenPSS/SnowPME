@@ -106,7 +106,7 @@ namespace Sce::Pss::Core::Graphics {
 		int bpp = PixelBuffer::GetFormatBitsPerPixel(format);
 		int bytesTotal = TO_BYTES_C(bpp * (PixelBuffer::AdjValueForDxt(format, dw)));
 
-		if (pitch == NULL)
+		if (pitch == 0)
 			pitch = bytesTotal;
 
 		int mipmapWidth = this->GetMipmapWidth(mipmapLevel);

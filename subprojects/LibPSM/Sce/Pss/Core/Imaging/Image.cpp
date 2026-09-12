@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string>
 #include <cstdio>
+#include <algorithm>
 
 using namespace Shared;
 using namespace Shared::String;
@@ -333,8 +334,12 @@ namespace Sce::Pss::Core::Imaging {
 		if (bufferSize >= pixelData.size) {
 			char* buf = mono_array_addr_with_size(buffer, 1, 0);
 			size_t length = mono_array_length(buffer);
-			memcpy(buf, pixelData.data, pixelData.size);
+
+			// Fix vulnerability in PSM- use minimum size here-
+			memcpy(buf, pixelData.data, std::min(pixelData.size, length));
 		}
+
+		Logger::Todo("Call first virtual function here.");
 
 		return PSM_ERROR_NO_ERROR;
 	}
